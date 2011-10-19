@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.ubs.eugene</groupId>
+        <artifactId>parent</artifactId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
+
+    <groupId>com.ubs.eugene</groupId>
+    <artifactId>eugene-hello</artifactId>
+    <version>0.1-SNAPSHOT</version>
+    <name>${bundle.namespace}</name>
+    <packaging>bundle</packaging>
+
+    <properties>
+        <bundle.namespace>com.ubs.eugene.hello</bundle.namespace>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>jade</groupId>
+            <artifactId>jade-osgi</artifactId>
+            <version>${jade.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>osgi_R4_core</artifactId>
+            <version>${osgi.version}</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>osgi_R4_compendium</artifactId>
+            <version>${osgi.version}</version>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>${maven.bundle.version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Bundle-Name>${bundle.namespace}</Bundle-Name>
+                        <Bundle-SymbolicName>${bundle.namespace}</Bundle-SymbolicName>
+                        <Bundle-Version>${pom.version}</Bundle-Version>
+                        <Bundle-Description>${pom.description}</Bundle-Description>
+                        <Export-Package>${bundle.namespace}</Export-Package>
+                        <Bundle-Activator>${bundle.namespace}.internal.HelloActivator</Bundle-Activator>
+                        <Import-Package>
+                            jade.core,
+                            jade.core.behaviours,
+                            jade.lang.acl,
+                            jade.osgi.service.agentFactory,
+                            jade.osgi.service.runtime,
+                            jade.wrapper,
+                            org.osgi.framework
+                        </Import-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+
+    </build>
+
+</project>
