@@ -32,6 +32,7 @@
         <maven.compiler.version>2.3.2</maven.compiler.version>
         <maven.assembly.version>2.2.1</maven.assembly.version>
         <maven.bundle.version>2.3.5</maven.bundle.version>
+        <maven.release.version>2.2.1</maven.release.version>
         <pax.version>1.5</pax.version>
         <jade.version>1.2.0</jade.version>
         <osgi.version>1.0</osgi.version>
@@ -64,6 +65,11 @@
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>${maven.release.version}</version>
             </plugin>
         </plugins>
     </build>

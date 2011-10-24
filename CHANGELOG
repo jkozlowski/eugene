@@ -1,0 +1,7 @@
+2011-10-24  Jakub D Kozlowski  <mail@jakub-kozlowski.com>
+    Release: Version 0.1
+        * Enabled Maven
+        ** Created eugene-hello bundle with HelloAgent and HelloActivator (starts one HelloAgent agent).
+        ** Created eugene-hello-dist which creates a zip with eugene-hello bundle
+           and all it's dependencies, along with equinox that is started with pax-runner.
+        * Added jade-osgi-1.2.0.jar and added .repo to the list of repositories.
