@@ -19,5 +19,6 @@
 
     <modules>
         <module>hello-world</module>
+        <module>message-passing</module>
     </modules>
 </project>
