@@ -49,8 +49,7 @@
             <artifactId>jade</artifactId>
             <version>4.1.0</version>
             <type>zip</type>
-            <classifier>source</classifier>
-            <scope>provided</scope>
+            <classifier>sources</classifier>
         </dependency>
     </dependencies>
 
