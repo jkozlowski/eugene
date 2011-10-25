@@ -5,19 +5,19 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.ubs.eugene</groupId>
+        <groupId>com.ubs.eugene.demo</groupId>
         <artifactId>parent</artifactId>
         <version>0.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.ubs.eugene</groupId>
-    <artifactId>eugene-hello</artifactId>
+    <groupId>com.ubs.eugene.demo</groupId>
+    <artifactId>hello-world</artifactId>
     <version>0.1-SNAPSHOT</version>
     <name>${bundle.namespace}</name>
     <packaging>bundle</packaging>
 
     <properties>
-        <bundle.namespace>com.ubs.eugene.hello</bundle.namespace>
+        <bundle.namespace>com.ubs.eugene.demo.hello</bundle.namespace>
     </properties>
 
     <dependencies>
@@ -30,13 +30,45 @@
             <groupId>org.osgi</groupId>
             <artifactId>osgi_R4_core</artifactId>
             <version>${osgi.version}</version>
+            <scope>provided</scope>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.osgi</groupId>
             <artifactId>osgi_R4_compendium</artifactId>
             <version>${osgi.version}</version>
+            <scope>provided</scope>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.ops4j.pax.runner</groupId>
+            <artifactId>pax-runner</artifactId>
+            <version>${pax.runner.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ops4j.pax.confman</groupId>
+            <artifactId>pax-confman-propsloader</artifactId>
+            <version>0.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ops4j.pax.logging</groupId>
+            <artifactId>pax-logging-api</artifactId>
+            <version>1.6.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ops4j.pax.logging</groupId>
+            <artifactId>pax-logging-service</artifactId>
+            <version>1.6.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.equinox</groupId>
+            <artifactId>cm</artifactId>
+            <version>3.2.0-v20070116</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.osgi</groupId>
+            <artifactId>services</artifactId>
+            <version>3.1.200-v20070605</version>
         </dependency>
     </dependencies>
 
@@ -67,8 +99,17 @@
                     </instructions>
                 </configuration>
             </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>${maven.assembly.version}</version>
+                <configuration>
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <finalName>hello-world-${project.version}</finalName>
+                    <descriptors>
+                        <descriptor>src/main/assembly/assembly.xml</descriptor>
+                    </descriptors>
+                </configuration>
+            </plugin>
         </plugins>
-
     </build>
-
 </project>

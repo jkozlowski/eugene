@@ -1,9 +1,9 @@
-package com.ubs.eugene.hello.internal;
+package com.ubs.eugene.demo.hello.internal;
 
+import com.ubs.eugene.demo.hello.HelloAgent;
 import jade.osgi.service.agentFactory.AgentFactoryService;
 import jade.osgi.service.runtime.JadeRuntimeService;
 import jade.wrapper.AgentController;
-import com.ubs.eugene.hello.HelloAgent;
 import org.osgi.framework.*;
 
 /**
@@ -13,6 +13,7 @@ import org.osgi.framework.*;
  * @since 0.1
  */
 public final class HelloActivator implements BundleActivator {
+
 
     private final AgentFactoryService agentFactory = new AgentFactoryService();
 
@@ -34,7 +35,7 @@ public final class HelloActivator implements BundleActivator {
     }
 
     /**
-     * Called whenever the OSGi framework stops our bundle.
+     * Called whenever the OSGi framework stops this bundle.
      *
      */
     public void stop(BundleContext bc) throws Exception {
@@ -57,7 +58,7 @@ public final class HelloActivator implements BundleActivator {
                     final JadeRuntimeService jrs = (JadeRuntimeService) context.getService(sr);
                     AgentController ac;
                     try {
-                        ac = jrs.createNewAgent("john", HelloAgent.class.getName(), null, context.getBundle().getSymbolicName());
+                        ac = jrs.createNewAgent("helloworld-agent", HelloAgent.class.getName(), null, context.getBundle().getSymbolicName());
                         ac.start();
                     } catch (Exception e) {
                         e.printStackTrace();

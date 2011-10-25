@@ -29,35 +29,20 @@
         <java.version>1.6</java.version>
         <pax.runner.version>1.7.5</pax.runner.version>
         <pax.confman.version>0.2.2</pax.confman.version>
+        <jade.version>1.2.0</jade.version>
+        <osgi.version>1.0</osgi.version>
         <maven.compiler.version>2.3.2</maven.compiler.version>
         <maven.assembly.version>2.2.1</maven.assembly.version>
         <maven.bundle.version>2.3.5</maven.bundle.version>
         <maven.release.version>2.2.1</maven.release.version>
-        <pax.version>1.5</pax.version>
-        <jade.version>1.2.0</jade.version>
-        <osgi.version>1.0</osgi.version>
-        <org.osgi.service.http.port>8080</org.osgi.service.http.port>
-        <org.osgi.service.http.port.secure>8443</org.osgi.service.http.port.secure>
-        <jade.gui>true</jade.gui>
     </properties>
 
     <modules>
-        <module>eugene-hello</module>
-        <module>eugene-hello-dist</module>
+        <module>demo</module>
     </modules>
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.ops4j</groupId>
-                <artifactId>maven-pax-plugin</artifactId>
-                <version>${pax.version}</version>
-                <configuration>
-                    <provision>
-                        <param>--platform=equinox</param>
-                    </provision>
-                </configuration>
-            </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven.compiler.version}</version>
