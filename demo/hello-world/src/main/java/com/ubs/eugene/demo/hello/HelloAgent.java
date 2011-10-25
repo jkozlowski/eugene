@@ -1,4 +1,4 @@
-package com.ubs.eugene.hello;
+package com.ubs.eugene.demo.hello;
 
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
@@ -20,7 +20,7 @@ public final class HelloAgent extends Agent {
 				if (msgRx != null) {
 					System.out.println(msgRx);
 					ACLMessage msgTx = msgRx.createReply();
-					msgTx.setContent("Hello!");
+					msgTx.setContent("Hello " + msgRx.getSender().getLocalName() + "!");
 					send(msgTx);
 				} else {
 					block();
