@@ -18,6 +18,7 @@
 
     <properties>
         <bundle.namespace>com.ubs.eugene.demo.hello</bundle.namespace>
+        <jade.gui>true</jade.gui>
     </properties>
 
     <dependencies>
@@ -83,8 +84,8 @@
                     <instructions>
                         <Bundle-Name>${bundle.namespace}</Bundle-Name>
                         <Bundle-SymbolicName>${bundle.namespace}</Bundle-SymbolicName>
-                        <Bundle-Version>${pom.version}</Bundle-Version>
-                        <Bundle-Description>${pom.description}</Bundle-Description>
+                        <Bundle-Version>${project.version}</Bundle-Version>
+                        <Bundle-Description>${project.description}</Bundle-Description>
                         <Export-Package>${bundle.namespace}</Export-Package>
                         <Bundle-Activator>${bundle.namespace}.internal.HelloActivator</Bundle-Activator>
                         <Import-Package>
