@@ -1,3 +1,10 @@
+2011-10-27 Jakub D Kozlowski <mail@jakub-kozlowski.com>
+    Release: Version 0.1.1
+        * Consolidated eugene-hello and eugene-hello-dist into demo/hello-world.
+        * Enabled maven-pax-plugin to allow running projects from IDE.
+        * Added jade and jade-osgi sources to the repository.
+        * Implemented message-passing simulation under demo/message-passing.
+
 2011-10-24  Jakub D Kozlowski  <mail@jakub-kozlowski.com>
     Release: Version 0.1
         * Enabled Maven
