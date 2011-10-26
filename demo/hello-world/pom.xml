@@ -25,7 +25,7 @@
         <dependency>
             <groupId>jade</groupId>
             <artifactId>jade-osgi</artifactId>
-            <version>${jade.version}</version>
+            <version>${jade.osgi.version}</version>
         </dependency>
         <dependency>
             <groupId>org.osgi</groupId>
