@@ -1,7 +1,7 @@
-package com.ubs.eugene.demo.messagepassing.internal;
+package com.ubs.eugene.demo.deadlock.internal;
 
-import com.ubs.eugene.demo.messagepassing.MessagePassingAgent;
-import com.ubs.eugene.demo.messagepassing.PrintingAgent;
+import com.ubs.eugene.demo.deadlock.BlockingMessagePassingAgent;
+import com.ubs.eugene.demo.deadlock.BlockingPrintingAgent;
 import jade.osgi.service.agentFactory.AgentFactoryService;
 import jade.osgi.service.runtime.JadeRuntimeService;
 import jade.util.Logger;
@@ -13,9 +13,10 @@ import java.util.List;
 import java.util.logging.Level;
 
 /**
- * Starts the message-passing simulation, between 3 agents.
+ * Starts the deadlock simulation between 3 agents.
  *
  * @author Jakub D Kozlowski
+ * @since 0.1.1
  */
 public class SimulationActivator implements BundleActivator {
 
@@ -25,11 +26,11 @@ public class SimulationActivator implements BundleActivator {
 
     private static final String MESSAGE = "Hello World!";
 
-    private static final String PRINTING_AGENT = PrintingAgent.class.getName();
+    private static final String PRINTING_AGENT = BlockingPrintingAgent.class.getName();
 
-    private static final String A_AGENT = MessagePassingAgent.class.getName() + ":A";
+    private static final String A_AGENT = BlockingMessagePassingAgent.class.getName() + ":A";
 
-    private static final String B_AGENT = MessagePassingAgent.class.getName() + ":B";
+    private static final String B_AGENT = BlockingMessagePassingAgent.class.getName() + ":B";
 
     private BundleContext ctx;
 
@@ -65,26 +66,36 @@ public class SimulationActivator implements BundleActivator {
                         final List<AgentController> controllers = new ArrayList<AgentController>();
 
                         final AgentController printer = jade.createNewAgent(PRINTING_AGENT,
-                                PrintingAgent.class.getName(), new Object[]{A_AGENT, B_AGENT, MESSAGE},
-                                ctx.getBundle().getSymbolicName());
+                                                                            BlockingPrintingAgent.class
+                                                                                    .getName(), new Object[]{A_AGENT,
+                                                                                                             B_AGENT,
+                                                                                                             MESSAGE},
+                                                                            ctx.getBundle().getSymbolicName());
                         controllers.add(printer);
 
                         final AgentController a = jade.createNewAgent(A_AGENT,
-                                MessagePassingAgent.class.getName(), new Object[]{PRINTING_AGENT, B_AGENT},
-                                ctx.getBundle().getSymbolicName());
+                                                                      BlockingMessagePassingAgent.class
+                                                                              .getName(), new Object[]{PRINTING_AGENT,
+                                                                                                       B_AGENT},
+                                                                      ctx.getBundle().getSymbolicName());
                         controllers.add(a);
 
                         final AgentController b = jade.createNewAgent(B_AGENT,
-                                MessagePassingAgent.class.getName(), new Object[]{A_AGENT, PRINTING_AGENT},
-                                ctx.getBundle().getSymbolicName());
+                                                                      BlockingMessagePassingAgent.class
+                                                                              .getName(), new Object[]{A_AGENT,
+                                                                                                       PRINTING_AGENT},
+                                                                      ctx.getBundle().getSymbolicName());
                         controllers.add(b);
 
                         for (final AgentController controller : controllers) {
                             controller.start();
                         }
-                    } catch (Exception e) {
-                        LOG.log(Level.SEVERE, "Cannot start " + SimulationActivator.class.getName() + ": JADE Runtime not available - '" + e.getMessage() + "'");
-                    } finally {
+                    }
+                    catch (Exception e) {
+                        LOG.log(Level.SEVERE, "Cannot start " + SimulationActivator.class
+                                .getName() + ": JADE Runtime not available - '" + e.getMessage() + "'");
+                    }
+                    finally {
                         ctx.ungetService(sr);
                     }
                     break;
