@@ -20,5 +20,6 @@
     <modules>
         <module>hello-world</module>
         <module>message-passing</module>
+        <module>deadlock</module>
     </modules>
 </project>
