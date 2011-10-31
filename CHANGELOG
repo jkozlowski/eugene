@@ -1,3 +1,7 @@
+2011-10-31 Jakub D Kozlowski <mail@jakub-kozlowski.com>
+    Release: Version 0.1.2
+        * Implemented deadlock simulation under demo/deadlock.
+
 2011-10-27 Jakub D Kozlowski <mail@jakub-kozlowski.com>
     Release: Version 0.1.1
         * Consolidated eugene-hello and eugene-hello-dist into demo/hello-world.
