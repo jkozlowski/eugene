@@ -1,0 +1,4 @@
+--vmOptions=-Dbundles.configuration.location=../../conf\
+    -Djade.gui=true
+--platform=equinox
+scan-dir:../lib
