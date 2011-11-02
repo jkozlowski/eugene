@@ -1,3 +1,7 @@
+2011-11-2 Jakub D Kozlowski <mail@jakub-kozlowski.com>
+    Release: Version 0.1.3
+        * Implemented livelock simulation under demo/livelock.
+
 2011-10-31 Jakub D Kozlowski <mail@jakub-kozlowski.com>
     Release: Version 0.1.2
         * Implemented deadlock simulation under demo/deadlock.
