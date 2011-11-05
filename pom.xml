@@ -8,7 +8,7 @@
     <artifactId>parent</artifactId>
     <version>0.1.3-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>eugene</name>
+    <name>${project.groupId}</name>
     <description>Eugene - Agent-Based Market Simulator for System Testing of Trading Algorithms</description>
 
     <repositories>
