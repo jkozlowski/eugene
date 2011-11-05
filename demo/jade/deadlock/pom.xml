@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.ubs.eugene.demo.jade</groupId>
+        <artifactId>parent</artifactId>
+        <version>0.1.3-SNAPSHOT</version>
+    </parent>
+
+    <groupId>${parent.groupId}</groupId>
+    <artifactId>deadlock</artifactId>
+    <version>0.1.3-SNAPSHOT</version>
+    <name>${bundle.namespace}</name>
+    <description>Implements a deadlock simulation:
+                 Agents pass messages from one to another, and block until receiving a reply -
+                 but before agents reply, they send messages to next agent in the chain
+                 and therefore deadlock.</description>
+    <packaging>bundle</packaging>
+
+    <properties>
+        <bundle.namespace>${project.groupId}.deadlock</bundle.namespace>
+        <jade.gui>false</jade.gui>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>jade</groupId>
+            <artifactId>jade-osgi</artifactId>
+            <version>${jade.osgi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>osgi_R4_core</artifactId>
+            <version>${osgi.version}</version>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>osgi_R4_compendium</artifactId>
+            <version>${osgi.version}</version>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.ops4j.pax.runner</groupId>
+            <artifactId>pax-runner</artifactId>
+            <version>${pax.runner.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ops4j.pax.confman</groupId>
+            <artifactId>pax-confman-propsloader</artifactId>
+            <version>0.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ops4j.pax.logging</groupId>
+            <artifactId>pax-logging-api</artifactId>
+            <version>1.6.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ops4j.pax.logging</groupId>
+            <artifactId>pax-logging-service</artifactId>
+            <version>1.6.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.equinox</groupId>
+            <artifactId>cm</artifactId>
+            <version>3.2.0-v20070116</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.osgi</groupId>
+            <artifactId>services</artifactId>
+            <version>3.1.200-v20070605</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>${maven.bundle.version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Bundle-Name>${bundle.namespace}</Bundle-Name>
+                        <Bundle-SymbolicName>${bundle.namespace}</Bundle-SymbolicName>
+                        <Bundle-Version>${project.version}</Bundle-Version>
+                        <Bundle-Description>${project.description}</Bundle-Description>
+                        <Export-Package>${bundle.namespace}</Export-Package>
+                        <Bundle-Activator>${bundle.namespace}.internal.SimulationActivator</Bundle-Activator>
+                        <Import-Package>
+                            jade.core,
+                            jade.core.behaviours,
+                            jade.lang.acl,
+                            jade.util,
+                            jade.osgi.service.agentFactory,
+                            jade.osgi.service.runtime,
+                            jade.wrapper,
+                            org.osgi.framework
+                        </Import-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>${maven.assembly.version}</version>
+                <configuration>
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <finalName>${project.artifactId}-${project.version}</finalName>
+                    <descriptors>
+                        <descriptor>src/main/assembly/assembly.xml</descriptor>
+                    </descriptors>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
