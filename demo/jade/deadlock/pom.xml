@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.ubs.eugene.demo.jade</groupId>
+        <groupId>eugene.demo.jade</groupId>
         <artifactId>parent</artifactId>
         <version>0.1.3-SNAPSHOT</version>
     </parent>
 
-    <groupId>${parent.groupId}</groupId>
+    <groupId>eugene.demo.jade</groupId>
     <artifactId>deadlock</artifactId>
     <version>0.1.3-SNAPSHOT</version>
     <name>${bundle.namespace}</name>
