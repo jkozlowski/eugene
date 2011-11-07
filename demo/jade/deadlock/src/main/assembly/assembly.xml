@@ -22,7 +22,7 @@
         <dependencySet>
             <outputDirectory>/bin</outputDirectory>
             <includes>
-                <include>com.ubs.eugene.demo:deadlock:*</include>
+                <include>eugene.demo.jade:deadlock:*</include>
                 <include>org.ops4j.pax.runner:*</include>
             </includes>
         </dependencySet>
