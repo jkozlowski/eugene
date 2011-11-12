@@ -45,13 +45,7 @@
                         <Bundle-Description>${project.description}</Bundle-Description>
                         <Export-Package>${bundle.namespace}</Export-Package>
                         <Import-Package>
-                            jade.core,
-                            jade.core.behaviours,
-                            jade.lang.acl,
-                            jade.util,
-                            jade.osgi.service.agentFactory,
-                            jade.osgi.service.runtime,
-                            jade.wrapper
+                            jade.content, jade.content.onto, jade.content.onto.annotations
                         </Import-Package>
                     </instructions>
                 </configuration>
