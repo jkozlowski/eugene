@@ -1,6 +1,10 @@
 package eugene.market.ontology;
 
+import eugene.market.ontology.field.OrdType;
+import eugene.market.ontology.field.OrderQty;
+import eugene.market.ontology.field.Price;
 import eugene.market.ontology.field.Side;
+import eugene.market.ontology.message.NewOrderSingle;
 import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
@@ -31,7 +35,12 @@ public final class MarketOntology extends BeanOntology {
         super(NAME);
 
         try {
+            add(OrderQty.class, false);
+            add(OrdType.class, false);
+            add(Price.class, false);
             add(Side.class, false);
+
+            add(NewOrderSingle.class, false);
         }
         catch (OntologyException e) {
             e.printStackTrace();
