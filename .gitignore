@@ -1,4 +1,4 @@
-.DS_Store
+# Maven
 target
 
 # idea
@@ -13,3 +13,14 @@ target
 .project
 eugene-hello/META-INF/
 runner/
+
+# Latex compiler files
+*.synctex.gz
+*.toc
+*.out
+*.pdf
+*.log
+*.aux
+
+# Mac OSX files
+.DS_Store

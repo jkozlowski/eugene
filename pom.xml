@@ -41,6 +41,7 @@
 
     <modules>
         <module>demo</module>
+        <module>doc</module>
     </modules>
 
     <dependencies>
