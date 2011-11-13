@@ -13,6 +13,28 @@
 
     <repositories>
         <repository>
+            <id>MavenCentral</id>
+            <name>Maven repository</name>
+            <url>http://repo1.maven.org/maven2</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>objectweb</id>
+            <name>Objectweb repository</name>
+            <url>http://maven.objectweb.org/maven2</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
             <id>ops4j.releases</id>
             <name>The OPS4J Release Repository</name>
             <url>http://repository.ops4j.org/maven2/</url>
@@ -29,6 +51,7 @@
         <java.version>1.6</java.version>
         <pax.runner.version>1.7.5</pax.runner.version>
         <pax.confman.version>0.2.2</pax.confman.version>
+        <pax.exam.version>2.3.0.M1</pax.exam.version>
         <jade.osgi.version>1.2.0</jade.osgi.version>
         <osgi.version>4.2.0</osgi.version>
         <javax.inject.version>1</javax.inject.version>
@@ -41,15 +64,18 @@
         <maven.release.version>2.2.1</maven.release.version>
         <maven.dependency.version>2.3</maven.dependency.version>
         <maven.cobertura.version>2.5.1</maven.cobertura.version>
+        <maven.surefire.version>2.9</maven.surefire.version>
         <maven.pax.version>1.5</maven.pax.version>
         <maven.pax.exam.version>1.2.4</maven.pax.exam.version>
         <pax.exam.version>2.3.0.M1</pax.exam.version>
+        <maven.pax.exam.version>1.2.4</maven.pax.exam.version>
     </properties>
 
     <modules>
         <module>demo</module>
         <module>doc</module>
         <module>jade-unit</module>
+        <module>market</module>
     </modules>
 
     <dependencies>
@@ -105,6 +131,16 @@
                         <param>--platform=equinox</param>
                         <param>--profiles=minimal</param>
                     </provision>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven.surefire.version}</version>
+                <configuration>
+                    <parallel>methods</parallel>
+                    <threadCount>10</threadCount>
+                    <useFile>false</useFile>
                 </configuration>
             </plugin>
         </plugins>
