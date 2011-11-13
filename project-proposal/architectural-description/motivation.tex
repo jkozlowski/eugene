@@ -1,0 +1,27 @@
+\section{Motivation}
+
+\subsection{Automated Software Testing}
+Ensuring software quality and reliability is very important, especially in a commercial setting. In order to verify correct operation, software systems are validated using a range of testing techniques. 
+
+\begin{itemize}
+\item Testing individual units of code (Unit Testing).
+\item Testing interfaces between components of a software system (Integration Testing). 
+\item Testing a completely integrated software system (System Testing).
+\end{itemize}
+
+\noindent
+Testing is performed in order to achieve an array of objectives.
+\begin{itemize}
+\item Validating behaviour of the functionality under development (Test-Driven Development). 
+\item Discovering new and regression errors in existing functionality, after changes have been made to the software system (Continuous Integration).
+\end{itemize}
+
+\subsection{Testing Non-Deterministic Systems}
+The techniques and objectives described in the previous section apply fairly well to testing deterministic systems. Such systems can be approximated into deterministic state-machines and therefore testing comes down to verifying that a set of inputs will produce a particular set of outputs.
+
+On the other hand, testing non-deterministic systems involves verifying that a particular set of inputs will produce a correct set of outputs with a statistically significant probability.
+
+\subsection{Testing Trading Algorithms}
+Trading Algorithms are an example of a non-deterministic system that operates in a non-deterministic environment. Trading Algorithms are designed to respond to the situation on the market and they also expect their actions to have an effect on it.
+
+Difficult as it is, Automated Testing of Trading Algorithms is essential in order to ensure correct order execution and to reduce reliance on manual testing. Automated Testing will prevent the developers from deploying incorrect software and improve Time to Market.
