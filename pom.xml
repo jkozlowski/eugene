@@ -49,6 +49,7 @@
         <module>demo</module>
         <module>doc</module>
         <module>jade-unit</module>
+        <module>market</module>
     </modules>
 
     <dependencies>
