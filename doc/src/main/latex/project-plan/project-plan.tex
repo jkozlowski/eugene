@@ -1,0 +1,95 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+
+\parindent=1in
+
+\usepackage[T1]{fontenc}
+
+\usepackage{booktabs}
+\usepackage{longtable}
+
+\usepackage{listings}
+\lstset{language=Java, numbers=left, frame=single}
+
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{graphicx}
+
+\usepackage{hyperref}
+
+\usepackage{multirow}
+
+\title{Eugene: Agent-Based Market Simulator for use in System Testing of Trading Algorithms}
+\author{Jakub Kozlowski \and Internal Supervisor: Dr. Christopher D. Clack \and External Supervisor: Ian Rose-Miller, UBS}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{Aim}
+To determine the efficacy of the Agent-Based Market Simulation approach for use in System Testing of Trading Algorithms.
+
+\section*{Objectives}
+\begin{itemize}
+\item Analyse existing Agent-Based approaches to Market Simulation to determine a set of possible Agent Types that will simulate different trading behaviours.
+\item Implement the Agents and their environment (Stock Market Agent, post-simulation Statistical Engine).
+\item Discover a specific configuration of Agents whose behaviour will simulate a particular day of trading, in regards to a benchmark.
+\item Evaluate the success of the simulator by comparing the emergent behaviour to the benchmark, as well running the simulation against a Trading Algorithm and analysing its behaviour.
+\end{itemize}
+
+\section*{Deliverables}
+\begin{itemize}
+\item A fully functional and tested implementation of Eugene with a design specification.
+\item A realistic simulation of a particular day of trading, in regards to a benchmark.
+\item Results and analysis from running the Eugene simulation against a Trading Algorithm.
+\item A strategy for connecting Eugene to a FIX engine, like \texttt{quickfixj}.
+\end{itemize}
+
+\section*{Work Plan}
+\begin{tabular}{ p{1.6in} p{3in} }
+
+        \toprule
+        
+        \multicolumn{1}{l}{\textbf{Dates}}                               		 &
+        \multicolumn{1}{l}{\textbf{Description}}                                \\
+        
+        7\textsuperscript{th} Nov - 18\textsuperscript{th} Dec 2011 &
+        
+        \begin{itemize}
+        \item Market Agent with Market Feed.
+        \item Market Agent Performance Tests.
+        \item Random Trader Agent.
+        \item Simulation lifecycle management.
+        \item Post-simulation analysis engine.
+        \item Complete end-to-end simulation.
+        \end{itemize}                             \\
+
+        19\textsuperscript{th} Dec 2011 - 19\textsuperscript{th} Feb 2012 &
+        \begin{itemize}
+        \item Implement Agents.
+        \item Interim Report.
+        \item Run Simulations and compare against benchmark.
+        \end{itemize}
+        \\
+        
+        20\textsuperscript{th} Feb 2012 - 27\textsuperscript{th} April 2012 &
+        \begin{itemize}
+        \item Thesis.
+        \item Running simulations against a Trading Algorithm.
+        \end{itemize}
+        \\
+        
+        \bottomrule
+        
+        \\[1in]
+        
+\end{tabular}
+
+\begin{flushright}
+Supervisor's Signature\hspace{0.5cm} \makebox[1.5in]{\hrulefill}
+\end{flushright}
+\end{document}
