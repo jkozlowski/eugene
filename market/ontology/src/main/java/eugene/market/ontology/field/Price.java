@@ -12,10 +12,22 @@ import java.math.BigDecimal;
  * @author Jakub D Kozlowski
  * @since 0.2
  */
-@Element(name = "44")
+@Element(name = Price.TAG)
 public final class Price extends Field<BigDecimal> {
+
+    public static final String TAG = "44";
+
+    public static final Integer TAGi = 44;
 
     public Price(BigDecimal value) {
         super(value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Integer getTag() {
+        return TAGi;
     }
 }
