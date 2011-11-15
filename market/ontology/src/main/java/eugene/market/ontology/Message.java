@@ -18,26 +18,13 @@ public abstract class Message implements AgentAction {
     private final TreeMap<Integer, Field<?>> fields = new TreeMap<Integer, Field<?>>();
 
     /**
-     * Returns true if {@link Field} with this <code>tag</code> exists in this {@link Message}.
+     * Sets the {@link Field} with this <code>tag</code>.
      *
-     * @param tag tag to check.
-     *
-     * @return true if {@link Field} with this tag exists in this {@link Message}, false otherwise.
+     * @param tag   tag of {@link Field} to set.
+     * @param field value to set.
      */
-    public boolean isSetField(Integer tag) {
-        return fields.containsKey(tag);
-    }
-
-    /**
-     * Returns true if this <code>field</code> exists in this {@link Message}.
-     *
-     * @param field field to check.
-     *
-     * @return true if this <code>field</code> exists in this {@link Message},
-     *         false otherwise.
-     */
-    public boolean isSetField(Field<?> field) {
-        return isSetField(field.getTag());
+    public void setField(Integer tag, Field<?> field) {
+        fields.put(tag, field);
     }
 
     /**
@@ -58,25 +45,6 @@ public abstract class Message implements AgentAction {
     }
 
     /**
-     * Sets the {@link Field} with this <code>tag</code>.
-     *
-     * @param tag   tag of {@link Field} to set.
-     * @param field value to set.
-     */
-    public void setField(Integer tag, Field<?> field) {
-        fields.put(tag, field);
-    }
-
-    /**
-     * Removes the {@link Field} with this <code>tag</code>.
-     *
-     * @param tag tag of {@link Field} to remove.
-     */
-    public void removeField(Integer tag) {
-        fields.remove(tag);
-    }
-
-    /**
      * Gets the message's type.
      *
      * @return the tag.
@@ -93,7 +61,7 @@ public abstract class Message implements AgentAction {
             return false;
         }
 
-        Message message = (Message) o;
+        final Message message = (Message) o;
 
         if (fields != null ? !fields.equals(message.fields) : message.fields != null) {
             return false;
