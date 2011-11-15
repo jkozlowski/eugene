@@ -85,6 +85,29 @@ public abstract class Message implements AgentAction {
     public abstract String getType();
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Message message = (Message) o;
+
+        if (fields != null ? !fields.equals(message.fields) : message.fields != null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return fields != null ? fields.hashCode() : 0;
+    }
+
+    @Override
     public String toString() {
         final StringBuffer b = new StringBuffer();
         b.append(getClass().getName()).append("[");

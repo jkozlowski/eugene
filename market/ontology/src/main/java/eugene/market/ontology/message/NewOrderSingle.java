@@ -6,7 +6,7 @@ import jade.content.onto.annotations.Element;
 import jade.content.onto.annotations.Slot;
 
 /**
- * The <code>NEWORDERSINGLE</code> type is used by agents wishing to submit securities orders to a broker for
+ * The {@link NewOrderSingle} message type is used by agents wishing to submit securities orders to a broker for
  * execution.
  *
  * @author Jakub D Kozlowski
@@ -130,7 +130,6 @@ public class NewOrderSingle extends Message {
     public void setPrice(Price price) {
         setField(Price.TAGi, price);
     }
-
 
     /**
      * {@inheritDoc}
