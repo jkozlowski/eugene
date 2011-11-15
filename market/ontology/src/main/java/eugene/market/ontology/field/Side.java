@@ -12,16 +12,16 @@ import jade.content.onto.annotations.Slot;
 @Element(name = "54")
 public final class Side extends Field<String> {
 
-    public static final Side BUY = new Side("1");
+    public static final String BUY = "1";
 
-    public static final Side SELL = new Side("1");
+    public static final String SELL = "1";
 
     public Side(String value) {
         super(value);
     }
 
     @Override
-    @Slot(permittedValues = {BUY.getValue(), SELL.getValue()})
+    @Slot(permittedValues = { BUY, SELL })
     public String getValue() {
         return super.getValue();
     }
