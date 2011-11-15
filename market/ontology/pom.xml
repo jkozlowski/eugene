@@ -15,7 +15,8 @@
     <version>0.1.3-SNAPSHOT</version>
     <name>${bundle.namespace}</name>
     <description>Implements the ontology for sending orders and
-                 receiving market data feeds.</description>
+        receiving market data feeds.
+    </description>
     <packaging>bundle</packaging>
 
     <properties>
