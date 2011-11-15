@@ -9,8 +9,12 @@ import jade.content.onto.annotations.Slot;
  * @author Jakub D Kozlowski
  * @since 0.2
  */
-@Element(name = "40")
+@Element(name = OrdType.TAG)
 public final class OrdType extends Field<String> {
+
+    public static final String TAG = "40";
+
+    public static final Integer TAGi = 40;
 
     public static final String MARKET = "1";
 
@@ -24,5 +28,13 @@ public final class OrdType extends Field<String> {
     @Slot(mandatory = true, permittedValues = { LIMIT, MARKET })
     public String getValue() {
         return super.getValue();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Integer getTag() {
+        return TAGi;
     }
 }

@@ -13,6 +13,8 @@ import jade.content.onto.annotations.SuppressSlot;
  * <ul>
  *     <li>All extending classes should be annotated with {@link Element} with name corresponding to their FIX tag.</li>
  *     <li>Extending classes should be marked as final, to disable future extensions.</li>
+ *     <li>All extending classes should implement {@link Field#getTag()} and return their FIX tag as an {@link Integer};
+ *     usage of primitive type <code>int</code> is discouraged to avoid autoboxing.</li>
  * </ul>
  *
  *
@@ -49,10 +51,7 @@ public abstract class Field<V> implements Concept {
      * @return the tag.
      */
     @SuppressSlot
-    public String getTag() {
-        return null != getClass().getAnnotation(Element.class) ? EMPTY_TAG
-                                                               : getClass().getAnnotation(Element.class).name();
-    }
+    public abstract Integer getTag();
 
     /**
      * Get the field's value.
