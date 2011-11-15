@@ -1,5 +1,6 @@
 package eugene.market.ontology.field;
 
+import eugene.market.ontology.Field;
 import jade.content.onto.annotations.Element;
 
 /**
