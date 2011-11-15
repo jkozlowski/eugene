@@ -2,12 +2,14 @@ package eugene.market.ontology;
 
 import eugene.market.ontology.message.NewOrderSingle;
 import jade.osgi.service.runtime.JadeRuntimeService;
-import org.junit.Before;
 import org.junit.Test;
-import org.ops4j.pax.exam.Inject;
-import org.ops4j.pax.exam.player.Player;
-import org.ops4j.pax.exam.testforge.WaitForService;
+import org.junit.runner.RunWith;
+import org.ops4j.pax.exam.Option;
+import org.ops4j.pax.exam.junit.Configuration;
+import org.ops4j.pax.exam.junit.JUnit4TestRunner;
 import org.osgi.framework.BundleContext;
+
+import javax.inject.Inject;
 
 import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
 import static org.ops4j.pax.exam.CoreOptions.options;
@@ -18,30 +20,29 @@ import static org.ops4j.pax.exam.CoreOptions.options;
  * @author Jakub D Kozlowski
  * @since 0.2
  */
+@RunWith(JUnit4TestRunner.class)
 public class NewOrderSingleTest {
 
     @Inject
-    private BundleContext bundleContext;
+    private BundleContext bundleContext = null;
 
-    @Before
-    public void setup() throws Exception {
+    @Inject
+    private JadeRuntimeService jadeRuntimeService = null;
 
-        new Player().with(
-                options(
-                        mavenBundle().groupId("jade").artifactId("jade-osgi").versionAsInProject().start()
-                )
-        )
-        .test(WaitForService.class, JadeRuntimeService.class.getName(), 5000)
-        .play();
-
-        System.out.println("Got the bundle: " + bundleContext);
-        System.out.println("Setup a container");
+    @Configuration
+    public static Option[] configure() {
+        return options(
+                mavenBundle().groupId("jade").artifactId("jade-osgi").versionAsInProject().start()
+        );
     }
 
     @Test
     public void test() {
-
+        System.out.println(this.bundleContext);
     }
 
-
+    @Test
+    public void IHaveJADE() throws Exception {
+        System.out.println("I gots JADE: " + jadeRuntimeService.getContainerName());
+    }
 }
