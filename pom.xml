@@ -44,6 +44,7 @@
         <maven.pax.version>1.5</maven.pax.version>
 	<maven.pax.exam.version>1.2.4</maven.pax.exam.version>
         <pax.exam.version>2.3.0.M1</pax.exam.version>
+        <maven.pax.exam.version>1.2.4</maven.pax.exam.version>
     </properties>
 
     <modules>
