@@ -15,9 +15,10 @@
     <version>0.1.3-SNAPSHOT</version>
     <name>${bundle.namespace}</name>
     <description>Implements a deadlock simulation:
-                 Agents pass messages from one to another, and block until receiving a reply -
-                 but before agents reply, they send messages to next agent in the chain
-                 and therefore deadlock.</description>
+        Agents pass messages from one to another, and block until receiving a reply -
+        but before agents reply, they send messages to next agent in the chain
+        and therefore deadlock.
+    </description>
     <packaging>bundle</packaging>
 
     <properties>
@@ -33,14 +34,14 @@
         </dependency>
         <dependency>
             <groupId>org.osgi</groupId>
-            <artifactId>osgi_R4_core</artifactId>
+            <artifactId>org.osgi.core</artifactId>
             <version>${osgi.version}</version>
             <scope>provided</scope>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.osgi</groupId>
-            <artifactId>osgi_R4_compendium</artifactId>
+            <artifactId>org.osgi.compendium</artifactId>
             <version>${osgi.version}</version>
             <scope>provided</scope>
             <optional>true</optional>

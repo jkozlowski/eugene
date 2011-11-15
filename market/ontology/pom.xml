@@ -24,19 +24,6 @@
     </properties>
 
     <dependencies>
-
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.compendium</artifactId>
-            <version>4.2.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>jade</groupId>
-            <artifactId>jade-osgi</artifactId>
-            <version>${jade.osgi.version}</version>
-        </dependency>
-
         <!-- START: Pax Exam -->
         <dependency>
             <groupId>org.ops4j.pax.exam</groupId>
@@ -49,13 +36,6 @@
             <groupId>org.ops4j.pax.exam</groupId>
             <artifactId>pax-exam-junit4</artifactId>
             <version>${pax.exam.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.ops4j.pax.exam</groupId>
-            <artifactId>pax-exam-junit</artifactId>
-            <version>1.2.4</version>
             <scope>test</scope>
         </dependency>
 
@@ -86,33 +66,38 @@
             <version>${pax.exam.version}</version>
             <scope>test</scope>
         </dependency>
-
-        <!--<dependency>
-            <groupId>org.osgilab.testing</groupId>
-            <artifactId>commons</artifactId>
-            <version>1.0.0</version>
-            <scope>test</scope>
-        </dependency>-->
         <!-- END: Pax Exam-->
-
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.compendium</artifactId>
+            <version>${osgi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jade</groupId>
+            <artifactId>jade-osgi</artifactId>
+            <version>${jade.osgi.version}</version>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
         </dependency>
-
-        <!-- OSGi R4 frameworks -->
         <dependency>
             <groupId>org.sonatype.tycho</groupId>
             <artifactId>org.eclipse.osgi</artifactId>
             <version>3.6.2.R36x_v20110210</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
-            <version>1</version>
+            <version>${javax.inject.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.simple.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
