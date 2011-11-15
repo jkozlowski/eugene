@@ -41,6 +41,7 @@
         <maven.bundle.version>2.3.5</maven.bundle.version>
         <maven.release.version>2.2.1</maven.release.version>
         <maven.pax.version>1.5</maven.pax.version>
+        <maven.pax.exam.version>1.2.4</maven.pax.exam.version>
     </properties>
 
     <modules>
