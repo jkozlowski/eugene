@@ -12,16 +12,16 @@ import jade.content.onto.annotations.Slot;
 @Element(name = "40")
 public final class OrdType extends Field<String> {
 
-    public static final OrdType MARKET = new OrdType("1");
+    public static final String MARKET = "1";
 
-    public static final OrdType LIMIT = new OrdType("2");
+    public static final String LIMIT = "2";
 
     public OrdType(String value) {
         super(value);
     }
 
     @Override
-    @Slot(mandatory = true, permittedValues = {LIMIT.getValue(), MARKET.getValue()})
+    @Slot(mandatory = true, permittedValues = { LIMIT, MARKET })
     public String getValue() {
         return super.getValue();
     }
