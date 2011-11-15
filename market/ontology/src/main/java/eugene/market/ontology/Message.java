@@ -1,4 +1,4 @@
-package eugene.market.ontology.message;
+package eugene.market.ontology;
 
 import jade.content.AgentAction;
 

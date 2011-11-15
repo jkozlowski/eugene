@@ -1,9 +1,8 @@
 package eugene.market.ontology.field;
 
+import eugene.market.ontology.Field;
 import jade.content.onto.annotations.Element;
 import jade.content.onto.annotations.Slot;
-
-import javax.swing.text.html.HTML.Tag;
 
 /**
  * Side of order.
