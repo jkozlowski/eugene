@@ -13,6 +13,28 @@
 
     <repositories>
         <repository>
+            <id>MavenCentral</id>
+            <name>Maven repository</name>
+            <url>http://repo1.maven.org/maven2</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>objectweb</id>
+            <name>Objectweb repository</name>
+            <url>http://maven.objectweb.org/maven2</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
             <id>ops4j.releases</id>
             <name>The OPS4J Release Repository</name>
             <url>http://repository.ops4j.org/maven2/</url>

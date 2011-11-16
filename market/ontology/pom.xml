@@ -60,6 +60,13 @@
             <scope>test</scope>
         </dependency>
 
+        <!--<dependency>
+            <groupId>org.ops4j.pax.exam</groupId>
+            <artifactId>pax-exam-container-paxrunner</artifactId>
+            <version>${pax.exam.version}</version>
+            <scope>test</scope>
+        </dependency>-->
+
         <dependency>
             <groupId>org.ops4j.pax.exam</groupId>
             <artifactId>pax-exam-link-mvn</artifactId>
@@ -119,7 +126,7 @@
                         <Bundle-SymbolicName>${bundle.namespace}</Bundle-SymbolicName>
                         <Bundle-Version>${project.version}</Bundle-Version>
                         <Bundle-Description>${project.description}</Bundle-Description>
-                        <Export-Package>${bundle.namespace}, ${bundle.namespace}.field, ${bundle.namespace}.message
+                        <Export-Package>${bundle.namespace}, ${bundle.namespace}.field, ${bundle.namespace}.message, jade.jademx.agent
                         </Export-Package>
                         <Import-Package>
                             jade.content, jade.content.onto, jade.content.onto.annotations
