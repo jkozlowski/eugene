@@ -36,14 +36,14 @@
         </dependency>
         <dependency>
             <groupId>org.osgi</groupId>
-            <artifactId>osgi_R4_core</artifactId>
+            <artifactId>org.osgi.core</artifactId>
             <version>${osgi.version}</version>
             <scope>provided</scope>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.osgi</groupId>
-            <artifactId>osgi_R4_compendium</artifactId>
+            <artifactId>org.osgi.compendium</artifactId>
             <version>${osgi.version}</version>
             <scope>provided</scope>
             <optional>true</optional>
