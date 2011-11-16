@@ -99,6 +99,11 @@
             <version>${slf4j.simple.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>jade</groupId>
+            <artifactId>jademx</artifactId>
+            <version>0.4.1</version>
+        </dependency>
     </dependencies>
 
     <build>
