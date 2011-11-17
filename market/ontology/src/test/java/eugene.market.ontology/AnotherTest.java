@@ -1,8 +1,9 @@
 package eugene.market.ontology;
 
-import jade.core.*;
+import jade.core.Profile;
+import jade.core.ProfileException;
+import jade.core.ProfileImpl;
 import jade.core.Runtime;
-import jade.osgi.service.runtime.JadeRuntimeService;
 import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
@@ -13,8 +14,6 @@ import org.ops4j.pax.exam.junit.Configuration;
 import org.ops4j.pax.exam.junit.ExamReactorStrategy;
 import org.ops4j.pax.exam.junit.JUnit4TestRunner;
 import org.ops4j.pax.exam.spi.reactors.AllConfinedStagedReactorFactory;
-
-import javax.inject.Inject;
 
 import static org.ops4j.pax.exam.CoreOptions.*;
 
@@ -34,6 +33,7 @@ public class AnotherTest {
                 junitBundles(),
                 systemProperty("org.ops4j.pax.logging.DefaultServiceLog.level").value("WARN"),
                 mavenBundle().groupId("org.apache.felix").artifactId("org.apache.felix.log").version("1.0.0"),
+                mavenBundle().groupId("eugene.market").artifactId("ontology").versionAsInProject(),
                 mavenBundle().groupId("jade").artifactId("jade-osgi").versionAsInProject().start()
         );
     }
@@ -48,11 +48,11 @@ public class AnotherTest {
 
         // Create a default profile
         Profile p = new ProfileImpl(true);
-        p.setParameter(Profile.NO_MTP, "true");
+        //p.setParameter(Profile.NO_MTP, "true");
         p.setParameter(Profile.DETECT_MAIN, "false");
         p.setParameter(Profile.LOCAL_SERVICE_MANAGER, "false");
         p.setParameter(Profile.NO_DISPLAY, "true");
-        System.out.println(p.getSpecifiers(Profile.IMTP));
+        p.setParameter(Profile.IMTP, "eugene.market.ontology.MyIMTPManager");
 
 
         // Create a new non-main container, connecting to the default
@@ -84,11 +84,11 @@ public class AnotherTest {
 
         // Create a default profile
         Profile p = new ProfileImpl(true);
-        p.setParameter(Profile.NO_MTP, "true");
+        //p.setParameter(Profile.NO_MTP, "true");
         p.setParameter(Profile.DETECT_MAIN, "false");
         p.setParameter(Profile.LOCAL_SERVICE_MANAGER, "false");
         p.setParameter(Profile.NO_DISPLAY, "true");
-        System.out.println(p.getSpecifiers(Profile.IMTP));
+        p.setParameter(Profile.IMTP, "eugene.market.ontology.MyIMTPManager");
 
 
         // Create a new non-main container, connecting to the default
