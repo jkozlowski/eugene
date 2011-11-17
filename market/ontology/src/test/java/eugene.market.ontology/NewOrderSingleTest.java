@@ -35,23 +35,22 @@ import static org.ops4j.pax.exam.CoreOptions.*;
  * @author Jakub D Kozlowski
  * @since 0.2
  */
-//@RunWith(JUnit4TestRunner.class)
-public class NewOrderSingleasd {
+@RunWith(JUnit4TestRunner.class)
+public class NewOrderSingleTest {
 
     @Inject
     private BundleContext bundleContext = null;
 
-    @Inject
-    private JadeRuntimeService jadeRuntimeService = null;
+//    @Inject
+//    private JadeRuntimeService jadeRuntimeService = null;
 
     @Configuration
     public static Option[] configure() {
         return options(
                 junitBundles(),
                 systemProperty( "org.ops4j.pax.logging.DefaultServiceLog.level").value("WARN"),
-                mavenBundle().groupId("org.apache.felix").artifactId("org.apache.felix.log").version("1.0.0"),
-                mavenBundle().groupId("jade").artifactId("jade-osgi").versionAsInProject().start(),
-                mavenBundle().groupId("jade").artifactId("jademx").versionAsInProject()
+                mavenBundle().groupId("org.apache.felix").artifactId("org.apache.felix.log").version("1.0.0")/*,
+                mavenBundle().groupId("jade").artifactId("jade-osgi").versionAsInProject().start()             */
         );
     }
 
