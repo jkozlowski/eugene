@@ -23,7 +23,7 @@ import static org.junit.Assert.fail;
 /**
  * @author Jakub D Kozlowski
  */
-public class UnitTestingTest {
+public class UnitTestingTestasd {
 
     // original inject message before AIDs localized
     //  "(REQUEST"+
@@ -88,7 +88,7 @@ public class UnitTestingTest {
         JadeFactory jadeFactory = new JadeFactory( jadeMXServer );
         // instantiate the configuration
         try {
-            runtime = jadeFactory.instantiateRuntime( jademxConfig );
+            runtime = jadeFactory.instantiateRuntime(jademxConfig);
         }
         catch (Exception e) {
             fail(ThrowableUtil.errMsg("problem instantiating configuration",e));

@@ -47,7 +47,7 @@ import static org.ops4j.pax.exam.CoreOptions.*;
  *         >Caboodle Networks, Inc.</a>
  */
 @RunWith(JUnit4TestRunner.class)
-public class JademxAgentProxyTest {
+public class JademxAgentProxyTestasd {
 
     @Configuration
     public static Option[] configure() {
@@ -63,7 +63,7 @@ public class JademxAgentProxyTest {
      * my logger
      */
     private final Logger logger =
-            Logger.getMyLogger(JademxAgentProxyTest.class.getName());
+            Logger.getMyLogger(JademxAgentProxyTestasd.class.getName());
 
     // original inject message before AIDs localized
     //  "(REQUEST"+

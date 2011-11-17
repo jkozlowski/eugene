@@ -38,28 +38,28 @@ import static org.ops4j.pax.exam.CoreOptions.*;
 //@RunWith(JUnit4TestRunner.class)
 public class NewOrderSingleasd {
 
-//    @Inject
-//    private BundleContext bundleContext = null;
-//
-//    @Inject
-//    private JadeRuntimeService jadeRuntimeService = null;
-//
-//    @Configuration
-//    public static Option[] configure() {
-//        return options(
-//                junitBundles(),
-//                systemProperty( "org.ops4j.pax.logging.DefaultServiceLog.level").value("WARN"),
-//                mavenBundle().groupId("org.apache.felix").artifactId("org.apache.felix.log").version("1.0.0"),
-//                mavenBundle().groupId("jade").artifactId("jade-osgi").versionAsInProject().start(),
-//                mavenBundle().groupId("jade").artifactId("jademx").versionAsInProject()
-//        );
-//    }
+    @Inject
+    private BundleContext bundleContext = null;
 
-//    @Test
-//    public void test() {
-//        System.out.println(this.bundleContext);
-//    }
-//
+    @Inject
+    private JadeRuntimeService jadeRuntimeService = null;
+
+    @Configuration
+    public static Option[] configure() {
+        return options(
+                junitBundles(),
+                systemProperty( "org.ops4j.pax.logging.DefaultServiceLog.level").value("WARN"),
+                mavenBundle().groupId("org.apache.felix").artifactId("org.apache.felix.log").version("1.0.0"),
+                mavenBundle().groupId("jade").artifactId("jade-osgi").versionAsInProject().start(),
+                mavenBundle().groupId("jade").artifactId("jademx").versionAsInProject()
+        );
+    }
+
+    @Test
+    public void test() {
+        System.out.println(this.bundleContext);
+    }
+
     @Test
     public void IHaveJADE() throws Exception {
         System.out.println("I gots JADE: ");
