@@ -39,6 +39,7 @@
         <maven.assembly.version>2.2.1</maven.assembly.version>
         <maven.bundle.version>2.3.5</maven.bundle.version>
         <maven.release.version>2.2.1</maven.release.version>
+        <maven.dependency.version>2.3</maven.dependency.version>
         <maven.pax.version>1.5</maven.pax.version>
 	<maven.pax.exam.version>1.2.4</maven.pax.exam.version>
         <pax.exam.version>2.3.0.M1</pax.exam.version>
@@ -47,6 +48,7 @@
     <modules>
         <module>demo</module>
         <module>doc</module>
+        <module>jade-unit</module>
     </modules>
 
     <dependencies>
@@ -83,6 +85,12 @@
                         <fileset>
                             <directory>runner</directory>
                             <followSymlinks>false</followSymlinks>
+                        </fileset>
+                        <fileset>
+                            <directory>${basedir}</directory>
+                            <includes>
+                                <include>APDescription.txt</include>
+                            </includes>
                         </fileset>
                     </filesets>
                 </configuration>
