@@ -1,0 +1,23 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.7.0
+Created-By: Apache Maven Bundle Plugin
+Built-By: 00918076
+Bnd-LastModified: 1245689405802
+Import-Package: org.osgi.framework,jade.content.lang.xml;resolution:=o
+ ptional,javax.net,javax.net.ssl,javax.xml.parsers,javax.swing,javax.s
+ wing.border,javax.swing.tree,javax.swing.event,javax.swing.table,java
+ x.swing.text,javax.swing.filechooser
+Export-Package: jade.osgi.service.runtime,jade.osgi.service.agentFacto
+ ry,jade.osgi,jade.content,jade.content.abs,jade.content.frame,jade.co
+ ntent.lang,jade.content.lang.sl,jade.content.lang.leap,jade.content.o
+ nto.basic,jade.content.onto,jade.content.schema,jade.core,jade.core.b
+ ehaviours,jade.core.event,jade.core.faultRecovery,jade.core.messaging
+ ,jade.core.mobility,jade.domain,jade.domain.FIPAAgentManagement,jade.
+ domain.introspection,jade.domain.JADEAgentManagement,jade.domain.mobi
+ lity,jade.gui,jade.lang.acl,jade.mtp,jade.proto,jade.security,jade.ut
+ il,jade.util.leap,jade.wrapper,jade.wrapper.gateway
+Bundle-Version: 1.0.0
+Bundle-Name: eugene.jade-unit
+Bundle-ClassPath: .,lib/commons-codec-1.3.jar
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: eugene.jade-unit
