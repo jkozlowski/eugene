@@ -30,7 +30,10 @@
         <pax.runner.version>1.7.5</pax.runner.version>
         <pax.confman.version>0.2.2</pax.confman.version>
         <jade.osgi.version>1.2.0</jade.osgi.version>
-        <osgi.version>1.0</osgi.version>
+        <osgi.version>4.2.0</osgi.version>
+        <javax.inject.version>1</javax.inject.version>
+        <slf4j.simple.version>1.6.3</slf4j.simple.version>
+        <junit.version>4.10</junit.version>
         <maven.compiler.version>2.3.2</maven.compiler.version>
         <maven.clean.version>2.4.1</maven.clean.version>
         <maven.assembly.version>2.2.1</maven.assembly.version>
