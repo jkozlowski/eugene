@@ -167,6 +167,11 @@
                                 <format>html</format>
                                 <format>xml</format>
                             </formats>
+                            <instrumentation>
+                                <ignores>
+                                    <ignore>eugene.demo.*</ignore>
+                                </ignores>
+                            </instrumentation>
                         </configuration>
                     </plugin>
                 </plugins>
