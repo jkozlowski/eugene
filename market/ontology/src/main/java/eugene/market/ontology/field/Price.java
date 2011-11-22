@@ -9,8 +9,6 @@ import java.math.BigDecimal;
 /**
  * Price per unit of quantity.
  *
- * Following FIX specification, implemented using {@link BigDecimal}.
- *
  * @author Jakub D Kozlowski
  * @since 0.2
  */

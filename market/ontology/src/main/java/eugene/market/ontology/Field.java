@@ -67,15 +67,15 @@ public abstract class Field<V> implements Concept {
     public abstract Integer getTag();
 
     /**
-     * Checks if this {@link Field} is an enum.
+     * Checks if this {@link Field} is an enums.
      *
-     * @return <code>true</code> if this {@link Field} is an enum, false otherwise.
+     * @return <code>true</code> if this {@link Field} is an enums, false otherwise.
      */
     @SuppressSlot
     public abstract Boolean isEnumField();
 
     /**
-     * Gets valid values for this {@link Field} if it is an enum.
+     * Gets valid values for this {@link Field} if it is an enums.
      *
      * @return valued values for this {@link Field}.
      */
