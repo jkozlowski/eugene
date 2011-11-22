@@ -40,8 +40,9 @@
         <maven.bundle.version>2.3.5</maven.bundle.version>
         <maven.release.version>2.2.1</maven.release.version>
         <maven.dependency.version>2.3</maven.dependency.version>
+        <maven.cobertura.version>2.5.1</maven.cobertura.version>
         <maven.pax.version>1.5</maven.pax.version>
-	<maven.pax.exam.version>1.2.4</maven.pax.exam.version>
+        <maven.pax.exam.version>1.2.4</maven.pax.exam.version>
         <pax.exam.version>2.3.0.M1</pax.exam.version>
     </properties>
 
@@ -108,4 +109,25 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>cobertura</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>cobertura-maven-plugin</artifactId>
+                        <version>${maven.cobertura.version}</version>
+                        <configuration>
+                            <formats>
+                                <format>html</format>
+                                <format>xml</format>
+                            </formats>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
