@@ -40,6 +40,13 @@
             <url>http://repository.ops4j.org/maven2/</url>
         </repository>
         <repository>
+            <id>MarketceteraRepo</id>
+            <url>http://repo.marketcetera.org/maven</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+        <repository>
             <id>project.local</id>
             <name>project</name>
             <url>file://.repo</url>
