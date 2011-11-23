@@ -45,7 +45,7 @@ public final class ExecType extends Field<String> {
     }
 
     @Override
-    @Slot(permittedValues = {NEW, TRADE})
+    @Slot(permittedValues = {NEW, PARTIAL_FILL, FILL, CANCELED, REJECTED, TRADE})
     public String getValue() {
         return super.getValue();
     }
