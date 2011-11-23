@@ -21,6 +21,14 @@ public final class ExecType extends Field<String> {
 
     public static final String NEW = "0";
 
+    public static final String PARTIAL_FILL = "1";
+
+    public static final String FILL = "2";
+
+    public static final String CANCELED = "4";
+
+    public static final String REJECTED = "8";
+
     public static final String TRADE = "F";
 
     /**
