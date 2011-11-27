@@ -8,7 +8,12 @@ package eugene.market.esma.enums;
  */
 public enum ExecType {
 
-    NEW("0"), PARTIAL_FILL("1"), FILL("2"), CANCELED("4"), REJECTED("8"), TRADE("F");
+    NEW(eugene.market.ontology.field.ExecType.NEW),
+    PARTIAL_FILL(eugene.market.ontology.field.ExecType.PARTIAL_FILL),
+    FILL(eugene.market.ontology.field.ExecType.FILL),
+    CANCELED(eugene.market.ontology.field.ExecType.CANCELED),
+    REJECTED(eugene.market.ontology.field.ExecType.REJECTED),
+    TRADE(eugene.market.ontology.field.ExecType.TRADE);
 
     private final String value;
 
@@ -21,7 +26,7 @@ public enum ExecType {
      *
      * @return {@link eugene.market.ontology.field.ExecType} for this <code>enum</code>.
      */
-    public eugene.market.ontology.field.ExecType getExecType() {
+    public eugene.market.ontology.field.ExecType field() {
         return new eugene.market.ontology.field.ExecType(value);
     }
 }

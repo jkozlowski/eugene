@@ -1,21 +1,27 @@
-package eugene.market.esma.impl;
+package eugene.market.esma.execution.book;
 
-import eugene.market.esma.Order;
 import eugene.market.esma.enums.OrdType;
+import eugene.market.esma.enums.Side;
 import org.testng.annotations.Test;
 
-import static eugene.market.esma.impl.MockOrders.buy;
-import static eugene.market.esma.impl.MockOrders.limitConstPriceEntryTime;
-import static eugene.market.esma.impl.MockOrders.limitPrice;
-import static eugene.market.esma.impl.MockOrders.ordType;
-import static eugene.market.esma.impl.MockOrders.ordTypeEntryTime;
-import static eugene.market.esma.impl.MockOrders.order;
-import static eugene.market.esma.impl.MockOrders.sell;
-import static eugene.market.esma.Order.AFTER;
-import static eugene.market.esma.Order.BEFORE;
-import static eugene.market.esma.Order.SAME;
+import java.util.concurrent.atomic.AtomicLong;
+
+import static eugene.market.esma.execution.MockOrders.buy;
+import static eugene.market.esma.Defaults.defaultOrdQty;
+import static eugene.market.esma.Defaults.defaultPrice;
+import static eugene.market.esma.execution.MockOrders.limitConstPriceEntryTime;
+import static eugene.market.esma.execution.MockOrders.limitPrice;
+import static eugene.market.esma.execution.MockOrders.ordType;
+import static eugene.market.esma.execution.MockOrders.ordTypeEntryTime;
+import static eugene.market.esma.execution.MockOrders.order;
+import static eugene.market.esma.execution.MockOrders.sell;
+import static eugene.market.esma.execution.book.Order.AFTER;
+import static eugene.market.esma.execution.book.Order.BEFORE;
+import static eugene.market.esma.execution.book.Order.SAME;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
 
 /**
  * Tests {@link Order}.
@@ -24,6 +30,68 @@ import static org.hamcrest.Matchers.is;
  * @since 0.2
  */
 public class OrderTest {
+
+    public static final AtomicLong curOrderID = new AtomicLong();
+
+    @Test
+    public void testConstructor() {
+        final Long start = System.nanoTime();
+        final Long orderID = orderID();
+        final Order order = new Order(orderID, OrdType.LIMIT, Side.SELL, defaultOrdQty, defaultPrice);
+        final Long stop = System.nanoTime();
+        assertThat(order.getOrderID(), is(orderID));
+        assertThat(order.getOrdType(), is(OrdType.LIMIT));
+        assertThat(order.getSide(), is(Side.SELL));
+        assertThat(order.getOrderQty(), is(defaultOrdQty));
+        assertThat(order.getPrice(), is(defaultPrice));
+        assertThat(order.getEntryTime(), is(greaterThanOrEqualTo(start)));
+        assertThat(order.getEntryTime(), is(lessThanOrEqualTo(stop)));
+    }
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testConstructorNullOrderID() {
+        new Order(null, System.nanoTime(), OrdType.LIMIT, Side.SELL, defaultOrdQty, defaultPrice);
+    }
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testConstructorNullEntryTime() {
+        new Order(orderID(), null, OrdType.LIMIT, Side.SELL, defaultOrdQty, defaultPrice);
+    }
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testConstructorNullOrdType() {
+        new Order(orderID(), System.nanoTime(), null, Side.SELL, defaultOrdQty, defaultPrice);
+    }
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testConstructorNullSide() {
+        new Order(orderID(), System.nanoTime(), OrdType.LIMIT, null, defaultOrdQty, defaultPrice);
+    }
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testConstructorNullOrdQty() {
+        new Order(orderID(), System.nanoTime(), OrdType.LIMIT, Side.SELL, null, defaultPrice);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testConstructorOrdQtyLessThanOne() {
+        new Order(orderID(), System.nanoTime(), OrdType.LIMIT, Side.SELL, Order.NO_QTY, defaultPrice);
+    }
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testConstructorNullPrice() {
+        new Order(orderID(), System.nanoTime(), OrdType.LIMIT, Side.SELL, defaultOrdQty, null);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testConstructorLimitOrderPriceLessThanOrEqualThanNoPrice() {
+        new Order(orderID(), System.nanoTime(), OrdType.LIMIT, Side.SELL, defaultOrdQty, Order.NO_PRICE);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testConstructorMarketOrderPriceNotNoPrice() {
+        new Order(orderID(), System.nanoTime(), OrdType.MARKET, Side.SELL, defaultOrdQty, defaultPrice);
+    }
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testCompareFirstNull() {
@@ -35,6 +103,12 @@ public class OrderTest {
     public void testCompareSecondNull() {
         compare(order(buy()), null);
         compare(order(sell()), null);
+    }
+
+    @Test
+    public void testCompareSameOrder() {
+        final Order order = order(buy());
+        assertThat(compare(order, order), is(SAME));
     }
 
     @Test
@@ -118,7 +192,16 @@ public class OrderTest {
     }
 
     /**
-     * Returns the result of comparing <code>o1</code> to <code>o2</code> using <code>orderComparator</code>.
+     * Gets the next orderID.
+     *
+     * @return next orderID.
+     */
+    public static Long orderID() {
+        return curOrderID.getAndIncrement();
+    }
+
+    /**
+     * Returns the result of comparing <code>o1</code> to <code>o2</code> using {@link Order#compareTo(Order)}.
      *
      * @param o1 first order.
      * @param o2 second order.
