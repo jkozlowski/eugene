@@ -7,7 +7,12 @@ package eugene.market.esma.enums;
  * @since 0.2
  */
 public enum OrdStatus {
-    NEW("0"), PARTIALLY_FILLED("1"), FILLED("2"), CANCELLED("4"), REJECTED("8");
+
+    NEW(eugene.market.ontology.field.OrdStatus.NEW),
+    PARTIALLY_FILLED(eugene.market.ontology.field.OrdStatus.PARTIALLY_FILLED),
+    FILLED(eugene.market.ontology.field.OrdStatus.FILLED),
+    CANCELED(eugene.market.ontology.field.OrdStatus.CANCELLED),
+    REJECTED(eugene.market.ontology.field.OrdStatus.REJECTED);
 
     private final String value;
 
@@ -20,7 +25,7 @@ public enum OrdStatus {
      *
      * @return {@link eugene.market.ontology.field.OrdStatus} for this <code>enum</code>.
      */
-    public eugene.market.ontology.field.OrdStatus getOrdStatus() {
+    public eugene.market.ontology.field.OrdStatus field() {
         return new eugene.market.ontology.field.OrdStatus(value);
     }
 }

@@ -1,7 +1,12 @@
 package eugene.market.ontology.message;
 
 import eugene.market.ontology.Message;
-import eugene.market.ontology.field.*;
+import eugene.market.ontology.field.ClOrdID;
+import eugene.market.ontology.field.OrdType;
+import eugene.market.ontology.field.OrderQty;
+import eugene.market.ontology.field.Price;
+import eugene.market.ontology.field.Side;
+import eugene.market.ontology.field.Symbol;
 import jade.content.onto.annotations.Element;
 import jade.content.onto.annotations.Slot;
 

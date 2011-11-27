@@ -1,42 +1,34 @@
-package eugene.market.esma.impl;
+package eugene.market.esma.execution;
 
-import eugene.market.esma.Order;
+import eugene.market.esma.Defaults;
 import eugene.market.esma.enums.OrdType;
 import eugene.market.esma.enums.Side;
-import jade.core.AID;
+import eugene.market.esma.execution.book.Order;
 
 import static eugene.market.esma.enums.OrdType.LIMIT;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
- * Utility methods for constructing utility {@link Order} mocks.
+ * Utility methods for constructing {@link Order} mocks.
  *
  * @author Jakub D Kozlowski
  * @since 0.2
  */
 public final class MockOrders {
 
-    public static final AID aid = new AID("test", AID.ISGUID);
-
-    public static final String defaultSymbol = "VOD.L";
-
-    public static final Long defaultOrdQty = 100L;
-
-    public static final Double defaultPrice = 100.0D;
-
     /**
-     * Gets a mocked {@link Order} with {@link MockOrders#defaultOrdQty}, {@link MockOrders#defaultPrice}, {@link
+     * Gets a mocked {@link Order} with {@link Defaults#defaultOrdQty}, {@link Defaults#defaultPrice}, {@link
      * Side#BUY, {@link OrdType#LIMIT} and {@link System#nanoTime()}.
      *
-     * @return mocked {@link Order}.
+     * @return mocked {@link Order }.
      */
     public static Order mockOrder() {
         final Order mock = mock(Order.class);
-        when(mock.getOrderQty()).thenReturn(defaultOrdQty);
+        when(mock.getOrderQty()).thenReturn(Defaults.defaultOrdQty);
         when(mock.getSide()).thenReturn(Side.BUY);
         when(mock.getOrdType()).thenReturn(OrdType.LIMIT);
-        when(mock.getPrice()).thenReturn(defaultPrice);
+        when(mock.getPrice()).thenReturn(Defaults.defaultPrice);
         when(mock.getEntryTime()).thenReturn(System.nanoTime());
         return mock;
     }
@@ -70,13 +62,16 @@ public final class MockOrders {
      * @return mocked {@link Order}.
      */
     public static Order ordType(final Order order, final OrdType ordType) {
+        if (ordType.isMarket()) {
+            when(order.getPrice()).thenReturn(Order.NO_PRICE);
+        }
         return when(order.getOrdType()).thenReturn(ordType).getMock();
     }
 
     /**
      * Gets a mocked {@link Order} with {@link Order#getOrderQty()} equal to <code>orderQty</code>.
      *
-     * @param order   order to set.
+     * @param order    order to set.
      * @param orderQty quantity to set.
      *
      * @return mocked {@link Order}.
@@ -146,7 +141,7 @@ public final class MockOrders {
      * @return {@link Order} from this <code>mock</code>.
      */
     public static Order order(final Order mock) {
-        return new Order(mock.getOrderQty(), mock.toString(), defaultSymbol, aid, mock.getSide(), mock
-                .getOrdType(), mock.getPrice(), mock.getEntryTime());
+        return new Order(Defaults.curOrderID.getAndIncrement(), mock.getEntryTime(), mock.getOrdType(),
+                         mock.getSide(), mock.getOrderQty(), mock.getPrice());
     }
 }

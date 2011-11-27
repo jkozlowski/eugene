@@ -56,12 +56,6 @@
             <version>${hamcrest.version}</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-            <version>1.0.CR5</version>
-            <scope>provided</scope>
-        </dependency>
     </dependencies>
 
     <build>
@@ -83,7 +77,9 @@
                             jade.content, jade.content.onto, jade.content.onto.annotations, com.google.common.base,
                             jade.core, eugene.market.ontology.field, eugene.market.ontology.message, jade.lang.acl,
                             javax.validation.constraints, com.google.common.collect, eugene.market.ontology,
-                            jade.content.lang, jade.content.lang.sl, jade.content.onto.basic, jade.core.behaviours
+                            jade.content.lang, jade.content.lang.sl, jade.content.onto.basic, jade.core.behaviours,
+                            com.google.common.primitives, java.util.logging, jade.util,
+                            eugene.market.ontology.message.data
                         </Import-Package>
                     </instructions>
                 </configuration>

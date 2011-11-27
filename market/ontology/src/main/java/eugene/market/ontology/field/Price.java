@@ -4,8 +4,6 @@ import eugene.market.ontology.Field;
 import jade.content.onto.annotations.Element;
 import jade.content.onto.annotations.SuppressSlot;
 
-import java.math.BigDecimal;
-
 /**
  * Price per unit of quantity.
  *
