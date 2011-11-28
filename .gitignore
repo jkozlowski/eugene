@@ -1,5 +1,6 @@
 .DS_Store
 target
+APDescription.txt
 
 # idea
 *.iml
