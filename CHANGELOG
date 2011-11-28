@@ -1,4 +1,17 @@
 2011-11-2 Jakub D Kozlowski <mail@jakub-kozlowski.com>
+    Release: Version 0.2
+        * Implemented Market Ontology under market/ontology
+        ** NewOrderSingle.
+        ** ExecutionReport.
+        ** Tests.
+        * Implemented Market Agent under market/esma.
+        ** Accepts NewOrderSingle, enters Order to OrderBook and sends a confirmation ExecutionReport.
+        ** Tests.
+        * Implemented jade-unit extension to JADE.
+        ** Allows creating unit tests for agent behaviours that run inside a in-memory Main JADE container.
+        * Project Plan.
+
+2011-11-2 Jakub D Kozlowski <mail@jakub-kozlowski.com>
     Release: Version 0.1.3
         * Implemented livelock simulation under demo/livelock.
 
