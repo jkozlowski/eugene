@@ -7,12 +7,12 @@
     <parent>
         <groupId>eugene</groupId>
         <artifactId>parent</artifactId>
-        <version>0.1.3-SNAPSHOT</version>
+        <version>0.2-SNAPSHOT</version>
     </parent>
 
     <groupId>eugene</groupId>
     <artifactId>jade-unit</artifactId>
-    <version>0.1.3-SNAPSHOT</version>
+    <version>0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>${project.groupId}.${project.artifactId}</name>
     <description>Implementation of MemoryIMTPManager that eliminates global side-effects.</description>
