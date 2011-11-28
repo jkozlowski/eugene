@@ -182,6 +182,9 @@
                                 <ignores>
                                     <ignore>eugene.demo.*</ignore>
                                 </ignores>
+                                <excludes>
+                                    <exclude>eugene/demo/**/*.class</exclude>
+                                </excludes>
                             </instrumentation>
                         </configuration>
                     </plugin>
