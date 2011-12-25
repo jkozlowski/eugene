@@ -117,7 +117,7 @@ public class NewOrderSingle extends Message {
      *
      * @return the price.
      */
-    @Slot(mandatory = true)
+    @Slot
     public Price getPrice() {
         return getField(Price.TAGi);
     }
