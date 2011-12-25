@@ -2,6 +2,7 @@ package eugene.market.ontology.message;
 
 import eugene.market.ontology.Message;
 import eugene.market.ontology.field.AvgPx;
+import eugene.market.ontology.field.ClOrdID;
 import eugene.market.ontology.field.CumQty;
 import eugene.market.ontology.field.ExecType;
 import eugene.market.ontology.field.LeavesQty;
@@ -180,6 +181,25 @@ public class ExecutionReport extends Message {
      */
     public void setOrderID(OrderID orderID) {
         setField(OrderID.TAGi, orderID);
+    }
+
+    /**
+     * Gets the clOrdID.
+     *
+     * @return the clOrdID.
+     */
+    @Slot(mandatory = true)
+    public ClOrdID getClOrdID() {
+        return getField(ClOrdID.TAGi);
+    }
+
+    /**
+     * Sets the clOrdID.
+     *
+     * @param clOrdID new clOrdID.
+     */
+    public void setClOrdID(ClOrdID clOrdID) {
+        setField(ClOrdID.TAGi, clOrdID);
     }
 
     /**

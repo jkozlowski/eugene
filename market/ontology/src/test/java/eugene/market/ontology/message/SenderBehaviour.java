@@ -17,7 +17,7 @@ import java.util.Set;
  * @author Jakub D Kozlowski
  * @since 0.2
  */
-class SenderBehaviour extends OneShotBehaviour {
+public class SenderBehaviour extends OneShotBehaviour {
 
     public final Set<Message> sent = new HashSet<Message>();
 
@@ -43,6 +43,7 @@ class SenderBehaviour extends OneShotBehaviour {
                 sent.add(msg);
             }
             catch (Exception e1) {
+                System.out.println(e1);
                 failed.add(msg);
             }
         }
