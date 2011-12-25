@@ -9,15 +9,15 @@ import quickfix.ConfigError;
 import quickfix.DataDictionary;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static java.lang.reflect.Modifier.isFinal;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 /**
  * Tests for inconsistencies in the {@link Field} classes.
@@ -29,7 +29,7 @@ public class FieldTest {
 
     private static final String FIELDS_PACKAGE = FieldTest.class.getPackage().getName();
 
-    private static final String FIX50XML = "FIX44.xml";
+    private static final String FIX44XML = "FIX44.xml";
 
     private static final String GET_VALUE_METHOD = "getValue";
 
@@ -37,8 +37,8 @@ public class FieldTest {
 
     @BeforeClass
     public static void setupDictionary() throws ConfigError {
-        System.out.println(FieldTest.class.getClassLoader().getResource(FIX50XML).getPath());
-        final DataDictionary dictionary = new DataDictionary(FIX50XML);
+        System.out.println(FieldTest.class.getClassLoader().getResource(FIX44XML).getPath());
+        final DataDictionary dictionary = new DataDictionary(FIX44XML);
         fields = new HashSet<Class<Field<?>>>();
         for (int field : dictionary.getOrderedFields()) {
             final String className = dictionary.getFieldName(field);
@@ -63,15 +63,14 @@ public class FieldTest {
                 final Set<String> actualValues = new TreeSet<String>(field.getEnumSet());
                 final Set<String> expectedValue =
                         new TreeSet<String>(Arrays.asList(getValueMethod.getAnnotation(Slot.class)
-                                                                        .permittedValues()));
+                                                                  .permittedValues()));
 
-                assertFalse(field.getEnumSet().isEmpty());
-                assertEquals(actualValues, expectedValue);
+                assertThat(field.getEnumSet().isEmpty(), is(false));
+                assertThat(actualValues, is(expectedValue));
             }
             else {
-                assertTrue(field.getEnumSet().isEmpty());
-                assertEquals(0, getValueMethod.getAnnotation(Slot.class)
-                                              .permittedValues().length);
+                assertThat(field.getEnumSet().isEmpty(), is(true));
+                assertThat(getValueMethod.getAnnotation(Slot.class).permittedValues().length, is(0));
             }
         }
     }
@@ -84,18 +83,18 @@ public class FieldTest {
     public void testTag() throws IllegalAccessException, InstantiationException {
         for (Class<Field<?>> fieldClass : fields) {
             final Field<?> field = fieldClass.newInstance();
-            assertEquals(fieldClass.getAnnotation(Element.class).name(), field.getTag().toString());
+            assertThat(fieldClass.getAnnotation(Element.class), notNullValue());
+            assertThat(fieldClass.getAnnotation(Element.class).name(), is(field.getTag().toString()));
         }
     }
 
     /**
      * Tests whether {@link Field}s are declared final.
-     *
      */
     @Test
     public void testIsFinal() {
         for (Class<Field<?>> fieldClass : fields) {
-            assertTrue(Modifier.isFinal(fieldClass.getModifiers()));
+            assertThat(isFinal(fieldClass.getModifiers()), is(true));
         }
     }
 }

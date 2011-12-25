@@ -2,6 +2,7 @@ package eugene.market.ontology.message;
 
 import eugene.market.ontology.Message;
 import eugene.market.ontology.field.AvgPx;
+import eugene.market.ontology.field.ClOrdID;
 import eugene.market.ontology.field.CumQty;
 import eugene.market.ontology.field.ExecType;
 import eugene.market.ontology.field.LeavesQty;
@@ -17,8 +18,8 @@ import org.junit.Test;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Tests sending {@link ExecutionReport}.
@@ -27,16 +28,6 @@ import static org.junit.Assert.assertTrue;
  * @since 0.2
  */
 public class ExecutionReportTest extends MessageTest {
-
-    public static final String id = "sdfaksjdfh";
-
-    public static final String Symbol = "VOD.L";
-
-    public static final Long LeavesQty = 1L;
-
-    public static final Long CumQty = 2L;
-
-    public static final Double AvgPx = 1.2;
 
     @Test
     public void testSendExecutionReport() throws InterruptedException, StaleProxyException, IllegalAccessException {
@@ -50,7 +41,8 @@ public class ExecutionReportTest extends MessageTest {
         executionReport.setCumQty(new CumQty(CumQty));
         executionReport.setAvgPx(new AvgPx(AvgPx));
         executionReport.setOrdStatus(new OrdStatus(OrdStatus.FILLED));
-        executionReport.setOrderID(new OrderID(id));
+        executionReport.setOrderID(new OrderID(OrderID));
+        executionReport.setClOrdID(new ClOrdID(ClOrdID));
         toSend.add(executionReport);
 
         receiverBehaviour = new ReceiverBehaviour(toSend.size());
@@ -64,12 +56,13 @@ public class ExecutionReportTest extends MessageTest {
         senderAgentController.putO2AObject(senderEvent, AgentController.ASYNC);
         senderEvent.waitUntilProcessed();
 
+        assertThat(senderBehaviour.failed.isEmpty(), is(true));
+        assertThat(senderBehaviour.sent, is(toSend));
+
         receiverEvent.waitUntilProcessed();
 
-        assertTrue(senderBehaviour.failed.isEmpty());
-        assertTrue(receiverBehaviour.failed.isEmpty());
-        assertEquals(toSend, senderBehaviour.sent);
-        assertEquals(toSend, receiverBehaviour.received);
+        assertThat(receiverBehaviour.failed.isEmpty(), is(true));
+        assertThat(receiverBehaviour.received, is(toSend));
     }
 
 }

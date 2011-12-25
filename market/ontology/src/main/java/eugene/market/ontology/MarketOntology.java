@@ -4,6 +4,8 @@ import eugene.market.ontology.field.AvgPx;
 import eugene.market.ontology.field.ClOrdID;
 import eugene.market.ontology.field.CumQty;
 import eugene.market.ontology.field.ExecType;
+import eugene.market.ontology.field.LastPx;
+import eugene.market.ontology.field.LastQty;
 import eugene.market.ontology.field.LeavesQty;
 import eugene.market.ontology.field.OrdStatus;
 import eugene.market.ontology.field.OrdType;
@@ -14,6 +16,9 @@ import eugene.market.ontology.field.Side;
 import eugene.market.ontology.field.Symbol;
 import eugene.market.ontology.message.ExecutionReport;
 import eugene.market.ontology.message.NewOrderSingle;
+import eugene.market.ontology.message.data.AddOrder;
+import eugene.market.ontology.message.data.Login;
+import eugene.market.ontology.message.data.OrderExecuted;
 import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
@@ -48,6 +53,8 @@ public final class MarketOntology extends BeanOntology {
             add(ClOrdID.class, false);
             add(CumQty.class, false);
             add(ExecType.class, false);
+            add(LastPx.class, false);
+            add(LastQty.class, false);
             add(LeavesQty.class, false);
             add(OrderID.class, false);
             add(OrderQty.class, false);
@@ -59,6 +66,10 @@ public final class MarketOntology extends BeanOntology {
 
             add(NewOrderSingle.class, false);
             add(ExecutionReport.class, false);
+
+            add(AddOrder.class, false);
+            add(Login.class, false);
+            add(OrderExecuted.class, false);
         }
         catch (OntologyException e) {
             e.printStackTrace();

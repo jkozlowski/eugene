@@ -41,6 +41,22 @@ public abstract class MessageTest {
 
     public static final String LANGUAGE = ContentLanguage.FIPA_SL0;
 
+    public static final String ClOrdID = "11";
+
+    public static final Long OrderQty = 2L;
+
+    public static final Double Price = 1.2;
+
+    public static final String Symbol = "VOD.L";
+
+    public static final String OrderID = "sdfaksjdfh";
+
+    public static final Long LeavesQty = 1L;
+
+    public static final Long CumQty = 2L;
+
+    public static final Double AvgPx = 1.2;
+
     /**
      * Creates the container.
      *

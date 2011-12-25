@@ -19,7 +19,7 @@ import static jade.lang.acl.MessageTemplate.and;
 /**
  * @author Jakub D Kozlowski
  */
-class ReceiverBehaviour extends SimpleBehaviour {
+public class ReceiverBehaviour extends SimpleBehaviour {
 
     public final int toReceive;
 
