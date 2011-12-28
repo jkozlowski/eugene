@@ -22,6 +22,7 @@ import eugene.market.ontology.message.data.OrderExecuted;
 import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
+import jade.domain.FIPANames.ContentLanguage;
 
 /**
  * Defines the Market Ontology used to send messages between Agents and the Market.
@@ -30,6 +31,11 @@ import jade.content.onto.OntologyException;
  * @since 0.2
  */
 public final class MarketOntology extends BeanOntology {
+
+    /**
+     * Language for this {@link MarketOntology}.
+     */
+    public static final String LANGUAGE = ContentLanguage.FIPA_SL;
 
     /**
      * Singleton instance of {@link MarketOntology}.
@@ -43,7 +49,6 @@ public final class MarketOntology extends BeanOntology {
 
     /**
      * Private constructor.
-     *
      */
     private MarketOntology() {
         super(NAME);
