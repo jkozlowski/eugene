@@ -8,6 +8,7 @@ import eugene.market.esma.enums.ExecType;
 import eugene.market.esma.enums.OrdStatus;
 import eugene.market.ontology.MarketOntology;
 import eugene.market.ontology.field.AvgPx;
+import eugene.market.ontology.field.ClOrdID;
 import eugene.market.ontology.field.CumQty;
 import eugene.market.ontology.field.LeavesQty;
 import eugene.market.ontology.field.OrderID;
@@ -106,6 +107,7 @@ public class MarketServerImpl implements MarketServer {
         executionReport.setLeavesQty(new LeavesQty(order.getOpenQuantity()));
         executionReport.setCumQty(new CumQty(order.getExecutedQuantity()));
         executionReport.setOrderID(new OrderID(order.getClOrdID()));
+        executionReport.setClOrdID(new ClOrdID(order.getClOrdID()));
         executionReport.setSide(order.getSide().getSide());
         executionReport.setSymbol(new Symbol(order.getSymbol()));
 
