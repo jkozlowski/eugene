@@ -12,12 +12,13 @@ import eugene.market.ontology.field.OrdType;
 import eugene.market.ontology.field.OrderID;
 import eugene.market.ontology.field.OrderQty;
 import eugene.market.ontology.field.Price;
+import eugene.market.ontology.field.SessionStatus;
 import eugene.market.ontology.field.Side;
 import eugene.market.ontology.field.Symbol;
 import eugene.market.ontology.message.ExecutionReport;
+import eugene.market.ontology.message.Logon;
 import eugene.market.ontology.message.NewOrderSingle;
 import eugene.market.ontology.message.data.AddOrder;
-import eugene.market.ontology.message.data.Login;
 import eugene.market.ontology.message.data.OrderExecuted;
 import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
@@ -66,14 +67,15 @@ public final class MarketOntology extends BeanOntology {
             add(OrdStatus.class, false);
             add(OrdType.class, false);
             add(Price.class, false);
+            add(SessionStatus.class, false);
             add(Side.class, false);
             add(Symbol.class, false);
 
-            add(NewOrderSingle.class, false);
             add(ExecutionReport.class, false);
+            add(NewOrderSingle.class, false);
+            add(Logon.class, false);
 
             add(AddOrder.class, false);
-            add(Login.class, false);
             add(OrderExecuted.class, false);
         }
         catch (OntologyException e) {

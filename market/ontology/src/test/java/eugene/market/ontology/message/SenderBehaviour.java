@@ -37,13 +37,12 @@ public class SenderBehaviour extends OneShotBehaviour {
                 final ACLMessage aclMessage = new ACLMessage(ACLMessage.REQUEST);
                 aclMessage.addReceiver(new AID(NewOrderSingleTest.RECEIVER_AGENT, AID.ISLOCALNAME));
                 aclMessage.setOntology(MarketOntology.getInstance().getName());
-                aclMessage.setLanguage(MessageTest.LANGUAGE);
+                aclMessage.setLanguage(MarketOntology.LANGUAGE);
                 myAgent.getContentManager().fillContent(aclMessage, a);
                 myAgent.send(aclMessage);
                 sent.add(msg);
             }
             catch (Exception e1) {
-                System.out.println(e1);
                 failed.add(msg);
             }
         }

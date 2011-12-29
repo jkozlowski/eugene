@@ -3,8 +3,8 @@ package eugene.market.ontology.field;
 import eugene.market.ontology.Field;
 import jade.content.onto.annotations.Element;
 import jade.content.onto.annotations.Slot;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 import quickfix.ConfigError;
 import quickfix.DataDictionary;
 
@@ -17,7 +17,7 @@ import java.util.TreeSet;
 import static java.lang.reflect.Modifier.isFinal;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Tests for inconsistencies in the {@link Field} classes.
@@ -33,45 +33,45 @@ public class FieldTest {
 
     private static final String GET_VALUE_METHOD = "getValue";
 
-    private static Set<Class<Field<?>>> fields;
+    private static final String DATA_PROVIDER = "data-provider";
 
-    @BeforeClass
-    public static void setupDictionary() throws ConfigError {
-        System.out.println(FieldTest.class.getClassLoader().getResource(FIX44XML).getPath());
+    @DataProvider(name = DATA_PROVIDER)
+    public Class<Field<?>>[][] setupDictionary() throws ConfigError {
         final DataDictionary dictionary = new DataDictionary(FIX44XML);
-        fields = new HashSet<Class<Field<?>>>();
+        final Set<Class<Field<?>>[]> fields = new HashSet<Class<Field<?>>[]>();
         for (int field : dictionary.getOrderedFields()) {
             final String className = dictionary.getFieldName(field);
             try {
                 final Class<Field<?>> fieldClass = (Class<Field<?>>) Class.forName(FIELDS_PACKAGE + "." + className);
-                fields.add(fieldClass);
+                fields.add(new Class[]{fieldClass});
             }
             catch (ClassNotFoundException e) {
             }
         }
+        return fields.toArray(new Class[][]{});
     }
 
     /**
      * Tests whether {@link Field}s correctly implement {@link Field#isEnumField()}.
      */
-    @Test
-    public void testIsEnum() throws IllegalAccessException, InstantiationException, NoSuchMethodException {
-        for (Class<Field<?>> fieldClass : fields) {
-            final Field<?> field = fieldClass.newInstance();
-            final Method getValueMethod = fieldClass.getMethod(GET_VALUE_METHOD, null);
-            if (field.isEnumField()) {
-                final Set<String> actualValues = new TreeSet<String>(field.getEnumSet());
-                final Set<String> expectedValue =
-                        new TreeSet<String>(Arrays.asList(getValueMethod.getAnnotation(Slot.class)
-                                                                  .permittedValues()));
+    @Test(dataProvider = DATA_PROVIDER)
+    public void testIsEnum(Class<Field<?>> fieldClass) throws IllegalAccessException, InstantiationException,
+                                                              NoSuchMethodException {
 
-                assertThat(field.getEnumSet().isEmpty(), is(false));
-                assertThat(actualValues, is(expectedValue));
-            }
-            else {
-                assertThat(field.getEnumSet().isEmpty(), is(true));
-                assertThat(getValueMethod.getAnnotation(Slot.class).permittedValues().length, is(0));
-            }
+        final Field<?> field = fieldClass.newInstance();
+        final Method getValueMethod = fieldClass.getMethod(GET_VALUE_METHOD, null);
+        if (field.isEnumField()) {
+            final Set<String> actualValues = new TreeSet<String>(field.getEnumSet());
+            final Set<String> expectedValue =
+                    new TreeSet<String>(Arrays.asList(getValueMethod.getAnnotation(Slot.class)
+                                                              .permittedValues()));
+
+            assertThat(field.getEnumSet().isEmpty(), is(false));
+            assertThat(actualValues, is(expectedValue));
+        }
+        else {
+            assertThat(field.getEnumSet().isEmpty(), is(true));
+            assertThat(getValueMethod.getAnnotation(Slot.class).permittedValues().length, is(0));
         }
     }
 
@@ -79,22 +79,18 @@ public class FieldTest {
      * Tests whether {@link Field}s return  same value from {@link Field#getTag()} as is set in {@link Element}
      * annotation.
      */
-    @Test
-    public void testTag() throws IllegalAccessException, InstantiationException {
-        for (Class<Field<?>> fieldClass : fields) {
-            final Field<?> field = fieldClass.newInstance();
-            assertThat(fieldClass.getAnnotation(Element.class), notNullValue());
-            assertThat(fieldClass.getAnnotation(Element.class).name(), is(field.getTag().toString()));
-        }
+    @Test(dataProvider = DATA_PROVIDER)
+    public void testTag(Class<Field<?>> fieldClass) throws IllegalAccessException, InstantiationException {
+        final Field<?> field = fieldClass.newInstance();
+        assertThat(fieldClass.getAnnotation(Element.class), notNullValue());
+        assertThat(fieldClass.getAnnotation(Element.class).name(), is(field.getTag().toString()));
     }
 
     /**
      * Tests whether {@link Field}s are declared final.
      */
-    @Test
-    public void testIsFinal() {
-        for (Class<Field<?>> fieldClass : fields) {
-            assertThat(isFinal(fieldClass.getModifiers()), is(true));
-        }
+    @Test(dataProvider = DATA_PROVIDER)
+    public void testIsFinal(Class<Field<?>> fieldClass) {
+        assertThat(isFinal(fieldClass.getModifiers()), is(true));
     }
 }
