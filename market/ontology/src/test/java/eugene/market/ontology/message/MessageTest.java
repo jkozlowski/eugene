@@ -5,13 +5,12 @@ import eugene.market.ontology.Message;
 import jade.content.lang.sl.SLCodec;
 import jade.core.Agent;
 import jade.core.Profile;
-import jade.domain.FIPANames.ContentLanguage;
 import jade.imtp.memory.MemoryProfile;
 import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
 import jade.wrapper.gateway.GatewayAgent;
-import org.junit.Before;
+import org.testng.annotations.BeforeMethod;
 
 import static jade.core.Runtime.instance;
 
@@ -25,10 +24,6 @@ public abstract class MessageTest {
 
     public AgentContainer agentContainer;
 
-    public static final String SENDER_AGENT = "sender";
-
-    public static final String RECEIVER_AGENT = "receiver";
-
     public GatewayAgent senderAgent;
 
     public GatewayAgent receiverAgent;
@@ -39,7 +34,9 @@ public abstract class MessageTest {
 
     public ReceiverBehaviour receiverBehaviour;
 
-    public static final String LANGUAGE = ContentLanguage.FIPA_SL0;
+    public static final String SENDER_AGENT = "sender";
+
+    public static final String RECEIVER_AGENT = "receiver";
 
     public static final String ClOrdID = "11";
 
@@ -61,7 +58,7 @@ public abstract class MessageTest {
      * Creates the container.
      *
      */
-    @Before
+    @BeforeMethod
     public void setupContainer() throws StaleProxyException {
         final Profile profile = new MemoryProfile();
         agentContainer = instance().createMainContainer(profile);
@@ -81,7 +78,7 @@ public abstract class MessageTest {
      * @param a agent to initialize.
      */
     public static void initAgent(final Agent a) {
-        a.getContentManager().registerLanguage(new SLCodec(), LANGUAGE);
+        a.getContentManager().registerLanguage(new SLCodec(), MarketOntology.LANGUAGE);
         a.getContentManager().registerOntology(MarketOntology.getInstance());
     }
 }

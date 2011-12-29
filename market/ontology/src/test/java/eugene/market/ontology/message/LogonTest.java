@@ -1,11 +1,7 @@
 package eugene.market.ontology.message;
 
 import eugene.market.ontology.Message;
-import eugene.market.ontology.field.ClOrdID;
-import eugene.market.ontology.field.OrdType;
-import eugene.market.ontology.field.OrderQty;
-import eugene.market.ontology.field.Price;
-import eugene.market.ontology.field.Side;
+import eugene.market.ontology.field.SessionStatus;
 import eugene.market.ontology.field.Symbol;
 import jade.util.Event;
 import jade.wrapper.AgentController;
@@ -19,26 +15,22 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
- * Tests sending {@link NewOrderSingle}.
+ * Tests sending {@link Logon}.
  *
  * @author Jakub D Kozlowski
- * @since 0.2
+ * @since 0.3
  */
-public class NewOrderSingleTest extends MessageTest {
+public class LogonTest extends MessageTest {
 
     @Test
-    public void testSendNewOrderSingleWithPrice() throws InterruptedException, StaleProxyException,
-                                                         IllegalAccessException {
+    public void testSendLogonWithSessionStatus() throws InterruptedException, StaleProxyException,
+                                                        IllegalAccessException {
 
         final Set<Message> toSend = new HashSet<Message>();
-        final NewOrderSingle newOrder = new NewOrderSingle();
-        newOrder.setClOrdID(new ClOrdID(ClOrdID));
-        newOrder.setSide(new Side(Side.BUY));
-        newOrder.setOrderQty(new OrderQty(OrderQty));
-        newOrder.setPrice(new Price(Price));
-        newOrder.setSymbol(new Symbol(Symbol));
-        newOrder.setOrdType(new OrdType(OrdType.LIMIT));
-        toSend.add(newOrder);
+        final Logon logon = new Logon();
+        logon.setSymbol(new Symbol(Symbol));
+        logon.setSessionStatus(new SessionStatus(SessionStatus.SESSION_ACTIVE));
+        toSend.add(logon);
 
         receiverBehaviour = new ReceiverBehaviour(toSend.size());
         final Event receiverEvent = new Event(-1, receiverBehaviour);
@@ -61,17 +53,13 @@ public class NewOrderSingleTest extends MessageTest {
     }
 
     @Test
-    public void testSendNewOrderSingleWithoutPrice() throws InterruptedException, StaleProxyException,
-                                                            IllegalAccessException {
+    public void testSendLogonWithoutSessionStatus() throws InterruptedException, StaleProxyException,
+                                                           IllegalAccessException {
 
         final Set<Message> toSend = new HashSet<Message>();
-        final NewOrderSingle newOrder = new NewOrderSingle();
-        newOrder.setClOrdID(new ClOrdID(ClOrdID));
-        newOrder.setSide(new Side(Side.BUY));
-        newOrder.setOrderQty(new OrderQty(OrderQty));
-        newOrder.setSymbol(new Symbol(Symbol));
-        newOrder.setOrdType(new OrdType(OrdType.LIMIT));
-        toSend.add(newOrder);
+        final Logon logon = new Logon();
+        logon.setSymbol(new Symbol(Symbol));
+        toSend.add(logon);
 
         receiverBehaviour = new ReceiverBehaviour(toSend.size());
         final Event receiverEvent = new Event(-1, receiverBehaviour);

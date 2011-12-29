@@ -7,14 +7,15 @@
  * and do not contain any member identity.
  *
  * <code>BATS PITCH 2.X</code> message types are prefixed with <code>BP</code> in order to eliminate confusion with
- * <code>FIX</code> messages, e.g. <code>Login</code> message has message type <code>0x01</code>,
- * therefore in <code>Market Ontology</code> it should have a <code>public static final</code> field called
- * <code>TYPE</code> equal to <code>BP0x01</code>.
+ * <code>FIX</code> messages, e.g. {@link AddOrder} message has message type <code>0x21</code>,
+ * therefore in {@link MarketOntology} it has {@link AddOrder.TYPE} equal to <code>BP0x21</code>.
  *
- * <code>BATS PITCH 2.X</code> messages use the same Message format as <code>FIX</code> messages. Therefore,
- * the same field types are used when an alternative is available.
+ * In {@link MarketOntology}, <code>BATS PITCH 2.X</code> messages use the same Message format as <code>FIX</code>
+ * messages. Therefore, the same field types are used when an alternative is available.
  *
  * @author Jakub D Kozlowski
  * @since 0.3
  */
 package eugene.market.ontology.message.data;
+
+import eugene.market.ontology.MarketOntology;

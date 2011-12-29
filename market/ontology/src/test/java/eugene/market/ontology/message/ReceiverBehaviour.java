@@ -28,7 +28,7 @@ public class ReceiverBehaviour extends SimpleBehaviour {
     public final Set<ACLMessage> failed = new HashSet<ACLMessage>();
 
     final MessageTemplate template =
-            and(MatchLanguage(MessageTest.LANGUAGE), and(MatchOntology(MarketOntology.getInstance()
+            and(MatchLanguage(MarketOntology.LANGUAGE), and(MatchOntology(MarketOntology.getInstance()
                                                                                      .getName()),
                                                          MatchPerformative(ACLMessage.REQUEST)));
 
@@ -42,18 +42,12 @@ public class ReceiverBehaviour extends SimpleBehaviour {
         try {
             ContentElement ce = myAgent.getContentManager().extractContent(msg);
 
-            if (Action.class != ce.getClass()) {
+            if (Action.class != ce.getClass() && !(((Action) ce).getAction() instanceof Message)) {
                 failed.add(msg);
                 return;
             }
 
-            final Action a = (Action) ce;
-            if (!(a.getAction() instanceof Message)) {
-                failed.add(msg);
-                return;
-            }
-
-            final Message order = (Message) a.getAction();
+            final Message order = (Message) ((Action) ce).getAction();
             received.add(order);
         }
         catch (Exception e) {
