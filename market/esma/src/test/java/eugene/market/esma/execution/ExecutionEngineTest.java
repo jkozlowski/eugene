@@ -88,6 +88,36 @@ public class ExecutionEngineTest {
         verify(executionEngine.getOrderBook()).insertOrder(order);
         verify(executionEngine.getMarketDataEngine()).newOrder(order);
     }
+    
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testCancelNullOrder() {
+        final ExecutionEngine executionEngine = getExecutionEngine();
+        executionEngine.cancel(null);
+    }
+
+    @Test
+    public void testCancelOrderDoesNotExist() {
+        final ExecutionEngine executionEngine = getExecutionEngine();
+
+        final OrderBook orderBook = executionEngine.getOrderBook();
+        when(orderBook.cancel(any(Order.class))).thenReturn(null);
+
+        assertThat(executionEngine.cancel(mock(Order.class)), nullValue());
+    }
+    
+    @Test
+    public void testCancelOrderValid() {
+        final ExecutionEngine executionEngine = getExecutionEngine();
+        
+        final Order order = mock(Order.class);
+        final OrderStatus orderStatus = mock(OrderStatus.class);
+        
+        final OrderBook orderBook = executionEngine.getOrderBook();
+        when(orderBook.cancel(order)).thenReturn(orderStatus);
+
+        assertThat(executionEngine.cancel(order), sameInstance(orderStatus));
+        verify(executionEngine.getMarketDataEngine()).cancel(orderStatus);
+    }
 
     @Test
     public void testExecuteBuySideEmpty() {

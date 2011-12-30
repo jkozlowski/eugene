@@ -82,6 +82,13 @@ public class DefaultOrderBook implements OrderBook {
         return new TradeReport(buyOrderStatus, sellOrderStatus, price, quantity);
     }
 
+    @Override
+    public OrderStatus cancel(final Order order) {
+        checkNotNull(order);
+        getQueue(order.getSide()).remove(order);
+        return executionReportMap.remove(order);
+    }
+
     /**
      * {@inheritDoc}
      */

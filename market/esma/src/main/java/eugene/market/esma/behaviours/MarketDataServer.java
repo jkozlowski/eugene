@@ -5,6 +5,7 @@ import eugene.market.esma.Repository.Tuple;
 import eugene.market.esma.execution.book.Order;
 import eugene.market.esma.execution.book.OrderStatus;
 import eugene.market.esma.execution.book.TradeReport;
+import eugene.market.esma.execution.data.CancelOrderEvent;
 import eugene.market.esma.execution.data.MarketDataEngine;
 import eugene.market.esma.execution.data.MarketDataEvent;
 import eugene.market.esma.execution.data.MarketDataEventHandler;
@@ -26,6 +27,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Level;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static eugene.market.esma.Messages.deleteOrder;
 import static eugene.market.esma.Messages.executionReport;
 import static eugene.market.esma.Messages.orderExecuted;
 import static eugene.market.esma.Orders.addOrder;
@@ -37,7 +39,6 @@ import static jade.lang.acl.ACLMessage.INFORM;
  * @author Jakub D Kozlowski
  * @since 0.3
  */
-// TODO: Rebuild OrderBook to execute Order's one by one, instead of pairs of Order's.
 public class MarketDataServer extends CyclicBehaviour implements MarketDataEventHandler {
 
     private static Logger LOG = Logger.getMyLogger(OrderServer.class.getName());
@@ -119,6 +120,11 @@ public class MarketDataServer extends CyclicBehaviour implements MarketDataEvent
         if (sellOrderStatus.getOrder().getOrdType().isLimit()) {
             send(orderExecuted(sellOrderStatus, tradeReport));
         }
+    }
+
+    @Override
+    public void handle(final CancelOrderEvent cancelOrderEvent) {
+        send(deleteOrder(cancelOrderEvent.getObject()));
     }
 
     /**

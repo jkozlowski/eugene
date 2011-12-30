@@ -2,6 +2,7 @@ package eugene.market.esma.execution.data;
 
 import eugene.market.esma.execution.book.Order;
 import eugene.market.esma.execution.book.OrderBook;
+import eugene.market.esma.execution.book.OrderStatus;
 import eugene.market.esma.execution.book.TradeReport;
 
 import java.util.HashMap;
@@ -39,6 +40,17 @@ public class MarketDataEngine {
     public void trade(final TradeReport tradeReport) {
         final Long eventId = currentEventId.getAndIncrement();
         final TradeEvent event = new TradeEvent(eventId, tradeReport);
+        events.put(eventId, event);
+    }
+
+    /**
+     * Indicates that an {@link Order} has been cancelled.
+     *
+     * @param orderStatus summary of the {@link Order}'s execution.
+     */
+    public void cancel(final OrderStatus orderStatus) {
+        final Long eventId = currentEventId.getAndIncrement();
+        final CancelOrderEvent event = new CancelOrderEvent(eventId, orderStatus);
         events.put(eventId, event);
     }
 

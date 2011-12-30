@@ -6,6 +6,7 @@ import eugene.market.esma.execution.book.Order;
 import eugene.market.esma.execution.book.OrderStatus;
 import eugene.market.esma.execution.book.TradeReport;
 import eugene.market.ontology.message.ExecutionReport;
+import eugene.market.ontology.message.data.DeleteOrder;
 import eugene.market.ontology.message.data.OrderExecuted;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -17,6 +18,7 @@ import static eugene.market.esma.Defaults.defaultOrdQty;
 import static eugene.market.esma.Defaults.defaultPrice;
 import static eugene.market.esma.Defaults.defaultSymbol;
 import static eugene.market.esma.Defaults.defaultTuple;
+import static eugene.market.esma.Messages.deleteOrder;
 import static eugene.market.esma.Messages.executionReport;
 import static eugene.market.esma.Messages.orderExecuted;
 import static eugene.market.esma.execution.MockOrders.buy;
@@ -125,5 +127,18 @@ public class MessagesTest {
         assertThat(orderExecuted.getLastQty().getValue(), is(tradeReport.getQuantity()));
         assertThat(orderExecuted.getLeavesQty().getValue(), is(buyOrderStatus.getLeavesQty()));
         assertThat(orderExecuted.getOrderID().getValue(), is(buy.getOrderID().toString()));
+    }
+    
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testDeleteOrderNullOrderStatus() {
+        deleteOrder(null);
+    }
+    
+    @Test
+    public void testDeleteOrder() {
+        final Order order = order(buy());
+        final OrderStatus orderStatus = new OrderStatus(order);
+        final DeleteOrder deleteOrder = deleteOrder(orderStatus);
+        assertThat(deleteOrder.getOrderID().getValue(), is(order.getOrderID().toString()));
     }
 }
