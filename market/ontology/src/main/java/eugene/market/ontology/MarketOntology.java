@@ -21,6 +21,7 @@ import eugene.market.ontology.message.NewOrderSingle;
 import eugene.market.ontology.message.OrderCancelReject;
 import eugene.market.ontology.message.OrderCancelRequest;
 import eugene.market.ontology.message.data.AddOrder;
+import eugene.market.ontology.message.data.DeleteOrder;
 import eugene.market.ontology.message.data.OrderExecuted;
 import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
@@ -80,6 +81,7 @@ public final class MarketOntology extends BeanOntology {
             add(OrderCancelRequest.class, false);
 
             add(AddOrder.class, false);
+            add(DeleteOrder.class, false);
             add(OrderExecuted.class, false);
         }
         catch (OntologyException e) {
