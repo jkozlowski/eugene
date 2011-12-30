@@ -22,7 +22,7 @@ public abstract class Message implements AgentAction {
 
         @Override
         public int compare(Integer i, Integer i1) {
-            return (i>i1 ? -1 : (i==i1 ? 0 : 1));
+            return (i > i1 ? -1 : (i == i1 ? 0 : 1));
         }
     };
 

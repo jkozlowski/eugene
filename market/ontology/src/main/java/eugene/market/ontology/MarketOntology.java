@@ -18,6 +18,8 @@ import eugene.market.ontology.field.Symbol;
 import eugene.market.ontology.message.ExecutionReport;
 import eugene.market.ontology.message.Logon;
 import eugene.market.ontology.message.NewOrderSingle;
+import eugene.market.ontology.message.OrderCancelReject;
+import eugene.market.ontology.message.OrderCancelRequest;
 import eugene.market.ontology.message.data.AddOrder;
 import eugene.market.ontology.message.data.OrderExecuted;
 import jade.content.onto.BeanOntology;
@@ -72,8 +74,10 @@ public final class MarketOntology extends BeanOntology {
             add(Symbol.class, false);
 
             add(ExecutionReport.class, false);
-            add(NewOrderSingle.class, false);
             add(Logon.class, false);
+            add(NewOrderSingle.class, false);
+            add(OrderCancelReject.class, false);
+            add(OrderCancelRequest.class, false);
 
             add(AddOrder.class, false);
             add(OrderExecuted.class, false);

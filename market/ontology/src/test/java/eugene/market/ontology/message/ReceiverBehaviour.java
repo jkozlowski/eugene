@@ -29,8 +29,8 @@ public class ReceiverBehaviour extends SimpleBehaviour {
 
     final MessageTemplate template =
             and(MatchLanguage(MarketOntology.LANGUAGE), and(MatchOntology(MarketOntology.getInstance()
-                                                                                     .getName()),
-                                                         MatchPerformative(ACLMessage.REQUEST)));
+                                                                                  .getName()),
+                                                            MatchPerformative(ACLMessage.REQUEST)));
 
     public ReceiverBehaviour(int toReceive) {
         this.toReceive = toReceive;

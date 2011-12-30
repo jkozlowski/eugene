@@ -36,7 +36,7 @@ public final class OrdType extends Field<String> {
     }
 
     @Override
-    @Slot(mandatory = true, permittedValues = { LIMIT, MARKET })
+    @Slot(mandatory = true, permittedValues = {LIMIT, MARKET})
     public String getValue() {
         return super.getValue();
     }

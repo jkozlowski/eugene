@@ -1,14 +1,9 @@
-package eugene.market.ontology.message.data;
+package eugene.market.ontology.message;
 
 import eugene.market.ontology.Message;
+import eugene.market.ontology.field.ClOrdID;
+import eugene.market.ontology.field.OrdStatus;
 import eugene.market.ontology.field.OrderID;
-import eugene.market.ontology.field.OrderQty;
-import eugene.market.ontology.field.Price;
-import eugene.market.ontology.field.Side;
-import eugene.market.ontology.field.Symbol;
-import eugene.market.ontology.message.MessageTest;
-import eugene.market.ontology.message.ReceiverBehaviour;
-import eugene.market.ontology.message.SenderBehaviour;
 import jade.util.Event;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
@@ -21,24 +16,23 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
- * Tests sending {@link AddOrder}.
+ * Tests sending {@link OrderCancelReject}.
  *
  * @author Jakub D Kozlowski
  * @since 0.3
  */
-public class AddOrderTest extends MessageTest {
+public class OrderCancelRejectTest extends MessageTest {
 
     @Test
-    public void testSendAddOrder() throws InterruptedException, StaleProxyException, IllegalAccessException {
+    public void testSendOrderCancelReject() throws InterruptedException, StaleProxyException,
+                                                   IllegalAccessException {
 
         final Set<Message> toSend = new HashSet<Message>();
-        final AddOrder addOrder = new AddOrder();
-        addOrder.setOrderID(new OrderID(OrderID));
-        addOrder.setOrderQty(new OrderQty((OrderQty)));
-        addOrder.setPrice(new Price(Price));
-        addOrder.setSide(new Side(Side.BUY));
-        addOrder.setSymbol(new Symbol(Symbol));
-        toSend.add(addOrder);
+        final OrderCancelReject orderCancelReject = new OrderCancelReject();
+        orderCancelReject.setClOrdID(new ClOrdID(ClOrdID));
+        orderCancelReject.setOrderID(new OrderID(OrderID));
+        orderCancelReject.setOrdStatus(new OrdStatus(OrdStatus.FILLED));
+        toSend.add(orderCancelReject);
 
         receiverBehaviour = new ReceiverBehaviour(toSend.size());
         final Event receiverEvent = new Event(-1, receiverBehaviour);
