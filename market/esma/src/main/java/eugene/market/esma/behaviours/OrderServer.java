@@ -21,6 +21,8 @@ import eugene.market.ontology.field.Symbol;
 import eugene.market.ontology.message.ExecutionReport;
 import eugene.market.ontology.message.Logon;
 import eugene.market.ontology.message.NewOrderSingle;
+import eugene.market.ontology.message.OrderCancelReject;
+import eugene.market.ontology.message.OrderCancelRequest;
 import jade.content.onto.basic.Action;
 import jade.core.AID;
 import jade.core.Agent;
@@ -112,6 +114,40 @@ public class OrderServer {
     }
 
     /**
+     * Accepts {@link OrderCancelRequest} messages.
+     *
+     * @param orderCancelRequest message to accept.
+     * @param request            original request.
+     */
+    public void serveOrderCancelRequestRequest(final OrderCancelRequest orderCancelRequest, final ACLMessage request) {
+
+        try {
+            final Tuple tuple = new Tuple(request.getSender(), orderCancelRequest.getClOrdID().getValue());
+            final Order order = repository.get(tuple);
+
+            if (null == order) {
+                rejectCancel(orderCancelRequest, request);
+                return;
+            }
+
+            final OrderStatus orderStatus = executionEngine.cancel(order);
+
+            if (null == orderStatus) {
+                rejectCancel(orderCancelRequest, request);
+                return;
+            }
+
+            cancelOrder(orderStatus, tuple, request);
+        }
+        catch (IllegalArgumentException e) {
+            rejectCancel(orderCancelRequest, request);
+        }
+        catch (NullPointerException e) {
+            rejectCancel(orderCancelRequest, request);
+        }
+    }
+
+    /**
      * Accepts {@link Logon} messages.
      *
      * @param logon   message to accept.
@@ -131,7 +167,7 @@ public class OrderServer {
     }
 
     /**
-     * Sends an {@link ExecutionReport} with this {@link ExecType#NEW}.
+     * Sends an {@link ExecutionReport} with {@link ExecType#NEW}.
      *
      * @param orderStatus    orderStatus to send the {@link ExecutionReport} about.
      * @param newOrderSingle {@link NewOrderSingle} from the <code>request</code>.
@@ -155,7 +191,7 @@ public class OrderServer {
     }
 
     /**
-     * Sends an {@link ExecutionReport} with this {@link ExecType#REJECTED}.
+     * Sends an {@link ExecutionReport} with {@link ExecType#REJECTED}.
      *
      * @param newOrderSingle {@link NewOrderSingle} from the <code>request</code>.
      * @param request        original request.
@@ -174,6 +210,42 @@ public class OrderServer {
         executionReport.setSymbol(new Symbol(symbol));
 
         send(request, executionReport);
+    }
+
+    /**
+     * Sends an {@link ExecutionReport} with this {@link ExecType#CANCELED}.
+     *
+     * @param orderStatus {@link OrderStatus} of cancelled order.
+     * @param tuple       {@link Tuple} for this {@link OrderStatus}.
+     * @param request     original request.
+     */
+    private void cancelOrder(final OrderStatus orderStatus, final Tuple tuple, final ACLMessage request) {
+
+        final ExecutionReport executionReport = new ExecutionReport();
+        executionReport.setAvgPx(new AvgPx(Order.NO_PRICE));
+        executionReport.setExecType(ExecType.REJECTED.field());
+        executionReport.setOrdStatus(OrdStatus.REJECTED.field());
+        executionReport.setLeavesQty(new LeavesQty(orderStatus.getLeavesQty()));
+        executionReport.setCumQty(new CumQty(Order.NO_QTY));
+        executionReport.setOrderID(new OrderID(orderStatus.getOrder().getOrderID().toString()));
+        executionReport.setClOrdID(new ClOrdID(tuple.getClOrdID()));
+        executionReport.setSide(orderStatus.getOrder().getSide().field());
+        executionReport.setSymbol(new Symbol(symbol));
+
+        send(request, executionReport);
+    }
+
+    /**
+     * Sends an {@link OrderCancelReject}.
+     *
+     * @param orderCancelRequest {@link OrderCancelRequest} from the <code>request</code>.
+     * @param request            original request.
+     */
+    private void rejectCancel(final OrderCancelRequest orderCancelRequest, final ACLMessage request) {
+        final OrderCancelReject orderCancelReject = new OrderCancelReject();
+        orderCancelReject.setOrdStatus(OrdStatus.REJECTED.field());
+        orderCancelReject.setClOrdID(orderCancelRequest.getClOrdID());
+        orderCancelReject.setOrderID(orderCancelReject.getOrderID());
     }
 
     /**

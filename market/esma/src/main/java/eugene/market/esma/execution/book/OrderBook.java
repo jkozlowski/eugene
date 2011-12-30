@@ -29,6 +29,16 @@ public interface OrderBook {
     public TradeReport execute(final Double price);
 
     /**
+     * Cancels this <code>order</code>.
+     *
+     * @param order {@link Order} to cancel.
+     *
+     * @return {@link OrderStatus} of cancelled {@link Order} or <code>null</code> if <code>order</code> does not
+     *         exist.
+     */
+    public OrderStatus cancel(final Order order);
+
+    /**
      * Gets the size of the book on this <code>side</code>.
      *
      * @param side the size of the book will be returned for this <code>side</code>.
@@ -61,8 +71,7 @@ public interface OrderBook {
      * @param order {@link Order} to return the {@link OrderStatus} for.
      *
      * @return the {@link OrderStatus} for this <code>order</code> or null if this {@link Order} is not in
-     *         this
-     *         {@link OrderBook}.
+     *         this {@link OrderBook}.
      */
     public OrderStatus getExecutionReport(final Order order);
 

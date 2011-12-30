@@ -15,6 +15,7 @@ import eugene.market.ontology.field.LeavesQty;
 import eugene.market.ontology.field.OrderID;
 import eugene.market.ontology.field.Symbol;
 import eugene.market.ontology.message.ExecutionReport;
+import eugene.market.ontology.message.data.DeleteOrder;
 import eugene.market.ontology.message.data.OrderExecuted;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -74,5 +75,19 @@ public final class Messages {
         orderExecuted.setLastQty(new LastQty(tradeReport.getQuantity()));
         orderExecuted.setOrderID(new OrderID(orderStatus.getOrder().getOrderID().toString()));
         return orderExecuted;
+    }
+
+    /**
+     * Gets a {@link DeleteOrder} message for this <code>orderStatus</code>.
+     *
+     * @param orderStatus {@link OrderStatus} to initialize the {@link DeleteOrder} with.
+     *
+     * @return initialized {@link DeleteOrder}.
+     */
+    public static DeleteOrder deleteOrder(final OrderStatus orderStatus) {
+        checkNotNull(orderStatus);
+        final DeleteOrder deleteOrder = new DeleteOrder();
+        deleteOrder.setOrderID(new OrderID(orderStatus.getOrder().getOrderID().toString()));
+        return deleteOrder;
     }
 }

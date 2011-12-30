@@ -87,6 +87,26 @@ public class ExecutionEngine {
     }
 
     /**
+     * Cancels this <code>order</code>.
+     *
+     * @param order {@link Order} to cancel.
+     *
+     * @return {@link OrderStatus} of cancelled {@link Order} or <code>null</code> if <code>order</code> does not
+     *         exist.
+     */
+    public OrderStatus cancel(final Order order) {
+        checkNotNull(order);
+
+        final OrderStatus orderStatus = orderBook.cancel(order);
+
+        if (null != orderStatus) {
+            marketDataEngine.cancel(orderStatus);
+        }
+
+        return orderStatus;
+    }
+
+    /**
      * Executes matching {@link Order}s in <code>orderBook</code>.
      */
     public void execute() {
