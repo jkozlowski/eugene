@@ -1,15 +1,10 @@
-package eugene.market.ontology.message;
+package eugene.market.ontology.message.data;
 
 import eugene.market.ontology.Message;
-import eugene.market.ontology.field.AvgPx;
-import eugene.market.ontology.field.ClOrdID;
-import eugene.market.ontology.field.CumQty;
-import eugene.market.ontology.field.ExecType;
-import eugene.market.ontology.field.LeavesQty;
-import eugene.market.ontology.field.OrdStatus;
 import eugene.market.ontology.field.OrderID;
-import eugene.market.ontology.field.Side;
-import eugene.market.ontology.field.Symbol;
+import eugene.market.ontology.message.MessageTest;
+import eugene.market.ontology.message.ReceiverBehaviour;
+import eugene.market.ontology.message.SenderBehaviour;
 import jade.util.Event;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
@@ -22,28 +17,20 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
- * Tests sending {@link ExecutionReport}.
+ * Tests sending {@link DeleteOrder}.
  *
  * @author Jakub D Kozlowski
- * @since 0.2
+ * @since 0.3
  */
-public class ExecutionReportTest extends MessageTest {
+public class DeleteOrderTest extends MessageTest {
 
     @Test
-    public void testSendExecutionReport() throws InterruptedException, StaleProxyException, IllegalAccessException {
+    public void testSendDeleteOrder() throws InterruptedException, StaleProxyException, IllegalAccessException {
 
         final Set<Message> toSend = new HashSet<Message>();
-        final ExecutionReport executionReport = new ExecutionReport();
-        executionReport.setExecType(new ExecType(ExecType.NEW));
-        executionReport.setSymbol(new Symbol(Symbol));
-        executionReport.setSide(new Side(Side.BUY));
-        executionReport.setLeavesQty(new LeavesQty(LeavesQty));
-        executionReport.setCumQty(new CumQty(CumQty));
-        executionReport.setAvgPx(new AvgPx(AvgPx));
-        executionReport.setOrdStatus(new OrdStatus(OrdStatus.FILLED));
-        executionReport.setOrderID(new OrderID(OrderID));
-        executionReport.setClOrdID(new ClOrdID(ClOrdID));
-        toSend.add(executionReport);
+        final DeleteOrder deleteOrder = new DeleteOrder();
+        deleteOrder.setOrderID(new OrderID(OrderID));
+        toSend.add(deleteOrder);
 
         receiverBehaviour = new ReceiverBehaviour(toSend.size());
         final Event receiverEvent = new Event(-1, receiverBehaviour);

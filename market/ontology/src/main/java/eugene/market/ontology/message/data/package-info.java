@@ -6,7 +6,7 @@
  * real-time full depth of book quotations and execution information. All orders and executions are anonymous,
  * and do not contain any member identity.
  *
- * <code>BATS PITCH 2.X</code> message types are prefixed with <code>BP</code> in order to eliminate confusion with
+ * <code>BATS Multicast PITCH 2.X</code> message types are prefixed with <code>BP</code> in order to eliminate confusion with
  * <code>FIX</code> messages, e.g. {@link AddOrder} message has message type <code>0x21</code>,
  * therefore in {@link MarketOntology} it has {@link AddOrder.TYPE} equal to <code>BP0x21</code>.
  *
