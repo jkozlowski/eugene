@@ -56,7 +56,6 @@ public abstract class MessageTest {
 
     /**
      * Creates the container.
-     *
      */
     @BeforeMethod
     public void setupContainer() throws StaleProxyException {

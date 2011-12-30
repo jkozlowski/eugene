@@ -19,9 +19,9 @@ public class SessionStatus extends Field<String> {
     public static final String TAG = "1409";
 
     public static final Integer TAGi = Integer.parseInt(TAG);
-    
+
     public static final String SESSION_ACTIVE = "1";
-    
+
     /**
      * {@inheritDoc}
      */
@@ -36,7 +36,7 @@ public class SessionStatus extends Field<String> {
     }
 
     @Override
-    @Slot(mandatory = true, permittedValues = { SESSION_ACTIVE })
+    @Slot(mandatory = true, permittedValues = {SESSION_ACTIVE})
     public String getValue() {
         return super.getValue();
     }

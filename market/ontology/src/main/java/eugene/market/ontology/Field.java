@@ -144,6 +144,7 @@ public abstract class Field<V> implements Concept {
     @Override
     public String toString() {
         final StringBuffer b = new StringBuffer();
-        return b.append(getClass().getSimpleName()).append("(").append(getTag()).append(")").append("=").append(value).toString();
+        return b.append(getClass().getSimpleName()).append("(").append(getTag()).append(")").append("=").append(
+                value).toString();
     }
 }
