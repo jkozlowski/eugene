@@ -1,3 +1,9 @@
+2012-01-03 Jakub D Kozlowski <mail@jakub-kozlowski.com>
+    Release: Version 0.3
+        * Implemented Market Data Feed
+        ** Traders logon with Logon message.
+        ** Traders receive AddOrder/OrderExecuted/DeleteOrder messages for visible orders on the Order Book.
+
 2011-11-2 Jakub D Kozlowski <mail@jakub-kozlowski.com>
     Release: Version 0.2
         * Implemented Market Ontology under market/ontology

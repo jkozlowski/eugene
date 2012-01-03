@@ -7,12 +7,12 @@
     <parent>
         <groupId>eugene.demo.jade</groupId>
         <artifactId>parent</artifactId>
-        <version>0.2-SNAPSHOT</version>
+        <version>0.3-SNAPSHOT</version>
     </parent>
 
     <groupId>eugene.demo.jade</groupId>
     <artifactId>livelock</artifactId>
-    <version>0.2-SNAPSHOT</version>
+    <version>0.3-SNAPSHOT</version>
     <name>${bundle.namespace}</name>
     <description>Implements a livelock simulation:
         Two agents require two resources to complete their operation:
@@ -90,21 +90,10 @@
                         <Bundle-Description>${project.description}</Bundle-Description>
                         <Export-Package>${bundle.namespace}</Export-Package>
                         <Bundle-Activator>${bundle.namespace}.internal.SimulationActivator</Bundle-Activator>
-                        <Import-Package>
-                            jade.core,
-                            jade.core.behaviours,
-                            jade.lang.acl,
-                            jade.util,
-                            jade.osgi.service.agentFactory,
-                            jade.osgi.service.runtime,
-                            jade.wrapper,
-                            jade.content,
-                            jade.content.lang,
-                            jade.content.lang.sl,
-                            jade.content.onto,
-                            jade.content.onto.basic,
-                            jade.proto,
-                            org.osgi.framework
+                        <Import-Package> jade.core, jade.core.behaviours, jade.lang.acl, jade.util,
+                            jade.osgi.service.agentFactory, jade.osgi.service.runtime, jade.wrapper, jade.content,
+                            jade.content.lang, jade.content.lang.sl, jade.content.onto, jade.content.onto.basic,
+                            jade.proto, org.osgi.framework
                         </Import-Package>
                     </instructions>
                 </configuration>
