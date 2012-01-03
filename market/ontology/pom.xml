@@ -7,12 +7,12 @@
     <parent>
         <groupId>eugene.market</groupId>
         <artifactId>parent</artifactId>
-        <version>0.2-SNAPSHOT</version>
+        <version>0.3-SNAPSHOT</version>
     </parent>
 
     <groupId>eugene.market</groupId>
     <artifactId>ontology</artifactId>
-    <version>0.2-SNAPSHOT</version>
+    <version>0.3-SNAPSHOT</version>
     <name>${bundle.namespace}</name>
     <description>Implements the ontology for sending orders and
         receiving market data feeds.
@@ -30,15 +30,15 @@
             <version>${jade.osgi.version}</version>
         </dependency>
         <dependency>
+            <groupId>eugene</groupId>
+            <artifactId>jade-unit</artifactId>
+            <version>${current.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>${testng.version}</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>eugene</groupId>
-            <artifactId>jade-unit</artifactId>
-            <version>${current.version}</version>
         </dependency>
         <dependency>
             <groupId>quickfixj</groupId>
