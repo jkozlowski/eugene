@@ -1,5 +1,6 @@
 package eugene.market.ontology.message;
 
+import eugene.market.ontology.Defaults;
 import eugene.market.ontology.Message;
 import eugene.market.ontology.field.ClOrdID;
 import eugene.market.ontology.field.OrdStatus;
@@ -29,8 +30,8 @@ public class OrderCancelRejectTest extends MessageTest {
 
         final Set<Message> toSend = new HashSet<Message>();
         final OrderCancelReject orderCancelReject = new OrderCancelReject();
-        orderCancelReject.setClOrdID(new ClOrdID(ClOrdID));
-        orderCancelReject.setOrderID(new OrderID(OrderID));
+        orderCancelReject.setClOrdID(new ClOrdID(Defaults.defaultClOrdID));
+        orderCancelReject.setOrderID(new OrderID(Defaults.defaultOrderID));
         orderCancelReject.setOrdStatus(new OrdStatus(OrdStatus.FILLED));
         toSend.add(orderCancelReject);
 

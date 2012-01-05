@@ -15,8 +15,6 @@ import static org.mockito.Mockito.mock;
  */
 public class TupleTest {
     
-    public static final String aid = "trader01";
-    
     public static final String clOrdID = "order01";
     
     @Test(expectedExceptions = NullPointerException.class)

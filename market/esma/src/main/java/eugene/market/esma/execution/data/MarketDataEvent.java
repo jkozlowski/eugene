@@ -1,6 +1,6 @@
 package eugene.market.esma.execution.data;
 
-import eugene.market.esma.execution.book.OrderBook;
+import eugene.market.book.OrderBook;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

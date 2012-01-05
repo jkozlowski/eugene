@@ -1,29 +1,31 @@
 package eugene.market.esma;
 
+import eugene.market.book.Order;
+import eugene.market.book.OrderStatus;
+import eugene.market.book.TradeReport;
+import eugene.market.esma.Repository.Tuple;
 import eugene.market.ontology.field.enums.ExecType;
 import eugene.market.ontology.field.enums.OrdStatus;
-import eugene.market.esma.execution.book.Order;
-import eugene.market.esma.execution.book.OrderStatus;
-import eugene.market.esma.execution.book.TradeReport;
 import eugene.market.ontology.message.ExecutionReport;
 import eugene.market.ontology.message.data.DeleteOrder;
 import eugene.market.ontology.message.data.OrderExecuted;
+import jade.core.AID;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static eugene.market.esma.Defaults.defaultOrdQty;
-import static eugene.market.esma.Defaults.defaultPrice;
-import static eugene.market.esma.Defaults.defaultSymbol;
-import static eugene.market.esma.Defaults.defaultTuple;
+import static eugene.market.book.MockOrders.buy;
+import static eugene.market.book.MockOrders.order;
+import static eugene.market.book.MockOrders.sell;
 import static eugene.market.esma.Messages.deleteOrder;
 import static eugene.market.esma.Messages.executionReport;
 import static eugene.market.esma.Messages.orderExecuted;
-import static eugene.market.esma.execution.MockOrders.buy;
-import static eugene.market.esma.execution.MockOrders.order;
-import static eugene.market.esma.execution.MockOrders.sell;
+import static eugene.market.ontology.Defaults.defaultClOrdID;
+import static eugene.market.ontology.Defaults.defaultOrdQty;
+import static eugene.market.ontology.Defaults.defaultPrice;
+import static eugene.market.ontology.Defaults.defaultSymbol;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
@@ -36,6 +38,8 @@ import static org.mockito.Mockito.mock;
  */
 public class MessagesTest {
 
+    public static final Tuple defaultTuple = new Tuple(mock(AID.class), defaultClOrdID);
+
     public static final String ORDER_STATUS_PROVIDER = "order-status-provider";
 
     @DataProvider(name = ORDER_STATUS_PROVIDER)
@@ -47,10 +51,13 @@ public class MessagesTest {
         final OrderStatus newOrderStatus = new OrderStatus(order);
         orders.add(new OrderStatus[]{newOrderStatus});
 
-        final OrderStatus partiallyFilledOrderStatus = new OrderStatus(order, defaultPrice, defaultOrdQty - 1L, 1L);
+        final OrderStatus partiallyFilledOrderStatus = new OrderStatus(order, defaultPrice,
+                                                                       defaultOrdQty - 1L,
+                                                                       1L);
         orders.add(new OrderStatus[]{partiallyFilledOrderStatus});
 
-        final OrderStatus filledOrderStatus = new OrderStatus(order, defaultPrice, 0L, defaultOrdQty);
+        final OrderStatus filledOrderStatus = new OrderStatus(order, defaultPrice, 0L,
+                                                              defaultOrdQty);
         orders.add(new OrderStatus[]{filledOrderStatus});
 
         return orders.toArray(new OrderStatus[][]{});
@@ -120,20 +127,20 @@ public class MessagesTest {
         final OrderStatus sellOrderStatus = new OrderStatus(sell, defaultPrice, defaultOrdQty - 1L, 1L);
         final TradeReport tradeReport = new TradeReport(buyOrderStatus, sellOrderStatus, defaultPrice,
                                                         defaultOrdQty - 1L);
-        
+
         final OrderExecuted orderExecuted = orderExecuted(buyOrderStatus, tradeReport);
-        
+
         assertThat(orderExecuted.getLastPx().getValue(), is(tradeReport.getPrice()));
         assertThat(orderExecuted.getLastQty().getValue(), is(tradeReport.getQuantity()));
         assertThat(orderExecuted.getLeavesQty().getValue(), is(buyOrderStatus.getLeavesQty()));
         assertThat(orderExecuted.getOrderID().getValue(), is(buy.getOrderID().toString()));
     }
-    
+
     @Test(expectedExceptions = NullPointerException.class)
     public void testDeleteOrderNullOrderStatus() {
         deleteOrder(null);
     }
-    
+
     @Test
     public void testDeleteOrder() {
         final Order order = order(buy());

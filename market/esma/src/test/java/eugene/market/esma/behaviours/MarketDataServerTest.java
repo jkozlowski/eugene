@@ -5,7 +5,7 @@ import eugene.market.esma.execution.data.MarketDataEngine;
 import jade.core.Agent;
 import org.testng.annotations.Test;
 
-import static eugene.market.esma.Defaults.defaultSymbol;
+import static eugene.market.ontology.Defaults.defaultSymbol;
 import static org.mockito.Mockito.mock;
 
 /**

@@ -78,6 +78,7 @@
         <maven.compiler.version>2.3.2</maven.compiler.version>
         <maven.clean.version>2.4.1</maven.clean.version>
         <maven.assembly.version>2.2.1</maven.assembly.version>
+        <maven.jar.version>2.3.2</maven.jar.version>
         <maven.bundle.version>2.3.5</maven.bundle.version>
         <maven.release.version>2.2.1</maven.release.version>
         <maven.dependency.version>2.3</maven.dependency.version>

@@ -1,5 +1,6 @@
 package eugene.market.ontology.message;
 
+import eugene.market.ontology.Defaults;
 import eugene.market.ontology.Message;
 import eugene.market.ontology.field.ClOrdID;
 import eugene.market.ontology.field.OrdType;
@@ -15,6 +16,7 @@ import org.testng.annotations.Test;
 import java.util.HashSet;
 import java.util.Set;
 
+import static eugene.market.ontology.Defaults.defaultOrdQty;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -32,11 +34,11 @@ public class NewOrderSingleTest extends MessageTest {
 
         final Set<Message> toSend = new HashSet<Message>();
         final NewOrderSingle newOrder = new NewOrderSingle();
-        newOrder.setClOrdID(new ClOrdID(ClOrdID));
+        newOrder.setClOrdID(new ClOrdID(Defaults.defaultClOrdID));
         newOrder.setSide(new Side(Side.BUY));
-        newOrder.setOrderQty(new OrderQty(OrderQty));
-        newOrder.setPrice(new Price(Price));
-        newOrder.setSymbol(new Symbol(Symbol));
+        newOrder.setOrderQty(new OrderQty(defaultOrdQty));
+        newOrder.setPrice(new Price(Defaults.Price));
+        newOrder.setSymbol(new Symbol(Defaults.defaultSymbol));
         newOrder.setOrdType(new OrdType(OrdType.LIMIT));
         toSend.add(newOrder);
 
@@ -66,10 +68,10 @@ public class NewOrderSingleTest extends MessageTest {
 
         final Set<Message> toSend = new HashSet<Message>();
         final NewOrderSingle newOrder = new NewOrderSingle();
-        newOrder.setClOrdID(new ClOrdID(ClOrdID));
+        newOrder.setClOrdID(new ClOrdID(Defaults.defaultClOrdID));
         newOrder.setSide(new Side(Side.BUY));
-        newOrder.setOrderQty(new OrderQty(OrderQty));
-        newOrder.setSymbol(new Symbol(Symbol));
+        newOrder.setOrderQty(new OrderQty(defaultOrdQty));
+        newOrder.setSymbol(new Symbol(Defaults.defaultSymbol));
         newOrder.setOrdType(new OrdType(OrdType.LIMIT));
         toSend.add(newOrder);
 

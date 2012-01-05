@@ -1,10 +1,10 @@
 package eugene.market.esma.behaviours;
 
+import eugene.market.book.Order;
+import eugene.market.book.OrderStatus;
+import eugene.market.book.TradeReport;
 import eugene.market.esma.Repository;
 import eugene.market.esma.Repository.Tuple;
-import eugene.market.esma.execution.book.Order;
-import eugene.market.esma.execution.book.OrderStatus;
-import eugene.market.esma.execution.book.TradeReport;
 import eugene.market.esma.execution.data.CancelOrderEvent;
 import eugene.market.esma.execution.data.MarketDataEngine;
 import eugene.market.esma.execution.data.MarketDataEvent;

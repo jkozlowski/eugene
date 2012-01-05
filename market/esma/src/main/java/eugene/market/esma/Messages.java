@@ -1,10 +1,8 @@
 package eugene.market.esma;
 
+import eugene.market.book.OrderStatus;
+import eugene.market.book.TradeReport;
 import eugene.market.esma.Repository.Tuple;
-import eugene.market.ontology.field.enums.ExecType;
-import eugene.market.ontology.field.enums.OrdStatus;
-import eugene.market.esma.execution.book.OrderStatus;
-import eugene.market.esma.execution.book.TradeReport;
 import eugene.market.ontology.Message;
 import eugene.market.ontology.field.AvgPx;
 import eugene.market.ontology.field.ClOrdID;
@@ -14,6 +12,8 @@ import eugene.market.ontology.field.LastQty;
 import eugene.market.ontology.field.LeavesQty;
 import eugene.market.ontology.field.OrderID;
 import eugene.market.ontology.field.Symbol;
+import eugene.market.ontology.field.enums.ExecType;
+import eugene.market.ontology.field.enums.OrdStatus;
 import eugene.market.ontology.message.ExecutionReport;
 import eugene.market.ontology.message.data.DeleteOrder;
 import eugene.market.ontology.message.data.OrderExecuted;

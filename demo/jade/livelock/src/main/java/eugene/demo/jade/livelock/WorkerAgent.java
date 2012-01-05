@@ -1,11 +1,11 @@
 package eugene.demo.jade.livelock;
 
 import eugene.demo.jade.livelock.internal.ActionInitiator;
+import eugene.demo.jade.livelock.internal.ActionInitiator.RequestStatus;
 import eugene.demo.jade.livelock.internal.ontology.RequestAction;
 import eugene.demo.jade.livelock.internal.ontology.Resource;
 import eugene.demo.jade.livelock.internal.ontology.ResourceOntology;
 import eugene.demo.jade.livelock.internal.ontology.SurrenderAction;
-import eugene.demo.jade.livelock.internal.ActionInitiator.RequestStatus;
 import jade.content.lang.sl.SLCodec;
 import jade.content.onto.basic.Action;
 import jade.core.AID;

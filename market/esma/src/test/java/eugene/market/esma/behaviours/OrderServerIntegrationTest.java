@@ -1,7 +1,7 @@
 package eugene.market.esma.behaviours;
 
+import eugene.market.book.Order;
 import eugene.market.esma.AbstractMarketAgentTest;
-import eugene.market.esma.execution.book.Order;
 import eugene.market.ontology.Message;
 import eugene.market.ontology.field.ClOrdID;
 import eugene.market.ontology.field.ExecType;
@@ -15,10 +15,10 @@ import eugene.market.ontology.message.NewOrderSingle;
 import jade.wrapper.StaleProxyException;
 import org.testng.annotations.Test;
 
+import static eugene.market.ontology.Defaults.defaultClOrdID;
+import static eugene.market.ontology.Defaults.defaultOrdQty;
+import static eugene.market.ontology.Defaults.defaultSymbol;
 import static eugene.market.esma.MockMessages.newOrderSingle;
-import static eugene.market.esma.Defaults.defaultClOrdID;
-import static eugene.market.esma.Defaults.defaultOrdQty;
-import static eugene.market.esma.Defaults.defaultSymbol;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;

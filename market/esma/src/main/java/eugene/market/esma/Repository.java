@@ -1,6 +1,6 @@
 package eugene.market.esma;
 
-import eugene.market.esma.execution.book.Order;
+import eugene.market.book.Order;
 import eugene.market.ontology.field.ClOrdID;
 import eugene.market.ontology.message.Logon;
 import jade.core.AID;

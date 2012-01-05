@@ -2,12 +2,12 @@ package eugene.market.esma.execution;
 
 import eugene.market.esma.Repository;
 import eugene.market.esma.Repository.Tuple;
-import eugene.market.esma.execution.book.Order;
+import eugene.market.book.Order;
 import jade.core.AID;
 import org.testng.annotations.Test;
 
-import static eugene.market.esma.execution.MockOrders.buy;
-import static eugene.market.esma.execution.MockOrders.order;
+import static eugene.market.book.MockOrders.buy;
+import static eugene.market.book.MockOrders.order;
 import static eugene.market.esma.execution.TupleTest.clOrdID;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;

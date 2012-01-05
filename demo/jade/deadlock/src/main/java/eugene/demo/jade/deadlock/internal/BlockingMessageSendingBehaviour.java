@@ -7,7 +7,9 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.util.Logger;
 
-import static jade.lang.acl.MessageTemplate.*;
+import static jade.lang.acl.MessageTemplate.MatchConversationId;
+import static jade.lang.acl.MessageTemplate.MatchSender;
+import static jade.lang.acl.MessageTemplate.and;
 
 /**
  * Sends a specified message to a specified agent, waits for a reply and finishes.

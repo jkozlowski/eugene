@@ -13,7 +13,7 @@ import jade.wrapper.StaleProxyException;
 import jade.wrapper.gateway.GatewayAgent;
 import org.testng.annotations.BeforeMethod;
 
-import static eugene.market.esma.Defaults.defaultSymbol;
+import static eugene.market.ontology.Defaults.defaultSymbol;
 import static jade.core.Runtime.instance;
 
 /**

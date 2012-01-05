@@ -1,10 +1,12 @@
-package eugene.market.esma.execution;
+package eugene.market.book;
 
-import eugene.market.esma.Defaults;
+import eugene.market.ontology.Defaults;
 import eugene.market.ontology.field.enums.OrdType;
 import eugene.market.ontology.field.enums.Side;
-import eugene.market.esma.execution.book.Order;
 
+import static eugene.market.ontology.Defaults.curOrderID;
+import static eugene.market.ontology.Defaults.defaultOrdQty;
+import static eugene.market.ontology.Defaults.defaultPrice;
 import static eugene.market.ontology.field.enums.OrdType.LIMIT;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -25,10 +27,10 @@ public final class MockOrders {
      */
     public static Order mockOrder() {
         final Order mock = mock(Order.class);
-        when(mock.getOrderQty()).thenReturn(Defaults.defaultOrdQty);
+        when(mock.getOrderQty()).thenReturn(defaultOrdQty);
         when(mock.getSide()).thenReturn(Side.BUY);
         when(mock.getOrdType()).thenReturn(OrdType.LIMIT);
-        when(mock.getPrice()).thenReturn(Defaults.defaultPrice);
+        when(mock.getPrice()).thenReturn(defaultPrice);
         when(mock.getEntryTime()).thenReturn(System.nanoTime());
         return mock;
     }
@@ -141,7 +143,7 @@ public final class MockOrders {
      * @return {@link Order} from this <code>mock</code>.
      */
     public static Order order(final Order mock) {
-        return new Order(Defaults.curOrderID.getAndIncrement(), mock.getEntryTime(), mock.getOrdType(),
+        return new Order(curOrderID.getAndIncrement(), mock.getEntryTime(), mock.getOrdType(),
                          mock.getSide(), mock.getOrderQty(), mock.getPrice());
     }
 }

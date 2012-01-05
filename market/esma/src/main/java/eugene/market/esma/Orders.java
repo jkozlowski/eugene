@@ -1,12 +1,12 @@
 package eugene.market.esma;
 
-import eugene.market.ontology.field.enums.OrdType;
-import eugene.market.ontology.field.enums.Side;
-import eugene.market.esma.execution.book.Order;
+import eugene.market.book.Order;
 import eugene.market.ontology.field.OrderID;
 import eugene.market.ontology.field.OrderQty;
 import eugene.market.ontology.field.Price;
 import eugene.market.ontology.field.Symbol;
+import eugene.market.ontology.field.enums.OrdType;
+import eugene.market.ontology.field.enums.Side;
 import eugene.market.ontology.message.NewOrderSingle;
 import eugene.market.ontology.message.data.AddOrder;
 

@@ -1,13 +1,13 @@
 package eugene.market.esma.execution;
 
-import eugene.market.ontology.field.enums.Side;
+import eugene.market.book.DefaultOrderBook;
+import eugene.market.book.Order;
+import eugene.market.book.OrderBook;
+import eugene.market.book.OrderStatus;
+import eugene.market.book.TradeReport;
 import eugene.market.esma.execution.MatchingEngine.MatchingResult;
-import eugene.market.esma.execution.book.DefaultOrderBook;
-import eugene.market.esma.execution.book.Order;
-import eugene.market.esma.execution.book.OrderBook;
-import eugene.market.esma.execution.book.OrderStatus;
-import eugene.market.esma.execution.book.TradeReport;
 import eugene.market.esma.execution.data.MarketDataEngine;
+import eugene.market.ontology.field.enums.Side;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

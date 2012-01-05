@@ -1,12 +1,12 @@
-package eugene.market.esma.execution.book;
+package eugene.market.book;
 
 import org.testng.annotations.Test;
 
-import static eugene.market.esma.Defaults.defaultOrdQty;
-import static eugene.market.esma.Defaults.defaultPrice;
-import static eugene.market.esma.execution.MockOrders.order;
-import static eugene.market.esma.execution.MockOrders.orderQty;
-import static eugene.market.esma.execution.MockOrders.sell;
+import static eugene.market.book.MockOrders.order;
+import static eugene.market.book.MockOrders.orderQty;
+import static eugene.market.book.MockOrders.sell;
+import static eugene.market.ontology.Defaults.defaultOrdQty;
+import static eugene.market.ontology.Defaults.defaultPrice;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -82,8 +82,7 @@ public class OrderStatusTest {
     @Test(expectedExceptions = NullPointerException.class)
     public void testExecuteNullPrice() {
         final Order order = orderQty(sell(), defaultOrdQty);
-        final OrderStatus orderStatus = new OrderStatus(order, Order.NO_PRICE,
-                                                        defaultOrdQty, Order.NO_QTY);
+        final OrderStatus orderStatus = new OrderStatus(order, Order.NO_PRICE, defaultOrdQty, Order.NO_QTY);
 
         orderStatus.execute(null, defaultOrdQty);
     }
@@ -91,8 +90,7 @@ public class OrderStatusTest {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testExecuteNoPrice() {
         final Order order = orderQty(sell(), defaultOrdQty);
-        final OrderStatus orderStatus = new OrderStatus(order, Order.NO_PRICE,
-                                                        defaultOrdQty, Order.NO_QTY);
+        final OrderStatus orderStatus = new OrderStatus(order, Order.NO_PRICE, defaultOrdQty, Order.NO_QTY);
 
         orderStatus.execute(Order.NO_PRICE, defaultOrdQty);
     }
@@ -101,8 +99,7 @@ public class OrderStatusTest {
     @Test(expectedExceptions = NullPointerException.class)
     public void testExecuteNullQuantity() {
         final Order order = orderQty(sell(), defaultOrdQty);
-        final OrderStatus orderStatus = new OrderStatus(order, Order.NO_PRICE,
-                                                        defaultOrdQty, Order.NO_QTY);
+        final OrderStatus orderStatus = new OrderStatus(order, Order.NO_PRICE, defaultOrdQty, Order.NO_QTY);
 
         orderStatus.execute(defaultPrice, null);
     }
@@ -110,8 +107,7 @@ public class OrderStatusTest {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testExecuteNoQuantity() {
         final Order order = orderQty(sell(), defaultOrdQty);
-        final OrderStatus orderStatus = new OrderStatus(order, Order.NO_PRICE,
-                                                        defaultOrdQty, Order.NO_QTY);
+        final OrderStatus orderStatus = new OrderStatus(order, Order.NO_PRICE, defaultOrdQty, Order.NO_QTY);
 
         orderStatus.execute(defaultPrice, Order.NO_QTY);
     }
@@ -119,8 +115,7 @@ public class OrderStatusTest {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testExecuteQuantityGreaterThanLeavesQty() {
         final Order order = orderQty(sell(), defaultOrdQty);
-        final OrderStatus orderStatus = new OrderStatus(order, Order.NO_PRICE,
-                                                        defaultOrdQty, Order.NO_QTY);
+        final OrderStatus orderStatus = new OrderStatus(order, Order.NO_PRICE, defaultOrdQty, Order.NO_QTY);
 
         orderStatus.execute(defaultPrice, defaultOrdQty + 1L);
     }
@@ -128,8 +123,7 @@ public class OrderStatusTest {
     @Test
     public void testExecute() {
         final Order order = order(orderQty(sell(), defaultOrdQty));
-        final OrderStatus orderStatus = new OrderStatus(order, defaultPrice,
-                                                        defaultOrdQty, Order.NO_QTY);
+        final OrderStatus orderStatus = new OrderStatus(order, defaultPrice, defaultOrdQty, Order.NO_QTY);
 
         final OrderStatus actual = orderStatus.execute(defaultPrice, defaultOrdQty - 1L);
 

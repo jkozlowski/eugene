@@ -1,14 +1,14 @@
 package eugene.market.esma.execution;
 
-import eugene.market.ontology.field.enums.Side;
+import eugene.market.book.DefaultOrderBook;
+import eugene.market.book.Order;
+import eugene.market.book.OrderBook;
+import eugene.market.book.OrderStatus;
+import eugene.market.book.TradeReport;
 import eugene.market.esma.execution.MatchingEngine.Match;
 import eugene.market.esma.execution.MatchingEngine.MatchingResult;
-import eugene.market.esma.execution.book.DefaultOrderBook;
-import eugene.market.esma.execution.book.Order;
-import eugene.market.esma.execution.book.OrderBook;
-import eugene.market.esma.execution.book.OrderStatus;
-import eugene.market.esma.execution.book.TradeReport;
 import eugene.market.esma.execution.data.MarketDataEngine;
+import eugene.market.ontology.field.enums.Side;
 import org.mockito.InOrder;
 import org.testng.annotations.Test;
 
@@ -22,7 +22,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
-
 
 /**
  * Tests {@link ExecutionEngine}.
@@ -88,7 +87,7 @@ public class ExecutionEngineTest {
         verify(executionEngine.getOrderBook()).insertOrder(order);
         verify(executionEngine.getMarketDataEngine()).newOrder(order);
     }
-    
+
     @Test(expectedExceptions = NullPointerException.class)
     public void testCancelNullOrder() {
         final ExecutionEngine executionEngine = getExecutionEngine();
@@ -104,14 +103,14 @@ public class ExecutionEngineTest {
 
         assertThat(executionEngine.cancel(mock(Order.class)), nullValue());
     }
-    
+
     @Test
     public void testCancelOrderValid() {
         final ExecutionEngine executionEngine = getExecutionEngine();
-        
+
         final Order order = mock(Order.class);
         final OrderStatus orderStatus = mock(OrderStatus.class);
-        
+
         final OrderBook orderBook = executionEngine.getOrderBook();
         when(orderBook.cancel(order)).thenReturn(orderStatus);
 

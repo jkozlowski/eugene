@@ -1,17 +1,17 @@
 package eugene.market.esma.execution;
 
+import eugene.market.book.Order;
+import eugene.market.book.OrderBook;
 import eugene.market.ontology.field.enums.OrdType;
 import eugene.market.ontology.field.enums.Side;
-import eugene.market.esma.execution.book.Order;
-import eugene.market.esma.execution.book.OrderBook;
 import org.testng.annotations.Test;
 
-import static eugene.market.esma.execution.MockOrders.buy;
-import static eugene.market.esma.Defaults.defaultPrice;
-import static eugene.market.esma.execution.MockOrders.limitPrice;
-import static eugene.market.esma.execution.MockOrders.ordType;
-import static eugene.market.esma.execution.MockOrders.order;
-import static eugene.market.esma.execution.MockOrders.sell;
+import static eugene.market.ontology.Defaults.defaultPrice;
+import static eugene.market.book.MockOrders.buy;
+import static eugene.market.book.MockOrders.limitPrice;
+import static eugene.market.book.MockOrders.ordType;
+import static eugene.market.book.MockOrders.order;
+import static eugene.market.book.MockOrders.sell;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;

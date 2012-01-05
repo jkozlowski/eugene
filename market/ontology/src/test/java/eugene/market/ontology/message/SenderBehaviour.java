@@ -1,5 +1,6 @@
 package eugene.market.ontology.message;
 
+import eugene.market.ontology.Defaults;
 import eugene.market.ontology.MarketOntology;
 import eugene.market.ontology.Message;
 import jade.content.onto.basic.Action;
@@ -33,9 +34,9 @@ public class SenderBehaviour extends OneShotBehaviour {
     public void action() {
         for (Message msg : toSend) {
             try {
-                final Action a = new Action(new AID(NewOrderSingleTest.RECEIVER_AGENT, AID.ISLOCALNAME), msg);
+                final Action a = new Action(new AID(Defaults.RECEIVER_AGENT, AID.ISLOCALNAME), msg);
                 final ACLMessage aclMessage = new ACLMessage(ACLMessage.REQUEST);
-                aclMessage.addReceiver(new AID(NewOrderSingleTest.RECEIVER_AGENT, AID.ISLOCALNAME));
+                aclMessage.addReceiver(new AID(Defaults.RECEIVER_AGENT, AID.ISLOCALNAME));
                 aclMessage.setOntology(MarketOntology.getInstance().getName());
                 aclMessage.setLanguage(MarketOntology.LANGUAGE);
                 myAgent.getContentManager().fillContent(aclMessage, a);

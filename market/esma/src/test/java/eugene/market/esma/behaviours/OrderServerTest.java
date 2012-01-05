@@ -5,7 +5,7 @@ import eugene.market.esma.Repository;
 import eugene.market.esma.execution.ExecutionEngine;
 import org.testng.annotations.Test;
 
-import static eugene.market.esma.Defaults.defaultSymbol;
+import static eugene.market.ontology.Defaults.defaultSymbol;
 import static org.mockito.Mockito.mock;
 
 /**
