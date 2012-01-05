@@ -1,8 +1,8 @@
 package eugene.market.esma.execution.book;
 
 import com.google.common.primitives.Doubles;
-import eugene.market.esma.enums.OrdType;
-import eugene.market.esma.enums.Side;
+import eugene.market.ontology.field.enums.OrdType;
+import eugene.market.ontology.field.enums.Side;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;

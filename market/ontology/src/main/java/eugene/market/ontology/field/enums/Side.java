@@ -1,4 +1,4 @@
-package eugene.market.esma.enums;
+package eugene.market.ontology.field.enums;
 
 import eugene.market.ontology.message.NewOrderSingle;
 

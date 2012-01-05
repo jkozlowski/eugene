@@ -1,8 +1,8 @@
 package eugene.market.esma;
 
 import eugene.market.esma.Repository.Tuple;
-import eugene.market.esma.enums.ExecType;
-import eugene.market.esma.enums.OrdStatus;
+import eugene.market.ontology.field.enums.ExecType;
+import eugene.market.ontology.field.enums.OrdStatus;
 import eugene.market.esma.execution.book.OrderStatus;
 import eugene.market.esma.execution.book.TradeReport;
 import eugene.market.ontology.Message;

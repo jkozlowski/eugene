@@ -1,11 +1,11 @@
 package eugene.market.esma.execution;
 
 import eugene.market.esma.Defaults;
-import eugene.market.esma.enums.OrdType;
-import eugene.market.esma.enums.Side;
+import eugene.market.ontology.field.enums.OrdType;
+import eugene.market.ontology.field.enums.Side;
 import eugene.market.esma.execution.book.Order;
 
-import static eugene.market.esma.enums.OrdType.LIMIT;
+import static eugene.market.ontology.field.enums.OrdType.LIMIT;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 

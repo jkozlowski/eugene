@@ -1,7 +1,7 @@
 package eugene.market.esma.execution;
 
-import eugene.market.esma.enums.OrdType;
-import eugene.market.esma.enums.Side;
+import eugene.market.ontology.field.enums.OrdType;
+import eugene.market.ontology.field.enums.Side;
 import eugene.market.esma.execution.book.Order;
 import eugene.market.esma.execution.book.OrderBook;
 import org.testng.annotations.Test;

@@ -1,7 +1,7 @@
 package eugene.market.esma;
 
-import eugene.market.esma.enums.OrdType;
-import eugene.market.esma.enums.Side;
+import eugene.market.ontology.field.enums.OrdType;
+import eugene.market.ontology.field.enums.Side;
 import eugene.market.esma.execution.book.Order;
 import eugene.market.ontology.field.OrderID;
 import eugene.market.ontology.field.OrderQty;

@@ -1,6 +1,6 @@
 package eugene.market.esma;
 
-import eugene.market.esma.enums.SessionStatus;
+import eugene.market.ontology.field.enums.SessionStatus;
 import eugene.market.ontology.Message;
 import eugene.market.ontology.field.ClOrdID;
 import eugene.market.ontology.field.OrdType;
