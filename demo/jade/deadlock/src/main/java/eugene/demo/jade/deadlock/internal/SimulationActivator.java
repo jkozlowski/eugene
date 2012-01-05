@@ -6,7 +6,11 @@ import jade.osgi.service.agentFactory.AgentFactoryService;
 import jade.osgi.service.runtime.JadeRuntimeService;
 import jade.util.Logger;
 import jade.wrapper.AgentController;
-import org.osgi.framework.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceEvent;
+import org.osgi.framework.ServiceListener;
+import org.osgi.framework.ServiceReference;
 
 import java.util.ArrayList;
 import java.util.List;

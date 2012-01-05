@@ -1,10 +1,10 @@
-package eugene.market.esma.execution.book;
+package eugene.market.book;
 
 import org.testng.annotations.Test;
 
-import static eugene.market.esma.execution.MockOrders.buy;
-import static eugene.market.esma.execution.MockOrders.order;
-import static eugene.market.esma.execution.MockOrders.sell;
+import static eugene.market.book.MockOrders.buy;
+import static eugene.market.book.MockOrders.order;
+import static eugene.market.book.MockOrders.sell;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.sameInstance;
@@ -25,8 +25,8 @@ public class TradeReportTest {
 
     private static final Long quantity = Order.NO_QTY + 1L;
 
-    private static final TradeReport TRADE_REPORT = new TradeReport
-            (BUY_ORDER_STATUS, SELL_ORDER_STATUS, price, quantity);
+    private static final TradeReport TRADE_REPORT = new TradeReport(BUY_ORDER_STATUS, SELL_ORDER_STATUS, price,
+                                                                    quantity);
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testConstructorNullBuyExecutionReport() {

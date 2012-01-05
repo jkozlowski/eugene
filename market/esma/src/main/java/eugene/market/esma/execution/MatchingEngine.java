@@ -1,7 +1,7 @@
 package eugene.market.esma.execution;
 
+import eugene.market.book.Order;
 import eugene.market.ontology.field.enums.OrdType;
-import eugene.market.esma.execution.book.Order;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;

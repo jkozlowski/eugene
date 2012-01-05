@@ -1,6 +1,5 @@
 package eugene.market.esma;
 
-import eugene.market.ontology.field.enums.SessionStatus;
 import eugene.market.ontology.Message;
 import eugene.market.ontology.field.ClOrdID;
 import eugene.market.ontology.field.OrdType;
@@ -8,13 +7,14 @@ import eugene.market.ontology.field.OrderQty;
 import eugene.market.ontology.field.Price;
 import eugene.market.ontology.field.Side;
 import eugene.market.ontology.field.Symbol;
+import eugene.market.ontology.field.enums.SessionStatus;
 import eugene.market.ontology.message.Logon;
 import eugene.market.ontology.message.NewOrderSingle;
 
-import static eugene.market.esma.Defaults.defaultClOrdID;
-import static eugene.market.esma.Defaults.defaultOrdQty;
-import static eugene.market.esma.Defaults.defaultPrice;
-import static eugene.market.esma.Defaults.defaultSymbol;
+import static eugene.market.ontology.Defaults.defaultClOrdID;
+import static eugene.market.ontology.Defaults.defaultOrdQty;
+import static eugene.market.ontology.Defaults.defaultPrice;
+import static eugene.market.ontology.Defaults.defaultSymbol;
 
 /**
  * Mock {@link Message}s.

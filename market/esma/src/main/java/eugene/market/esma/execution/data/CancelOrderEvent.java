@@ -1,7 +1,7 @@
 package eugene.market.esma.execution.data;
 
-import eugene.market.esma.execution.book.Order;
-import eugene.market.esma.execution.book.OrderStatus;
+import eugene.market.book.Order;
+import eugene.market.book.OrderStatus;
 
 /**
  * Indicates that an {@link Order} has been cancelled.

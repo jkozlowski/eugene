@@ -1,5 +1,6 @@
 package eugene.market.ontology.message;
 
+import eugene.market.ontology.Defaults;
 import eugene.market.ontology.MarketOntology;
 import eugene.market.ontology.Message;
 import jade.content.lang.sl.SLCodec;
@@ -34,26 +35,6 @@ public abstract class MessageTest {
 
     public ReceiverBehaviour receiverBehaviour;
 
-    public static final String SENDER_AGENT = "sender";
-
-    public static final String RECEIVER_AGENT = "receiver";
-
-    public static final String ClOrdID = "11";
-
-    public static final Long OrderQty = 2L;
-
-    public static final Double Price = 1.2;
-
-    public static final String Symbol = "VOD.L";
-
-    public static final String OrderID = "sdfaksjdfh";
-
-    public static final Long LeavesQty = 1L;
-
-    public static final Long CumQty = 2L;
-
-    public static final Double AvgPx = 1.2;
-
     /**
      * Creates the container.
      */
@@ -63,11 +44,11 @@ public abstract class MessageTest {
         agentContainer = instance().createMainContainer(profile);
 
         senderAgent = new GatewayAgent();
-        senderAgentController = agentContainer.acceptNewAgent(SENDER_AGENT, senderAgent);
+        senderAgentController = agentContainer.acceptNewAgent(Defaults.SENDER_AGENT, senderAgent);
         initAgent(senderAgent);
 
         receiverAgent = new GatewayAgent();
-        receiverAgentController = agentContainer.acceptNewAgent(RECEIVER_AGENT, receiverAgent);
+        receiverAgentController = agentContainer.acceptNewAgent(Defaults.RECEIVER_AGENT, receiverAgent);
         initAgent(receiverAgent);
     }
 

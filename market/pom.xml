@@ -20,5 +20,6 @@
     <modules>
         <module>ontology</module>
         <module>esma</module>
+        <module>book</module>
     </modules>
 </project>

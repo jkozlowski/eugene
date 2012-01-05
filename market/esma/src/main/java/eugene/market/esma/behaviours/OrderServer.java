@@ -1,15 +1,12 @@
 package eugene.market.esma.behaviours;
 
+import eugene.market.book.Order;
+import eugene.market.book.OrderStatus;
 import eugene.market.esma.MarketAgent;
 import eugene.market.esma.Orders.NewOrderSingleValidationException;
 import eugene.market.esma.Repository;
 import eugene.market.esma.Repository.Tuple;
-import eugene.market.ontology.field.enums.ExecType;
-import eugene.market.ontology.field.enums.OrdStatus;
-import eugene.market.ontology.field.enums.SessionStatus;
 import eugene.market.esma.execution.ExecutionEngine;
-import eugene.market.esma.execution.book.Order;
-import eugene.market.esma.execution.book.OrderStatus;
 import eugene.market.ontology.MarketOntology;
 import eugene.market.ontology.Message;
 import eugene.market.ontology.field.AvgPx;
@@ -18,6 +15,9 @@ import eugene.market.ontology.field.CumQty;
 import eugene.market.ontology.field.LeavesQty;
 import eugene.market.ontology.field.OrderID;
 import eugene.market.ontology.field.Symbol;
+import eugene.market.ontology.field.enums.ExecType;
+import eugene.market.ontology.field.enums.OrdStatus;
+import eugene.market.ontology.field.enums.SessionStatus;
 import eugene.market.ontology.message.ExecutionReport;
 import eugene.market.ontology.message.Logon;
 import eugene.market.ontology.message.NewOrderSingle;

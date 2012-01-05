@@ -1,14 +1,14 @@
-package eugene.market.esma.execution.book;
+package eugene.market.book;
 
 import eugene.market.ontology.field.enums.Side;
 import org.testng.annotations.Test;
 
-import static eugene.market.esma.Defaults.defaultOrdQty;
-import static eugene.market.esma.Defaults.defaultPrice;
-import static eugene.market.esma.execution.MockOrders.buy;
-import static eugene.market.esma.execution.MockOrders.order;
-import static eugene.market.esma.execution.MockOrders.orderQty;
-import static eugene.market.esma.execution.MockOrders.sell;
+import static eugene.market.book.MockOrders.buy;
+import static eugene.market.book.MockOrders.order;
+import static eugene.market.book.MockOrders.orderQty;
+import static eugene.market.book.MockOrders.sell;
+import static eugene.market.ontology.Defaults.defaultOrdQty;
+import static eugene.market.ontology.Defaults.defaultPrice;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalToIgnoringCase;
 import static org.hamcrest.Matchers.hasItemInArray;
@@ -128,13 +128,13 @@ public class DefaultOrderBookTest {
         assertThat(orderBook.getExecutionReport(buy), nullValue());
         assertThat(orderBook.getExecutionReport(sell), nullValue());
     }
-    
+
     @Test(expectedExceptions = NullPointerException.class)
     public void testCancelNullOrder() {
         final OrderBook orderBook = new DefaultOrderBook();
         orderBook.cancel(null);
     }
-    
+
     @Test
     public void testCancelOrderNotInOrderBook() {
         final OrderBook orderBook = new DefaultOrderBook();
@@ -142,14 +142,14 @@ public class DefaultOrderBookTest {
         final OrderStatus orderStatus = orderBook.cancel(order);
         assertThat(orderStatus, nullValue());
     }
-    
+
     @Test
     public void testCancelOrderInOrderBook() {
         final OrderBook orderBook = new DefaultOrderBook();
         final Order order = order(buy());
         final OrderStatus expected = orderBook.insertOrder(order);
         final OrderStatus actual = orderBook.cancel(order);
-        
+
         assertThat(actual, sameInstance(expected));
         assertThat(orderBook.getExecutionReport(order), nullValue());
         assertThat(orderBook.getBuyOrders(), not(hasItemInArray(order)));

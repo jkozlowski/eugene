@@ -1,5 +1,6 @@
 package eugene.market.ontology.message;
 
+import eugene.market.ontology.Defaults;
 import eugene.market.ontology.Message;
 import eugene.market.ontology.field.ClOrdID;
 import eugene.market.ontology.field.OrderID;
@@ -14,6 +15,7 @@ import org.testng.annotations.Test;
 import java.util.HashSet;
 import java.util.Set;
 
+import static eugene.market.ontology.Defaults.defaultOrdQty;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -31,11 +33,11 @@ public class OrderCancelRequestTest extends MessageTest {
 
         final Set<Message> toSend = new HashSet<Message>();
         final OrderCancelRequest orderCancelRequest = new OrderCancelRequest();
-        orderCancelRequest.setClOrdID(new ClOrdID(ClOrdID));
-        orderCancelRequest.setOrderID(new OrderID(OrderID));
+        orderCancelRequest.setClOrdID(new ClOrdID(Defaults.defaultClOrdID));
+        orderCancelRequest.setOrderID(new OrderID(Defaults.defaultOrderID));
         orderCancelRequest.setSide(new Side(Side.BUY));
-        orderCancelRequest.setOrderQty(new OrderQty(OrderQty));
-        orderCancelRequest.setSymbol(new Symbol(Symbol));
+        orderCancelRequest.setOrderQty(new OrderQty(defaultOrdQty));
+        orderCancelRequest.setSymbol(new Symbol(Defaults.defaultSymbol));
         toSend.add(orderCancelRequest);
 
         receiverBehaviour = new ReceiverBehaviour(toSend.size());

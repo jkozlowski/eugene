@@ -1,5 +1,6 @@
 package eugene.market.ontology.message;
 
+import eugene.market.ontology.Defaults;
 import eugene.market.ontology.Message;
 import eugene.market.ontology.field.SessionStatus;
 import eugene.market.ontology.field.Symbol;
@@ -28,7 +29,7 @@ public class LogonTest extends MessageTest {
 
         final Set<Message> toSend = new HashSet<Message>();
         final Logon logon = new Logon();
-        logon.setSymbol(new Symbol(Symbol));
+        logon.setSymbol(new Symbol(Defaults.defaultSymbol));
         logon.setSessionStatus(new SessionStatus(SessionStatus.SESSION_ACTIVE));
         toSend.add(logon);
 
@@ -58,7 +59,7 @@ public class LogonTest extends MessageTest {
 
         final Set<Message> toSend = new HashSet<Message>();
         final Logon logon = new Logon();
-        logon.setSymbol(new Symbol(Symbol));
+        logon.setSymbol(new Symbol(Defaults.defaultSymbol));
         toSend.add(logon);
 
         receiverBehaviour = new ReceiverBehaviour(toSend.size());

@@ -1,5 +1,6 @@
 package eugene.market.ontology.message.data;
 
+import eugene.market.ontology.Defaults;
 import eugene.market.ontology.Message;
 import eugene.market.ontology.field.OrderID;
 import eugene.market.ontology.message.MessageTest;
@@ -29,7 +30,7 @@ public class DeleteOrderTest extends MessageTest {
 
         final Set<Message> toSend = new HashSet<Message>();
         final DeleteOrder deleteOrder = new DeleteOrder();
-        deleteOrder.setOrderID(new OrderID(OrderID));
+        deleteOrder.setOrderID(new OrderID(Defaults.defaultOrderID));
         toSend.add(deleteOrder);
 
         receiverBehaviour = new ReceiverBehaviour(toSend.size());

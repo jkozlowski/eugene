@@ -11,15 +11,14 @@
     </parent>
 
     <groupId>eugene.market</groupId>
-    <artifactId>esma</artifactId>
+    <artifactId>book</artifactId>
     <version>0.3-SNAPSHOT</version>
     <name>${bundle.namespace}</name>
-    <description>Implements the Eugene's Stock Market Agent.
-    </description>
+    <description>Implements the Order Book.</description>
     <packaging>bundle</packaging>
 
     <properties>
-        <bundle.namespace>${project.groupId}.esma</bundle.namespace>
+        <bundle.namespace>${project.groupId}.book</bundle.namespace>
     </properties>
 
     <dependencies>
@@ -34,21 +33,15 @@
             <version>${current.version}</version>
         </dependency>
         <dependency>
-            <groupId>eugene.market</groupId>
-            <artifactId>book</artifactId>
-            <version>${current.version}</version>
-        </dependency>
-        <dependency>
             <groupId>com.googlecode.guava-osgi</groupId>
             <artifactId>guava-osgi</artifactId>
             <version>${guava.version}</version>
         </dependency>
         <dependency>
             <groupId>eugene.market</groupId>
-            <artifactId>book</artifactId>
+            <artifactId>ontology</artifactId>
             <version>${current.version}</version>
             <classifier>tests</classifier>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.testng</groupId>
@@ -86,15 +79,28 @@
                         <Export-Package>${bundle.namespace}
                         </Export-Package>
                         <Import-Package>
-                            jade.content, jade.content.onto, jade.content.onto.annotations, com.google.common.base,
-                            jade.core, eugene.market.ontology.field, eugene.market.ontology.field.enums,
-                            eugene.market.ontology.message, jade.lang.acl,
-                            javax.validation.constraints, com.google.common.collect, eugene.market.ontology,
-                            jade.content.lang, jade.content.lang.sl, jade.content.onto.basic, jade.core.behaviours,
-                            com.google.common.primitives, java.util.logging, jade.util,
-                            eugene.market.ontology.message.data, eugene.market.book
+                            com.google.common.base, com.google.common.primitives, eugene.market.ontology.field.enums
                         </Import-Package>
                     </instructions>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>${maven.jar.version}</version>
+                <executions>
+                    <execution>
+                        <id>jar-test-classes</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*Test.*</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
         </plugins>

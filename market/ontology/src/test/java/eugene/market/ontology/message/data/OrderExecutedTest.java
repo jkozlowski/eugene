@@ -1,5 +1,6 @@
 package eugene.market.ontology.message.data;
 
+import eugene.market.ontology.Defaults;
 import eugene.market.ontology.Message;
 import eugene.market.ontology.field.LastPx;
 import eugene.market.ontology.field.LastQty;
@@ -16,6 +17,7 @@ import org.testng.annotations.Test;
 import java.util.HashSet;
 import java.util.Set;
 
+import static eugene.market.ontology.Defaults.defaultOrdQty;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -32,10 +34,10 @@ public class OrderExecutedTest extends MessageTest {
 
         final Set<Message> toSend = new HashSet<Message>();
         final OrderExecuted orderExecuted = new OrderExecuted();
-        orderExecuted.setOrderID(new OrderID(OrderID));
-        orderExecuted.setLastPx(new LastPx(Price));
-        orderExecuted.setLastQty(new LastQty(OrderQty));
-        orderExecuted.setLeavesQty(new LeavesQty(LeavesQty));
+        orderExecuted.setOrderID(new OrderID(Defaults.defaultOrderID));
+        orderExecuted.setLastPx(new LastPx(Defaults.Price));
+        orderExecuted.setLastQty(new LastQty(defaultOrdQty));
+        orderExecuted.setLeavesQty(new LeavesQty(Defaults.defaultLeavesQty));
         toSend.add(orderExecuted);
 
         receiverBehaviour = new ReceiverBehaviour(toSend.size());

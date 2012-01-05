@@ -1,23 +1,22 @@
-package eugene.market.esma.execution.book;
+package eugene.market.book;
 
 import eugene.market.ontology.field.enums.OrdType;
 import eugene.market.ontology.field.enums.Side;
 import org.testng.annotations.Test;
 
-import java.util.concurrent.atomic.AtomicLong;
-
-import static eugene.market.esma.execution.MockOrders.buy;
-import static eugene.market.esma.Defaults.defaultOrdQty;
-import static eugene.market.esma.Defaults.defaultPrice;
-import static eugene.market.esma.execution.MockOrders.limitConstPriceEntryTime;
-import static eugene.market.esma.execution.MockOrders.limitPrice;
-import static eugene.market.esma.execution.MockOrders.ordType;
-import static eugene.market.esma.execution.MockOrders.ordTypeEntryTime;
-import static eugene.market.esma.execution.MockOrders.order;
-import static eugene.market.esma.execution.MockOrders.sell;
-import static eugene.market.esma.execution.book.Order.AFTER;
-import static eugene.market.esma.execution.book.Order.BEFORE;
-import static eugene.market.esma.execution.book.Order.SAME;
+import static eugene.market.book.MockOrders.buy;
+import static eugene.market.book.MockOrders.limitConstPriceEntryTime;
+import static eugene.market.book.MockOrders.limitPrice;
+import static eugene.market.book.MockOrders.ordType;
+import static eugene.market.book.MockOrders.ordTypeEntryTime;
+import static eugene.market.book.MockOrders.order;
+import static eugene.market.book.MockOrders.sell;
+import static eugene.market.book.Order.AFTER;
+import static eugene.market.book.Order.BEFORE;
+import static eugene.market.book.Order.SAME;
+import static eugene.market.ontology.Defaults.curOrderID;
+import static eugene.market.ontology.Defaults.defaultOrdQty;
+import static eugene.market.ontology.Defaults.defaultPrice;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
@@ -30,8 +29,6 @@ import static org.hamcrest.Matchers.lessThanOrEqualTo;
  * @since 0.2
  */
 public class OrderTest {
-
-    public static final AtomicLong curOrderID = new AtomicLong();
 
     @Test
     public void testConstructor() {
@@ -113,18 +110,14 @@ public class OrderTest {
 
     @Test
     public void testCompareLimitToMarket() {
-        assertThat(compare(order(ordType(buy(), OrdType.LIMIT)),
-                           order(ordType(buy(), OrdType.MARKET))), is(AFTER));
-        assertThat(compare(order(ordType(sell(), OrdType.LIMIT)),
-                           order(ordType(sell(), OrdType.MARKET))), is(AFTER));
+        assertThat(compare(order(ordType(buy(), OrdType.LIMIT)), order(ordType(buy(), OrdType.MARKET))), is(AFTER));
+        assertThat(compare(order(ordType(sell(), OrdType.LIMIT)), order(ordType(sell(), OrdType.MARKET))), is(AFTER));
     }
 
     @Test
     public void testCompareMarketToLimit() {
-        assertThat(compare(order(ordType(buy(), OrdType.MARKET)),
-                           order(ordType(buy(), OrdType.LIMIT))), is(BEFORE));
-        assertThat(compare(order(ordType(sell(), OrdType.MARKET)),
-                           order(ordType(sell(), OrdType.LIMIT))), is(BEFORE));
+        assertThat(compare(order(ordType(buy(), OrdType.MARKET)), order(ordType(buy(), OrdType.LIMIT))), is(BEFORE));
+        assertThat(compare(order(ordType(sell(), OrdType.MARKET)), order(ordType(sell(), OrdType.LIMIT))), is(BEFORE));
     }
 
     @Test

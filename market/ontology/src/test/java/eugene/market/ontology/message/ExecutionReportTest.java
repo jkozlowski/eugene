@@ -1,5 +1,6 @@
 package eugene.market.ontology.message;
 
+import eugene.market.ontology.Defaults;
 import eugene.market.ontology.Message;
 import eugene.market.ontology.field.AvgPx;
 import eugene.market.ontology.field.ClOrdID;
@@ -35,14 +36,14 @@ public class ExecutionReportTest extends MessageTest {
         final Set<Message> toSend = new HashSet<Message>();
         final ExecutionReport executionReport = new ExecutionReport();
         executionReport.setExecType(new ExecType(ExecType.NEW));
-        executionReport.setSymbol(new Symbol(Symbol));
+        executionReport.setSymbol(new Symbol(Defaults.defaultSymbol));
         executionReport.setSide(new Side(Side.BUY));
-        executionReport.setLeavesQty(new LeavesQty(LeavesQty));
-        executionReport.setCumQty(new CumQty(CumQty));
-        executionReport.setAvgPx(new AvgPx(AvgPx));
+        executionReport.setLeavesQty(new LeavesQty(Defaults.defaultLeavesQty));
+        executionReport.setCumQty(new CumQty(Defaults.defaultCumQty));
+        executionReport.setAvgPx(new AvgPx(Defaults.defaultAvgPx));
         executionReport.setOrdStatus(new OrdStatus(OrdStatus.FILLED));
-        executionReport.setOrderID(new OrderID(OrderID));
-        executionReport.setClOrdID(new ClOrdID(ClOrdID));
+        executionReport.setOrderID(new OrderID(Defaults.defaultOrderID));
+        executionReport.setClOrdID(new ClOrdID(Defaults.defaultClOrdID));
         toSend.add(executionReport);
 
         receiverBehaviour = new ReceiverBehaviour(toSend.size());

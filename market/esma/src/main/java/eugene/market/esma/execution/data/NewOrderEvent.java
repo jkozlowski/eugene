@@ -1,7 +1,7 @@
 package eugene.market.esma.execution.data;
 
-import eugene.market.esma.execution.book.Order;
-import eugene.market.esma.execution.book.OrderBook;
+import eugene.market.book.Order;
+import eugene.market.book.OrderBook;
 
 /**
  * Indicates that a new {@link Order} has been inserted into the {@link OrderBook}.

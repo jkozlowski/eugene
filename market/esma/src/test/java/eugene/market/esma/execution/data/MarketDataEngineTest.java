@@ -1,11 +1,11 @@
 package eugene.market.esma.execution.data;
 
-import eugene.market.esma.execution.book.Order;
-import eugene.market.esma.execution.book.TradeReport;
+import eugene.market.book.Order;
+import eugene.market.book.TradeReport;
 import org.testng.annotations.Test;
 
-import static eugene.market.esma.execution.MockOrders.buy;
-import static eugene.market.esma.execution.MockOrders.order;
+import static eugene.market.book.MockOrders.buy;
+import static eugene.market.book.MockOrders.order;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;

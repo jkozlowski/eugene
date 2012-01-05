@@ -1,9 +1,9 @@
 package eugene.market.esma.execution.data;
 
-import eugene.market.esma.execution.book.Order;
-import eugene.market.esma.execution.book.OrderBook;
-import eugene.market.esma.execution.book.OrderStatus;
-import eugene.market.esma.execution.book.TradeReport;
+import eugene.market.book.Order;
+import eugene.market.book.OrderBook;
+import eugene.market.book.OrderStatus;
+import eugene.market.book.TradeReport;
 
 import java.util.HashMap;
 import java.util.Map;

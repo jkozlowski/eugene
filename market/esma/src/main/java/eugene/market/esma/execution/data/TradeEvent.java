@@ -1,7 +1,7 @@
 package eugene.market.esma.execution.data;
 
-import eugene.market.esma.execution.book.Order;
-import eugene.market.esma.execution.book.TradeReport;
+import eugene.market.book.Order;
+import eugene.market.book.TradeReport;
 
 /**
  * Indicates that a pair of {@link Order}s have been executed.
