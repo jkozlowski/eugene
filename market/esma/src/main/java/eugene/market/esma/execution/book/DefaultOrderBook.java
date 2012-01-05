@@ -1,6 +1,6 @@
 package eugene.market.esma.execution.book;
 
-import eugene.market.esma.enums.Side;
+import eugene.market.ontology.field.enums.Side;
 
 import java.util.Arrays;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package eugene.market.esma.enums;
+package eugene.market.ontology.field.enums;
 
 /**
  * Enum that mirrors {@link eugene.market.ontology.field.OrdType}.

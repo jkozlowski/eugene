@@ -1,6 +1,6 @@
 package eugene.market.esma.execution;
 
-import eugene.market.esma.enums.Side;
+import eugene.market.ontology.field.enums.Side;
 import eugene.market.esma.execution.MatchingEngine.Match;
 import eugene.market.esma.execution.MatchingEngine.MatchingResult;
 import eugene.market.esma.execution.book.DefaultOrderBook;

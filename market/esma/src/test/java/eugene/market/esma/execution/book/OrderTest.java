@@ -1,7 +1,7 @@
 package eugene.market.esma.execution.book;
 
-import eugene.market.esma.enums.OrdType;
-import eugene.market.esma.enums.Side;
+import eugene.market.ontology.field.enums.OrdType;
+import eugene.market.ontology.field.enums.Side;
 import org.testng.annotations.Test;
 
 import java.util.concurrent.atomic.AtomicLong;

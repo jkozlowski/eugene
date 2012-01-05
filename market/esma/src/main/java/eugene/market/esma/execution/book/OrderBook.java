@@ -1,6 +1,6 @@
 package eugene.market.esma.execution.book;
 
-import eugene.market.esma.enums.Side;
+import eugene.market.ontology.field.enums.Side;
 
 /**
  * Maintains lists of outstanding buy and sell {@link Order}s.

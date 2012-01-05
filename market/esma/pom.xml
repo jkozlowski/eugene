@@ -75,7 +75,8 @@
                         </Export-Package>
                         <Import-Package>
                             jade.content, jade.content.onto, jade.content.onto.annotations, com.google.common.base,
-                            jade.core, eugene.market.ontology.field, eugene.market.ontology.message, jade.lang.acl,
+                            jade.core, eugene.market.ontology.field, eugene.market.ontology.field.enums,
+                            eugene.market.ontology.message, jade.lang.acl,
                             javax.validation.constraints, com.google.common.collect, eugene.market.ontology,
                             jade.content.lang, jade.content.lang.sl, jade.content.onto.basic, jade.core.behaviours,
                             com.google.common.primitives, java.util.logging, jade.util,
