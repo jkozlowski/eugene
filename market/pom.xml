@@ -21,5 +21,6 @@
         <module>ontology</module>
         <module>esma</module>
         <module>book</module>
+        <module>client</module>
     </modules>
 </project>
