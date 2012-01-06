@@ -75,6 +75,8 @@
         <guava.version>10.0.0</guava.version>
         <hamcrest.version>1.1</hamcrest.version>
         <mockito.version>1.9.0-rc1</mockito.version>
+        <easymock.version>3.0</easymock.version>
+        <powermock.version>1.4.10</powermock.version>
         <maven.compiler.version>2.3.2</maven.compiler.version>
         <maven.clean.version>2.4.1</maven.clean.version>
         <maven.assembly.version>2.2.1</maven.assembly.version>
