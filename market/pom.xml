@@ -15,7 +15,7 @@
     <version>0.3-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>${project.groupId}</name>
-    <description>Modules that relate to the Eugene's Stock Market Agent</description>
+    <description>Modules that relate to the Eugene's Stock Market Agent and Client API.</description>
 
     <modules>
         <module>ontology</module>

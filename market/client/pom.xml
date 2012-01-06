@@ -38,6 +38,11 @@
             <version>${current.version}</version>
         </dependency>
         <dependency>
+            <groupId>eugene.market</groupId>
+            <artifactId>esma</artifactId>
+            <version>${current.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.googlecode.guava-osgi</groupId>
             <artifactId>guava-osgi</artifactId>
             <version>${guava.version}</version>
@@ -50,9 +55,28 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>eugene.market</groupId>
+            <artifactId>esma</artifactId>
+            <version>${current.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>${testng.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-testng</artifactId>
+            <version>${powermock.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito</artifactId>
+            <version>${powermock.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -82,18 +106,26 @@
                         <Bundle-SymbolicName>${bundle.namespace}</Bundle-SymbolicName>
                         <Bundle-Version>${project.version}</Bundle-Version>
                         <Bundle-Description>${project.description}</Bundle-Description>
-                        <Export-Package>${bundle.namespace}
-                        </Export-Package>
+                        <Export-Package>${bundle.namespace}.api</Export-Package>
                         <Import-Package>
-                            jade.content, jade.content.onto, jade.content.onto.annotations, com.google.common.base,
+                            jade.content, jade.content.onto, jade.proto, jade.domain, jade.domain.FIPAAgentManagement,
+                            jade.content.onto.annotations, com.google.common.base,
                             jade.core, eugene.market.ontology.field, eugene.market.ontology.field.enums,
                             eugene.market.ontology.message, jade.lang.acl,
                             javax.validation.constraints, com.google.common.collect, eugene.market.ontology,
                             jade.content.lang, jade.content.lang.sl, jade.content.onto.basic, jade.core.behaviours,
-                            com.google.common.primitives, java.util.logging, jade.util,
+                            com.google.common.primitives, java.util.logging, jade.util, eugene.market.esma,
                             eugene.market.ontology.message.data, eugene.market.book
                         </Import-Package>
                     </instructions>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven.surefire.version}</version>
+                <configuration>
+                    <forkMode>pertest</forkMode>
                 </configuration>
             </plugin>
         </plugins>
