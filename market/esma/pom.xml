@@ -86,7 +86,8 @@
                         <Export-Package>${bundle.namespace}
                         </Export-Package>
                         <Import-Package>
-                            jade.content, jade.content.onto, jade.content.onto.annotations, com.google.common.base,
+                            jade.content, jade.domain, jade.domain.FIPAAgentManagement, jade.content.onto,
+                            jade.content.onto.annotations, com.google.common.base,
                             jade.core, eugene.market.ontology.field, eugene.market.ontology.field.enums,
                             eugene.market.ontology.message, jade.lang.acl,
                             javax.validation.constraints, com.google.common.collect, eugene.market.ontology,
