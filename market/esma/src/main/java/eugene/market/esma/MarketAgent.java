@@ -7,9 +7,17 @@ import eugene.market.ontology.MarketOntology;
 import jade.content.lang.sl.SLCodec;
 import jade.core.Agent;
 import jade.core.behaviours.OntologyServer;
+import jade.domain.DFService;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.Property;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
+import jade.domain.FIPAException;
+
+import java.util.logging.Logger;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static jade.domain.DFService.register;
 import static jade.lang.acl.ACLMessage.REQUEST;
 
 /**
@@ -19,6 +27,12 @@ import static jade.lang.acl.ACLMessage.REQUEST;
  * @since 0.2
  */
 public class MarketAgent extends Agent {
+
+    private static final Logger LOG = Logger.getLogger(MarketAgent.class.getName());
+
+    public static final String SERVICE_TYPE = "order-execution";
+
+    public static final String SYMBOL_PROPERTY_NAME = "symbol";
 
     private final String symbol;
 
@@ -41,13 +55,28 @@ public class MarketAgent extends Agent {
 
     @Override
     public void setup() {
-        getContentManager().registerLanguage(new SLCodec(), MarketOntology.LANGUAGE);
-        getContentManager().registerOntology(MarketOntology.getInstance());
+        try {
+            getContentManager().registerLanguage(new SLCodec(), MarketOntology.LANGUAGE);
+            getContentManager().registerOntology(MarketOntology.getInstance());
 
-        final OrderServer orderServer = new OrderServer(this, executionEngine, repository, symbol);
+            final DFAgentDescription agentDescription = getDFAgentDescription();
+            final ServiceDescription serviceDescription = getServiceDescription();
+            serviceDescription.setName(getLocalName() + "-" +  SERVICE_TYPE);
+            serviceDescription.addProperties(new Property(SYMBOL_PROPERTY_NAME, symbol));
+            agentDescription.setName(getAID());
+            agentDescription.addServices(serviceDescription);
+            register(this, agentDescription);
 
-        addBehaviour(new OntologyServer(this, MarketOntology.getInstance(), REQUEST, orderServer));
-        addBehaviour(new MarketDataServer(this, executionEngine.getMarketDataEngine(), repository, symbol));
+
+            final OrderServer orderServer = new OrderServer(this, executionEngine, repository, symbol);
+
+            addBehaviour(new OntologyServer(this, MarketOntology.getInstance(), REQUEST, orderServer));
+            addBehaviour(new MarketDataServer(this, executionEngine.getMarketDataEngine(), repository, symbol));
+        }
+        catch (FIPAException e) {
+            e.printStackTrace();
+            LOG.severe(e.toString());
+        }
     }
 
     /**
@@ -66,5 +95,38 @@ public class MarketAgent extends Agent {
      */
     public Repository getRepository() {
         return repository;
+    }
+
+    /**
+     * Gets the template {@link DFAgentDescription} for searching for {@link MarketAgent}s,
+     * with {@link DFAgentDescription#addLanguages(String)} and {@link DFAgentDescription#addOntologies(String)}
+     * correctly set.
+     *
+     * The Agents should use {@link MarketAgent#getServiceDescription()} to get the template for {@link
+     * ServiceDescription} to set using {@link DFAgentDescription#addServices(ServiceDescription)}.
+     *
+     * @return template {@link DFAgentDescription}.
+     */
+    public static DFAgentDescription getDFAgentDescription() {
+        final DFAgentDescription agentDescription = new DFAgentDescription();
+        agentDescription.addLanguages(MarketOntology.LANGUAGE);
+        agentDescription.addOntologies(MarketOntology.NAME);
+        return agentDescription;
+    }
+
+    /**
+     * Gets the template {@link ServiceDescription} that instances of {@link MarketAgent} register with the {@link
+     * DFService}.
+     *
+     * When using {@link DFService#search(Agent, DFAgentDescription)},
+     * the Agents should set the property {@link MarketAgent#SYMBOL_PROPERTY_NAME} to a {@link String} representing
+     * the symbol that the Agent wishes to trade, using {@link ServiceDescription#addProperties(Property)}.
+     *
+     * @return template {@link ServiceDescription}.
+     */
+    public static ServiceDescription getServiceDescription() {
+        final ServiceDescription serviceDescription = new ServiceDescription();
+        serviceDescription.setType(SERVICE_TYPE);
+        return serviceDescription;
     }
 }
