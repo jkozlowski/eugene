@@ -113,7 +113,8 @@
                 </executions>
                 <configuration>
                     <includes>
-                        <exclude>**/AbstractMarketAgentTest.class</exclude>
+                        <include>**/AbstractMarketAgentTest.class</include>
+                        <include>**/SendMessage.class</include>
                     </includes>
                 </configuration>
             </plugin>
