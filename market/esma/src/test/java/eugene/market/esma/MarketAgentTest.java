@@ -54,7 +54,7 @@ public class MarketAgentTest extends AbstractMarketAgentTest {
             }
         };
         final Event traderEvent = new Event(-1, checkRegistered);
-        traderAgentController.putO2AObject(traderEvent, AgentController.ASYNC);
+        gatewayAgentController.putO2AObject(traderEvent, AgentController.ASYNC);
         traderEvent.waitUntilProcessed();
         assertThat(marketAgentController.getName(), is(description.get().getName().getName()));
     }

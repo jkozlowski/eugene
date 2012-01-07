@@ -24,13 +24,13 @@ import static jade.core.Runtime.instance;
  */
 public abstract class AbstractMarketAgentTest {
 
-    public static final String TRADER_AGENT = "trader";
+    public static final String GATEWAY_AGENT = "gateway";
 
     public static final String MARKET_AGENT = "market";
 
     public Agent traderAgent;
 
-    public AgentController traderAgentController;
+    public AgentController gatewayAgentController;
 
     public AgentController marketAgentController;
 
@@ -48,10 +48,10 @@ public abstract class AbstractMarketAgentTest {
 
     private void initTraderAgent(final AgentContainer agentContainer) throws StaleProxyException {
         traderAgent = new GatewayAgent();
-        traderAgentController = agentContainer.acceptNewAgent(TRADER_AGENT, traderAgent);
+        gatewayAgentController = agentContainer.acceptNewAgent(GATEWAY_AGENT, traderAgent);
         traderAgent.getContentManager().registerLanguage(new SLCodec(), MarketOntology.LANGUAGE);
         traderAgent.getContentManager().registerOntology(MarketOntology.getInstance());
-        traderAgentController.start();
+        gatewayAgentController.start();
     }
 
     private void initMarketAgent(final AgentContainer agentContainer) throws StaleProxyException {
@@ -63,7 +63,7 @@ public abstract class AbstractMarketAgentTest {
     public Message send(final Message msg) throws StaleProxyException, InterruptedException {
         final SendMessage sendMessage = new SendMessage(traderAgent, msg);
         final Event traderEvent = new Event(-1, sendMessage);
-        traderAgentController.putO2AObject(traderEvent, AgentController.ASYNC);
+        gatewayAgentController.putO2AObject(traderEvent, AgentController.ASYNC);
         traderEvent.waitUntilProcessed();
         return sendMessage.received.get();
     }
