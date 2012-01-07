@@ -61,7 +61,7 @@ public class MarketAgent extends Agent {
 
             final DFAgentDescription agentDescription = getDFAgentDescription();
             final ServiceDescription serviceDescription = getServiceDescription();
-            serviceDescription.setName(getLocalName() + "-" +  SERVICE_TYPE);
+            serviceDescription.setName(getLocalName() + "-" + SERVICE_TYPE);
             serviceDescription.addProperties(new Property(SYMBOL_PROPERTY_NAME, symbol));
             agentDescription.setName(getAID());
             agentDescription.addServices(serviceDescription);
@@ -107,7 +107,7 @@ public class MarketAgent extends Agent {
      *
      * @return template {@link DFAgentDescription}.
      */
-    public static DFAgentDescription getDFAgentDescription() {
+    private static DFAgentDescription getDFAgentDescription() {
         final DFAgentDescription agentDescription = new DFAgentDescription();
         agentDescription.addLanguages(MarketOntology.LANGUAGE);
         agentDescription.addOntologies(MarketOntology.NAME);
@@ -124,9 +124,25 @@ public class MarketAgent extends Agent {
      *
      * @return template {@link ServiceDescription}.
      */
-    public static ServiceDescription getServiceDescription() {
+    private static ServiceDescription getServiceDescription() {
         final ServiceDescription serviceDescription = new ServiceDescription();
         serviceDescription.setType(SERVICE_TYPE);
         return serviceDescription;
+    }
+
+    /**
+     * Gets the {@link DFAgentDescription} to search for {@link MarketAgent}s that handle this <code>symbol</code>.
+     *
+     * @param symbol symbol to lookup.
+     *
+     * @return template {@link DFAgentDescription}.
+     */
+    public static DFAgentDescription getDFAgentDescription(final String symbol) {
+        checkNotNull(symbol);
+        final DFAgentDescription agentDescription = getDFAgentDescription();
+        final ServiceDescription serviceDescription = getServiceDescription();
+        serviceDescription.addProperties(new Property(SYMBOL_PROPERTY_NAME, symbol));
+        agentDescription.addServices(serviceDescription);
+        return agentDescription;
     }
 }

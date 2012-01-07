@@ -3,9 +3,7 @@ package eugene.market.esma;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.Property;
 import jade.domain.FIPAAgentManagement.SearchConstraints;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.util.Event;
 import jade.wrapper.AgentController;
@@ -14,9 +12,7 @@ import org.testng.annotations.Test;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import static eugene.market.esma.MarketAgent.SYMBOL_PROPERTY_NAME;
 import static eugene.market.esma.MarketAgent.getDFAgentDescription;
-import static eugene.market.esma.MarketAgent.getServiceDescription;
 import static eugene.market.ontology.Defaults.defaultSymbol;
 import static jade.domain.DFService.searchUntilFound;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -40,10 +36,7 @@ public class MarketAgentTest extends AbstractMarketAgentTest {
             @Override
             public void action() {
                 try {
-                    final DFAgentDescription agentDescription = getDFAgentDescription();
-                    final ServiceDescription serviceDescription = getServiceDescription();
-                    serviceDescription.addProperties(new Property(SYMBOL_PROPERTY_NAME, defaultSymbol));
-                    agentDescription.addServices(serviceDescription);
+                    final DFAgentDescription agentDescription = getDFAgentDescription(defaultSymbol);
 
                     final SearchConstraints constraints = new SearchConstraints();
                     constraints.setMaxResults(-1L);
@@ -64,5 +57,10 @@ public class MarketAgentTest extends AbstractMarketAgentTest {
         traderAgentController.putO2AObject(traderEvent, AgentController.ASYNC);
         traderEvent.waitUntilProcessed();
         assertThat(marketAgentController.getName(), is(description.get().getName().getName()));
+    }
+    
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testGetDFAgentDescriptionNullSymbol() {
+        getDFAgentDescription(null);
     }
 }
