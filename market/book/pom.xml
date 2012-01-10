@@ -7,12 +7,12 @@
     <parent>
         <groupId>eugene.market</groupId>
         <artifactId>parent</artifactId>
-        <version>0.3-SNAPSHOT</version>
+        <version>0.4-SNAPSHOT</version>
     </parent>
 
     <groupId>eugene.market</groupId>
     <artifactId>book</artifactId>
-    <version>0.3-SNAPSHOT</version>
+    <version>0.4-SNAPSHOT</version>
     <name>${bundle.namespace}</name>
     <description>Implements the Order Book.</description>
     <packaging>bundle</packaging>
