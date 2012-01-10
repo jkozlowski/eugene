@@ -18,7 +18,7 @@ import static org.powermock.api.mockito.PowerMockito.mock;
  * @author Jakub D Kozlowski
  * @since 0.4
  */
-@PrepareForTest({Agent.class, AID.class})
+@PrepareForTest({Session.class, Agent.class, AID.class})
 public class LogonBehaviourTest extends PowerMockTestCase {
 
     @Test(expectedExceptions = NullPointerException.class)
