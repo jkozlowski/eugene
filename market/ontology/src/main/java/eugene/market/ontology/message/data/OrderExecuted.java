@@ -1,5 +1,6 @@
 package eugene.market.ontology.message.data;
 
+import eugene.market.ontology.field.TradeID;
 import eugene.market.ontology.Message;
 import eugene.market.ontology.field.LastPx;
 import eugene.market.ontology.field.LastQty;
@@ -10,7 +11,7 @@ import jade.content.onto.annotations.Slot;
 
 /**
  * {@link OrderExecuted} messages are sent when a visible order on the order book is executed in whole or in part at
- * a price
+ * a price. The {@link OrderID} refers to the {@link OrderID} of the original {@link AddOrder} message.
  *
  * @author Jakub D Kozlowski
  * @since 0.3
@@ -94,6 +95,25 @@ public class OrderExecuted extends Message {
      */
     public void setLastPx(LastPx lastPx) {
         setField(LastPx.TAGi, lastPx);
+    }
+
+    /**
+     * Gets the tradeID.
+     *
+     * @return the tradeID.
+     */
+    @Slot(mandatory = true)
+    public TradeID getTradeID() {
+        return getField(TradeID.TAGi);
+    }
+
+    /**
+     * Sets the tradeID.
+     *
+     * @param tradeID new tradeID.
+     */
+    public void setTradeID(TradeID tradeID) {
+        setField(TradeID.TAGi, tradeID);
     }
 
     /**

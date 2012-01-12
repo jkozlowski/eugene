@@ -9,8 +9,6 @@ package eugene.market.ontology.field.enums;
 public enum ExecType {
 
     NEW(eugene.market.ontology.field.ExecType.NEW),
-    PARTIAL_FILL(eugene.market.ontology.field.ExecType.PARTIAL_FILL),
-    FILL(eugene.market.ontology.field.ExecType.FILL),
     CANCELED(eugene.market.ontology.field.ExecType.CANCELED),
     REJECTED(eugene.market.ontology.field.ExecType.REJECTED),
     TRADE(eugene.market.ontology.field.ExecType.TRADE);

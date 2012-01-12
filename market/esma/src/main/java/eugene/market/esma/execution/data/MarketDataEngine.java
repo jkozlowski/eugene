@@ -3,7 +3,7 @@ package eugene.market.esma.execution.data;
 import eugene.market.book.Order;
 import eugene.market.book.OrderBook;
 import eugene.market.book.OrderStatus;
-import eugene.market.book.TradeReport;
+import eugene.market.esma.execution.Execution;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,11 +35,11 @@ public class MarketDataEngine {
     /**
      * Indicates that a pair of {@link Order}s has been executed.
      *
-     * @param tradeReport summary of the trade.
+     * @param execution summary of the execution.
      */
-    public void trade(final TradeReport tradeReport) {
+    public void execution(final Execution execution) {
         final Long eventId = currentEventId.getAndIncrement();
-        final TradeEvent event = new TradeEvent(eventId, tradeReport);
+        final ExecutionEvent event = new ExecutionEvent(eventId, execution);
         events.put(eventId, event);
     }
 

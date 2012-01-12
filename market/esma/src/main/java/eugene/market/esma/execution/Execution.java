@@ -1,6 +1,8 @@
-package eugene.market.book;
+package eugene.market.esma.execution;
 
 import com.google.common.primitives.Longs;
+import eugene.market.book.Order;
+import eugene.market.book.OrderStatus;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -12,8 +14,7 @@ import static com.google.common.primitives.Doubles.compare;
  * @author Jakub D Kozlowski
  * @since 0.3
  */
-// TODO: Check if quantity is not bigger than any of the quantities.
-public class TradeReport {
+public class Execution {
 
     private final OrderStatus buyOrderStatus;
 
@@ -23,19 +24,25 @@ public class TradeReport {
 
     private final Long quantity;
 
+    private final Long execID;
+
     /**
-     * Creates a {@link TradeReport} with this <code>buyOrderStatus</code>,
+     * Creates a {@link Execution} with this <code>execID</code>, <code>buyOrderStatus</code>,
      * <code>sellOrderStatus</code>, <code>price</code> and <code>quantity</code>.
      *
+     * @param execID          unique identifier of this {@link Execution}.
      * @param buyOrderStatus  status of execution of the buy order.
      * @param sellOrderStatus status of execution of the sell order.
      * @param price           price of execution.
      * @param quantity        quantity of execution.
      */
-    public TradeReport(final OrderStatus buyOrderStatus,
-                       final OrderStatus sellOrderStatus,
-                       final Double price,
-                       final Long quantity) {
+    public Execution(final Long execID,
+                     final OrderStatus buyOrderStatus,
+                     final OrderStatus sellOrderStatus,
+                     final Double price,
+                     final Long quantity) {
+
+        checkNotNull(execID);
         checkNotNull(buyOrderStatus);
         checkArgument(buyOrderStatus.getOrder().getSide().isBuy());
         checkNotNull(sellOrderStatus);
@@ -45,10 +52,20 @@ public class TradeReport {
         checkNotNull(quantity);
         checkArgument(Longs.compare(quantity, Order.NO_QTY) == 1);
 
+        this.execID = execID;
         this.buyOrderStatus = buyOrderStatus;
         this.sellOrderStatus = sellOrderStatus;
         this.price = price;
         this.quantity = quantity;
+    }
+
+    /**
+     * Gets the execID.
+     *
+     * @return the execID.
+     */
+    public Long getExecID() {
+        return execID;
     }
 
     /**

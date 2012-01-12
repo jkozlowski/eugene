@@ -2,8 +2,8 @@ package eugene.market.esma;
 
 import eugene.market.book.Order;
 import eugene.market.book.OrderStatus;
-import eugene.market.book.TradeReport;
 import eugene.market.esma.Repository.Tuple;
+import eugene.market.esma.execution.Execution;
 import eugene.market.ontology.field.enums.ExecType;
 import eugene.market.ontology.field.enums.OrdStatus;
 import eugene.market.ontology.message.ExecutionReport;
@@ -41,6 +41,8 @@ public class MessagesTest {
     public static final Tuple defaultTuple = new Tuple(mock(AID.class), defaultClOrdID);
 
     public static final String ORDER_STATUS_PROVIDER = "order-status-provider";
+
+    public static final Long execID = 1L;
 
     @DataProvider(name = ORDER_STATUS_PROVIDER)
     public OrderStatus[][] getOrderStatus() {
@@ -86,7 +88,7 @@ public class MessagesTest {
 
 
         if (orderStatus.isFilled()) {
-            assertThat(executionReport.getExecType(), is(ExecType.FILL.field()));
+            assertThat(executionReport.getExecType(), is(ExecType.TRADE.field()));
             assertThat(executionReport.getOrdStatus(), is(OrdStatus.FILLED.field()));
         }
         else {
@@ -95,7 +97,7 @@ public class MessagesTest {
                 assertThat(executionReport.getOrdStatus(), is(OrdStatus.NEW.field()));
             }
             else {
-                assertThat(executionReport.getExecType(), is(ExecType.PARTIAL_FILL.field()));
+                assertThat(executionReport.getExecType(), is(ExecType.TRADE.field()));
                 assertThat(executionReport.getOrdStatus(), is(OrdStatus.PARTIALLY_FILLED.field()));
             }
         }
@@ -111,7 +113,7 @@ public class MessagesTest {
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testOrderExecutedNullOrderStatus() {
-        orderExecuted(null, mock(TradeReport.class));
+        orderExecuted(null, mock(Execution.class));
     }
 
     @Test(expectedExceptions = NullPointerException.class)
@@ -125,13 +127,14 @@ public class MessagesTest {
         final Order sell = order(sell());
         final OrderStatus buyOrderStatus = new OrderStatus(buy, defaultPrice, defaultOrdQty - 2L, 2L);
         final OrderStatus sellOrderStatus = new OrderStatus(sell, defaultPrice, defaultOrdQty - 1L, 1L);
-        final TradeReport tradeReport = new TradeReport(buyOrderStatus, sellOrderStatus, defaultPrice,
-                                                        defaultOrdQty - 1L);
+        final Execution execution = new Execution(execID, buyOrderStatus, sellOrderStatus, defaultPrice,
+                                                  defaultOrdQty - 1L);
 
-        final OrderExecuted orderExecuted = orderExecuted(buyOrderStatus, tradeReport);
+        final OrderExecuted orderExecuted = orderExecuted(buyOrderStatus, execution);
 
-        assertThat(orderExecuted.getLastPx().getValue(), is(tradeReport.getPrice()));
-        assertThat(orderExecuted.getLastQty().getValue(), is(tradeReport.getQuantity()));
+        assertThat(orderExecuted.getTradeID().getValue(), is(execution.getExecID().toString()));
+        assertThat(orderExecuted.getLastPx().getValue(), is(execution.getPrice()));
+        assertThat(orderExecuted.getLastQty().getValue(), is(execution.getQuantity()));
         assertThat(orderExecuted.getLeavesQty().getValue(), is(buyOrderStatus.getLeavesQty()));
         assertThat(orderExecuted.getOrderID().getValue(), is(buy.getOrderID().toString()));
     }

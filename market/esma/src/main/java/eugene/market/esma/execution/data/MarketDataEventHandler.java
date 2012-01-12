@@ -16,11 +16,11 @@ public interface MarketDataEventHandler {
     public void handle(final NewOrderEvent newOrderEvent);
 
     /**
-     * Handles {@link TradeEvent}.
+     * Handles {@link ExecutionEvent}.
      *
-     * @param tradeEvent {@link TradeEvent} to handle.
+     * @param executionEvent {@link ExecutionEvent} to handle.
      */
-    public void handle(final TradeEvent tradeEvent);
+    public void handle(final ExecutionEvent executionEvent);
 
     /**
      * Handles {@link CancelOrderEvent}.

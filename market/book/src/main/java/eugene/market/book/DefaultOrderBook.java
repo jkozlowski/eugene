@@ -1,18 +1,19 @@
 package eugene.market.book;
 
+import com.google.common.primitives.Doubles;
+import com.google.common.primitives.Longs;
 import eugene.market.ontology.field.enums.Side;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.SortedSet;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
-import static com.google.common.primitives.Doubles.compare;
-import static com.google.common.primitives.Longs.max;
+import static com.google.common.collect.Sets.newTreeSet;
 
 /**
  * Default implementation of {@link OrderBook}.
@@ -24,7 +25,7 @@ public class DefaultOrderBook implements OrderBook {
 
     public static final String SEPARATOR = "*****************\n";
 
-    private final Map<Order, OrderStatus> executionReportMap;
+    private final Map<Order, OrderStatus> orderStatusMap;
 
     private final Queue<Order> buyOrders;
 
@@ -36,7 +37,7 @@ public class DefaultOrderBook implements OrderBook {
     public DefaultOrderBook() {
         this.buyOrders = new PriorityQueue<Order>();
         this.sellOrders = new PriorityQueue<Order>();
-        this.executionReportMap = new HashMap<Order, OrderStatus>();
+        this.orderStatusMap = new HashMap<Order, OrderStatus>();
     }
 
     /**
@@ -47,7 +48,7 @@ public class DefaultOrderBook implements OrderBook {
         checkNotNull(order);
         getQueue(order.getSide()).offer(order);
         final OrderStatus orderStatus = new OrderStatus(order);
-        executionReportMap.put(order, orderStatus);
+        orderStatusMap.put(order, orderStatus);
         return orderStatus;
     }
 
@@ -55,38 +56,38 @@ public class DefaultOrderBook implements OrderBook {
      * {@inheritDoc}
      */
     @Override
-    public TradeReport execute(final Double price) {
+    public OrderStatus execute(final Side side, final Long orderQty, final Double price) {
+
+        checkNotNull(side);
+        checkNotNull(orderQty);
         checkNotNull(price);
-        checkArgument(compare(price, Order.NO_PRICE) == 1);
-        checkState(!buyOrders.isEmpty());
-        checkState(!sellOrders.isEmpty());
 
-        final Order buyOrder = peek(Side.BUY);
-        final Order sellOrder = peek(Side.SELL);
+        checkArgument(Doubles.compare(price, Order.NO_PRICE) == 1);
+        checkArgument(Longs.compare(orderQty, Order.NO_QTY) == 1);
 
-        final Long quantity = max(buyOrder.getOrderQty(), sellOrder.getOrderQty());
+        checkState(!getQueue(side).isEmpty());
 
-        final OrderStatus buyOrderStatus = getExecutionReport(buyOrder).execute(price, quantity);
-        final OrderStatus sellOrderStatus = getExecutionReport(sellOrder).execute(price, quantity);
+        final Order order = peek(side);
 
-        if (buyOrderStatus.isFilled()) {
-            getQueue(Side.BUY).poll();
-            executionReportMap.remove(buyOrder);
+        final OrderStatus newOrderStatus = getOrderStatus(order).execute(price, orderQty);
+
+        if (newOrderStatus.isFilled()) {
+            final Order removedOrder = getQueue(side).poll();
+            checkState(order.equals(removedOrder));
+            orderStatusMap.remove(order);
         }
-        
-        if (sellOrderStatus.isFilled()) {
-            getQueue(Side.SELL).poll();
-            executionReportMap.remove(sellOrder);
+        else {
+            orderStatusMap.put(order, newOrderStatus);
         }
-        
-        return new TradeReport(buyOrderStatus, sellOrderStatus, price, quantity);
+
+        return newOrderStatus;
     }
 
     @Override
     public OrderStatus cancel(final Order order) {
         checkNotNull(order);
         getQueue(order.getSide()).remove(order);
-        return executionReportMap.remove(order);
+        return orderStatusMap.remove(order);
     }
 
     /**
@@ -120,35 +121,29 @@ public class DefaultOrderBook implements OrderBook {
      * {@inheritDoc}
      */
     @Override
-    public OrderStatus getExecutionReport(final Order order) {
-        return executionReportMap.get(order);
+    public OrderStatus getOrderStatus(final Order order) {
+        return orderStatusMap.get(order);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Order[] getBuyOrders() {
-        final Order[] buyOrders = this.buyOrders.toArray(new Order[this.buyOrders.size()]);
-        Arrays.sort(buyOrders);
-        return buyOrders;
+    public SortedSet<Order> getBuyOrders() {
+        return newTreeSet(this.buyOrders);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Order[] getSellOrders() {
-        final Order[] sellOrders = this.sellOrders.toArray(new Order[this.sellOrders.size()]);
-        Arrays.sort(sellOrders);
-        return sellOrders;
+    public SortedSet<Order> getSellOrders() {
+        return newTreeSet(this.sellOrders);
     }
 
     private Queue<Order> getQueue(final Side side) {
-        if (side.isSell()) {
-            return sellOrders;
-        }
-        return buyOrders;
+        checkNotNull(side);
+        return side.isSell() ? sellOrders : buyOrders;
     }
 
     @Override

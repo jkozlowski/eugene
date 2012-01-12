@@ -6,6 +6,9 @@ import jade.content.onto.annotations.Element;
 import jade.content.onto.annotations.Slot;
 
 /**
+ * {@link DeleteOrder} message is sent whenever an open order is completely cancelled. The {@link OrderID} refers to
+ * the {@link OrderID} of the original {@link AddOrder} message.
+ *
  * @author Jakub D Kozlowski
  * @since 0.3
  */
