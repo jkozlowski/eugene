@@ -76,10 +76,10 @@
                         <Bundle-SymbolicName>${bundle.namespace}</Bundle-SymbolicName>
                         <Bundle-Version>${project.version}</Bundle-Version>
                         <Bundle-Description>${project.description}</Bundle-Description>
-                        <Export-Package>${bundle.namespace}
-                        </Export-Package>
+                        <Export-Package>${bundle.namespace}</Export-Package>
                         <Import-Package>
-                            com.google.common.base, com.google.common.primitives, eugene.market.ontology.field.enums
+                            com.google.common.base, com.google.common.collect, com.google.common.primitives,
+                            eugene.market.ontology.field.enums
                         </Import-Package>
                     </instructions>
                 </configuration>

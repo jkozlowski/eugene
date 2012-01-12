@@ -4,21 +4,26 @@ import eugene.market.book.DefaultOrderBook;
 import eugene.market.book.Order;
 import eugene.market.book.OrderBook;
 import eugene.market.book.OrderStatus;
-import eugene.market.book.TradeReport;
-import eugene.market.esma.execution.MatchingEngine.Match;
-import eugene.market.esma.execution.MatchingEngine.MatchingResult;
 import eugene.market.esma.execution.data.MarketDataEngine;
 import eugene.market.ontology.field.enums.Side;
-import org.mockito.InOrder;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 import org.testng.annotations.Test;
 
+import static eugene.market.book.MockOrders.buy;
+import static eugene.market.book.MockOrders.limitOrdQtyPrice;
+import static eugene.market.book.MockOrders.order;
+import static eugene.market.book.MockOrders.orderQty;
+import static eugene.market.book.MockOrders.sell;
+import static eugene.market.ontology.Defaults.defaultOrdQty;
+import static eugene.market.ontology.Defaults.defaultPrice;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
@@ -79,12 +84,10 @@ public class ExecutionEngineTest {
     @Test
     public void testInsertOrderValid() {
         final ExecutionEngine executionEngine = getExecutionEngine();
-        final Order order = mock(Order.class);
-        final OrderStatus orderStatus = mock(OrderStatus.class);
-        when(executionEngine.getOrderBook().insertOrder(any(Order.class))).thenReturn(orderStatus);
+        final Order order = order(buy());
 
-        assertThat(executionEngine.insertOrder(order), sameInstance(orderStatus));
-        verify(executionEngine.getOrderBook()).insertOrder(order);
+        assertThat(executionEngine.insertOrder(order), sameInstance(executionEngine.getOrderBook().getOrderStatus
+                (order)));
         verify(executionEngine.getMarketDataEngine()).newOrder(order);
     }
 
@@ -96,23 +99,16 @@ public class ExecutionEngineTest {
 
     @Test
     public void testCancelOrderDoesNotExist() {
-        final ExecutionEngine executionEngine = getExecutionEngine();
-
-        final OrderBook orderBook = executionEngine.getOrderBook();
-        when(orderBook.cancel(any(Order.class))).thenReturn(null);
-
-        assertThat(executionEngine.cancel(mock(Order.class)), nullValue());
+        assertThat(getExecutionEngine().cancel(order(buy())), nullValue());
     }
 
     @Test
     public void testCancelOrderValid() {
         final ExecutionEngine executionEngine = getExecutionEngine();
 
-        final Order order = mock(Order.class);
-        final OrderStatus orderStatus = mock(OrderStatus.class);
-
+        final Order order = order(buy());
         final OrderBook orderBook = executionEngine.getOrderBook();
-        when(orderBook.cancel(order)).thenReturn(orderStatus);
+        final OrderStatus orderStatus = orderBook.insertOrder(order);
 
         assertThat(executionEngine.cancel(order), sameInstance(orderStatus));
         verify(executionEngine.getMarketDataEngine()).cancel(orderStatus);
@@ -121,95 +117,94 @@ public class ExecutionEngineTest {
     @Test
     public void testExecuteBuySideEmpty() {
         final ExecutionEngine executionEngine = getExecutionEngine();
-        when(executionEngine.getOrderBook().isEmpty(Side.BUY)).thenReturn(true);
-        when(executionEngine.getOrderBook().size(Side.BUY)).thenReturn(0);
+        final OrderBook orderBook = executionEngine.getOrderBook();
+        final Order sell = order(sell());
+        orderBook.insertOrder(sell);
 
         executionEngine.execute();
 
-        final OrderBook orderBook = executionEngine.getOrderBook();
-        final InOrder inOrder = inOrder(orderBook);
-        inOrder.verify(orderBook).isEmpty(Side.BUY);
-        inOrder.verifyNoMoreInteractions();
+        verifyZeroInteractions(executionEngine.getMarketDataEngine());
 
-        verifyZeroInteractions(executionEngine.getMatchingEngine(), executionEngine.getMarketDataEngine());
+        assertThat(orderBook.isEmpty(Side.SELL), is(false));
+        assertThat(orderBook.peek(Side.SELL), sameInstance(sell));
+        assertThat(orderBook.size(Side.SELL), is(1));
+        assertThat(orderBook.isEmpty(Side.BUY), is(true));
     }
 
     @Test
     public void testExecuteSellSideEmpty() {
         final ExecutionEngine executionEngine = getExecutionEngine();
-        when(executionEngine.getOrderBook().isEmpty(Side.BUY)).thenReturn(false);
-        when(executionEngine.getOrderBook().size(Side.BUY)).thenReturn(1);
-        when(executionEngine.getOrderBook().isEmpty(Side.SELL)).thenReturn(true);
-        when(executionEngine.getOrderBook().size(Side.SELL)).thenReturn(0);
+        final OrderBook orderBook = executionEngine.getOrderBook();
+        final Order buy = order(buy());
+        orderBook.insertOrder(buy);
 
         executionEngine.execute();
 
-        final OrderBook orderBook = executionEngine.getOrderBook();
-        final InOrder inOrder = inOrder(orderBook);
-        inOrder.verify(orderBook).isEmpty(Side.BUY);
-        inOrder.verify(orderBook).isEmpty(Side.SELL);
-        inOrder.verifyNoMoreInteractions();
+        verifyZeroInteractions(executionEngine.getMarketDataEngine());
 
-        verifyZeroInteractions(executionEngine.getMatchingEngine(), executionEngine.getMarketDataEngine());
+        assertThat(orderBook.isEmpty(Side.BUY), is(false));
+        assertThat(orderBook.peek(Side.BUY), sameInstance(buy));
+        assertThat(orderBook.size(Side.BUY), is(1));
+        assertThat(orderBook.isEmpty(Side.SELL), is(true));
     }
 
     @Test
     public void testExecuteOrderValidNoMatch() {
-        final Order buy = mock(Order.class);
-        final Order sell = mock(Order.class);
+        final Order buy = order(limitOrdQtyPrice(buy(), defaultOrdQty, defaultPrice - 1L));
+        final Order sell = order(limitOrdQtyPrice(sell(), defaultOrdQty, defaultPrice));
         final ExecutionEngine executionEngine = getExecutionEngine(buy, sell);
-        final MatchingResult matchingResult = MatchingResult.NO_MATCH;
-        when(executionEngine.getMatchingEngine().match(buy, sell)).thenReturn(matchingResult);
 
         executionEngine.execute();
 
         final OrderBook orderBook = executionEngine.getOrderBook();
-        final MatchingEngine matchingEngine = executionEngine.getMatchingEngine();
-        final InOrder inOrder = inOrder(orderBook, matchingEngine);
-
-        inOrder.verify(orderBook).isEmpty(Side.BUY);
-        inOrder.verify(orderBook).isEmpty(Side.SELL);
-        inOrder.verify(orderBook).peek(Side.BUY);
-        inOrder.verify(orderBook).peek(Side.SELL);
-        inOrder.verify(matchingEngine).match(buy, sell);
-        inOrder.verifyNoMoreInteractions();
 
         verifyZeroInteractions(executionEngine.getMarketDataEngine());
+
+        assertThat(orderBook.isEmpty(Side.SELL), is(false));
+        assertThat(orderBook.peek(Side.SELL), sameInstance(sell));
+        assertThat(orderBook.size(Side.SELL), is(1));
+        assertThat(orderBook.isEmpty(Side.BUY), is(false));
+        assertThat(orderBook.peek(Side.BUY), sameInstance(buy));
+        assertThat(orderBook.size(Side.BUY), is(1));
     }
 
     @Test
     public void testExecuteOrderValidMatch() {
-        final Order buy = mock(Order.class);
-        final Order sell = mock(Order.class);
-        final ExecutionEngine executionEngine = getExecutionEngineOrderOnEachSide(buy, sell);
-        final MatchingResult matchingResult = new MatchingResult(Match.YES, Order.NO_PRICE);
-        final TradeReport tradeReport = mock(TradeReport.class);
-        when(executionEngine.getMatchingEngine().match(buy, sell)).thenReturn(matchingResult);
-        when(executionEngine.getOrderBook().execute(Order.NO_PRICE)).thenReturn(tradeReport);
+        final ArgumentCaptor<Execution> tradeReport = ArgumentCaptor.forClass(Execution.class);
+        final Order buy = order(orderQty(buy(), defaultOrdQty));
+        final Order sell = order(orderQty(sell(), defaultOrdQty - 1L));
+        final ExecutionEngine executionEngine = getExecutionEngine(buy, sell);
 
         executionEngine.execute();
 
         final OrderBook orderBook = executionEngine.getOrderBook();
-        final MatchingEngine matchingEngine = executionEngine.getMatchingEngine();
         final MarketDataEngine marketDataEngine = executionEngine.getMarketDataEngine();
-        final InOrder inOrder = inOrder(orderBook, matchingEngine, marketDataEngine);
 
-        inOrder.verify(orderBook).isEmpty(Side.BUY);
-        inOrder.verify(orderBook).isEmpty(Side.SELL);
-        inOrder.verify(orderBook).peek(Side.BUY);
-        inOrder.verify(orderBook).peek(Side.SELL);
-        inOrder.verify(matchingEngine).match(buy, sell);
-        inOrder.verify(orderBook).execute(Order.NO_PRICE);
-        inOrder.verify(marketDataEngine).trade(tradeReport);
-        inOrder.verify(orderBook).isEmpty(Side.BUY);
-        inOrder.verifyNoMoreInteractions();
+        verify(orderBook).execute(Side.BUY, defaultOrdQty - 1L, defaultPrice);
+        verify(orderBook).execute(Side.SELL, defaultOrdQty - 1L, defaultPrice);
+        verify(marketDataEngine).execution(tradeReport.capture());
+
+        assertThat(tradeReport.getValue().getExecID(), is(executionEngine.getCurExecID() - 1L));
+        assertThat(tradeReport.getValue().getPrice(), is(defaultPrice));
+        assertThat(tradeReport.getValue().getQuantity(), is(defaultOrdQty - 1L));
+
+        assertThat(tradeReport.getValue().getBuyOrderStatus().getOrder(), sameInstance(buy));
+        assertThat(tradeReport.getValue().getSellOrderStatus().getOrder(), sameInstance(sell));
+
+        assertThat(tradeReport.getValue().getBuyOrderStatus().getLeavesQty(), is(1L));
+        assertThat(tradeReport.getValue().getBuyOrderStatus().getCumQty(), is(defaultOrdQty - 1L));
+
+        assertThat(tradeReport.getValue().getSellOrderStatus().isFilled(), is(true));
+
+        assertThat(orderBook.isEmpty(Side.BUY), is(false));
+        assertThat(orderBook.peek(Side.BUY), sameInstance(buy));
+        assertThat(orderBook.isEmpty(Side.SELL), is(true));
     }
 
     /**
      * Gets an {@link ExecutionEngine} with:
      * <ul>
-     * <li>{@link OrderBook} that returns <code>true</code> when {@link OrderBook#isEmpty(Side)} is called with
-     * any {@link Side}.</li>
+     * <li>{@link OrderBook} wrapped with {@link Mockito#spy(Object)}.</li>
      * <li>{@link InsertionValidator} that returns <code>true</code> when {@link InsertionValidator#validate
      * (OrderBook, Order)} is called with any arguments.</li>
      * </ul>
@@ -217,24 +212,20 @@ public class ExecutionEngineTest {
      * @return an instance of {@link ExecutionEngine} with mocked dependencies.
      */
     public static ExecutionEngine getExecutionEngine() {
-        final OrderBook orderBook = mock(OrderBook.class);
-        when(orderBook.isEmpty(any(Side.class))).thenReturn(true);
+        final OrderBook orderBook = spy(new DefaultOrderBook());
         final InsertionValidator insertionValidator = mock(InsertionValidator.class);
         when(insertionValidator.validate(any(OrderBook.class), any(Order.class))).thenReturn(true);
         return new ExecutionEngine(insertionValidator, orderBook,
-                                   mock(MatchingEngine.class),
+                                   MatchingEngine.getInstance(),
                                    mock(MarketDataEngine.class));
     }
 
     /**
      * Gets an {@link ExecutionEngine} with the attributes of {@link ExecutionEngineTest#getExecutionEngine()
-     * } except that:
-     * <ul>
-     * <li>{@link OrderBook#peek(Side)} returns <code>buyOrder</code> and <code>sellOrder</code></li>
-     * </ul>
+     * } and <code>buyOrder</code> and <code>sellOrder</code> added to the {@link OrderBook}.
      *
-     * @param buyOrder  {@link Order} to return when {@link OrderBook#peek(Side)} is called with {@link Side#BUY}.
-     * @param sellOrder {@link Order} to return when {@link OrderBook#peek(Side)} is called with {@link Side#SELL}.
+     * @param buyOrder  {@link Order} to add to {@link OrderBook}.
+     * @param sellOrder {@link Order} to add to {@link OrderBook}.
      *
      * @return an instance of {@link ExecutionEngine} with mocked dependencies.
      */
@@ -242,35 +233,8 @@ public class ExecutionEngineTest {
                                                      final Order sellOrder) {
         final ExecutionEngine executionEngine = getExecutionEngine();
         final OrderBook orderBook = executionEngine.getOrderBook();
-        when(orderBook.isEmpty(any(Side.class))).thenReturn(false);
-        when(orderBook.size(any(Side.class))).thenReturn(1);
-        when(orderBook.peek(Side.BUY)).thenReturn(buyOrder);
-        when(orderBook.peek(Side.SELL)).thenReturn(sellOrder);
-        return executionEngine;
-    }
-
-    /**
-     * Gets an {@link ExecutionEngine} with the attributes of {@link ExecutionEngineTest#getExecutionEngine()
-     * } except that:
-     * <ul>
-     * <li>{@link OrderBook#peek(Side)} returns <code>buyOrder</code> and <code>sellOrder</code> first time it is
-     * called and {@link OrderBook#isEmpty(Side)} and {@link OrderBook#size(Side)} work correctly.</li>
-     * </ul>
-     *
-     * @param buyOrder  {@link Order} to return when {@link OrderBook#peek(Side)} is called with {@link Side#BUY}.
-     * @param sellOrder {@link Order} to return when {@link OrderBook#peek(Side)} is called with {@link Side#SELL}.
-     *
-     * @return an instance of {@link ExecutionEngine} with mocked dependencies.
-     */
-    public static ExecutionEngine getExecutionEngineOrderOnEachSide(final Order buyOrder,
-                                                                    final Order sellOrder) {
-        final ExecutionEngine executionEngine = getExecutionEngine();
-        final OrderBook orderBook = executionEngine.getOrderBook();
-        when(orderBook.isEmpty(Side.SELL)).thenReturn(false).thenReturn(true);
-        when(orderBook.isEmpty(Side.BUY)).thenReturn(false).thenReturn(true);
-        when(orderBook.size(any(Side.class))).thenReturn(1).thenReturn(0);
-        when(orderBook.peek(Side.BUY)).thenReturn(buyOrder).thenReturn(null);
-        when(orderBook.peek(Side.SELL)).thenReturn(sellOrder).thenReturn(null);
+        orderBook.insertOrder(buyOrder);
+        orderBook.insertOrder(sellOrder);
         return executionEngine;
     }
 }

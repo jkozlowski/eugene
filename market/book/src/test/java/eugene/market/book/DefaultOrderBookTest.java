@@ -11,7 +11,7 @@ import static eugene.market.ontology.Defaults.defaultOrdQty;
 import static eugene.market.ontology.Defaults.defaultPrice;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalToIgnoringCase;
-import static org.hamcrest.Matchers.hasItemInArray;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasToString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isIn;
@@ -60,7 +60,7 @@ public class DefaultOrderBookTest {
         assertThat(orderBook.size(Side.BUY), is(1));
         assertThat(orderBook.peek(Side.BUY), is(buy));
         assertThat(buy, isIn(orderBook.getBuyOrders()));
-        assertThat(orderStatus, sameInstance(orderBook.getExecutionReport(buy)));
+        assertThat(orderStatus, sameInstance(orderBook.getOrderStatus(buy)));
         assertThat(orderStatus.isEmpty(), is(true));
     }
 
@@ -78,55 +78,94 @@ public class DefaultOrderBookTest {
         assertThat(orderBook.size(Side.SELL), is(1));
         assertThat(orderBook.peek(Side.SELL), is(sell));
         assertThat(sell, isIn(orderBook.getSellOrders()));
-        assertThat(orderStatus, sameInstance(orderBook.getExecutionReport(sell)));
+        assertThat(orderStatus, sameInstance(orderBook.getOrderStatus(sell)));
         assertThat(orderStatus.isEmpty(), is(true));
+    }
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testExecuteNullSide() {
+        final OrderBook orderBook = new DefaultOrderBook();
+        orderBook.execute(null, defaultOrdQty, defaultPrice);
+    }
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testExecuteNullOrderQty() {
+        final OrderBook orderBook = new DefaultOrderBook();
+        orderBook.execute(Side.BUY, null, defaultPrice);
     }
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testExecuteNullPrice() {
         final OrderBook orderBook = new DefaultOrderBook();
-        orderBook.execute(null);
+        orderBook.execute(Side.BUY, defaultOrdQty, null);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testExecuteNoPrice() {
         final OrderBook orderBook = new DefaultOrderBook();
-        orderBook.execute(Order.NO_PRICE);
+        orderBook.execute(Side.BUY, defaultOrdQty, Order.NO_PRICE);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testExecuteNoOrderQty() {
+        final OrderBook orderBook = new DefaultOrderBook();
+        orderBook.execute(Side.BUY, Order.NO_QTY, defaultPrice);
     }
 
     @Test(expectedExceptions = IllegalStateException.class)
-    public void testExecuteEmptySellSide() {
+    public void testExecuteSellEmptySellSide() {
         final OrderBook orderBook = new DefaultOrderBook();
-        final Order buy = order(buy());
-        orderBook.insertOrder(buy);
-
-        orderBook.execute(defaultPrice);
+        orderBook.execute(Side.SELL, defaultOrdQty, defaultPrice);
     }
 
     @Test(expectedExceptions = IllegalStateException.class)
-    public void testExecuteEmptyBuySide() {
+    public void testExecuteBuyEmptyBuySide() {
         final OrderBook orderBook = new DefaultOrderBook();
-        final Order sell = order(sell());
-        orderBook.insertOrder(sell);
-
-        orderBook.execute(defaultPrice);
+        orderBook.execute(Side.BUY, defaultOrdQty, defaultPrice);
     }
 
     @Test
-    public void testExecute() {
+    public void testExecutePartialFill() {
         final OrderBook orderBook = new DefaultOrderBook();
         final Order buy = order(orderQty(buy(), defaultOrdQty));
         final Order sell = order(orderQty(sell(), defaultOrdQty));
         orderBook.insertOrder(buy);
-        orderBook.insertOrder(sell);
+        final OrderStatus sellOrderStatus = orderBook.insertOrder(sell);
 
-        final TradeReport actual = orderBook.execute(defaultPrice);
-        assertThat(actual.getPrice(), is(defaultPrice));
-        assertThat(actual.getQuantity(), is(defaultOrdQty));
+        final OrderStatus orderStatus = orderBook.execute(Side.BUY, defaultOrdQty - 1L, defaultPrice);
+
+        assertThat(orderStatus.getCumQty(), is(defaultOrdQty - 1));
+        assertThat(orderStatus.getAvgPx(), is(defaultPrice));
+        assertThat(orderStatus.getLeavesQty(), is(1L));
+        assertThat(orderStatus.getOrder(), sameInstance(buy));
+        assertThat(orderStatus.isFilled(), is(false));
+        assertThat(orderStatus.isEmpty(), is(false));
+        assertThat(orderBook.isEmpty(Side.BUY), is(false));
+        assertThat(orderBook.isEmpty(Side.SELL), is(false));
+        assertThat(orderBook.getOrderStatus(buy), sameInstance(orderStatus));
+        assertThat(orderBook.getOrderStatus(sell), sameInstance(sellOrderStatus));
+    }
+
+    @Test
+    public void testExecuteFill() {
+        final OrderBook orderBook = new DefaultOrderBook();
+        final Order buy = order(orderQty(buy(), defaultOrdQty));
+        final Order sell = order(orderQty(sell(), defaultOrdQty));
+        orderBook.insertOrder(buy);
+        final OrderStatus sellOrderStatus = orderBook.insertOrder(sell);
+
+        final OrderStatus orderStatus = orderBook.execute(Side.BUY, defaultOrdQty, defaultPrice);
+
+        assertThat(orderStatus.getCumQty(), is(defaultOrdQty));
+        assertThat(orderStatus.getAvgPx(), is(defaultPrice));
+        assertThat(orderStatus.getLeavesQty(), is(Order.NO_QTY));
+        assertThat(orderStatus.getOrder(), sameInstance(buy));
+        assertThat(orderStatus.isFilled(), is(true));
+        assertThat(orderStatus.isEmpty(), is(false));
         assertThat(orderBook.isEmpty(Side.BUY), is(true));
-        assertThat(orderBook.isEmpty(Side.SELL), is(true));
-        assertThat(orderBook.getExecutionReport(buy), nullValue());
-        assertThat(orderBook.getExecutionReport(sell), nullValue());
+        assertThat(orderBook.isEmpty(Side.SELL), is(false));
+        assertThat(orderBook.getOrderStatus(buy), nullValue());
+        assertThat(orderBook.getOrderStatus(sell), sameInstance(sellOrderStatus));
     }
 
     @Test(expectedExceptions = NullPointerException.class)
@@ -151,8 +190,8 @@ public class DefaultOrderBookTest {
         final OrderStatus actual = orderBook.cancel(order);
 
         assertThat(actual, sameInstance(expected));
-        assertThat(orderBook.getExecutionReport(order), nullValue());
-        assertThat(orderBook.getBuyOrders(), not(hasItemInArray(order)));
+        assertThat(orderBook.getOrderStatus(order), nullValue());
+        assertThat(orderBook.getBuyOrders(), not(hasItem(order)));
     }
 
     @Test(expectedExceptions = NullPointerException.class)

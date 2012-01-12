@@ -1,7 +1,7 @@
 package eugene.market.esma.execution.data;
 
 import eugene.market.book.Order;
-import eugene.market.book.TradeReport;
+import eugene.market.esma.execution.Execution;
 import org.testng.annotations.Test;
 
 import static eugene.market.book.MockOrders.buy;
@@ -35,14 +35,14 @@ public class MarketDataEngineTest {
     @Test
     public void testGetMarketDataEngineTradeEvent() {
         final MarketDataEngine marketDataEngine = new MarketDataEngine();
-        final TradeReport tradeReport = mock(TradeReport.class);
+        final Execution execution = mock(Execution.class);
         final Long currentEventId = marketDataEngine.getCurrentEventId();
 
-        marketDataEngine.trade(tradeReport);
+        marketDataEngine.execution(execution);
 
-        assertThat(marketDataEngine.getMarketDataEvent(currentEventId), is(TradeEvent.class));
-        final TradeEvent newOrderEvent = (TradeEvent) marketDataEngine.getMarketDataEvent(currentEventId);
+        assertThat(marketDataEngine.getMarketDataEvent(currentEventId), is(ExecutionEvent.class));
+        final ExecutionEvent newOrderEvent = (ExecutionEvent) marketDataEngine.getMarketDataEvent(currentEventId);
         assertThat(newOrderEvent.getEventId(), is(currentEventId));
-        assertThat(newOrderEvent.getObject(), is(tradeReport));
+        assertThat(newOrderEvent.getObject(), is(execution));
     }
 }

@@ -1,13 +1,15 @@
 package eugene.market.esma.execution;
 
+import com.google.common.primitives.Longs;
 import eugene.market.book.DefaultOrderBook;
 import eugene.market.book.Order;
 import eugene.market.book.OrderBook;
 import eugene.market.book.OrderStatus;
-import eugene.market.book.TradeReport;
 import eugene.market.esma.execution.MatchingEngine.MatchingResult;
 import eugene.market.esma.execution.data.MarketDataEngine;
 import eugene.market.ontology.field.enums.Side;
+
+import java.util.concurrent.atomic.AtomicLong;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -27,6 +29,8 @@ public class ExecutionEngine {
     private final InsertionValidator insertionValidator;
 
     private final MarketDataEngine marketDataEngine;
+
+    private final AtomicLong curExecID = new AtomicLong(1L);
 
     /**
      * Constructs a {@link ExecutionEngine} that will use {@link InsertionValidator}, {@link
@@ -122,9 +126,26 @@ public class ExecutionEngine {
                 break;
             }
 
-            final TradeReport tradeReport = orderBook.execute(matchResult.getPrice());
-            marketDataEngine.trade(tradeReport);
+            final Long orderQty = Longs.min(orderBook.getOrderStatus(buyOrder).getLeavesQty(),
+                                            orderBook.getOrderStatus(sellOrder).getLeavesQty());
+
+            final OrderStatus buyOrderStatus = orderBook.execute(Side.BUY, orderQty, matchResult.getPrice());
+            final OrderStatus sellOrderStatus = orderBook.execute(Side.SELL, orderQty, matchResult.getPrice());
+
+            final Execution execution = new Execution(curExecID.getAndIncrement(), buyOrderStatus, sellOrderStatus,
+                                                      matchResult.getPrice(), orderQty);
+
+            marketDataEngine.execution(execution);
         }
+    }
+
+    /**
+     * Gets curExecID.
+     *
+     * @return the curExecID.
+     */
+    public Long getCurExecID() {
+        return curExecID.get();
     }
 
     /**

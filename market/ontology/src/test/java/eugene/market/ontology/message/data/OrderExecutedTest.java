@@ -2,6 +2,7 @@ package eugene.market.ontology.message.data;
 
 import eugene.market.ontology.Defaults;
 import eugene.market.ontology.Message;
+import eugene.market.ontology.field.TradeID;
 import eugene.market.ontology.field.LastPx;
 import eugene.market.ontology.field.LastQty;
 import eugene.market.ontology.field.LeavesQty;
@@ -35,6 +36,7 @@ public class OrderExecutedTest extends MessageTest {
         final Set<Message> toSend = new HashSet<Message>();
         final OrderExecuted orderExecuted = new OrderExecuted();
         orderExecuted.setOrderID(new OrderID(Defaults.defaultOrderID));
+        orderExecuted.setTradeID(new TradeID(Defaults.defaultExecID));
         orderExecuted.setLastPx(new LastPx(Defaults.Price));
         orderExecuted.setLastQty(new LastQty(defaultOrdQty));
         orderExecuted.setLeavesQty(new LeavesQty(Defaults.defaultLeavesQty));

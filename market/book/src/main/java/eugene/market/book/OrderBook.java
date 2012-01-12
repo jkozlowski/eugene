@@ -2,6 +2,8 @@ package eugene.market.book;
 
 import eugene.market.ontology.field.enums.Side;
 
+import java.util.SortedSet;
+
 /**
  * Maintains lists of outstanding buy and sell {@link Order}s.
  *
@@ -20,13 +22,24 @@ public interface OrderBook {
     public OrderStatus insertOrder(final Order order);
 
     /**
-     * Executes {@link Order}s at the top of the book at this <code>price</code>.
+     * Executes the <code>orderQty</code> of the {@link Order} at the top of the book on this <code>side</code> at
+     * this <code>price</code>.
      *
-     * @param price price of execution.
+     * @param side     {@link Side} of the {@link Order} to execute.
+     * @param orderQty quantity to execute.
+     * @param price    price of execution.
      *
-     * @return report of the trade execution.
+     * @return {@link OrderStatus} after the execution.
+     *
+     * @throws NullPointerException     if <code>side</code>, <code>orderQty</code> or <code>price</code> are
+     *                                  <code>null</code>.
+     * @throws IllegalArgumentException if <code>price <= {@link Order#NO_PRICE}</code>,
+     *                                  or <code>orderQty <= {@link Order#NO_QTY}</code>,
+     *                                  or <code>orderQty > {@link OrderStatus#getLeavesQty()}</code>
+     *                                  or the {@link OrderBook} is empty on this <code>side</code>.
      */
-    public TradeReport execute(final Double price);
+    public OrderStatus execute(final Side side, final Long orderQty, final Double price) throws NullPointerException,
+                                                                                                IllegalArgumentException;
 
     /**
      * Cancels this <code>order</code>.
@@ -73,19 +86,19 @@ public interface OrderBook {
      * @return the {@link OrderStatus} for this <code>order</code> or null if this {@link Order} is not in
      *         this {@link OrderBook}.
      */
-    public OrderStatus getExecutionReport(final Order order);
+    public OrderStatus getOrderStatus(final Order order);
 
     /**
-     * Gets a sorted array of {@link Side#BUY} orders.
+     * Gets a {@link SortedSet} of {@link Side#BUY} orders.
      *
-     * @return sorted array of {@link Side#BUY} orders.
+     * @return {@link SortedSet} of {@link Side#BUY} orders.
      */
-    public Order[] getBuyOrders();
+    public SortedSet<Order> getBuyOrders();
 
     /**
-     * Gets a sorted array of {@link Side#SELL} orders.
+     * Gets a {@link SortedSet} of {@link Side#SELL} orders.
      *
-     * @return sorted array of {@link Side#SELL} orders.
+     * @return {@link SortedSet} of {@link Side#SELL} orders.
      */
-    public Order[] getSellOrders();
+    public SortedSet<Order> getSellOrders();
 }

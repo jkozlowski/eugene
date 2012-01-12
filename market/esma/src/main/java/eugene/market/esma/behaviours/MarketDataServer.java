@@ -2,7 +2,7 @@ package eugene.market.esma.behaviours;
 
 import eugene.market.book.Order;
 import eugene.market.book.OrderStatus;
-import eugene.market.book.TradeReport;
+import eugene.market.esma.execution.Execution;
 import eugene.market.esma.Repository;
 import eugene.market.esma.Repository.Tuple;
 import eugene.market.esma.execution.data.CancelOrderEvent;
@@ -10,7 +10,7 @@ import eugene.market.esma.execution.data.MarketDataEngine;
 import eugene.market.esma.execution.data.MarketDataEvent;
 import eugene.market.esma.execution.data.MarketDataEventHandler;
 import eugene.market.esma.execution.data.NewOrderEvent;
-import eugene.market.esma.execution.data.TradeEvent;
+import eugene.market.esma.execution.data.ExecutionEvent;
 import eugene.market.ontology.MarketOntology;
 import eugene.market.ontology.Message;
 import eugene.market.ontology.message.ExecutionReport;
@@ -97,28 +97,28 @@ public class MarketDataServer extends CyclicBehaviour implements MarketDataEvent
     }
 
     @Override
-    public void handle(final TradeEvent tradeEvent) {
+    public void handle(final ExecutionEvent executionEvent) {
 
-        final TradeReport tradeReport = tradeEvent.getObject();
+        final Execution execution = executionEvent.getObject();
 
         // Buy side
-        final OrderStatus buyOrderStatus = tradeReport.getBuyOrderStatus();
+        final OrderStatus buyOrderStatus = execution.getBuyOrderStatus();
         final Tuple buyTuple = repository.get(buyOrderStatus.getOrder());
         checkNotNull(buyTuple);
 
         send(executionReport(buyOrderStatus, buyTuple, symbol), buyTuple);
         if (buyOrderStatus.getOrder().getOrdType().isLimit()) {
-            send(orderExecuted(buyOrderStatus, tradeReport));
+            send(orderExecuted(buyOrderStatus, execution));
         }
 
         // Sell side
-        final OrderStatus sellOrderStatus = tradeReport.getSellOrderStatus();
+        final OrderStatus sellOrderStatus = execution.getSellOrderStatus();
         final Tuple sellTuple = repository.get(sellOrderStatus.getOrder());
         checkNotNull(sellTuple);
 
         send(executionReport(sellOrderStatus, sellTuple, symbol), sellTuple);
         if (sellOrderStatus.getOrder().getOrdType().isLimit()) {
-            send(orderExecuted(sellOrderStatus, tradeReport));
+            send(orderExecuted(sellOrderStatus, execution));
         }
     }
 

@@ -21,6 +21,8 @@ public class Defaults {
     public static final Double defaultPrice = 100.0D;
 
     public static final String defaultClOrdID = "client01";
+    
+    public static final String defaultExecID = "01";
 
     public static final Double Price = 1.2;
 

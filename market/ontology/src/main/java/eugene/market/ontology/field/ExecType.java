@@ -21,10 +21,6 @@ public final class ExecType extends Field<String> {
 
     public static final String NEW = "0";
 
-    public static final String PARTIAL_FILL = "1";
-
-    public static final String FILL = "2";
-
     public static final String CANCELED = "4";
 
     public static final String REJECTED = "8";
@@ -45,7 +41,7 @@ public final class ExecType extends Field<String> {
     }
 
     @Override
-    @Slot(permittedValues = {NEW, PARTIAL_FILL, FILL, CANCELED, REJECTED, TRADE})
+    @Slot(permittedValues = {NEW, CANCELED, REJECTED, TRADE})
     public String getValue() {
         return super.getValue();
     }

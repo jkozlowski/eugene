@@ -1,12 +1,13 @@
 package eugene.market.esma;
 
 import eugene.market.book.OrderStatus;
-import eugene.market.book.TradeReport;
+import eugene.market.esma.execution.Execution;
 import eugene.market.esma.Repository.Tuple;
 import eugene.market.ontology.Message;
 import eugene.market.ontology.field.AvgPx;
 import eugene.market.ontology.field.ClOrdID;
 import eugene.market.ontology.field.CumQty;
+import eugene.market.ontology.field.TradeID;
 import eugene.market.ontology.field.LastPx;
 import eugene.market.ontology.field.LastQty;
 import eugene.market.ontology.field.LeavesQty;
@@ -46,8 +47,7 @@ public final class Messages {
         executionReport.setClOrdID(new ClOrdID(tuple.getClOrdID()));
         executionReport.setAvgPx(new AvgPx(orderStatus.getAvgPx()));
         executionReport.setCumQty(new CumQty(orderStatus.getCumQty()));
-        executionReport.setExecType(orderStatus.isEmpty() ? ExecType.NEW.field() : (orderStatus.isFilled() ?
-                ExecType.FILL.field() : ExecType.PARTIAL_FILL.field()));
+        executionReport.setExecType(orderStatus.isEmpty() ? ExecType.NEW.field() : ExecType.TRADE.field());
         executionReport.setLeavesQty(new LeavesQty(orderStatus.getLeavesQty()));
         executionReport.setOrderID(new OrderID(orderStatus.getOrder().getOrderID().toString()));
         executionReport.setOrdStatus(orderStatus.isEmpty() ? OrdStatus.NEW.field() : (orderStatus.isFilled() ?
@@ -59,20 +59,21 @@ public final class Messages {
     }
 
     /**
-     * Gets a {@link OrderExecuted} message for this <code>orderStatus</code> and <code>tradeReport</code>.
+     * Gets a {@link OrderExecuted} message for this <code>orderStatus</code> and <code>execution</code>.
      *
      * @param orderStatus {@link OrderStatus} to initialize the {@link OrderExecuted} with.
-     * @param tradeReport {@link TradeReport} to initialize the {@link OrderExecuted} with.
+     * @param execution {@link Execution} to initialize the {@link OrderExecuted} with.
      *
      * @return initialized {@link OrderExecuted}.
      */
-    public static OrderExecuted orderExecuted(final OrderStatus orderStatus, final TradeReport tradeReport) {
+    public static OrderExecuted orderExecuted(final OrderStatus orderStatus, final Execution execution) {
         checkNotNull(orderStatus);
-        checkNotNull(tradeReport);
+        checkNotNull(execution);
         final OrderExecuted orderExecuted = new OrderExecuted();
-        orderExecuted.setLastPx(new LastPx(tradeReport.getPrice()));
+        orderExecuted.setTradeID(new TradeID(execution.getExecID().toString()));
+        orderExecuted.setLastPx(new LastPx(execution.getPrice()));
         orderExecuted.setLeavesQty(new LeavesQty(orderStatus.getLeavesQty()));
-        orderExecuted.setLastQty(new LastQty(tradeReport.getQuantity()));
+        orderExecuted.setLastQty(new LastQty(execution.getQuantity()));
         orderExecuted.setOrderID(new OrderID(orderStatus.getOrder().getOrderID().toString()));
         return orderExecuted;
     }

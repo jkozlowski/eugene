@@ -1,25 +1,25 @@
 package eugene.market.esma.execution.data;
 
 import eugene.market.book.Order;
-import eugene.market.book.TradeReport;
+import eugene.market.esma.execution.Execution;
 
 /**
  * Indicates that a pair of {@link Order}s have been executed.
  */
-public final class TradeEvent extends MarketDataEvent<TradeReport> {
+public final class ExecutionEvent extends MarketDataEvent<Execution> {
 
     /**
      * {@inheritDoc}
      */
-    public TradeEvent(final Long eventId, final TradeReport tradeReport) {
-        super(eventId, System.nanoTime(), tradeReport);
+    public ExecutionEvent(final Long eventId, final Execution execution) {
+        super(eventId, System.nanoTime(), execution);
     }
 
     /**
      * {@inheritDoc}
      */
-    public TradeEvent(final Long eventId, final Long time, final TradeReport tradeReport) {
-        super(eventId, time, tradeReport);
+    public ExecutionEvent(final Long eventId, final Long time, final Execution execution) {
+        super(eventId, time, execution);
     }
 
     /**

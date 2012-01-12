@@ -3,6 +3,7 @@ package eugene.market.ontology;
 import eugene.market.ontology.field.AvgPx;
 import eugene.market.ontology.field.ClOrdID;
 import eugene.market.ontology.field.CumQty;
+import eugene.market.ontology.field.TradeID;
 import eugene.market.ontology.field.ExecType;
 import eugene.market.ontology.field.LastPx;
 import eugene.market.ontology.field.LastQty;
@@ -61,6 +62,7 @@ public final class MarketOntology extends BeanOntology {
             add(AvgPx.class, false);
             add(ClOrdID.class, false);
             add(CumQty.class, false);
+            add(TradeID.class, false);
             add(ExecType.class, false);
             add(LastPx.class, false);
             add(LastQty.class, false);
