@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>eugene.agent</groupId>
+        <artifactId>parent</artifactId>
+        <version>0.4-SNAPSHOT</version>
+    </parent>
+
+    <groupId>eugene.agent</groupId>
+    <artifactId>noise</artifactId>
+    <version>0.4-SNAPSHOT</version>
+    <name>${bundle.namespace}</name>
+    <description>Implements the Noise Trader Agent.</description>
+    <packaging>bundle</packaging>
+
+    <properties>
+        <bundle.namespace>${project.groupId}.noise</bundle.namespace>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>eugene</groupId>
+            <artifactId>jade-unit</artifactId>
+            <version>${current.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>eugene.market</groupId>
+            <artifactId>ontology</artifactId>
+            <version>${current.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>eugene.market</groupId>
+            <artifactId>client</artifactId>
+            <version>${current.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.guava-osgi</groupId>
+            <artifactId>guava-osgi</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>eugene.market</groupId>
+            <artifactId>ontology</artifactId>
+            <version>${current.version}</version>
+            <classifier>tests</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>${testng.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-testng</artifactId>
+            <version>${powermock.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito</artifactId>
+            <version>${powermock.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-all</artifactId>
+            <version>${hamcrest.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>${maven.bundle.version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Bundle-Name>${bundle.namespace}</Bundle-Name>
+                        <Bundle-SymbolicName>${bundle.namespace}</Bundle-SymbolicName>
+                        <Bundle-Version>${project.version}</Bundle-Version>
+                        <Bundle-Description>${project.description}</Bundle-Description>
+                        <Export-Package>${bundle.namespace}</Export-Package>
+                        <Import-Package>
+                            com.google.common.base, com.google.common.collect, com.google.common.primitives,
+                            jade.core, jade.core.behaviours, eugene.market.ontology.message,
+                            eugene.market.ontology.message.data, eugene.market.book, eugene.market.ontology.field,
+                            eugene.market.ontology.field.enums, eugene.market.client, eugene.market.ontology,
+                            jade.content, jade.content.lang, jade.content.lang.sl, jade.content.onto
+                        </Import-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>${maven.jar.version}</version>
+                <executions>
+                    <execution>
+                        <id>jar-test-classes</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*Test.*</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
