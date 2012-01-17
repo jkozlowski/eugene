@@ -36,7 +36,7 @@ public class OrderExecutedTest extends MessageTest {
         final Set<Message> toSend = new HashSet<Message>();
         final OrderExecuted orderExecuted = new OrderExecuted();
         orderExecuted.setOrderID(new OrderID(Defaults.defaultOrderID));
-        orderExecuted.setTradeID(new TradeID(Defaults.defaultExecID));
+        orderExecuted.setTradeID(new TradeID(Defaults.defaultTradeID));
         orderExecuted.setLastPx(new LastPx(Defaults.Price));
         orderExecuted.setLastQty(new LastQty(defaultOrdQty));
         orderExecuted.setLeavesQty(new LeavesQty(Defaults.defaultLeavesQty));

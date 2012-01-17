@@ -22,7 +22,7 @@ public class Defaults {
 
     public static final String defaultClOrdID = "client01";
     
-    public static final String defaultExecID = "01";
+    public static final String defaultTradeID = "01";
 
     public static final Double Price = 1.2;
 

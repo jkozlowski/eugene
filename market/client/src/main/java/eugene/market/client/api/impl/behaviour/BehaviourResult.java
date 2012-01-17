@@ -1,4 +1,4 @@
-package eugene.market.client.api.impl;
+package eugene.market.client.api.impl.behaviour;
 
 import jade.core.behaviours.Behaviour;
 
