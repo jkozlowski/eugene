@@ -11,6 +11,18 @@
     <name>${project.groupId}</name>
     <description>Eugene - Agent-Based Market Simulator for System Testing of Trading Algorithms</description>
 
+    <developers>
+        <developer>
+            <id>jkozlowski</id>
+            <name>Jakub D Kozlowski</name>
+            <email>mail@jakub-kozlowski.com</email>
+            <roles>
+                <role>Developer</role>
+            </roles>
+            <organization>UCL</organization>
+        </developer>
+    </developers>
+
     <repositories>
         <repository>
             <id>MavenCentral</id>
