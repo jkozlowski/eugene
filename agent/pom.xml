@@ -18,6 +18,6 @@
     <description>Modules that implement various Trader Agents.</description>
 
     <modules>
-
+        <module>random</module>
     </modules>
 </project>
