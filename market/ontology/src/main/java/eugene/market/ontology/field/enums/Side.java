@@ -39,11 +39,22 @@ public enum Side {
 
     /**
      * Gets the opposite {@link Side}.
-     * 
+     *
      * @return {@link Side#BUY} if called on {@link Side#SELL} and vice versa.
      */
     public Side getOpposite() {
         return isBuy() ? SELL : BUY;
+    }
+
+    /**
+     * Gets {@link Side} for this <code>field</code>.
+     *
+     * @param field {@link eugene.market.ontology.field.Side} to parse.
+     *
+     * @return {@link Side} for this <code>field</code>.
+     */
+    public static Side parse(final eugene.market.ontology.field.Side field) {
+        return BUY.value.equals(field.getValue()) ? BUY : SELL;
     }
 
     /**
@@ -54,7 +65,7 @@ public enum Side {
      * @return {@link Side} for this <code>newOrderSingle</code>
      */
     public static Side getSide(final NewOrderSingle newOrderSingle) {
-        return BUY.value.equals(newOrderSingle.getSide().getValue())? BUY : SELL;
+        return BUY.value.equals(newOrderSingle.getSide().getValue()) ? BUY : SELL;
     }
 
     /**

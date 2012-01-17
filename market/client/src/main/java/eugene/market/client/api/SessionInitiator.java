@@ -1,7 +1,7 @@
 package eugene.market.client.api;
 
-import eugene.market.client.api.impl.BehaviourResult;
-import eugene.market.client.api.impl.LogonBehaviour;
+import eugene.market.client.api.impl.behaviour.BehaviourResult;
+import eugene.market.client.api.impl.behaviour.LogonBehaviour;
 import eugene.market.esma.MarketAgent;
 import eugene.market.ontology.Message;
 import jade.core.AID;

@@ -1,7 +1,8 @@
-package eugene.market.client.api.impl;
+package eugene.market.client.api.impl.behaviour;
 
 import eugene.market.client.api.Application;
 import eugene.market.client.api.Session;
+import eugene.market.client.api.impl.behaviour.MessageRoutingBehaviour;
 import eugene.market.ontology.Message;
 import eugene.market.ontology.message.ExecutionReport;
 import eugene.market.ontology.message.OrderCancelReject;
