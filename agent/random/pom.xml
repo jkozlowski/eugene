@@ -11,7 +11,7 @@
     </parent>
 
     <groupId>eugene.agent</groupId>
-    <artifactId>book</artifactId>
+    <artifactId>random</artifactId>
     <version>0.4-SNAPSHOT</version>
     <name>${bundle.namespace}</name>
     <description>Implements the Random Trader Agent.</description>
@@ -84,7 +84,7 @@
                         <Export-Package>${bundle.namespace}</Export-Package>
                         <Import-Package>
                             com.google.common.base, com.google.common.collect, com.google.common.primitives,
-                            eugene.market.ontology.field.enums
+                            jade.core, jade.core.behaviours
                         </Import-Package>
                     </instructions>
                 </configuration>
