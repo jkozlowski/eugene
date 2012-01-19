@@ -84,7 +84,8 @@
                         <Export-Package>${bundle.namespace}</Export-Package>
                         <Import-Package>
                             com.google.common.base, com.google.common.collect, com.google.common.primitives,
-                            jade.core, jade.core.behaviours
+                            jade.core, jade.core.behaviours, eugene.market.client.api, eugene.market.ontology.message,
+                            eugene.market.ontology.message.data
                         </Import-Package>
                     </instructions>
                 </configuration>
