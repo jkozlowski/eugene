@@ -1,4 +1,4 @@
-package eugene.market.client.api.impl.builder;
+package eugene.market.client.api.impl;
 
 import eugene.market.book.Order;
 import eugene.market.book.OrderBook;
@@ -25,18 +25,18 @@ import static java.util.Collections.unmodifiableMap;
  * @author Jakub D Kozlowski
  * @since 0.5
  */
-public class OrderBookBuilder extends ApplicationAdapter {
+public class OrderBookApplication extends ApplicationAdapter {
 
     private final Map<String, Order> orderMap;
 
     private final OrderBook orderBook;
 
     /**
-     * Creates a {@link OrderBookBuilder} that will build this <code>orderBook</code>.
+     * Creates a {@link OrderBookApplication} that will build this <code>orderBook</code>.
      *
      * @param orderBook {@link OrderBook} to build.
      */
-    public OrderBookBuilder(final OrderBook orderBook) {
+    public OrderBookApplication(final OrderBook orderBook) {
         checkNotNull(orderBook);
         this.orderBook = orderBook;
         this.orderMap = new HashMap<String, Order>();

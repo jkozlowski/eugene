@@ -1,9 +1,10 @@
-package eugene.market.client.api.impl.builder;
+package eugene.market.client.api.impl;
 
 import eugene.market.book.DefaultOrderBook;
 import eugene.market.book.Order;
 import eugene.market.book.OrderBook;
 import eugene.market.client.api.Session;
+import eugene.market.client.api.impl.OrderBookApplication;
 import eugene.market.ontology.field.LastPx;
 import eugene.market.ontology.field.LastQty;
 import eugene.market.ontology.field.LeavesQty;
@@ -33,41 +34,41 @@ import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.mock;
 
 /**
- * Tests {@link OrderBookBuilder}.
+ * Tests {@link OrderBookApplication}.
  *
  * @author Jakub D Kozlowski
  * @since 0.5
  */
 @PrepareForTest({Session.class})
-public class OrderBookBuilderTest {
+public class OrderBookApplicationTest {
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testConstructorNullOrderBook() {
-        new OrderBookBuilder(null);
+        new OrderBookApplication(null);
     }
 
     @Test
     public void testConstructorEmptyOrderMap() {
         final OrderBook orderBook = mock(OrderBook.class);
-        final OrderBookBuilder builder = new OrderBookBuilder(orderBook);
-        assertThat(builder.getOrderMap().isEmpty(), is(true));
+        final OrderBookApplication application = new OrderBookApplication(orderBook);
+        assertThat(application.getOrderMap().isEmpty(), is(true));
     }
 
     @Test(expectedExceptions = NumberFormatException.class)
     public void testToAppAddOrderNotValidOrderID() {
         final OrderBook orderBook = mock(OrderBook.class);
-        final OrderBookBuilder builder = new OrderBookBuilder(orderBook);
+        final OrderBookApplication application = new OrderBookApplication(orderBook);
 
         final AddOrder addOrder = new AddOrder();
         addOrder.setOrderID(new OrderID("not-a-number"));
 
-        builder.toApp(addOrder, mock(Session.class));
+        application.toApp(addOrder, mock(Session.class));
     }
 
     @Test
     public void testToAppAddOrder() {
         final OrderBook orderBook = mock(OrderBook.class);
-        final OrderBookBuilder builder = new OrderBookBuilder(orderBook);
+        final OrderBookApplication application = new OrderBookApplication(orderBook);
 
         final AddOrder addOrder = new AddOrder();
         addOrder.setOrderID(new OrderID(defaultOrderID));
@@ -75,7 +76,7 @@ public class OrderBookBuilderTest {
         addOrder.setPrice(new Price(defaultPrice));
         addOrder.setSide(Side.BUY.field());
 
-        builder.toApp(addOrder, mock(Session.class));
+        application.toApp(addOrder, mock(Session.class));
 
         final ArgumentCaptor<Order> captor = ArgumentCaptor.forClass(Order.class);
         verify(orderBook).insertOrder(captor.capture());
@@ -85,24 +86,24 @@ public class OrderBookBuilderTest {
         assertThat(captor.getValue().getOrdType(), is(OrdType.LIMIT));
         assertThat(captor.getValue().getPrice(), is(defaultPrice));
         assertThat(captor.getValue().getSide(), is(Side.BUY));
-        assertThat(builder.getOrderMap().get(defaultOrderID), is(captor.getValue()));
+        assertThat(application.getOrderMap().get(defaultOrderID), is(captor.getValue()));
     }
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testToAppDeleteOrderUnknownOrder() {
         final OrderBook orderBook = mock(OrderBook.class);
-        final OrderBookBuilder builder = new OrderBookBuilder(orderBook);
+        final OrderBookApplication application = new OrderBookApplication(orderBook);
 
         final DeleteOrder deleteOrder = new DeleteOrder();
         deleteOrder.setOrderID(new OrderID(defaultOrderID));
 
-        builder.toApp(deleteOrder, mock(Session.class));
+        application.toApp(deleteOrder, mock(Session.class));
     }
 
     @Test
     public void testToAppDeleteOrder() {
         final OrderBook orderBook = mock(OrderBook.class);
-        final OrderBookBuilder builder = new OrderBookBuilder(orderBook);
+        final OrderBookApplication application = new OrderBookApplication(orderBook);
 
         final AddOrder addOrder = new AddOrder();
         addOrder.setOrderID(new OrderID(defaultOrderID));
@@ -110,7 +111,7 @@ public class OrderBookBuilderTest {
         addOrder.setPrice(new Price(defaultPrice));
         addOrder.setSide(Side.BUY.field());
 
-        builder.toApp(addOrder, mock(Session.class));
+        application.toApp(addOrder, mock(Session.class));
 
         final ArgumentCaptor<Order> captor = ArgumentCaptor.forClass(Order.class);
         verify(orderBook).insertOrder(captor.capture());
@@ -118,16 +119,16 @@ public class OrderBookBuilderTest {
         final DeleteOrder deleteOrder = new DeleteOrder();
         deleteOrder.setOrderID(new OrderID(defaultOrderID));
 
-        builder.toApp(deleteOrder, mock(Session.class));
+        application.toApp(deleteOrder, mock(Session.class));
 
         verify(orderBook).cancel(captor.getValue());
-        assertThat(builder.getOrderMap().containsValue(captor.getValue()), is(false));
+        assertThat(application.getOrderMap().containsValue(captor.getValue()), is(false));
     }
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testToAppOrderExecutedUnknownOrder() {
         final OrderBook orderBook = mock(OrderBook.class);
-        final OrderBookBuilder builder = new OrderBookBuilder(orderBook);
+        final OrderBookApplication application = new OrderBookApplication(orderBook);
 
         final OrderExecuted orderExecuted = new OrderExecuted();
         orderExecuted.setOrderID(new OrderID(defaultOrderID));
@@ -136,13 +137,13 @@ public class OrderBookBuilderTest {
         orderExecuted.setLeavesQty(new LeavesQty(defaultOrdQty));
         orderExecuted.setTradeID(new TradeID(defaultTradeID));
 
-        builder.toApp(orderExecuted, mock(Session.class));
+        application.toApp(orderExecuted, mock(Session.class));
     }
 
     @Test(expectedExceptions = IllegalStateException.class)
     public void testToAppOrderExecutedOrderNotAtTopOfOrderBook() {
         final OrderBook orderBook = new DefaultOrderBook();
-        final OrderBookBuilder builder = new OrderBookBuilder(orderBook);
+        final OrderBookApplication application = new OrderBookApplication(orderBook);
 
         final AddOrder addOrder1 = new AddOrder();
         addOrder1.setOrderID(new OrderID(defaultOrderID));
@@ -150,7 +151,7 @@ public class OrderBookBuilderTest {
         addOrder1.setPrice(new Price(defaultPrice));
         addOrder1.setSide(Side.BUY.field());
 
-        builder.toApp(addOrder1, mock(Session.class));
+        application.toApp(addOrder1, mock(Session.class));
 
         final AddOrder addOrder2 = new AddOrder();
         addOrder2.setOrderID(new OrderID(defaultOrderID + "1"));
@@ -158,7 +159,7 @@ public class OrderBookBuilderTest {
         addOrder2.setPrice(new Price(defaultPrice + 1L));
         addOrder2.setSide(Side.BUY.field());
 
-        builder.toApp(addOrder2, mock(Session.class));
+        application.toApp(addOrder2, mock(Session.class));
 
         final OrderExecuted orderExecuted = new OrderExecuted();
         orderExecuted.setOrderID(new OrderID(defaultOrderID));
@@ -167,13 +168,13 @@ public class OrderBookBuilderTest {
         orderExecuted.setLeavesQty(new LeavesQty(defaultOrdQty));
         orderExecuted.setTradeID(new TradeID(defaultTradeID));
 
-        builder.toApp(orderExecuted, mock(Session.class));
+        application.toApp(orderExecuted, mock(Session.class));
     }
 
     @Test(expectedExceptions = IllegalStateException.class)
     public void testToAppOrderExecutedLeavesQtyDoesNotMatch() {
         final OrderBook orderBook = new DefaultOrderBook();
-        final OrderBookBuilder builder = new OrderBookBuilder(orderBook);
+        final OrderBookApplication application = new OrderBookApplication(orderBook);
 
         final AddOrder addOrder1 = new AddOrder();
         addOrder1.setOrderID(new OrderID(defaultOrderID));
@@ -181,7 +182,7 @@ public class OrderBookBuilderTest {
         addOrder1.setPrice(new Price(defaultPrice));
         addOrder1.setSide(Side.BUY.field());
 
-        builder.toApp(addOrder1, mock(Session.class));
+        application.toApp(addOrder1, mock(Session.class));
 
         final OrderExecuted orderExecuted = new OrderExecuted();
         orderExecuted.setOrderID(new OrderID(defaultOrderID));
@@ -190,13 +191,13 @@ public class OrderBookBuilderTest {
         orderExecuted.setLeavesQty(new LeavesQty(2L));
         orderExecuted.setTradeID(new TradeID(defaultTradeID));
 
-        builder.toApp(orderExecuted, mock(Session.class));
+        application.toApp(orderExecuted, mock(Session.class));
     }
 
     @Test
     public void testToAppOrderExecuted() {
         final OrderBook orderBook = new DefaultOrderBook();
-        final OrderBookBuilder builder = new OrderBookBuilder(orderBook);
+        final OrderBookApplication application = new OrderBookApplication(orderBook);
 
         final AddOrder addOrder1 = new AddOrder();
         addOrder1.setOrderID(new OrderID(defaultOrderID));
@@ -204,7 +205,7 @@ public class OrderBookBuilderTest {
         addOrder1.setPrice(new Price(defaultPrice));
         addOrder1.setSide(Side.BUY.field());
 
-        builder.toApp(addOrder1, mock(Session.class));
+        application.toApp(addOrder1, mock(Session.class));
 
         final OrderExecuted orderExecuted = new OrderExecuted();
         orderExecuted.setOrderID(new OrderID(defaultOrderID));
@@ -213,7 +214,7 @@ public class OrderBookBuilderTest {
         orderExecuted.setLeavesQty(new LeavesQty(1L));
         orderExecuted.setTradeID(new TradeID(defaultTradeID));
 
-        builder.toApp(orderExecuted, mock(Session.class));
+        application.toApp(orderExecuted, mock(Session.class));
     }
 
     @ObjectFactory
