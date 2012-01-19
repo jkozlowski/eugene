@@ -3,12 +3,14 @@ package eugene.agent.random;
 import eugene.agent.random.impl.behaviour.PlaceOrderBehaviour;
 import eugene.market.book.DefaultOrderBook;
 import eugene.market.book.OrderBook;
-import eugene.market.client.api.Application;
 import eugene.market.client.api.ApplicationAdapter;
 import eugene.market.client.api.Session;
+import eugene.market.client.api.SessionInitiator;
 import eugene.market.ontology.message.Logon;
 import jade.core.Agent;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 import static eugene.market.client.api.Applications.orderBook;
 import static eugene.market.client.api.Applications.proxy;
 
@@ -19,20 +21,27 @@ import static eugene.market.client.api.Applications.proxy;
  * @since 0.5
  */
 public class RandomTraderAgent extends Agent {
-    
-    public RandomTraderAgent(final String symbol) {
 
+    private final String symbol;
+
+    public RandomTraderAgent(final String symbol) {
+        checkNotNull(symbol);
+        checkArgument(!symbol.isEmpty());
+        this.symbol = symbol;
     }
 
     @Override
     public void setup() {
         final OrderBook orderBook = new DefaultOrderBook();
-        final Application proxy = proxy(orderBook(orderBook), new ApplicationAdapter() {
-            @Override
-            public void onLogon(final Logon logon, final Agent agent, final Session session) {
-                agent.addBehaviour(new PlaceOrderBehaviour(agent, orderBook));
-            }
-        });
-//        final SessionInitiator sessionInitiator = new SessionInitiator(this, proxy, )
+        addBehaviour(new SessionInitiator(
+                this,
+                proxy(orderBook(orderBook), new ApplicationAdapter() {
+                    @Override
+                    public void onLogon(final Logon logon, final Agent agent, final Session session) {
+                        agent.addBehaviour(new PlaceOrderBehaviour(agent, orderBook, session));
+                    }
+                }),
+                symbol
+        ));
     }
 }
