@@ -42,14 +42,15 @@ public class ProxyApplicationTest {
     public void testOnLogon() {
         final Application application1 = mock(Application.class);
         final Application application2 = mock(Application.class);
+        final Session session = mock(Session.class);
         final Agent agent = mock(Agent.class);
         final Logon logon = new Logon();
         final ProxyApplication proxy = new ProxyApplication(application1, application2);
 
-        proxy.onLogon(logon, agent);
+        proxy.onLogon(logon, agent, session);
 
-        verify(application1).onLogon(logon, agent);
-        verify(application2).onLogon(logon, agent);
+        verify(application1).onLogon(logon, agent, session);
+        verify(application2).onLogon(logon, agent, session);
         verifyNoMoreInteractions(application1, application2);
     }
 

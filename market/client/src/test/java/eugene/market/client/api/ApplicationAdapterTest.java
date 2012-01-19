@@ -30,7 +30,7 @@ public class ApplicationAdapterTest {
     @Test
     public void testCoverage() {
         final Application application = new TestApplicationAdapter();
-        application.onLogon(mock(Logon.class), mock(Agent.class));
+        application.onLogon(mock(Logon.class), mock(Agent.class), mock(Session.class));
         application.toApp(mock(ExecutionReport.class), mock(Session.class));
         application.toApp(mock(DeleteOrder.class), mock(Session.class));
         application.toApp(mock(AddOrder.class), mock(Session.class));

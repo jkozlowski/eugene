@@ -40,11 +40,11 @@ public class ProxyApplication implements Application {
     }
 
     @Override
-    public void onLogon(final Logon logon, final Agent agent) {
+    public void onLogon(final Logon logon, final Agent agent, final Session session) {
         forAll(new Function<Application, Void>() {
             @Override
             public Void apply(final Application application) {
-                application.onLogon(logon, agent);
+                application.onLogon(logon, agent, session);
                 return null;
             }
         });

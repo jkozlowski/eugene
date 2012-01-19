@@ -47,7 +47,7 @@ public class LogonBehaviour extends SequentialBehaviour {
                 final Logon logon = session.extractMessage(inform, Logon.class);
                 if (null != logon && SessionStatus.SESSION_ACTIVE.field().equals(logon.getSessionStatus())) {
                     result.success();
-                    session.getApplication().onLogon(logon, myAgent);
+                    session.getApplication().onLogon(logon, myAgent, session);
                     myAgent.addBehaviour(new MessageRoutingBehaviour(myAgent, session));
                 }
             }
