@@ -5,6 +5,7 @@ import eugene.market.book.DefaultOrderBook;
 import eugene.market.book.OrderBook;
 import eugene.market.client.api.Application;
 import eugene.market.client.api.ApplicationAdapter;
+import eugene.market.client.api.Session;
 import eugene.market.ontology.message.Logon;
 import jade.core.Agent;
 
@@ -28,7 +29,7 @@ public class RandomTraderAgent extends Agent {
         final OrderBook orderBook = new DefaultOrderBook();
         final Application proxy = proxy(orderBook(orderBook), new ApplicationAdapter() {
             @Override
-            public void onLogon(Logon logon, Agent agent) {
+            public void onLogon(final Logon logon, final Agent agent, final Session session) {
                 agent.addBehaviour(new PlaceOrderBehaviour(agent, orderBook));
             }
         });
