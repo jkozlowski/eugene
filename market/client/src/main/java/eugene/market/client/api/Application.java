@@ -22,10 +22,11 @@ public interface Application {
      * Called when a valid {@link Logon} has been established with the Market Agent. This method should be used by
      * {@link Application} implementations to register {@link Behaviour}s with the <code>agent</code>.
      *
-     * @param logon {@link Logon} message received from the Market Agent.
-     * @param agent {@link Agent} that is executing the {@link Session}.
+     * @param logon   {@link Logon} message received from the Market Agent.
+     * @param agent   {@link Agent} that is executing the {@link Session}.
+     * @param session active {@link Session}.
      */
-    void onLogon(final Logon logon, final Agent agent);
+    void onLogon(final Logon logon, final Agent agent, final Session session);
 
     /**
      * This callback receives {@link ExecutionReport} for the application.
@@ -55,7 +56,7 @@ public interface Application {
      * This callback receives {@link DeleteOrder} for the application.
      *
      * @param deleteOrder received {@link DeleteOrder}.
-     * @param session  {@link Session} that received this <code>deleteOrder</code>.
+     * @param session     {@link Session} that received this <code>deleteOrder</code>.
      */
     void toApp(final DeleteOrder deleteOrder, final Session session);
 
@@ -63,7 +64,7 @@ public interface Application {
      * This callback receives {@link OrderExecuted} for the application.
      *
      * @param orderExecuted received {@link OrderExecuted}.
-     * @param session  {@link Session} that received this <code>orderExecuted</code>.
+     * @param session       {@link Session} that received this <code>orderExecuted</code>.
      */
     void toApp(final OrderExecuted orderExecuted, final Session session);
 }

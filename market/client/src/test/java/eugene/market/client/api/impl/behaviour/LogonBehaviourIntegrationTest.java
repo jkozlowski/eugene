@@ -2,8 +2,6 @@ package eugene.market.client.api.impl.behaviour;
 
 import eugene.market.client.api.Application;
 import eugene.market.client.api.Session;
-import eugene.market.client.api.impl.behaviour.BehaviourResult;
-import eugene.market.client.api.impl.behaviour.LogonBehaviour;
 import eugene.market.esma.AbstractMarketAgentTest;
 import eugene.market.ontology.message.Logon;
 import jade.core.AID;
@@ -37,6 +35,6 @@ public class LogonBehaviourIntegrationTest extends AbstractMarketAgentTest {
         event.waitUntilProcessed();
 
         assertThat(logonBehaviour.onEnd(), is(BehaviourResult.SUCCESS));
-        verify(application).onLogon(Mockito.any(Logon.class), Mockito.eq(traderAgent));
+        verify(application).onLogon(Mockito.any(Logon.class), Mockito.eq(traderAgent), Mockito.eq(session));
     }
 }

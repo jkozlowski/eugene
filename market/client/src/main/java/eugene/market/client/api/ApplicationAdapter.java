@@ -17,26 +17,26 @@ import jade.core.Agent;
 public abstract class ApplicationAdapter implements Application {
 
     @Override
-    public void onLogon(Logon logon, Agent agent) {
+    public void onLogon(final Logon logon, final Agent agent, final Session session) {
     }
 
     @Override
-    public void toApp(ExecutionReport executionReport, Session session) {
+    public void toApp(final ExecutionReport executionReport, final Session session) {
     }
 
     @Override
-    public void toApp(OrderCancelReject orderCancelReject, Session session) {
+    public void toApp(final OrderCancelReject orderCancelReject, final Session session) {
     }
 
     @Override
-    public void toApp(AddOrder addOrder, Session session) {
+    public void toApp(final AddOrder addOrder, final Session session) {
     }
 
     @Override
-    public void toApp(DeleteOrder deleteOrder, Session session) {
+    public void toApp(final DeleteOrder deleteOrder, final Session session) {
     }
 
     @Override
-    public void toApp(OrderExecuted orderExecuted, Session session) {
+    public void toApp(final OrderExecuted orderExecuted, final Session session) {
     }
 }
