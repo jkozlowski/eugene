@@ -1,7 +1,7 @@
-package eugene.market.client.api;
+package eugene.market.client.impl;
 
-import eugene.market.client.api.impl.behaviour.BehaviourResult;
-import eugene.market.client.api.impl.behaviour.LogonBehaviour;
+import eugene.market.client.Application;
+import eugene.market.client.Session;
 import eugene.market.esma.MarketAgent;
 import eugene.market.ontology.Message;
 import jade.core.AID;
@@ -19,7 +19,7 @@ import static eugene.market.esma.MarketAgent.getDFAgentDescription;
 import static jade.domain.DFService.searchUntilFound;
 
 /**
- * Searches for the Market Agent and initiates the {@link Session}. The Agents should provide an implementation of
+ * Searches for the Market Agent and initiates the {@link DefaultSession}. The Agents should provide an implementation of
  * {@link Application} that will receive callbacks whenever {@link Message}s are received.
  *
  * @author Jakub D Kozlowski
@@ -40,11 +40,11 @@ public final class SessionInitiator extends OneShotBehaviour {
     private final BehaviourResult result = new BehaviourResult();
 
     /**
-     * Creates a {@link Session} that will search for the Market Agent for this <code>symbol</code> and that will
-     * pass this {@link Application} to {@link Session}.
+     * Creates a {@link DefaultSession} that will search for the Market Agent for this <code>symbol</code> and that will
+     * pass this {@link Application} to {@link DefaultSession}.
      *
      * @param agent       {@link Agent} that will execute this {@link SessionInitiator}.
-     * @param application implementation of {@link Application} that will be passed to {@link Session}.
+     * @param application implementation of {@link Application} that will be passed to {@link DefaultSession}.
      * @param symbol      symbol that the Market Agent needs to handle.
      */
     public SessionInitiator(final Agent agent, final Application application, final String symbol) {
@@ -65,7 +65,7 @@ public final class SessionInitiator extends OneShotBehaviour {
             return;
         }
         
-        final Session session = new Session(myAgent, marketAgent, application, symbol);
+        final Session session = new DefaultSession(myAgent, marketAgent, application, symbol);
 
         myAgent.addBehaviour(new LogonBehaviour(myAgent, session));
         result.success();

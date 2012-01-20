@@ -1,10 +1,10 @@
-package eugene.market.client.api.impl;
+package eugene.market.client.impl;
 
 import eugene.market.book.Order;
 import eugene.market.book.OrderBook;
 import eugene.market.book.OrderStatus;
-import eugene.market.client.api.ApplicationAdapter;
-import eugene.market.client.api.Session;
+import eugene.market.client.ApplicationAdapter;
+import eugene.market.client.Session;
 import eugene.market.ontology.Message;
 import eugene.market.ontology.field.enums.OrdType;
 import eugene.market.ontology.field.enums.Side;

@@ -1,7 +1,7 @@
-package eugene.market.client.api.impl.behaviour;
+package eugene.market.client.impl;
 
-import eugene.market.client.api.Application;
-import eugene.market.client.api.Session;
+import eugene.market.client.Application;
+import eugene.market.client.Session;
 import eugene.market.ontology.MarketOntology;
 import eugene.market.ontology.Message;
 import eugene.market.ontology.message.ExecutionReport;
@@ -27,7 +27,7 @@ import static jade.lang.acl.MessageTemplate.and;
  * @since 0.4
  */
 public class MessageRoutingBehaviour extends CyclicBehaviour {
-    
+
     private final MessageTemplate template;
 
     private final Session session;

@@ -1,6 +1,8 @@
-package eugene.market.client.api;
+package eugene.market.client.impl;
 
-import eugene.market.client.api.impl.behaviour.BehaviourResult;
+import eugene.market.client.Application;
+import eugene.market.client.impl.BehaviourResult;
+import eugene.market.client.impl.SessionInitiator;
 import eugene.market.esma.AbstractMarketAgentTest;
 import jade.util.Event;
 import jade.wrapper.AgentController;

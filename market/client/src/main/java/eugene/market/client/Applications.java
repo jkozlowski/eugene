@@ -1,8 +1,8 @@
-package eugene.market.client.api;
+package eugene.market.client;
 
 import eugene.market.book.OrderBook;
-import eugene.market.client.api.impl.OrderBookApplication;
-import eugene.market.client.api.impl.ProxyApplication;
+import eugene.market.client.impl.OrderBookApplication;
+import eugene.market.client.impl.ProxyApplication;
 import eugene.market.esma.Messages;
 
 /**
@@ -11,7 +11,7 @@ import eugene.market.esma.Messages;
  * @author Jakub D Kozlowski
  * @since 0.5
  */
-public class Applications {
+public final class Applications {
 
     private Applications() {
     }

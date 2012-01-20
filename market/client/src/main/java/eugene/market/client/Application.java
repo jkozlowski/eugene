@@ -1,8 +1,9 @@
-package eugene.market.client.api;
+package eugene.market.client;
 
 import eugene.market.ontology.Message;
 import eugene.market.ontology.message.ExecutionReport;
 import eugene.market.ontology.message.Logon;
+import eugene.market.ontology.message.NewOrderSingle;
 import eugene.market.ontology.message.OrderCancelReject;
 import eugene.market.ontology.message.data.AddOrder;
 import eugene.market.ontology.message.data.DeleteOrder;
@@ -11,7 +12,7 @@ import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 
 /**
- * Interface for receiving {@link Session} {@link Message}s.
+ * Interface for receiving {@link Message}s sent through and received by {@link Session}.
  *
  * @author Jakub D Kozlowski
  * @since 0.4
@@ -23,7 +24,7 @@ public interface Application {
      * {@link Application} implementations to register {@link Behaviour}s with the <code>agent</code>.
      *
      * @param logon   {@link Logon} message received from the Market Agent.
-     * @param agent   {@link Agent} that is executing the {@link Session}.
+     * @param agent   {@link Agent} that is executing the this <code>session</code>.
      * @param session active {@link Session}.
      */
     void onLogon(final Logon logon, final Agent agent, final Session session);
@@ -67,4 +68,12 @@ public interface Application {
      * @param session       {@link Session} that received this <code>orderExecuted</code>.
      */
     void toApp(final OrderExecuted orderExecuted, final Session session);
+
+    /**
+     * This callback receives {@link NewOrderSingle} before it is sent.
+     *
+     * @param newOrderSingle {@link NewOrderSingle} to send.
+     * @param session        {@link Session} that will send this <code>newOrderSingle</code>.
+     */
+    void fromApp(final NewOrderSingle newOrderSingle, final Session session);
 }

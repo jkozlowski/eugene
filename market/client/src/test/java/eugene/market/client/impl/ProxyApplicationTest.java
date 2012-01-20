@@ -1,9 +1,10 @@
-package eugene.market.client.api.impl;
+package eugene.market.client.impl;
 
-import eugene.market.client.api.Application;
-import eugene.market.client.api.Session;
+import eugene.market.client.Application;
+import eugene.market.client.Session;
 import eugene.market.ontology.message.ExecutionReport;
 import eugene.market.ontology.message.Logon;
+import eugene.market.ontology.message.NewOrderSingle;
 import eugene.market.ontology.message.OrderCancelReject;
 import eugene.market.ontology.message.data.AddOrder;
 import eugene.market.ontology.message.data.DeleteOrder;
@@ -25,7 +26,7 @@ import static org.powermock.api.mockito.PowerMockito.verifyNoMoreInteractions;
  * @author Jakub D Kozlowski
  * @since 0.5
  */
-@PrepareForTest({Agent.class, Session.class})
+@PrepareForTest(Agent.class)
 public class ProxyApplicationTest {
     
     @Test(expectedExceptions = NullPointerException.class)
@@ -126,6 +127,21 @@ public class ProxyApplicationTest {
 
         verify(application1).toApp(orderExecuted, session);
         verify(application2).toApp(orderExecuted, session);
+        verifyNoMoreInteractions(application1, application2);
+    }
+
+    @Test
+    public void testFromAppNewOrderSingle() {
+        final Application application1 = mock(Application.class);
+        final Application application2 = mock(Application.class);
+        final Session session = mock(Session.class);
+        final NewOrderSingle newOrderSingle = new NewOrderSingle();
+        final ProxyApplication proxy = new ProxyApplication(application1, application2);
+
+        proxy.fromApp(newOrderSingle, session);
+
+        verify(application1).fromApp(newOrderSingle, session);
+        verify(application2).fromApp(newOrderSingle, session);
         verifyNoMoreInteractions(application1, application2);
     }
 
