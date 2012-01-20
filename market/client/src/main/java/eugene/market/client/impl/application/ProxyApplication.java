@@ -1,8 +1,8 @@
-package eugene.market.client.api.impl;
+package eugene.market.client.impl.application;
 
 import com.google.common.base.Function;
-import eugene.market.client.api.Application;
-import eugene.market.client.api.Session;
+import eugene.market.client.Application;
+import eugene.market.client.Session;
 import eugene.market.ontology.Message;
 import eugene.market.ontology.message.ExecutionReport;
 import eugene.market.ontology.message.Logon;

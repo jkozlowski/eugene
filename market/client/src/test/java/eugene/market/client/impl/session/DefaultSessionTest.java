@@ -1,5 +1,7 @@
-package eugene.market.client.api;
+package eugene.market.client.impl.session;
 
+import eugene.market.client.Application;
+import eugene.market.client.Session;
 import jade.core.AID;
 import jade.core.Agent;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -15,37 +17,37 @@ import static org.hamcrest.Matchers.sameInstance;
 import static org.powermock.api.mockito.PowerMockito.mock;
 
 /**
- * Tests {@link Session}.
+ * Tests {@link DefaultSession}.
  *
  * @author Jakub D Kozlowski
  * @since 0.4
  */
 @PrepareForTest({Agent.class, AID.class})
-public class SessionTest {
+public class DefaultSessionTest {
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testConstructorNullAgent() {
-        new Session(null, mock(AID.class), mock(Application.class), defaultSymbol);
+        new DefaultSession(null, mock(AID.class), mock(Application.class), defaultSymbol);
     }
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testConstructorNullMarketAgent() {
-        new Session(mock(Agent.class), null, mock(Application.class), defaultSymbol);
+        new DefaultSession(mock(Agent.class), null, mock(Application.class), defaultSymbol);
     }
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testConstructorNullApplication() {
-        new Session(mock(Agent.class), mock(AID.class), null, defaultSymbol);
+        new DefaultSession(mock(Agent.class), mock(AID.class), null, defaultSymbol);
     }
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testConstructorNullSymbol() {
-        new Session(mock(Agent.class), mock(AID.class), mock(Application.class), null);
+        new DefaultSession(mock(Agent.class), mock(AID.class), mock(Application.class), null);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testConstructorEmptySymbol() {
-        new Session(mock(Agent.class), mock(AID.class), mock(Application.class), "");
+        new DefaultSession(mock(Agent.class), mock(AID.class), mock(Application.class), "");
     }
 
     @Test
@@ -53,9 +55,8 @@ public class SessionTest {
         final Agent agent = mock(Agent.class);
         final AID marketAgent = mock(AID.class);
         final Application application = mock(Application.class);
-        final Session session = new Session(agent, marketAgent, application, defaultSymbol);
+        final Session session = new DefaultSession(agent, marketAgent, application, defaultSymbol);
 
-        assertThat(session.getMarketAgent(), sameInstance(marketAgent));
         assertThat(session.getApplication(), sameInstance(application));
         assertThat(session.getSymbol(), is(defaultSymbol));
     }

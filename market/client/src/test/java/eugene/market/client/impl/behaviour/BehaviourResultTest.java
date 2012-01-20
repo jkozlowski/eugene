@@ -1,6 +1,5 @@
-package eugene.market.client.api.impl.behaviour;
+package eugene.market.client.impl.behaviour;
 
-import eugene.market.client.api.impl.behaviour.BehaviourResult;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

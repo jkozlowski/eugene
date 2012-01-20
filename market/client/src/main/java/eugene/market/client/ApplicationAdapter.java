@@ -1,4 +1,4 @@
-package eugene.market.client.api;
+package eugene.market.client;
 
 import eugene.market.ontology.message.ExecutionReport;
 import eugene.market.ontology.message.Logon;

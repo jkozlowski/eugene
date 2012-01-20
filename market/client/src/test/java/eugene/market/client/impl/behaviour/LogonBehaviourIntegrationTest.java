@@ -1,7 +1,7 @@
-package eugene.market.client.api.impl.behaviour;
+package eugene.market.client.impl.behaviour;
 
-import eugene.market.client.api.Application;
-import eugene.market.client.api.Session;
+import eugene.market.client.Application;
+import eugene.market.client.impl.session.DefaultSession;
 import eugene.market.esma.AbstractMarketAgentTest;
 import eugene.market.ontology.message.Logon;
 import jade.core.AID;
@@ -28,7 +28,7 @@ public class LogonBehaviourIntegrationTest extends AbstractMarketAgentTest {
     public void testLogonBehaviour() throws Exception {
         final AID marketAgent = new AID(MARKET_AGENT, AID.ISLOCALNAME);
         final Application application = mock(Application.class);
-        final Session session = new Session(traderAgent, marketAgent, application, defaultSymbol);
+        final DefaultSession session = new DefaultSession(traderAgent, marketAgent, application, defaultSymbol);
         final LogonBehaviour logonBehaviour = new LogonBehaviour(traderAgent, session);
         final Event event = new Event(-1, logonBehaviour);
         gatewayAgentController.putO2AObject(event, AgentController.ASYNC);

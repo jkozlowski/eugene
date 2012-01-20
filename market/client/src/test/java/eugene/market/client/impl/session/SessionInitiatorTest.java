@@ -1,7 +1,8 @@
-package eugene.market.client.api;
+package eugene.market.client.impl.session;
 
-import eugene.market.client.api.impl.behaviour.BehaviourResult;
-import eugene.market.client.api.impl.behaviour.LogonBehaviour;
+import eugene.market.client.Application;
+import eugene.market.client.impl.behaviour.BehaviourResult;
+import eugene.market.client.impl.behaviour.LogonBehaviour;
 import jade.content.ContentManager;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.OntologyException;
@@ -74,11 +75,11 @@ public class SessionInitiatorTest {
 
         when(searchUntilFound(any(Agent.class), any(AID.class), any(DFAgentDescription.class),
                               any(SearchConstraints.class), anyInt()))
-        .thenReturn(new DFAgentDescription[]{ agentDescription });
+                .thenReturn(new DFAgentDescription[]{agentDescription});
 
         final SessionInitiator initiator = new SessionInitiator(agent, mock(Application.class), defaultSymbol);
         initiator.action();
-        
+
         verify(agent).addBehaviour(any(LogonBehaviour.class));
         assertThat(initiator.onEnd(), is(BehaviourResult.SUCCESS));
     }
@@ -93,7 +94,7 @@ public class SessionInitiatorTest {
 
         when(searchUntilFound(any(Agent.class), any(AID.class), any(DFAgentDescription.class),
                               any(SearchConstraints.class), anyInt()))
-                .thenReturn(new DFAgentDescription[] { } );
+                .thenReturn(new DFAgentDescription[]{});
 
         final SessionInitiator initiator = new SessionInitiator(agent, mock(Application.class), defaultSymbol);
         initiator.action();

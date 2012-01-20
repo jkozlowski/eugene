@@ -1,8 +1,7 @@
-package eugene.market.client.api.impl.behaviour;
+package eugene.market.client.impl.behaviour;
 
-import eugene.market.client.api.Application;
-import eugene.market.client.api.Session;
-import eugene.market.client.api.impl.behaviour.MessageRoutingBehaviour;
+import eugene.market.client.Application;
+import eugene.market.client.Session;
 import eugene.market.ontology.Message;
 import eugene.market.ontology.message.ExecutionReport;
 import eugene.market.ontology.message.OrderCancelReject;
@@ -33,7 +32,7 @@ import static org.powermock.api.mockito.PowerMockito.when;
  * @author Jakub D Kozlowski
  * @since 0.4
  */
-@PrepareForTest({Agent.class, Session.class, ACLMessage.class})
+@PrepareForTest({Agent.class, ACLMessage.class})
 public class MessageRoutingBehaviourTest {
 
     @Test(expectedExceptions = NullPointerException.class)

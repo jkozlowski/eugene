@@ -1,8 +1,7 @@
-package eugene.market.client.api.impl.behaviour;
+package eugene.market.client.impl.behaviour;
 
-import eugene.market.client.api.Application;
-import eugene.market.client.api.Session;
-import eugene.market.client.api.impl.Messages;
+import eugene.market.client.Application;
+import eugene.market.client.Session;
 import eugene.market.esma.MarketAgent;
 import eugene.market.ontology.field.Symbol;
 import eugene.market.ontology.field.enums.SessionStatus;
@@ -40,7 +39,7 @@ public class LogonBehaviour extends SequentialBehaviour {
 
         final Logon logon = new Logon();
         logon.setSymbol(new Symbol(session.getSymbol()));
-        final ACLMessage logonRequest = Messages.aclRequest(myAgent, session.getMarketAgent(), logon);
+        final ACLMessage logonRequest = session.aclRequest(logon);
         addSubBehaviour(new AchieveREInitiator(myAgent, logonRequest) {
             @Override
             public void handleInform(final ACLMessage inform) {

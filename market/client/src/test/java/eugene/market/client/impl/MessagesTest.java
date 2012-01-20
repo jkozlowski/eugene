@@ -1,4 +1,4 @@
-package eugene.market.client.api.impl;
+package eugene.market.client.impl;
 
 import eugene.market.ontology.MarketOntology;
 import eugene.market.ontology.Message;
@@ -21,8 +21,8 @@ import org.testng.annotations.Test;
 
 import java.util.Iterator;
 
-import static eugene.market.client.api.impl.Messages.aclRequest;
-import static eugene.market.client.api.impl.Messages.extractMessage;
+import static eugene.market.client.impl.Messages.aclRequest;
+import static eugene.market.client.impl.Messages.extractMessage;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;

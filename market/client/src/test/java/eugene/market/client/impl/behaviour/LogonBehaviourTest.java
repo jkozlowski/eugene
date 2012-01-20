@@ -1,7 +1,6 @@
-package eugene.market.client.api.impl.behaviour;
+package eugene.market.client.impl.behaviour;
 
-import eugene.market.client.api.Session;
-import eugene.market.client.api.impl.behaviour.LogonBehaviour;
+import eugene.market.client.Session;
 import jade.core.AID;
 import jade.core.Agent;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -19,7 +18,7 @@ import static org.powermock.api.mockito.PowerMockito.mock;
  * @author Jakub D Kozlowski
  * @since 0.4
  */
-@PrepareForTest({Session.class, Agent.class, AID.class})
+@PrepareForTest({Agent.class, AID.class})
 public class LogonBehaviourTest extends PowerMockTestCase {
 
     @Test(expectedExceptions = NullPointerException.class)

@@ -1,8 +1,8 @@
-package eugene.market.client.api;
+package eugene.market.client;
 
 import eugene.market.book.OrderBook;
-import eugene.market.client.api.impl.OrderBookApplication;
-import eugene.market.client.api.impl.ProxyApplication;
+import eugene.market.client.impl.application.OrderBookApplication;
+import eugene.market.client.impl.application.ProxyApplication;
 import eugene.market.esma.Messages;
 
 /**
