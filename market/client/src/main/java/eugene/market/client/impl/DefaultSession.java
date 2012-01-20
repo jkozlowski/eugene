@@ -6,6 +6,7 @@ import eugene.market.esma.MarketAgent;
 import eugene.market.ontology.MarketOntology;
 import eugene.market.ontology.Message;
 import eugene.market.ontology.message.Logon;
+import eugene.market.ontology.message.NewOrderSingle;
 import jade.content.ContentElement;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.OntologyException;
@@ -136,5 +137,13 @@ public final class DefaultSession implements Session {
         catch (OntologyException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void send(final NewOrderSingle newOrderSingle) {
+        agent.send(aclRequest(newOrderSingle));
     }
 }

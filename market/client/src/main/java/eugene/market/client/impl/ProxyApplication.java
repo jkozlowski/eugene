@@ -6,6 +6,7 @@ import eugene.market.client.Session;
 import eugene.market.ontology.Message;
 import eugene.market.ontology.message.ExecutionReport;
 import eugene.market.ontology.message.Logon;
+import eugene.market.ontology.message.NewOrderSingle;
 import eugene.market.ontology.message.OrderCancelReject;
 import eugene.market.ontology.message.data.AddOrder;
 import eugene.market.ontology.message.data.DeleteOrder;
@@ -100,6 +101,17 @@ public class ProxyApplication implements Application {
             @Override
             public Void apply(final Application application) {
                 application.toApp(orderExecuted, session);
+                return null;
+            }
+        });
+    }
+
+    @Override
+    public void fromApp(final NewOrderSingle newOrderSingle, final Session session) {
+        forAll(new Function<Application, Void>() {
+            @Override
+            public Void apply(final Application application) {
+                application.fromApp(newOrderSingle, session);
                 return null;
             }
         });

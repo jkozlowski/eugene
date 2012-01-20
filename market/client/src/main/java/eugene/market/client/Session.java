@@ -4,6 +4,7 @@ import eugene.market.esma.MarketAgent;
 import eugene.market.ontology.MarketOntology;
 import eugene.market.ontology.Message;
 import eugene.market.ontology.message.Logon;
+import eugene.market.ontology.message.NewOrderSingle;
 import jade.content.onto.basic.Action;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
@@ -65,4 +66,11 @@ public interface Session {
      * @throws RuntimeException if it is impossible to construct an {@link ACLMessage}.
      */
     ACLMessage aclRequest(final Message message) throws RuntimeException;
+
+    /**
+     * Sends this <code>newOrderSingle</code>.
+     *
+     * @param newOrderSingle {@link NewOrderSingle} to send.
+     */
+    void send(final NewOrderSingle newOrderSingle);
 }

@@ -2,7 +2,6 @@ package eugene.market.client.impl;
 
 import eugene.market.client.Application;
 import eugene.market.client.Session;
-import eugene.market.client.impl.DefaultSession;
 import eugene.market.ontology.MarketOntology;
 import eugene.market.ontology.Message;
 import eugene.market.ontology.message.Logon;
@@ -224,6 +223,21 @@ public class DefaultSessionTest {
                                                                             Mockito.any(Action.class));
 
         session.aclRequest(message);
+    }
+
+    @Test
+    public void testSendNewOrderSingle() throws CodecException, OntologyException {
+        final AID to = mock(AID.class);
+        final Agent agent = mock(Agent.class);
+        final ContentManager contentManager = mock(ContentManager.class);
+        final Session session = new DefaultSession(agent, to, mock(Application.class), defaultSymbol);
+        when(agent.getContentManager()).thenReturn(contentManager);
+
+        final NewOrderSingle newOrderSingle = mock(NewOrderSingle.class);
+        session.send(newOrderSingle);
+
+        verify(agent).getContentManager();
+        verify(agent).send(Mockito.any(ACLMessage.class));
     }
 
     @ObjectFactory
