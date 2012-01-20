@@ -11,14 +11,14 @@
     </parent>
 
     <groupId>eugene.agent</groupId>
-    <artifactId>random</artifactId>
+    <artifactId>noise</artifactId>
     <version>0.4-SNAPSHOT</version>
     <name>${bundle.namespace}</name>
-    <description>Implements the Random Trader Agent.</description>
+    <description>Implements the Noise Trader Agent.</description>
     <packaging>bundle</packaging>
 
     <properties>
-        <bundle.namespace>${project.groupId}.random</bundle.namespace>
+        <bundle.namespace>${project.groupId}.noise</bundle.namespace>
     </properties>
 
     <dependencies>
