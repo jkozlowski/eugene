@@ -1,4 +1,4 @@
-package eugene.agent.random.impl.behaviour;
+package eugene.agent.noise.impl.behaviour;
 
 import eugene.market.book.OrderBook;
 import eugene.market.client.api.Session;

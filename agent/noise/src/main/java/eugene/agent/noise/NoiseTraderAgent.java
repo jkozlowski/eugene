@@ -1,6 +1,6 @@
-package eugene.agent.random;
+package eugene.agent.noise;
 
-import eugene.agent.random.impl.behaviour.PlaceOrderBehaviour;
+import eugene.agent.noise.impl.behaviour.PlaceOrderBehaviour;
 import eugene.market.book.DefaultOrderBook;
 import eugene.market.book.OrderBook;
 import eugene.market.client.api.ApplicationAdapter;
@@ -15,16 +15,16 @@ import static eugene.market.client.api.Applications.orderBook;
 import static eugene.market.client.api.Applications.proxy;
 
 /**
- * Implements the Random Trader Agent.
+ * Implements the Noise Trader Agent.
  *
  * @author Jakub D Kozlowski
  * @since 0.5
  */
-public class RandomTraderAgent extends Agent {
+public class NoiseTraderAgent extends Agent {
 
     private final String symbol;
 
-    public RandomTraderAgent(final String symbol) {
+    public NoiseTraderAgent(final String symbol) {
         checkNotNull(symbol);
         checkArgument(!symbol.isEmpty());
         this.symbol = symbol;

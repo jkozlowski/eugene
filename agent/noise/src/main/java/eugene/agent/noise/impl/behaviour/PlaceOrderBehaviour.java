@@ -1,5 +1,6 @@
-package eugene.agent.random.impl.behaviour;
+package eugene.agent.noise.impl.behaviour;
 
+import com.google.common.annotations.VisibleForTesting;
 import eugene.market.book.OrderBook;
 import eugene.market.client.api.Session;
 import eugene.market.ontology.field.OrderQty;
@@ -16,7 +17,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Places either {@link Strategy#AGGRESSIVE}, {@link Strategy#MID} or {@link Strategy#PASSIVE} order for a random
- * {@link OrderQty} and to a random {@link Side}, and sleeps for a random period of time.
+ * {@link OrderQty} (between {@link PlaceOrderBehaviour#MIN_ORDER_QTY} and {@link PlaceOrderBehaviour#MAX_ORDER_QTY})
+ * and to a random {@link Side}, and then sleeps for a noise period of time.
  *
  * @author Jakub D Kozlowski
  * @since 0.5
@@ -77,7 +79,8 @@ public class PlaceOrderBehaviour extends TickerBehaviour {
     }
 
     @Override
-    protected void onTick() {
+    @VisibleForTesting
+    public void onTick() {
 
         final Strategy strategy = getStrategy();
         final Side side = (0 == generator.nextInt(1)) ? Side.BUY : Side.SELL;
@@ -145,10 +148,10 @@ public class PlaceOrderBehaviour extends TickerBehaviour {
             case PASSIVE:
                 final int additive = generator.nextInt(MAX_SPREAD - MIN_SPREAD);
                 if (side.isBuy()) {
-                    newOrderSingle.setPrice(new Price(curPrice - additive));
+                    newOrderSingle.setPrice(new Price(curPrice - additive * DEFAULT_TICK));
                 }
                 else {
-                    newOrderSingle.setPrice(new Price(curPrice + additive));
+                    newOrderSingle.setPrice(new Price(curPrice + additive * DEFAULT_TICK));
                 }
                 break;
         }
