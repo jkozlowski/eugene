@@ -1,7 +1,8 @@
-package eugene.market.client.impl.application;
+package eugene.market.client.impl;
 
 import eugene.market.client.Application;
 import eugene.market.client.Session;
+import eugene.market.client.impl.ProxyApplication;
 import eugene.market.ontology.message.ExecutionReport;
 import eugene.market.ontology.message.Logon;
 import eugene.market.ontology.message.OrderCancelReject;

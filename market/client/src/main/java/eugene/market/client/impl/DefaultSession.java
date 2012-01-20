@@ -1,11 +1,15 @@
-package eugene.market.client.impl.session;
+package eugene.market.client.impl;
 
 import eugene.market.client.Application;
 import eugene.market.client.Session;
-import eugene.market.client.impl.Messages;
 import eugene.market.esma.MarketAgent;
+import eugene.market.ontology.MarketOntology;
 import eugene.market.ontology.Message;
 import eugene.market.ontology.message.Logon;
+import jade.content.ContentElement;
+import jade.content.lang.Codec.CodecException;
+import jade.content.onto.OntologyException;
+import jade.content.onto.basic.Action;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
@@ -86,7 +90,25 @@ public final class DefaultSession implements Session {
      */
     @Override
     public <T extends Message> T extractMessage(final ACLMessage aclMessage, final Class<T> type) {
-        return Messages.extractMessage(agent, aclMessage, type);
+
+        checkNotNull(aclMessage);
+        checkNotNull(type);
+
+        try {
+            final ContentElement ce = agent.getContentManager().extractContent(aclMessage);
+
+            if (ce instanceof Action &&
+                    null != ((Action) ce).getAction() &&
+                    (((Action) ce).getAction().getClass() == type)) {
+
+                return (T) ((Action) ce).getAction();
+            }
+        }
+        catch (CodecException e) {
+        }
+        catch (OntologyException e) {
+        }
+        return null;
     }
 
     /**
@@ -94,6 +116,25 @@ public final class DefaultSession implements Session {
      */
     @Override
     public ACLMessage aclRequest(final Message message) {
-        return Messages.aclRequest(agent, marketAgent, message);
+
+        checkNotNull(message);
+
+        try {
+            final Action action = new Action(marketAgent, message);
+            final ACLMessage aclMessage = new ACLMessage(ACLMessage.REQUEST);
+            aclMessage.setOntology(MarketOntology.getInstance().getName());
+            aclMessage.setLanguage(MarketOntology.LANGUAGE);
+            aclMessage.addReceiver(marketAgent);
+
+            agent.getContentManager().fillContent(aclMessage, action);
+
+            return aclMessage;
+        }
+        catch (CodecException e) {
+            throw new RuntimeException(e);
+        }
+        catch (OntologyException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

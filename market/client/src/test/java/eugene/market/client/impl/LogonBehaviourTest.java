@@ -1,6 +1,7 @@
-package eugene.market.client.impl.behaviour;
+package eugene.market.client.impl;
 
 import eugene.market.client.Session;
+import eugene.market.client.impl.LogonBehaviour;
 import jade.core.AID;
 import jade.core.Agent;
 import org.powermock.core.classloader.annotations.PrepareForTest;

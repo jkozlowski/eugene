@@ -1,4 +1,4 @@
-package eugene.market.client.impl.application;
+package eugene.market.client.impl;
 
 import com.google.common.base.Function;
 import eugene.market.client.Application;

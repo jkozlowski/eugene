@@ -1,6 +1,6 @@
 package eugene.market.client;
 
-import eugene.market.client.impl.session.DefaultSession;
+import eugene.market.client.impl.DefaultSession;
 import eugene.market.ontology.message.ExecutionReport;
 import eugene.market.ontology.message.Logon;
 import eugene.market.ontology.message.OrderCancelReject;

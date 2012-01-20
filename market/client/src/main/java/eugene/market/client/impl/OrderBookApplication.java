@@ -1,4 +1,4 @@
-package eugene.market.client.impl.application;
+package eugene.market.client.impl;
 
 import eugene.market.book.Order;
 import eugene.market.book.OrderBook;

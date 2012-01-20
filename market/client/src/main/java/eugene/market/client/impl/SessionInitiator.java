@@ -1,9 +1,7 @@
-package eugene.market.client.impl.session;
+package eugene.market.client.impl;
 
 import eugene.market.client.Application;
 import eugene.market.client.Session;
-import eugene.market.client.impl.behaviour.BehaviourResult;
-import eugene.market.client.impl.behaviour.LogonBehaviour;
 import eugene.market.esma.MarketAgent;
 import eugene.market.ontology.Message;
 import jade.core.AID;

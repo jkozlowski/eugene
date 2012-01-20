@@ -1,8 +1,8 @@
 package eugene.market.client;
 
 import eugene.market.book.OrderBook;
-import eugene.market.client.impl.application.OrderBookApplication;
-import eugene.market.client.impl.application.ProxyApplication;
+import eugene.market.client.impl.OrderBookApplication;
+import eugene.market.client.impl.ProxyApplication;
 import org.testng.annotations.Test;
 
 import static eugene.market.client.Applications.orderBook;
