@@ -105,6 +105,7 @@
     </properties>
 
     <modules>
+        <module>agent</module>
         <module>demo</module>
         <module>doc</module>
         <module>jade-unit</module>
