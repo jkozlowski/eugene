@@ -11,7 +11,7 @@ import eugene.market.esma.Messages;
  * @author Jakub D Kozlowski
  * @since 0.5
  */
-public class Applications {
+public final class Applications {
 
     private Applications() {
     }
