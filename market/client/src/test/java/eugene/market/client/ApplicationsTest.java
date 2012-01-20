@@ -1,12 +1,12 @@
-package eugene.market.client.api;
+package eugene.market.client;
 
 import eugene.market.book.OrderBook;
-import eugene.market.client.api.impl.OrderBookApplication;
-import eugene.market.client.api.impl.ProxyApplication;
+import eugene.market.client.impl.OrderBookApplication;
+import eugene.market.client.impl.ProxyApplication;
 import org.testng.annotations.Test;
 
-import static eugene.market.client.api.Applications.orderBook;
-import static eugene.market.client.api.Applications.proxy;
+import static eugene.market.client.Applications.orderBook;
+import static eugene.market.client.Applications.proxy;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;

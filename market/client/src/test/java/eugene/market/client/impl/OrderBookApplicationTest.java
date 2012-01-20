@@ -1,10 +1,10 @@
-package eugene.market.client.api.impl;
+package eugene.market.client.impl;
 
 import eugene.market.book.DefaultOrderBook;
 import eugene.market.book.Order;
 import eugene.market.book.OrderBook;
-import eugene.market.client.api.Session;
-import eugene.market.client.api.impl.OrderBookApplication;
+import eugene.market.client.Session;
+import eugene.market.client.impl.OrderBookApplication;
 import eugene.market.ontology.field.LastPx;
 import eugene.market.ontology.field.LastQty;
 import eugene.market.ontology.field.LeavesQty;
@@ -18,10 +18,6 @@ import eugene.market.ontology.message.data.AddOrder;
 import eugene.market.ontology.message.data.DeleteOrder;
 import eugene.market.ontology.message.data.OrderExecuted;
 import org.mockito.ArgumentCaptor;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.testng.PowerMockObjectFactory;
-import org.testng.IObjectFactory;
-import org.testng.annotations.ObjectFactory;
 import org.testng.annotations.Test;
 
 import static eugene.market.ontology.Defaults.defaultOrdQty;
@@ -39,7 +35,6 @@ import static org.powermock.api.mockito.PowerMockito.mock;
  * @author Jakub D Kozlowski
  * @since 0.5
  */
-@PrepareForTest({Session.class})
 public class OrderBookApplicationTest {
 
     @Test(expectedExceptions = NullPointerException.class)
@@ -215,10 +210,5 @@ public class OrderBookApplicationTest {
         orderExecuted.setTradeID(new TradeID(defaultTradeID));
 
         application.toApp(orderExecuted, mock(Session.class));
-    }
-
-    @ObjectFactory
-    public IObjectFactory getObjectFactory() {
-        return new PowerMockObjectFactory();
     }
 }

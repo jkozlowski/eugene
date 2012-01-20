@@ -1,7 +1,8 @@
-package eugene.market.client.api;
+package eugene.market.client;
 
 import eugene.market.ontology.message.ExecutionReport;
 import eugene.market.ontology.message.Logon;
+import eugene.market.ontology.message.NewOrderSingle;
 import eugene.market.ontology.message.OrderCancelReject;
 import eugene.market.ontology.message.data.AddOrder;
 import eugene.market.ontology.message.data.DeleteOrder;
@@ -21,7 +22,7 @@ import static org.mockito.Mockito.mock;
  * @author Jakub D Kozlowski
  * @since 0.5
  */
-@PrepareForTest({Agent.class, Session.class})
+@PrepareForTest({Agent.class})
 public class ApplicationAdapterTest {
 
     private static class TestApplicationAdapter extends ApplicationAdapter {
@@ -36,6 +37,7 @@ public class ApplicationAdapterTest {
         application.toApp(mock(AddOrder.class), mock(Session.class));
         application.toApp(mock(OrderExecuted.class), mock(Session.class));
         application.toApp(mock(OrderCancelReject.class), mock(Session.class));
+        application.fromApp(mock(NewOrderSingle.class), mock(Session.class));
     }
 
     @ObjectFactory
