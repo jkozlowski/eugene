@@ -3,6 +3,8 @@ package eugene.market.client;
 import eugene.market.esma.MarketAgent;
 import eugene.market.ontology.MarketOntology;
 import eugene.market.ontology.Message;
+import eugene.market.ontology.field.ClOrdID;
+import eugene.market.ontology.field.Symbol;
 import eugene.market.ontology.message.Logon;
 import eugene.market.ontology.message.NewOrderSingle;
 import jade.content.onto.basic.Action;
@@ -72,13 +74,15 @@ public interface Session {
     ACLMessage aclRequest(final Message message) throws RuntimeException;
 
     /**
-     * Sends this <code>newOrderSingle</code>. If {@link NewOrderSingle#getSymbol()} is null, it will be set
+     * Sends this <code>newOrderSingle</code>. {@link Symbol} will be set to the symbol handled by this {@link
+     * Session} and a unique {@link ClOrdID} will be generated.
      *
      * @param newOrderSingle {@link NewOrderSingle} to send.
      *
      * @throws NullPointerException     if <code>newOrderSingle</code> is null.
      * @throws IllegalArgumentException if {@link NewOrderSingle#getSymbol()} is not null and it is not equal to the
-     *                                  symbol handled by this {@link Session}.
+     *                                  symbol handled by this {@link Session} or {@link NewOrderSingle#getClOrdID()}
+     *                                  is not null.
      */
     void send(final NewOrderSingle newOrderSingle) throws NullPointerException, IllegalArgumentException;
 }

@@ -4,6 +4,7 @@ import eugene.market.client.Application;
 import eugene.market.client.Session;
 import eugene.market.ontology.MarketOntology;
 import eugene.market.ontology.Message;
+import eugene.market.ontology.field.ClOrdID;
 import eugene.market.ontology.field.Symbol;
 import eugene.market.ontology.message.Logon;
 import eugene.market.ontology.message.NewOrderSingle;
@@ -24,6 +25,7 @@ import org.testng.annotations.Test;
 
 import java.util.Iterator;
 
+import static eugene.market.ontology.Defaults.defaultClOrdID;
 import static eugene.market.ontology.Defaults.defaultSymbol;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -42,6 +44,8 @@ import static org.powermock.api.mockito.PowerMockito.when;
  */
 @PrepareForTest({Agent.class, AID.class, ContentManager.class})
 public class DefaultSessionTest {
+    
+    private static final String defaultAgentID = "trader01";
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testConstructorNullAgent() {
@@ -251,12 +255,25 @@ public class DefaultSessionTest {
         session.send(newOrderSingle);
     }
 
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testSendNewOrderSingleNotNullClOrdID() {
+        final Session session = new DefaultSession(mock(Agent.class), mock(AID.class), mock(Application.class),
+                                                   defaultSymbol);
+        final NewOrderSingle newOrderSingle = new NewOrderSingle();
+        newOrderSingle.setClOrdID(new ClOrdID(defaultClOrdID));
+        session.send(newOrderSingle);
+    }
+
     @Test
     public void testSendNewOrderSingle() throws CodecException, OntologyException {
         final AID to = mock(AID.class);
+        final AID id = mock(AID.class);
+        when(id.getName() ).thenReturn(defaultAgentID);
         final Agent agent = mock(Agent.class);
+        when(agent.getAID()).thenReturn(id);
         final ContentManager contentManager = mock(ContentManager.class);
-        final Session session = new DefaultSession(agent, to, mock(Application.class), defaultSymbol);
+        final Application application = mock(Application.class);
+        final DefaultSession session = new DefaultSession(agent, to, application, defaultSymbol);
         when(agent.getContentManager()).thenReturn(contentManager);
 
         final NewOrderSingle newOrderSingle = new NewOrderSingle();
@@ -264,7 +281,9 @@ public class DefaultSessionTest {
 
         verify(agent).getContentManager();
         verify(agent).send(Mockito.any(ACLMessage.class));
+        verify(application).fromApp(newOrderSingle, session);
         assertThat(newOrderSingle.getSymbol().getValue(), is(defaultSymbol));
+        assertThat(newOrderSingle.getClOrdID().getValue(), is(defaultAgentID + (session.getCurClOrdID() - 1L)));
     }
 
     @ObjectFactory

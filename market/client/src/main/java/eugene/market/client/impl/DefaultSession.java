@@ -1,10 +1,12 @@
 package eugene.market.client.impl;
 
+import com.google.common.annotations.VisibleForTesting;
 import eugene.market.client.Application;
 import eugene.market.client.Session;
 import eugene.market.esma.MarketAgent;
 import eugene.market.ontology.MarketOntology;
 import eugene.market.ontology.Message;
+import eugene.market.ontology.field.ClOrdID;
 import eugene.market.ontology.field.Symbol;
 import eugene.market.ontology.message.Logon;
 import eugene.market.ontology.message.NewOrderSingle;
@@ -15,6 +17,8 @@ import jade.content.onto.basic.Action;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
+
+import java.util.concurrent.atomic.AtomicLong;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -38,6 +42,8 @@ public final class DefaultSession implements Session {
     private final Application application;
 
     private final String symbol;
+    
+    private final AtomicLong curClOrdID = new AtomicLong(1);
 
     /**
      * Creates a {@link DefaultSession} that will route all messages to this <code>application</code> and will be
@@ -147,7 +153,21 @@ public final class DefaultSession implements Session {
     public void send(final NewOrderSingle newOrderSingle) {
         checkNotNull(newOrderSingle);
         checkArgument(null == newOrderSingle.getSymbol() || symbol.equals(newOrderSingle.getSymbol().getValue()));
+        checkArgument(null == newOrderSingle.getClOrdID());
         newOrderSingle.setSymbol(new Symbol(symbol));
+        newOrderSingle.setClOrdID(getClOrdID());
+        application.fromApp(newOrderSingle, this);
         agent.send(aclRequest(newOrderSingle));
+    }
+
+    @VisibleForTesting
+    public Long getCurClOrdID() {
+        return curClOrdID.get();
+    }
+    
+    private ClOrdID getClOrdID() {
+        final StringBuilder b = new StringBuilder(agent.getAID().getName());
+        b.append(curClOrdID.getAndIncrement());
+        return new ClOrdID(b.toString());
     }
 }
