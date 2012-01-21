@@ -33,7 +33,6 @@ public class TestAgent extends Agent {
 
             @Override
             protected void onTick() {
-                LOG.info(TestAgent.class.getName() + "#" + getAID() + ": " + TICK_MESSAGE);
             }
         });
     }
