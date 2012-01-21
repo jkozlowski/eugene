@@ -1,3 +1,10 @@
+2012-01-21 Jakub D Kozlowski <mail@jakub-kozlowski.com>
+    Release: Version 0.5
+        * Implemented Noise Trader.
+        * Refactored OrderBook to accept single sided executions.
+        * Added ability to send message to Client API.
+        * Added ability to build the order book to Client API.
+
 2012-01-10 Jakub D Kozlowski <mail@jakub-kozlowski.com>
     Release: Version 0.4
         * Implemented Client API
