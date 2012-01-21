@@ -107,7 +107,7 @@ public final class DefaultSession implements Session {
 
             if (ce instanceof Action &&
                     null != ((Action) ce).getAction() &&
-                    (((Action) ce).getAction().getClass() == type)) {
+                    type.isAssignableFrom(((Action) ce).getAction().getClass())) {
 
                 return (T) ((Action) ce).getAction();
             }

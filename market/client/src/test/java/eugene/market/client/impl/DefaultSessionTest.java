@@ -174,6 +174,23 @@ public class DefaultSessionTest {
         assertThat(session.extractMessage(aclMessage, logon.getClass()), sameInstance(logon));
     }
 
+    @Test
+    public void testExtractMessageAsMessage() throws CodecException, OntologyException {
+        final ACLMessage aclMessage = mock(ACLMessage.class);
+        final Agent agent = mock(Agent.class);
+        final ContentManager contentManager = mock(ContentManager.class);
+        final Action action = mock(Action.class);
+        final Logon logon = mock(Logon.class);
+        final Session session = new DefaultSession(agent, mock(AID.class), mock(Application.class), defaultSymbol);
+        when(agent.getContentManager()).thenReturn(contentManager);
+        when(contentManager.extractContent(aclMessage)).thenReturn(action);
+        when(action.getAction()).thenReturn(logon);
+
+        final Message message = session.extractMessage(aclMessage, Message.class);
+        assertThat(message, is(Logon.class));
+        assertThat((Logon) message, sameInstance(logon));
+    }
+
     @Test(expectedExceptions = NullPointerException.class)
     public void testAclRequestNullMessage() {
         final Session session = new DefaultSession(mock(Agent.class), mock(AID.class), mock(Application.class),
