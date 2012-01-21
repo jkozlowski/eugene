@@ -5,6 +5,7 @@ import eugene.market.client.Session;
 import eugene.market.esma.MarketAgent;
 import eugene.market.ontology.MarketOntology;
 import eugene.market.ontology.Message;
+import eugene.market.ontology.field.Symbol;
 import eugene.market.ontology.message.Logon;
 import eugene.market.ontology.message.NewOrderSingle;
 import jade.content.ContentElement;
@@ -144,6 +145,9 @@ public final class DefaultSession implements Session {
      */
     @Override
     public void send(final NewOrderSingle newOrderSingle) {
+        checkNotNull(newOrderSingle);
+        checkArgument(null == newOrderSingle.getSymbol() || symbol.equals(newOrderSingle.getSymbol().getValue()));
+        newOrderSingle.setSymbol(new Symbol(symbol));
         agent.send(aclRequest(newOrderSingle));
     }
 }

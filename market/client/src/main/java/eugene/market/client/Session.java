@@ -10,11 +10,15 @@ import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 
 /**
- * {@link Session} is a communication channel between the Agents and the Market Agent.
+ * {@link Session} is a communication channel between the Agents and {@link MarketAgent}.
  *
- * {@link Session} sends an appropriate {@link Logon} message to the Market Agent in order to initiate the
+ * {@link Session} sends an appropriate {@link Logon} message to {@link MarketAgent} in order to initiate the
  * communication channel. {@link Session} will route all {@link Message}s (sent through it and received by it) to
  * the {@link Application}.
+ *
+ * {@link Session}s are valid for a single <code>symbol</code> only, therefore {@link NewOrderSingle} messages sent
+ * through a {@link Session} should not have {@link NewOrderSingle#getSymbol()} equal to a different symbol,
+ * than the one handled by this {@link Session}.
  *
  * @author Jakub D Kozlowski
  * @since 0.5
@@ -68,9 +72,13 @@ public interface Session {
     ACLMessage aclRequest(final Message message) throws RuntimeException;
 
     /**
-     * Sends this <code>newOrderSingle</code>.
+     * Sends this <code>newOrderSingle</code>. If {@link NewOrderSingle#getSymbol()} is null, it will be set
      *
      * @param newOrderSingle {@link NewOrderSingle} to send.
+     *
+     * @throws NullPointerException     if <code>newOrderSingle</code> is null.
+     * @throws IllegalArgumentException if {@link NewOrderSingle#getSymbol()} is not null and it is not equal to the
+     *                                  symbol handled by this {@link Session}.
      */
-    void send(final NewOrderSingle newOrderSingle);
+    void send(final NewOrderSingle newOrderSingle) throws NullPointerException, IllegalArgumentException;
 }

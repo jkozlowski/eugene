@@ -4,6 +4,7 @@ import eugene.market.client.Application;
 import eugene.market.client.Session;
 import eugene.market.ontology.MarketOntology;
 import eugene.market.ontology.Message;
+import eugene.market.ontology.field.Symbol;
 import eugene.market.ontology.message.Logon;
 import eugene.market.ontology.message.NewOrderSingle;
 import jade.content.ContentElement;
@@ -225,6 +226,31 @@ public class DefaultSessionTest {
         session.aclRequest(message);
     }
 
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testSendNewOrderSingleNullNewOrderSingle() {
+        final Session session = new DefaultSession(mock(Agent.class), mock(AID.class), mock(Application.class),
+                                                   defaultSymbol);
+        session.send(null);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testSendNewOrderSingleIllegalSymbol() {
+        final Session session = new DefaultSession(mock(Agent.class), mock(AID.class), mock(Application.class),
+                                                   defaultSymbol);
+        final NewOrderSingle newOrderSingle = new NewOrderSingle();
+        newOrderSingle.setSymbol(new Symbol("BARC.L"));
+        session.send(newOrderSingle);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testSendNewOrderSingleNullValueOfSymbol() {
+        final Session session = new DefaultSession(mock(Agent.class), mock(AID.class), mock(Application.class),
+                                                   defaultSymbol);
+        final NewOrderSingle newOrderSingle = new NewOrderSingle();
+        newOrderSingle.setSymbol(new Symbol(null));
+        session.send(newOrderSingle);
+    }
+
     @Test
     public void testSendNewOrderSingle() throws CodecException, OntologyException {
         final AID to = mock(AID.class);
@@ -233,11 +259,12 @@ public class DefaultSessionTest {
         final Session session = new DefaultSession(agent, to, mock(Application.class), defaultSymbol);
         when(agent.getContentManager()).thenReturn(contentManager);
 
-        final NewOrderSingle newOrderSingle = mock(NewOrderSingle.class);
+        final NewOrderSingle newOrderSingle = new NewOrderSingle();
         session.send(newOrderSingle);
 
         verify(agent).getContentManager();
         verify(agent).send(Mockito.any(ACLMessage.class));
+        assertThat(newOrderSingle.getSymbol().getValue(), is(defaultSymbol));
     }
 
     @ObjectFactory
