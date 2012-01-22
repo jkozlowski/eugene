@@ -1,5 +1,9 @@
-package eugene.market.book;
+package eugene.market.book.impl;
 
+import eugene.market.book.Order;
+import eugene.market.book.OrderBook;
+import eugene.market.book.OrderStatus;
+import eugene.market.book.impl.DefaultOrderBook;
 import eugene.market.ontology.field.enums.Side;
 import org.testng.annotations.Test;
 

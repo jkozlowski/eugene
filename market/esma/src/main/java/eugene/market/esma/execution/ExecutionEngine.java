@@ -1,10 +1,10 @@
 package eugene.market.esma.execution;
 
 import com.google.common.primitives.Longs;
-import eugene.market.book.DefaultOrderBook;
 import eugene.market.book.Order;
 import eugene.market.book.OrderBook;
 import eugene.market.book.OrderStatus;
+import eugene.market.book.impl.DefaultOrderBook;
 import eugene.market.esma.execution.MatchingEngine.MatchingResult;
 import eugene.market.esma.execution.data.MarketDataEngine;
 import eugene.market.ontology.field.enums.Side;
@@ -12,6 +12,7 @@ import eugene.market.ontology.field.enums.Side;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static eugene.market.book.OrderBooks.defaultOrderBook;
 
 /**
  * Accepts {@link Order}s to be executed on an {@link OrderBook}, validates then executes them and logs all
@@ -37,7 +38,7 @@ public class ExecutionEngine {
      * DefaultOrderBook}, {@link MatchingEngine} and {@link MarketDataEngine}.
      */
     public ExecutionEngine() {
-        this(InsertionValidator.getInstance(), new DefaultOrderBook(), MatchingEngine.getInstance(),
+        this(InsertionValidator.getInstance(), defaultOrderBook(), MatchingEngine.getInstance(),
              new MarketDataEngine());
     }
 

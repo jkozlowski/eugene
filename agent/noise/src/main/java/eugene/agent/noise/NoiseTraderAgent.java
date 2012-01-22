@@ -1,7 +1,6 @@
 package eugene.agent.noise;
 
 import eugene.agent.noise.impl.PlaceOrderBehaviour;
-import eugene.market.book.DefaultOrderBook;
 import eugene.market.book.OrderBook;
 import eugene.market.client.Application;
 import eugene.market.client.ApplicationAdapter;
@@ -21,6 +20,7 @@ import java.util.logging.Logger;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static eugene.market.book.OrderBooks.defaultOrderBook;
 import static eugene.market.client.Applications.orderBook;
 import static eugene.market.client.Applications.proxy;
 import static eugene.market.client.Sessions.initate;
@@ -48,7 +48,7 @@ public class NoiseTraderAgent extends Agent {
         getContentManager().registerLanguage(new SLCodec(), MarketOntology.LANGUAGE);
         getContentManager().registerOntology(MarketOntology.getInstance());
 
-        final OrderBook orderBook = new DefaultOrderBook();
+        final OrderBook orderBook = defaultOrderBook();
         addBehaviour(initate(
                 this,
                 proxy(

@@ -1,7 +1,10 @@
-package eugene.market.book;
+package eugene.market.book.impl;
 
 import com.google.common.primitives.Doubles;
 import com.google.common.primitives.Longs;
+import eugene.market.book.Order;
+import eugene.market.book.OrderBook;
+import eugene.market.book.OrderStatus;
 import eugene.market.ontology.field.enums.Side;
 
 import java.util.HashMap;

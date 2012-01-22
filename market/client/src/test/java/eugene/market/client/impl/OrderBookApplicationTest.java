@@ -1,10 +1,9 @@
 package eugene.market.client.impl;
 
-import eugene.market.book.DefaultOrderBook;
+import eugene.market.book.impl.DefaultOrderBook;
 import eugene.market.book.Order;
 import eugene.market.book.OrderBook;
 import eugene.market.client.Session;
-import eugene.market.client.impl.OrderBookApplication;
 import eugene.market.ontology.field.LastPx;
 import eugene.market.ontology.field.LastQty;
 import eugene.market.ontology.field.LeavesQty;
