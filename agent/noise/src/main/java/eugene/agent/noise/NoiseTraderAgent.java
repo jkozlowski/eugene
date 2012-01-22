@@ -4,12 +4,10 @@ import eugene.agent.noise.impl.PlaceOrderBehaviour;
 import eugene.market.book.OrderBook;
 import eugene.market.client.ApplicationAdapter;
 import eugene.market.client.Session;
+import eugene.market.esma.MarketAgent;
 import eugene.market.ontology.MarketOntology;
 import eugene.market.ontology.message.Logon;
-import jade.content.lang.sl.SLCodec;
 import jade.core.Agent;
-
-import java.util.logging.Logger;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -26,8 +24,6 @@ import static eugene.market.client.Sessions.initiate;
  */
 public class NoiseTraderAgent extends Agent {
 
-    private static final Logger LOG = Logger.getLogger(NoiseTraderAgent.class.getName());
-
     private final String symbol;
 
     public NoiseTraderAgent(final String symbol) {
@@ -38,7 +34,7 @@ public class NoiseTraderAgent extends Agent {
 
     @Override
     public void setup() {
-        getContentManager().registerLanguage(new SLCodec(), MarketOntology.LANGUAGE);
+        getContentManager().registerLanguage(MarketAgent.getCodec(), MarketOntology.LANGUAGE);
         getContentManager().registerOntology(MarketOntology.getInstance());
 
         final OrderBook orderBook = defaultOrderBook();
@@ -52,7 +48,7 @@ public class NoiseTraderAgent extends Agent {
                                 agent.addBehaviour(new PlaceOrderBehaviour(orderBook, session));
                             }
                         }
-                ), symbol
-        ));
+                ),
+                symbol));
     }
 }

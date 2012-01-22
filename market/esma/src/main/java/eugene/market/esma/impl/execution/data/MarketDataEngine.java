@@ -5,8 +5,8 @@ import eugene.market.book.OrderBook;
 import eugene.market.book.OrderStatus;
 import eugene.market.esma.impl.execution.Execution;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -19,7 +19,7 @@ public class MarketDataEngine {
 
     private static final AtomicLong currentEventId = new AtomicLong(1L);
 
-    private final Map<Long, MarketDataEvent> events = new HashMap<Long, MarketDataEvent>();
+    private final Map<Long, MarketDataEvent> events = new ConcurrentHashMap<Long, MarketDataEvent>();
 
     /**
      * Indicates that an new {@link Order} has been inserted into the {@link OrderBook}.

@@ -1,15 +1,12 @@
 package eugene.agent.noise;
 
 import eugene.market.esma.MarketAgent;
-import eugene.market.ontology.MarketOntology;
-import jade.content.lang.sl.SLCodec;
 import jade.core.Agent;
 import jade.core.Profile;
 import jade.imtp.memory.MemoryProfile;
 import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
-import jade.wrapper.gateway.GatewayAgent;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -24,13 +21,8 @@ import static jade.core.Runtime.instance;
  */
 public class NoiseTraderAgentIntegrationTest {
 
-    public static final String GATEWAY_AGENT = "gateway";
 
     public static final String MARKET_AGENT = "market";
-
-    public Agent traderAgent;
-
-    public AgentController gatewayAgentController;
 
     public AgentController marketAgentController;
 
@@ -49,11 +41,11 @@ public class NoiseTraderAgentIntegrationTest {
     }
 
     private void initTraderAgent(final AgentContainer agentContainer) throws StaleProxyException {
-        traderAgent = new GatewayAgent();
-        gatewayAgentController = agentContainer.acceptNewAgent(GATEWAY_AGENT, traderAgent);
-        traderAgent.getContentManager().registerLanguage(new SLCodec(), MarketOntology.LANGUAGE);
-        traderAgent.getContentManager().registerOntology(MarketOntology.getInstance());
-        gatewayAgentController.start();
+//        traderAgent = new GatewayAgent();
+//        gatewayAgentController = agentContainer.acceptNewAgent(GATEWAY_AGENT, traderAgent);
+//        traderAgent.getContentManager().registerLanguage(new LEAPCodec(), MarketOntology.LANGUAGE);
+//        traderAgent.getContentManager().registerOntology(MarketOntology.getInstance());
+//        gatewayAgentController.start();
     }
 
     private void initMarketAgent(final AgentContainer agentContainer) throws StaleProxyException {
@@ -62,17 +54,17 @@ public class NoiseTraderAgentIntegrationTest {
         marketAgentController.start();
     }
 
-    @Test(enabled = false)
+    @Test(enabled = true)
     public void testNoiseTraderAgent() throws StaleProxyException, InterruptedException {
 
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 150; i++) {
             final NoiseTraderAgent noiseTraderAgent = new NoiseTraderAgent(defaultSymbol);
             final AgentController traderAgentController = agentContainer.acceptNewAgent("noise-trader" + i,
                                                                                   noiseTraderAgent);
             traderAgentController.start();
         }
 
-        Thread.sleep(30000L);
+        Thread.sleep(60000L);
     }
 
 }

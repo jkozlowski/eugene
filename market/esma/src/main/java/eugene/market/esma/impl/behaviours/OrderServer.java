@@ -94,6 +94,8 @@ public class OrderServer {
      */
     public void serveNewOrderSingleRequest(final NewOrderSingle newOrderSingle, final ACLMessage request) {
         try {
+            
+            System.out.println("Queue size: " + agent.getCurQueueSize());
             final Order order = newOrder(newOrderSingle);
 
             final OrderStatus orderStatus = executionEngine.insertOrder(order);

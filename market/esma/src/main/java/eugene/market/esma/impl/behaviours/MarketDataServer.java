@@ -163,23 +163,23 @@ public class MarketDataServer extends CyclicBehaviour implements MarketDataEvent
     private void send(final Message message) {
 
         checkNotNull(message);
-        for (final AID aid : repository.getAIDs()) {
-            try {
-                final Action a = new Action(aid, message);
 
-                final ACLMessage aclMessage = new ACLMessage(INFORM);
+        try {
+            final Action a = new Action(agent.getAID(), message);
+            final ACLMessage aclMessage = new ACLMessage(INFORM);
+            for (final AID aid : repository.getAIDs()) {
                 aclMessage.addReceiver(aid);
-                aclMessage.setOntology(MarketOntology.getInstance().getName());
-                aclMessage.setLanguage(MarketOntology.LANGUAGE);
-                agent.getContentManager().fillContent(aclMessage, a);
-                agent.send(aclMessage);
             }
-            catch (CodecException e) {
-                LOG.log(Level.SEVERE, e.getMessage());
-            }
-            catch (OntologyException e) {
-                LOG.log(Level.SEVERE, e.getMessage());
-            }
+            aclMessage.setOntology(MarketOntology.getInstance().getName());
+            aclMessage.setLanguage(MarketOntology.LANGUAGE);
+            agent.getContentManager().fillContent(aclMessage, a);
+            agent.send(aclMessage);
+        }
+        catch (CodecException e) {
+            LOG.log(Level.SEVERE, e.getMessage());
+        }
+        catch (OntologyException e) {
+            LOG.log(Level.SEVERE, e.getMessage());
         }
     }
 }

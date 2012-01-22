@@ -93,7 +93,7 @@
                             javax.validation.constraints, com.google.common.collect, eugene.market.ontology,
                             jade.content.lang, jade.content.lang.sl, jade.content.onto.basic, jade.core.behaviours,
                             com.google.common.primitives, java.util.logging, jade.util,
-                            eugene.market.ontology.message.data, eugene.market.book
+                            eugene.market.ontology.message.data, eugene.market.book, jade.content.lang.leap
                         </Import-Package>
                     </instructions>
                 </configuration>

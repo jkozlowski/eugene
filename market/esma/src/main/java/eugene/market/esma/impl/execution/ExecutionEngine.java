@@ -5,6 +5,7 @@ import eugene.market.book.Order;
 import eugene.market.book.OrderBook;
 import eugene.market.book.OrderStatus;
 import eugene.market.book.impl.DefaultOrderBook;
+import eugene.market.esma.impl.Orders;
 import eugene.market.esma.impl.execution.MatchingEngine.MatchingResult;
 import eugene.market.esma.impl.execution.data.MarketDataEngine;
 import eugene.market.ontology.field.enums.Side;
@@ -32,6 +33,10 @@ public class ExecutionEngine {
     private final MarketDataEngine marketDataEngine;
 
     private final AtomicLong curExecID = new AtomicLong(1L);
+
+    private long messagesReceived = 0;
+
+    private long lastNewOrderTime = System.currentTimeMillis();
 
     /**
      * Constructs a {@link ExecutionEngine} that will use {@link InsertionValidator}, {@link
@@ -116,6 +121,15 @@ public class ExecutionEngine {
      */
     public void execute() {
 
+        messagesReceived++;
+        final long oldLastNewOrderTime = lastNewOrderTime;
+        final long curTime = System.currentTimeMillis();
+        if (curTime - oldLastNewOrderTime >= 1000) {
+            lastNewOrderTime = curTime;
+            System.out.print("Message rate=" + messagesReceived + " msg/min");
+            messagesReceived = 0;
+        }
+
         while (!orderBook.isEmpty(Side.BUY) && !orderBook.isEmpty(Side.SELL)) {
 
             final Order buyOrder = orderBook.peek(Side.BUY);
@@ -138,6 +152,14 @@ public class ExecutionEngine {
 
             marketDataEngine.execution(execution);
         }
+
+        System.out.println("Current price: buy=" +
+                                   (orderBook.isEmpty(Side.BUY) ? "no price" : orderBook.peek(Side.BUY).getPrice()) +
+
+                                   ", sell=" +
+                                   (orderBook.isEmpty(Side.SELL) ? "no price" : orderBook.peek(Side.SELL).getPrice())
+                                   + "; curExecID=" + curExecID.get() + "; curOrderID=" + Orders.curOrderID.get()
+        );
     }
 
     /**

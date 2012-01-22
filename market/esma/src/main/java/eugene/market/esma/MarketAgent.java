@@ -5,9 +5,11 @@ import eugene.market.esma.impl.behaviours.MarketDataServer;
 import eugene.market.esma.impl.behaviours.OrderServer;
 import eugene.market.esma.impl.execution.ExecutionEngine;
 import eugene.market.ontology.MarketOntology;
-import jade.content.lang.sl.SLCodec;
+import jade.content.lang.Codec;
+import jade.content.lang.leap.LEAPCodec;
 import jade.core.Agent;
 import jade.core.behaviours.OntologyServer;
+import jade.core.behaviours.ThreadedBehaviourFactory;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.Property;
@@ -57,7 +59,7 @@ public class MarketAgent extends Agent {
     @Override
     public void setup() {
         try {
-            getContentManager().registerLanguage(new SLCodec(), MarketOntology.LANGUAGE);
+            getContentManager().registerLanguage(getCodec(), MarketOntology.LANGUAGE);
             getContentManager().registerOntology(MarketOntology.getInstance());
 
             final DFAgentDescription agentDescription = getDFAgentDescription();
@@ -71,13 +73,25 @@ public class MarketAgent extends Agent {
 
             final OrderServer orderServer = new OrderServer(this, executionEngine, repository, symbol);
 
+            final ThreadedBehaviourFactory factory = new ThreadedBehaviourFactory();
             addBehaviour(new OntologyServer(this, MarketOntology.getInstance(), REQUEST, orderServer));
-            addBehaviour(new MarketDataServer(this, executionEngine.getMarketDataEngine(), repository, symbol));
+            addBehaviour(factory.wrap(new MarketDataServer(this, executionEngine.getMarketDataEngine(),
+                                                                       repository, 
+                                                      symbol)));
         }
         catch (FIPAException e) {
             e.printStackTrace();
             LOG.severe(e.toString());
         }
+    }
+
+    /**
+     * Gets an instance of a {@link Codec} used by {@link MarketAgent}s.
+     * 
+     * @return instance of {@link Codec}.
+     */
+    public static Codec getCodec() {
+        return new LEAPCodec();
     }
 
     /**

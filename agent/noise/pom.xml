@@ -38,6 +38,11 @@
             <version>${current.version}</version>
         </dependency>
         <dependency>
+            <groupId>eugene.market</groupId>
+            <artifactId>esma</artifactId>
+            <version>${current.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.googlecode.guava-osgi</groupId>
             <artifactId>guava-osgi</artifactId>
             <version>${guava.version}</version>
@@ -99,7 +104,8 @@
                             jade.core, jade.core.behaviours, eugene.market.ontology.message,
                             eugene.market.ontology.message.data, eugene.market.book, eugene.market.ontology.field,
                             eugene.market.ontology.field.enums, eugene.market.client, eugene.market.ontology,
-                            jade.content, jade.content.lang, jade.content.lang.sl, jade.content.onto
+                            jade.content, jade.content.lang, jade.content.lang.sl, jade.content.onto,
+                            jade.content.lang.leap, eugene.market.esma
                         </Import-Package>
                     </instructions>
                 </configuration>

@@ -27,6 +27,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class PlaceOrderBehaviour extends TickerBehaviour {
 
+    public static final int INITIAL_DELAY = 20000;
+
     public static final int MAX_SPREAD = 10;
 
     public static final int MIN_SPREAD = 1;
@@ -35,7 +37,7 @@ public class PlaceOrderBehaviour extends TickerBehaviour {
 
     public static final double DEFAULT_CURRENT_PRICE = 100.0D;
 
-    public static final Integer MAX_SLEEP = 1000;
+    public static final Integer MAX_SLEEP = 500;
 
     public static final int MAX_ORDER_QTY = 3000;
 
@@ -85,7 +87,7 @@ public class PlaceOrderBehaviour extends TickerBehaviour {
      * @param session   {@link Session} to use to send orders.
      */
     public PlaceOrderBehaviour(final Random generator, final OrderBook orderBook, final Session session) {
-        super(null, generator.nextInt(MAX_SLEEP) + 1);
+        super(null, INITIAL_DELAY);
         checkNotNull(generator);
         checkNotNull(orderBook);
         checkNotNull(session);
@@ -97,7 +99,6 @@ public class PlaceOrderBehaviour extends TickerBehaviour {
     @Override
     @VisibleForTesting
     public void onTick() {
-
         final Strategy strategy = getStrategy();
         final Side side = (0 == generator.nextInt(2)) ? Side.BUY : Side.SELL;
         final Long orderQty = getOrderQty();
