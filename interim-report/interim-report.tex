@@ -1,0 +1,122 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+
+\parindent=1in
+
+\usepackage[T1]{fontenc}
+
+\usepackage{booktabs}
+\usepackage{longtable}
+
+\usepackage{listings}
+\lstset{language=Java, numbers=left, frame=single}
+
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{todonotes}
+
+\usepackage{ulem}
+\normalem 
+
+\usepackage{enumitem}
+
+\usepackage{hyperref}
+
+\usepackage{multirow}
+
+\title{Eugene: Agent-Based Market Simulator for use in System Testing of Trading Algorithms \\ Interim Report}
+\author{Jakub Koz\l owski \and Internal Supervisor: Dr. Christopher D. Clack \and External Supervisor: Ian Rose-Miller, UBS}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section*{Current Objectives}
+\begin{enumerate}
+\item Analyse existing Agent-Based approaches to Market Simulation to determine a set of possible Agent Types that will simulate different trading behaviours.
+
+\item \sout{Implement the Agents and their environment (Stock Market Agent, post-simulation Statistical Engine).} Implement the Stock Market Agent and supporting APIs for developing Trader Agents.
+
+\item \sout{Discover a specific configuration of Agents whose behaviour will simulate a particular day of trading, in regards to a benchmark.} Implement a simulation that will aim to discover a flaw in a trading algorithm to demonstrate the efficacy of Eugene. 
+
+\item \sout{Evaluate the success of the simulator by comparing the emergent behaviour to the benchmark, as well running the simulation against a Trading Algorithm and analysing its behaviour.} \textbf{Possible Extension}: Implement a simulation that will aim to determine the better trading algorithm out of two different trading algorithms.
+\end{enumerate}
+
+\section*{Progress}
+
+\begin{enumerate}
+\item Analysed a number of academic papers in the areas of Artificial Stock Markets \cite{Jha2010}, Multi Agent-Based Simulation \cite{Boer-Sorban2008} and Flash Crash Analysis \cite{kirilenko2011} in order to determine a set of possible Agent Types to simulate different trading behaviours.   
+
+\item  
+\begin{enumerate}
+\item Implemented a Market Agent that operates a Limit Order Book accessible to Trader Agents via Market Ontology messages. The Market Agent publishes an Order-by-Order Market Data Feed that the Trader Agents subscribe to.
+\item  Implemented a thin and fluent Client API above the Market Ontology, that allows the Trader Agents to logon with the Market Agent, receive and send messages.
+\item Implemented a reusable component on top of the Client API that allows the Trader Agents to rebuild the current state of the Limit Order Book from the messages received from the Market Agent. 
+\item Implemented a \texttt{jade-unit} extension to the JADE framework, which eliminates global side-effects (a network socket) and therefore allows multiple JADE containers to be started inside a single JVM. This allows for writing unit-tests that can be run using conventional Java unit-testing approaches and frameworks, instead of using a specialised JADE testing framework (Test Suite Framework\cite{jade}).
+\item The code is thoroughly unit and integration tested; Regression tests run on every commit inside a Jenkins Continuous Integration Server\cite{jenkins}. Currently, global test coverage is above 87\%, however most components are close to 100\%.
+\item The code is highly-decoupled; Each component is a separate Maven module\cite{maven}.
+\item The code is thoroughly documented using javadoc \cite{javadoc}; The code to documentation ratio is about 2:1 (3396 comment lines vs. 7701 code lines, as measured by cloc\cite{cloc}) 
+\item The development is carried on an issue-by-issue basis, following a short (2 weeks) release cycle. Time is logged to an hour and work is documented in a wiki (Redmine \cite{redmine}). Time logged: 211 hours. 
+\item Current version number is \texttt{v0.5}; minor version number (\texttt{0.*}) gets incremented on each release.
+\end{enumerate} 
+
+\item Implemented a Noise Trader that sends passive, mid or aggressive orders to the Limit Order Book.  
+
+\end{enumerate}
+
+\section*{Remaining Work}
+\begin{enumerate}
+\item Design and implement a simulation that will aim to discover a flaw in a trading algorithm to demonstrate the efficacy of Eugene.
+\item \textbf{Possible Extension}: Design and implement a simulation that will aim to determine the better trading algorithm out of two different trading algorithms. 
+\end{enumerate}
+
+\begin{center}
+\begin{tabular}{ p{1.4in} p{3in} }
+
+                
+        \multicolumn{1}{l}{\textbf{Dates}}                               		 &
+        \multicolumn{1}{l}{\textbf{Description}}                               \\
+        \toprule
+
+
+        25\textsuperscript{th} Jan 2012 - 26\textsuperscript{th} Feb 2012 &
+        \begin{itemize}
+        \item Design and implement a simulation that will aim to discover a flaw in a trading algorithm.
+        \item Run the simulation and collect results.
+        \item Analyse the results.
+        \end{itemize}
+        \\
+        
+        27\textsuperscript{th} Feb 2012 - 27\textsuperscript{th} April 2012 &
+        \begin{itemize}
+        \item \textbf{Possible Extension}: Design and implement a simulation that will aim to determine the better trading algorithm out of two different trading algorithms.
+        \item Run the simulation and collect results.
+        \item Analyse the results.
+        \item Thesis.
+        \end{itemize}
+        \\
+\end{tabular}
+\end{center}
+
+\section*{Deliverables}
+\begin{enumerate}
+\item A fully functional, tested and documented implementation of Eugene.
+\item \sout{A realistic simulation of a particular day of trading, in regards to a benchmark.} A simulation that will aim to discover a flaw in a trading algorithm to demonstrate the efficacy of Eugene. 
+\item \sout{Results and analysis from running the Eugene simulation against a Trading Algorithm.} \textbf{Possible Extension}: A simulation that will aim to determine the better trading algorithm out of two different trading algorithms.  
+\item \sout{A strategy for connecting Eugene to a FIX engine, like \texttt{quickfixj}.}
+\end{enumerate}
+
+\begin{flushright}
+Supervisor's Signature\hspace{0.5cm} \makebox[1.5in]{\hrulefill}
+\end{flushright}
+
+\pagebreak
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}
