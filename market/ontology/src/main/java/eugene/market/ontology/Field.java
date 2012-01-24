@@ -115,19 +115,17 @@ public abstract class Field<V> implements Concept {
      */
     @Override
     public boolean equals(Object o) {
+
         if (this == o) {
             return true;
         }
+
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
 
         final Field field = (Field) o;
-        if (value != null ? !value.equals(field.value) : field.value != null) {
-            return false;
-        }
-
-        return true;
+        return (value != null ? value.equals(field.value) : field.value == null);
     }
 
     /**
@@ -144,7 +142,8 @@ public abstract class Field<V> implements Concept {
     @Override
     public String toString() {
         final StringBuffer b = new StringBuffer();
-        return b.append(getClass().getSimpleName()).append("(").append(getTag()).append(")").append("=").append(
-                value).toString();
+        b.append(getClass().getSimpleName());
+        b.append("=").append(value);
+        return b.toString();
     }
 }

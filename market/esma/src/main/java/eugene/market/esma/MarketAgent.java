@@ -1,8 +1,9 @@
 package eugene.market.esma;
 
-import eugene.market.esma.behaviours.MarketDataServer;
-import eugene.market.esma.behaviours.OrderServer;
-import eugene.market.esma.execution.ExecutionEngine;
+import eugene.market.esma.impl.Repository;
+import eugene.market.esma.impl.behaviours.MarketDataServer;
+import eugene.market.esma.impl.behaviours.OrderServer;
+import eugene.market.esma.impl.execution.ExecutionEngine;
 import eugene.market.ontology.MarketOntology;
 import jade.content.lang.sl.SLCodec;
 import jade.core.Agent;
@@ -77,24 +78,6 @@ public class MarketAgent extends Agent {
             e.printStackTrace();
             LOG.severe(e.toString());
         }
-    }
-
-    /**
-     * Gets the executionEngine.
-     *
-     * @return the executionEngine.
-     */
-    public ExecutionEngine getExecutionEngine() {
-        return executionEngine;
-    }
-
-    /**
-     * Gets the repository.
-     *
-     * @return the repository.
-     */
-    public Repository getRepository() {
-        return repository;
     }
 
     /**

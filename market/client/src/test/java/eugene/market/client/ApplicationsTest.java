@@ -1,6 +1,7 @@
 package eugene.market.client;
 
 import eugene.market.book.OrderBook;
+import eugene.market.book.OrderBooks;
 import eugene.market.client.impl.OrderBookApplication;
 import eugene.market.client.impl.ProxyApplication;
 import org.testng.annotations.Test;
@@ -18,6 +19,11 @@ import static org.mockito.Mockito.mock;
  * @since 0.5
  */
 public class ApplicationsTest {
+    
+    @Test(expectedExceptions = UnsupportedOperationException.class)
+    public void testConstructor() {
+        new Applications();
+    }
 
     @Test
     public void testProxy() {

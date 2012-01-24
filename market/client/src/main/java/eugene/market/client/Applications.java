@@ -1,9 +1,10 @@
 package eugene.market.client;
 
+import com.google.common.annotations.VisibleForTesting;
 import eugene.market.book.OrderBook;
 import eugene.market.client.impl.OrderBookApplication;
 import eugene.market.client.impl.ProxyApplication;
-import eugene.market.esma.Messages;
+import eugene.market.esma.impl.Messages;
 
 /**
  * Factory methods for creating {@link Application}s.
@@ -13,7 +14,17 @@ import eugene.market.esma.Messages;
  */
 public final class Applications {
 
-    private Applications() {
+    private static final String ERROR_MESSAGE = "This class should not be instantiated";
+
+    /**
+     * This constructor should not be invoked. It is only visible for the purposes of keeping global test coverage
+     * high.
+     *
+     * @throws UnsupportedOperationException this constructor should not be invoked.
+     */
+    @VisibleForTesting
+    public Applications() throws UnsupportedOperationException {
+        throw new UnsupportedOperationException(ERROR_MESSAGE);
     }
 
     /**

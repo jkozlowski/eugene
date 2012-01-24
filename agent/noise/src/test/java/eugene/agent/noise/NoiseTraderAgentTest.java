@@ -19,6 +19,4 @@ public class NoiseTraderAgentTest {
     public void testConstructorEmptySymbol() {
         new NoiseTraderAgent("");
     }
-
-
 }

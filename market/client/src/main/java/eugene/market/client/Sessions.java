@@ -1,5 +1,6 @@
 package eugene.market.client;
 
+import com.google.common.annotations.VisibleForTesting;
 import eugene.market.client.impl.SessionInitiator;
 import eugene.market.esma.MarketAgent;
 import jade.core.Agent;
@@ -13,7 +14,17 @@ import jade.core.behaviours.Behaviour;
  */
 public final class Sessions {
 
-    private Sessions() {
+    private static final String ERROR_MESSAGE = "This class should not be instantiated";
+
+    /**
+     * This constructor should not be invoked. It is only visible for the purposes of keeping global test coverage
+     * high.
+     *
+     * @throws UnsupportedOperationException this constructor should not be invoked.
+     */
+    @VisibleForTesting
+    public Sessions() throws UnsupportedOperationException {
+        throw new UnsupportedOperationException(ERROR_MESSAGE);
     }
 
     /**
@@ -32,8 +43,8 @@ public final class Sessions {
      *                                  null.
      * @throws IllegalArgumentException if <code>symbol</code> is empty.
      */
-    public static Behaviour initate(final Agent agent, final Application application,
-                                    final String symbol) throws NullPointerException, IllegalArgumentException {
+    public static Behaviour initiate(final Agent agent, final Application application,
+                                     final String symbol) throws NullPointerException, IllegalArgumentException {
         return new SessionInitiator(agent, application, symbol);
     }
 }

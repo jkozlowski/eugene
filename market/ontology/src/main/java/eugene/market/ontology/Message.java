@@ -18,7 +18,7 @@ public abstract class Message implements AgentAction {
 
     private final TreeMap<Integer, Field<?>> fields = new TreeMap<Integer, Field<?>>(fieldComparator);
 
-    private static final Comparator<Integer> fieldComparator = new Comparator<Integer>() {
+    public static final Comparator<Integer> fieldComparator = new Comparator<Integer>() {
 
         @Override
         public int compare(Integer i, Integer i1) {
@@ -63,25 +63,21 @@ public abstract class Message implements AgentAction {
 
     @Override
     public boolean equals(Object o) {
+
         if (this == o) {
             return true;
         }
+
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
 
-        final Message message = (Message) o;
-
-        if (fields != null ? !fields.equals(message.fields) : message.fields != null) {
-            return false;
-        }
-
-        return true;
+        return fields.equals(((Message) o).fields);
     }
 
     @Override
     public int hashCode() {
-        return fields != null ? fields.hashCode() : 0;
+        return fields.hashCode();
     }
 
     @Override

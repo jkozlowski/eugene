@@ -2,17 +2,10 @@ package eugene.agent.noise;
 
 import eugene.agent.noise.impl.PlaceOrderBehaviour;
 import eugene.market.book.OrderBook;
-import eugene.market.client.Application;
 import eugene.market.client.ApplicationAdapter;
 import eugene.market.client.Session;
 import eugene.market.ontology.MarketOntology;
-import eugene.market.ontology.message.ExecutionReport;
 import eugene.market.ontology.message.Logon;
-import eugene.market.ontology.message.NewOrderSingle;
-import eugene.market.ontology.message.OrderCancelReject;
-import eugene.market.ontology.message.data.AddOrder;
-import eugene.market.ontology.message.data.DeleteOrder;
-import eugene.market.ontology.message.data.OrderExecuted;
 import jade.content.lang.sl.SLCodec;
 import jade.core.Agent;
 
@@ -23,7 +16,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static eugene.market.book.OrderBooks.defaultOrderBook;
 import static eugene.market.client.Applications.orderBook;
 import static eugene.market.client.Applications.proxy;
-import static eugene.market.client.Sessions.initate;
+import static eugene.market.client.Sessions.initiate;
 
 /**
  * Implements the Noise Trader Agent.
@@ -49,7 +42,7 @@ public class NoiseTraderAgent extends Agent {
         getContentManager().registerOntology(MarketOntology.getInstance());
 
         final OrderBook orderBook = defaultOrderBook();
-        addBehaviour(initate(
+        addBehaviour(initiate(
                 this,
                 proxy(
                         orderBook(orderBook),
@@ -58,46 +51,8 @@ public class NoiseTraderAgent extends Agent {
                             public void onLogon(final Logon logon, final Agent agent, final Session session) {
                                 agent.addBehaviour(new PlaceOrderBehaviour(orderBook, session));
                             }
-                        },
-                        new Application() {
-
-                            @Override
-                            public void onLogon(Logon logon, Agent agent, Session session) {
-//                                LOG.info(logon.toString());
-                            }
-
-                            @Override
-                            public void toApp(ExecutionReport executionReport, Session session) {
-//                                LOG.info(executionReport.toString());
-                            }
-
-                            @Override
-                            public void toApp(OrderCancelReject orderCancelReject, Session session) {
-//                                LOG.info(orderCancelReject.toString());
-                            }
-
-                            @Override
-                            public void toApp(AddOrder addOrder, Session session) {
-//                                LOG.info(addOrder.toString());
-                            }
-
-                            @Override
-                            public void toApp(DeleteOrder deleteOrder, Session session) {
-//                                LOG.info(deleteOrder.toString());
-                            }
-
-                            @Override
-                            public void toApp(OrderExecuted orderExecuted, Session session) {
-//                                LOG.info(orderExecuted.toString());
-                            }
-
-                            @Override
-                            public void fromApp(NewOrderSingle newOrderSingle, Session session) {
-//                                LOG.info(newOrderSingle.toString());
-                            }
                         }
-                ),
-                symbol
+                ), symbol
         ));
     }
 }
