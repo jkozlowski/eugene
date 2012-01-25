@@ -1,0 +1,76 @@
+= Eugene: Agent-Based Stock Market Simulator for System Testing of Trading Algorithms
+
+* Redmine: http://abfm.cs.ucl.ac.uk/redmine/projects/eugene
+* Jenkins: http://abfm.cs.ucl.ac.uk/jenkins/job/eugene
+
+== 2012-01-21: Release v0.5  - Jakub D Kozlowski <mail@jakub-kozlowski.com>
+
+=== Noise Trader Agent [agent/noise]
+* Implemented Noise Trader.
+
+=== Order Book [market/book]
+* Refactored OrderBook to accept single sided executions.
+
+=== Client API [market/client]
+* Added ability to send messages to Client API.
+* Added ability to build the order book to Client API.
+
+=== Market Agent [market/esma]
+* Unique ExecID is generated on each execution.
+
+== 2012-01-10: Release v0.4 - Jakub D Kozlowski <mail@jakub-kozlowski.com>
+
+=== Market Agent [market/esma]
+* Register Market Agent with DFService.
+
+=== Order Book [market/book]
+* Refactor Order Book into a separate module.
+
+=== Client API [market/client]
+* Implement SessionInitiator, Session and Application classes.
+
+== 2012-01-03: Release v0.3 - Jakub D Kozlowski <mail@jakub-kozlowski.com>
+
+=== Market Agent - Market Data Feed [market/esma]
+* Traders logon with Logon message.
+* Traders receive AddOrder/OrderExecuted/DeleteOrder messages for visible orders on the Order Book.
+
+=== Market Ontology [market/ontology]
+* Logon.
+* OrderCancelReject.
+* OrderCancelRequest.
+* AddOrder.
+* DeleteOrder.
+* OrderExecuted.
+
+== 2011-11-2: Release v0.2 -  Jakub D Kozlowski <mail@jakub-kozlowski.com>
+
+=== Market Ontology [market/ontology]
+* NewOrderSingle.
+* ExecutionReport.
+
+=== Market Agent [market/esma].
+* Accepts NewOrderSingle, enters Order to OrderBook and sends a confirmation ExecutionReport.
+
+=== jade-unit extension to JADE [jade-unit].
+* Allows creating unit tests for agent behaviours that run inside a in-memory Main JADE container.
+
+=== Project Plan.
+
+== 2011-11-2: Release v0.1.3 -  Jakub D Kozlowski <mail@jakub-kozlowski.com>
+* Implemented livelock simulation under demo/livelock.
+
+== 2011-10-31: Release v0.1.2 - Jakub D Kozlowski <mail@jakub-kozlowski.com>
+* Implemented deadlock simulation under demo/deadlock.
+
+== 2011-10-27: Release v0.1.1 - Jakub D Kozlowski <mail@jakub-kozlowski.com>
+* Consolidated eugene-hello and eugene-hello-dist into demo/hello-world.
+* Enabled maven-pax-plugin to allow running projects from IDE.
+* Added jade and jade-osgi sources to the repository.
+* Implemented message-passing simulation under demo/message-passing.
+
+== 2011-10-24: Release v0.1 -  Jakub D Kozlowski  <mail@jakub-kozlowski.com>
+* Enabled Maven
+* Created eugene-hello bundle with HelloAgent and HelloActivator (starts one HelloAgent agent).
+* Created eugene-hello-dist which creates a zip with eugene-hello bundle and all it's dependencies, along with equinox that is started with pax-runner.
+* Added jade-osgi-1.2.0.jar and added .repo to the list of repositories.
