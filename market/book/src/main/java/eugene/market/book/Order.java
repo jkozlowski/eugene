@@ -36,12 +36,12 @@ public class Order implements Comparable<Order> {
     /**
      * Indicates that there is no price.
      */
-    public static final Double NO_PRICE = new Double(0.0D);
+    public static final Double NO_PRICE = Double.valueOf(0.0D);
 
     /**
      * Indicates that there is no quantity.
      */
-    public static final Long NO_QTY = new Long(0L);
+    public static final Long NO_QTY = Long.valueOf(0L);
 
     private final Long entryTime;
 
@@ -58,11 +58,7 @@ public class Order implements Comparable<Order> {
     /**
      * Constructs an {@link Order} with {@link System#nanoTime()} <code>entryTime</code>.
      *
-     * @param orderID  new orderID.
-     * @param ordType  new ordType.
-     * @param side     new side.
-     * @param orderQty new orderQty.
-     * @param price    new price.
+     * @see {@link Order#Order(Long, Long, OrdType, Side, Long, Double)}.
      */
     public Order(final Long orderID, final OrdType ordType, final Side side,
                  final Long orderQty, final Double price) {
@@ -78,9 +74,17 @@ public class Order implements Comparable<Order> {
      * @param side      new side.
      * @param orderQty  new orderQty.
      * @param price     new price.
+     *
+     * @throws NullPointerException     if either parameter is null.
+     * @throws IllegalArgumentException if <code>ordQty</code> is <code><= 0</code>.
+     * @throws IllegalArgumentException if <code>ordType</code> is {@link OrdType#LIMIT} and <code>price</code> is
+     *                                  <code><= 0</code>, or if <code>ordType</code> is {@link OrdType#MARKET} and
+     *                                  <code>price</code> is <code>!= 0</code>.
      */
     public Order(final Long orderID, final Long entryTime, final OrdType ordType,
-                 final Side side, final Long orderQty, final Double price) {
+                 final Side side, final Long orderQty, final Double price)
+            throws NullPointerException, IllegalArgumentException {
+
         checkNotNull(orderID);
         checkNotNull(entryTime);
         checkNotNull(ordType);
@@ -154,9 +158,38 @@ public class Order implements Comparable<Order> {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        final Order order = (Order) o;
+
+        if (!entryTime.equals(order.entryTime)) return false;
+        if (!orderID.equals(order.orderID)) return false;
+        if (!ordType.equals(order.ordType)) return false;
+        if (!orderQty.equals(order.orderQty)) return false;
+        if (!price.equals(order.price)) return false;
+        if (side != order.side) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = entryTime.hashCode();
+        result = 31 * result + orderID.hashCode();
+        result = 31 * result + ordType.hashCode();
+        result = 31 * result + side.hashCode();
+        result = 31 * result + orderQty.hashCode();
+        result = 31 * result + price.hashCode();
+        return result;
+    }
+
+    @Override
     public int compareTo(Order o2) {
+
         checkNotNull(o2);
-        checkArgument(getSide().equals(o2.getSide()));
+        checkArgument(side.equals(o2.side));
 
         // Compare object references
         if (this == o2) {

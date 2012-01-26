@@ -6,6 +6,7 @@ import eugene.market.ontology.message.ExecutionReport;
 import eugene.market.ontology.message.Logon;
 import eugene.market.ontology.message.NewOrderSingle;
 import eugene.market.ontology.message.OrderCancelReject;
+import eugene.market.ontology.message.OrderCancelRequest;
 import eugene.market.ontology.message.data.AddOrder;
 import eugene.market.ontology.message.data.DeleteOrder;
 import eugene.market.ontology.message.data.OrderExecuted;
@@ -142,6 +143,21 @@ public class ProxyApplicationTest {
 
         verify(application1).fromApp(newOrderSingle, session);
         verify(application2).fromApp(newOrderSingle, session);
+        verifyNoMoreInteractions(application1, application2);
+    }
+
+    @Test
+    public void testFromAppOrderCancelRequest() {
+        final Application application1 = mock(Application.class);
+        final Application application2 = mock(Application.class);
+        final Session session = mock(Session.class);
+        final OrderCancelRequest orderCancelRequest = new OrderCancelRequest();
+        final ProxyApplication proxy = new ProxyApplication(application1, application2);
+
+        proxy.fromApp(orderCancelRequest, session);
+
+        verify(application1).fromApp(orderCancelRequest, session);
+        verify(application2).fromApp(orderCancelRequest, session);
         verifyNoMoreInteractions(application1, application2);
     }
 

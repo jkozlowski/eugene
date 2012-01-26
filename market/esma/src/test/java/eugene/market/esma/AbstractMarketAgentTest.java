@@ -4,6 +4,7 @@ import eugene.market.ontology.MarketOntology;
 import eugene.market.ontology.Message;
 import jade.core.Agent;
 import jade.core.Profile;
+import jade.core.behaviours.Behaviour;
 import jade.imtp.memory.MemoryProfile;
 import jade.util.Event;
 import jade.wrapper.AgentContainer;
@@ -66,5 +67,9 @@ public abstract class AbstractMarketAgentTest {
         traderEvent.waitUntilProcessed();
         return sendMessage.received.get();
     }
-
+    
+    public void submit(final Behaviour behaviour) throws StaleProxyException {
+        final Event traderEvent = new Event(-1, behaviour);
+        gatewayAgentController.putO2AObject(traderEvent, AgentController.ASYNC);
+    }
 }

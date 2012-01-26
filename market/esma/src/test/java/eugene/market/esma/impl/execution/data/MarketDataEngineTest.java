@@ -27,8 +27,8 @@ public class MarketDataEngineTest {
 
         marketDataEngine.newOrder(order);
 
-        assertThat(marketDataEngine.getMarketDataEvent(currentEventId), is(NewOrderEvent.class));
-        final NewOrderEvent newOrderEvent = (NewOrderEvent) marketDataEngine.getMarketDataEvent(currentEventId);
+        assertThat(marketDataEngine.getMarketDataEvent(currentEventId), is(MarketDataEvent.NewOrderEvent.class));
+        final MarketDataEvent.NewOrderEvent newOrderEvent = (MarketDataEvent.NewOrderEvent) marketDataEngine.getMarketDataEvent(currentEventId);
         assertThat(newOrderEvent.getEventId(), is(currentEventId));
         assertThat(newOrderEvent.getObject(), is(order));
     }
@@ -41,8 +41,8 @@ public class MarketDataEngineTest {
 
         marketDataEngine.execution(execution);
 
-        assertThat(marketDataEngine.getMarketDataEvent(currentEventId), is(ExecutionEvent.class));
-        final ExecutionEvent newOrderEvent = (ExecutionEvent) marketDataEngine.getMarketDataEvent(currentEventId);
+        assertThat(marketDataEngine.getMarketDataEvent(currentEventId), is(MarketDataEvent.ExecutionEvent.class));
+        final MarketDataEvent.ExecutionEvent newOrderEvent = (MarketDataEvent.ExecutionEvent) marketDataEngine.getMarketDataEvent(currentEventId);
         assertThat(newOrderEvent.getEventId(), is(currentEventId));
         assertThat(newOrderEvent.getObject(), is(execution));
     }
@@ -55,8 +55,8 @@ public class MarketDataEngineTest {
 
         marketDataEngine.cancel(orderStatus);
 
-        assertThat(marketDataEngine.getMarketDataEvent(currentEventId), is(CancelOrderEvent.class));
-        final CancelOrderEvent cancelOrderEvent = (CancelOrderEvent) marketDataEngine.getMarketDataEvent(currentEventId);
+        assertThat(marketDataEngine.getMarketDataEvent(currentEventId), is(MarketDataEvent.CancelOrderEvent.class));
+        final MarketDataEvent.CancelOrderEvent cancelOrderEvent = (MarketDataEvent.CancelOrderEvent) marketDataEngine.getMarketDataEvent(currentEventId);
         assertThat(cancelOrderEvent.getEventId(), is(currentEventId));
         assertThat(cancelOrderEvent.getObject(), is(orderStatus));
     }

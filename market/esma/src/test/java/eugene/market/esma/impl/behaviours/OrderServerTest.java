@@ -17,7 +17,7 @@ import static org.mockito.Mockito.mock;
 public class OrderServerTest {
 
     @Test(expectedExceptions = NullPointerException.class)
-    public void testConstructorNullActor() {
+    public void testConstructorNullAgent() {
         new OrderServer(null, defaultSymbol);
     }
 

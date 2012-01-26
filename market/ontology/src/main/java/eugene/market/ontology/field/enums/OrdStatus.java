@@ -28,4 +28,50 @@ public enum OrdStatus {
     public eugene.market.ontology.field.OrdStatus field() {
         return new eugene.market.ontology.field.OrdStatus(value);
     }
+
+    /**
+     * Checks if this {@link OrdStatus} is {@link OrdStatus#NEW}.
+     *
+     * @return <code>true</code> if this {@link OrdStatus} is {@link OrdStatus#NEW}, <code>false</code> otherwise.
+     */
+    public boolean isNew() {
+        return NEW.equals(this);
+    }
+
+    /**
+     * Checks if this {@link OrdStatus} is {@link OrdStatus#PARTIALLY_FILLED}.
+     *
+     * @return <code>true</code> if this {@link OrdStatus} is {@link OrdStatus#PARTIALLY_FILLED}, <code>false</code>
+     *         otherwise.
+     */
+    public boolean isPartiallyFilled() {
+        return PARTIALLY_FILLED.equals(this);
+    }
+
+    /**
+     * Checks if this {@link OrdStatus} is {@link OrdStatus#FILLED}.
+     *
+     * @return <code>true</code> if this {@link OrdStatus} is {@link OrdStatus#FILLED}, <code>false</code> otherwise.
+     */
+    public boolean isFilled() {
+        return FILLED.equals(this);
+    }
+
+    /**
+     * Checks if this {@link OrdStatus} is {@link OrdStatus#CANCELED}.
+     *
+     * @return <code>true</code> if this {@link OrdStatus} is {@link OrdStatus#CANCELED}, <code>false</code> otherwise.
+     */
+    public boolean isCanceled() {
+        return CANCELED.equals(this);
+    }
+
+    /**
+     * Checks if this {@link OrdStatus} is {@link OrdStatus#REJECTED}.
+     *
+     * @return <code>true</code> if this {@link OrdStatus} is {@link OrdStatus#REJECTED}, <code>false</code> otherwise.
+     */
+    public boolean isRejected() {
+        return REJECTED.equals(this);
+    }
 }

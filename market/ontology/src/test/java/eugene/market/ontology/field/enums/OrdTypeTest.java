@@ -34,15 +34,32 @@ public class OrdTypeTest {
         assertThat(OrdType.MARKET.isMarket(), is(true));
     }
     
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testGetOrdTypeNullNewOrderSingle() {
+        OrdType.getOrdType(null);
+    }
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testGetOrdTypeNullOrdType() {
+        OrdType.getOrdType(new NewOrderSingle());
+    }
+    
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testGetOrdTypeIllegalValue() {
+        final NewOrderSingle newOrderSingle = new NewOrderSingle();
+        newOrderSingle.setOrdType(new eugene.market.ontology.field.OrdType("Hello World!"));
+        OrdType.getOrdType(newOrderSingle);
+    }
+    
     @Test
-    public void getOrdTypeLimit() {
+    public void testGetOrdTypeLimit() {
         final NewOrderSingle newOrderSingle = new NewOrderSingle();
         newOrderSingle.setOrdType(new eugene.market.ontology.field.OrdType(eugene.market.ontology.field.OrdType.LIMIT));
         assertThat(OrdType.getOrdType(newOrderSingle), is(OrdType.LIMIT));
     }
 
     @Test
-    public void getOrdTypeMarket() {
+    public void testGetOrdTypeMarket() {
         final NewOrderSingle newOrderSingle = new NewOrderSingle();
         newOrderSingle.setOrdType(new eugene.market.ontology.field.OrdType(eugene.market.ontology.field.OrdType.MARKET));
         assertThat(OrdType.getOrdType(newOrderSingle), is(OrdType.MARKET));

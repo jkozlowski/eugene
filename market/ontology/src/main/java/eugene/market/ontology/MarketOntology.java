@@ -87,7 +87,7 @@ public final class MarketOntology extends BeanOntology {
             add(OrderExecuted.class, false);
         }
         catch (OntologyException e) {
-            new RuntimeException(e);
+            throw new RuntimeException(e);
         }
     }
 

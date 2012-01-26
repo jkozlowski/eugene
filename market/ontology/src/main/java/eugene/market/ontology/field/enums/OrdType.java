@@ -2,6 +2,8 @@ package eugene.market.ontology.field.enums;
 
 import eugene.market.ontology.message.NewOrderSingle;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Enum that mirrors {@link eugene.market.ontology.field.OrdType}.
  *
@@ -13,7 +15,7 @@ public enum OrdType {
     MARKET(eugene.market.ontology.field.OrdType.MARKET),
     LIMIT(eugene.market.ontology.field.OrdType.LIMIT);
 
-    public final String value;
+    private final String value;
 
     OrdType(final String value) {
         this.value = value;
@@ -43,9 +45,24 @@ public enum OrdType {
      * @param newOrderSingle order to get {@link OrdType} for.
      *
      * @return {@link OrdType} for this <code>newOrderSingle</code>
+     *
+     * @throws NullPointerException     if <code>newOrderSingle</code> or {@link NewOrderSingle#getOrdType()} are null.
+     * @throws IllegalArgumentException if value returned from {@link NewOrderSingle#getOrdType()} is invalid.
      */
-    public static OrdType getOrdType(final NewOrderSingle newOrderSingle) {
-        return MARKET.value.equals(newOrderSingle.getOrdType().getValue()) ? MARKET : LIMIT;
+    public static OrdType getOrdType(final NewOrderSingle newOrderSingle)
+            throws NullPointerException, IllegalArgumentException {
+
+        checkNotNull(newOrderSingle);
+        checkNotNull(newOrderSingle.getOrdType());
+
+        if (MARKET.value.equals(newOrderSingle.getOrdType().getValue())) {
+            return MARKET;
+        }
+        else if (LIMIT.value.equals(newOrderSingle.getOrdType().getValue())) {
+            return LIMIT;
+        }
+
+        throw new IllegalArgumentException();
     }
 
     /**

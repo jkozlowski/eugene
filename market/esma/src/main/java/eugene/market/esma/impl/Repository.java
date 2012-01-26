@@ -4,6 +4,7 @@ import eugene.market.book.Order;
 import eugene.market.ontology.field.ClOrdID;
 import eugene.market.ontology.message.Logon;
 import jade.core.AID;
+import jade.lang.acl.ACLMessage;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -16,7 +17,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Maintains the mapping between <code>{@link Order}s</code> and ({@link AID}, {@link ClOrdID}) pairs and a list of
- * {@link AID}s of traders that sent a {@link Logon} message..
+ * {@link AID}s of traders that sent a {@link Logon} message.
  *
  * @author Jakub D Kozlowski
  * @since 0.3
@@ -32,11 +33,11 @@ public class Repository {
     private final List<AID> publicAIDs = Collections.unmodifiableList(aids);
 
     /**
-     * Adds this <code>aid</code>.
+     * Adds this <code>aclMessage</code>.
      *
-     * @param aid aid to add.
+     * @param aid aclMessage to add.
      */
-    public void add(final AID aid) {
+    public synchronized void add(final AID aid) {
         checkNotNull(aid);
         aids.add(aid);
     }
@@ -46,7 +47,7 @@ public class Repository {
      *
      * @return the list of aids.
      */
-    public List<AID> getAIDs() {
+    public synchronized List<AID> getAIDs() {
         return publicAIDs;
     }
 
@@ -56,7 +57,7 @@ public class Repository {
      * @param order {@link Order} to put.
      * @param tuple {@link Tuple} to put.
      */
-    public void put(final Order order, final Tuple tuple) {
+    public synchronized void put(final Order order, final Tuple tuple) {
         checkNotNull(order);
         checkNotNull(tuple);
         orderTupleMap.put(order, tuple);
@@ -70,7 +71,7 @@ public class Repository {
      *
      * @return {@link Tuple} for this <code>order</code>.
      */
-    public Tuple get(final Order order) {
+    public synchronized Tuple get(final Order order) {
         return orderTupleMap.get(order);
     }
 
@@ -81,33 +82,33 @@ public class Repository {
      *
      * @return {@link Order} for this <code>tuple</code>.
      */
-    public Order get(final Tuple tuple) {
+    public synchronized Order get(final Tuple tuple) {
         return tupleOrderMap.get(tuple);
     }
 
     /**
-     * ({@link AID}, {@link ClOrdID}) pair.
+     * ({@link ACLMessage}, {@link ClOrdID}) pair.
      */
     public static final class Tuple {
 
-        private final AID aid;
+        private final ACLMessage aclMessage;
         private final String clOrdID;
 
-        public Tuple(final AID aid, final String clOrdID) {
-            checkNotNull(aid);
+        public Tuple(final ACLMessage aclMessage, final String clOrdID) {
+            checkNotNull(aclMessage);
             checkNotNull(clOrdID);
             checkArgument(!clOrdID.isEmpty());
-            this.aid = aid;
+            this.aclMessage = aclMessage;
             this.clOrdID = clOrdID;
         }
 
         /**
-         * Gets the aid.
+         * Gets the aclMessage.
          *
-         * @return the aid.
+         * @return the aclMessage.
          */
-        public AID getAID() {
-            return aid;
+        public ACLMessage getACLMessage() {
+            return aclMessage;
         }
 
         /**
@@ -126,7 +127,7 @@ public class Repository {
 
             final Tuple tuple = (Tuple) o;
 
-            if (!aid.equals(tuple.aid)) return false;
+            if (!aclMessage.getSender().equals(tuple.aclMessage.getSender())) return false;
             if (!clOrdID.equals(tuple.clOrdID)) return false;
 
             return true;
@@ -134,7 +135,7 @@ public class Repository {
 
         @Override
         public int hashCode() {
-            int result = aid.hashCode();
+            int result = aclMessage.getSender().hashCode();
             result = 31 * result + clOrdID.hashCode();
             return result;
         }

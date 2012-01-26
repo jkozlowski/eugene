@@ -2,9 +2,11 @@ package eugene.market.esma.impl.execution;
 
 import eugene.market.book.Order;
 import eugene.market.book.OrderStatus;
+import eugene.market.ontology.field.enums.OrdType;
 import org.testng.annotations.Test;
 
 import static eugene.market.book.MockOrders.buy;
+import static eugene.market.book.MockOrders.ordType;
 import static eugene.market.book.MockOrders.order;
 import static eugene.market.book.MockOrders.sell;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -37,7 +39,7 @@ public class ExecutionTest {
     public void testConstructorNullExecID() {
         new Execution(null, BUY_ORDER_STATUS, SELL_ORDER_STATUS, price, quantity);
     }
-    
+
     @Test(expectedExceptions = NullPointerException.class)
     public void testConstructorNullBuyExecutionReport() {
         new Execution(execID, null, SELL_ORDER_STATUS, price, quantity);
@@ -54,8 +56,14 @@ public class ExecutionTest {
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testConstructorSellExecutionReportOrderSell() {
+    public void testConstructorSameSide() {
         new Execution(execID, BUY_ORDER_STATUS, BUY_ORDER_STATUS, price, quantity);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testConstructorLimitNotLimit() {
+        new Execution(execID, SELL_ORDER_STATUS, new OrderStatus(order(ordType(buy(), OrdType.MARKET))), price,
+                      quantity);
     }
 
     @Test(expectedExceptions = NullPointerException.class)
@@ -77,7 +85,7 @@ public class ExecutionTest {
     public void testConstructorNoQuantity() {
         new Execution(execID, BUY_ORDER_STATUS, SELL_ORDER_STATUS, price, Order.NO_QTY);
     }
-    
+
     @Test
     public void testGetExecID() {
         assertThat(EXECUTION.getExecID(), sameInstance(execID));
@@ -85,12 +93,12 @@ public class ExecutionTest {
 
     @Test
     public void testGetBuyOrderExecutionReport() {
-        assertThat(EXECUTION.getBuyOrderStatus(), sameInstance(BUY_ORDER_STATUS));
+        assertThat(EXECUTION.getNewOrderStatus(), sameInstance(BUY_ORDER_STATUS));
     }
 
     @Test
     public void testGetSellOrderExecutionReport() {
-        assertThat(EXECUTION.getSellOrderStatus(), sameInstance(SELL_ORDER_STATUS));
+        assertThat(EXECUTION.getLimitOrderStatus(), sameInstance(SELL_ORDER_STATUS));
     }
 
     @Test

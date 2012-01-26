@@ -6,10 +6,13 @@ import eugene.market.esma.impl.Repository.Tuple;
 import eugene.market.esma.impl.execution.Execution;
 import eugene.market.ontology.field.enums.ExecType;
 import eugene.market.ontology.field.enums.OrdStatus;
+import eugene.market.ontology.field.enums.OrdType;
 import eugene.market.ontology.message.ExecutionReport;
+import eugene.market.ontology.message.data.AddOrder;
 import eugene.market.ontology.message.data.DeleteOrder;
 import eugene.market.ontology.message.data.OrderExecuted;
-import jade.core.AID;
+import jade.lang.acl.ACLMessage;
+import org.hamcrest.CoreMatchers;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -17,8 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static eugene.market.book.MockOrders.buy;
+import static eugene.market.book.MockOrders.ordType;
 import static eugene.market.book.MockOrders.order;
 import static eugene.market.book.MockOrders.sell;
+import static eugene.market.esma.impl.Messages.addOrder;
 import static eugene.market.esma.impl.Messages.deleteOrder;
 import static eugene.market.esma.impl.Messages.executionReport;
 import static eugene.market.esma.impl.Messages.orderExecuted;
@@ -38,7 +43,7 @@ import static org.mockito.Mockito.mock;
  */
 public class MessagesTest {
 
-    public static final Tuple defaultTuple = new Tuple(mock(AID.class), defaultClOrdID);
+    public static final Tuple defaultTuple = new Tuple(mock(ACLMessage.class), defaultClOrdID);
 
     public static final String ORDER_STATUS_PROVIDER = "order-status-provider";
 
@@ -53,18 +58,16 @@ public class MessagesTest {
         final OrderStatus newOrderStatus = new OrderStatus(order);
         orders.add(new OrderStatus[]{newOrderStatus});
 
-        final OrderStatus partiallyFilledOrderStatus = new OrderStatus(order, defaultPrice,
-                                                                       defaultOrdQty - 1L,
-                                                                       1L);
+        final OrderStatus partiallyFilledOrderStatus = new OrderStatus(order, defaultPrice, defaultOrdQty - 1L,
+                                                                       1L, OrdStatus.NEW);
         orders.add(new OrderStatus[]{partiallyFilledOrderStatus});
 
-        final OrderStatus filledOrderStatus = new OrderStatus(order, defaultPrice, 0L,
-                                                              defaultOrdQty);
+        final OrderStatus filledOrderStatus = new OrderStatus(order, defaultPrice, 0L, defaultOrdQty, OrdStatus.NEW);
         orders.add(new OrderStatus[]{filledOrderStatus});
 
         return orders.toArray(new OrderStatus[][]{});
     }
-    
+
     @Test(expectedExceptions = UnsupportedOperationException.class)
     public void testConstructor() {
         new Messages();
@@ -130,8 +133,8 @@ public class MessagesTest {
     public void testOrderExecuted() {
         final Order buy = order(buy());
         final Order sell = order(sell());
-        final OrderStatus buyOrderStatus = new OrderStatus(buy, defaultPrice, defaultOrdQty - 2L, 2L);
-        final OrderStatus sellOrderStatus = new OrderStatus(sell, defaultPrice, defaultOrdQty - 1L, 1L);
+        final OrderStatus buyOrderStatus = new OrderStatus(buy, defaultPrice, defaultOrdQty - 2L, 2L, OrdStatus.NEW);
+        final OrderStatus sellOrderStatus = new OrderStatus(sell, defaultPrice, defaultOrdQty - 1L, 1L, OrdStatus.NEW);
         final Execution execution = new Execution(execID, buyOrderStatus, sellOrderStatus, defaultPrice,
                                                   defaultOrdQty - 1L);
 
@@ -155,5 +158,34 @@ public class MessagesTest {
         final OrderStatus orderStatus = new OrderStatus(order);
         final DeleteOrder deleteOrder = deleteOrder(orderStatus);
         assertThat(deleteOrder.getOrderID().getValue(), is(order.getOrderID().toString()));
+    }
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testAddOrderNullOrder() {
+        addOrder(null, defaultSymbol);
+    }
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testAddOrderNullSymbol() {
+        addOrder(mock(OrderStatus.class), null);
+    }
+
+    @Test
+    public void testAddOrder() {
+        final Order buy = order(buy());
+        final OrderStatus orderStatus = new OrderStatus(buy).execute(defaultPrice, defaultOrdQty - 1L);
+        final AddOrder addOrder = addOrder(orderStatus, defaultSymbol);
+        assertThat(addOrder.getOrderID().getValue(), CoreMatchers.is(buy.getOrderID().toString()));
+        assertThat(addOrder.getOrderQty().getValue(), CoreMatchers.is(orderStatus.getLeavesQty()));
+        assertThat(addOrder.getPrice().getValue(), CoreMatchers.is(buy.getPrice()));
+        assertThat(addOrder.getSide(), CoreMatchers.is(buy.getSide().field()));
+        assertThat(addOrder.getSymbol().getValue(), CoreMatchers.is(defaultSymbol));
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testAddOrderMarketOrder() {
+        final Order buy = order(ordType(buy(), OrdType.MARKET));
+        final OrderStatus orderStatus = new OrderStatus(buy);
+        addOrder(orderStatus, defaultSymbol);
     }
 }

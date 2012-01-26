@@ -3,10 +3,12 @@ package eugene.market.book.impl;
 import eugene.market.book.Order;
 import eugene.market.book.OrderBook;
 import eugene.market.book.OrderStatus;
+import eugene.market.ontology.field.enums.OrdType;
 import eugene.market.ontology.field.enums.Side;
 import org.testng.annotations.Test;
 
 import static eugene.market.book.MockOrders.buy;
+import static eugene.market.book.MockOrders.ordType;
 import static eugene.market.book.MockOrders.order;
 import static eugene.market.book.MockOrders.orderQty;
 import static eugene.market.book.MockOrders.sell;
@@ -49,6 +51,24 @@ public class DefaultOrderBookTest {
         orderBook.insert(null);
     }
 
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testInsertNullOrderStatus() {
+        final OrderBook orderBook = new DefaultOrderBook();
+        orderBook.insert(order(buy()), null);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testInsertOrderStatusOfDifferentOrder() {
+        final OrderBook orderBook = new DefaultOrderBook();
+        orderBook.insert(order(buy()), new OrderStatus(order(buy())));
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testInsertMarket() {
+        final OrderBook orderBook = new DefaultOrderBook();
+        orderBook.insert(order(buy()), new OrderStatus(order(ordType(buy(), OrdType.MARKET))));
+    }
+
     @Test
     public void testInsertLimitBuy() {
         final OrderBook orderBook = new DefaultOrderBook();
@@ -84,7 +104,7 @@ public class DefaultOrderBookTest {
         assertThat(orderStatus, sameInstance(orderBook.getOrderStatus(sell)));
         assertThat(orderStatus.isEmpty(), is(true));
     }
-    
+
     @Test(expectedExceptions = NullPointerException.class)
     public void testInsertPartiallyExecutedNullOrderStatus() {
         new DefaultOrderBook().insert(order(sell()), null);

@@ -9,23 +9,37 @@ package eugene.market.esma.impl.execution.data;
 public interface MarketDataEventHandler {
 
     /**
-     * Handles {@link NewOrderEvent}.
+     * Handles {@link MarketDataEvent.NewOrderEvent}.
      *
-     * @param newOrderEvent {@link NewOrderEvent} to handle.
+     * @param newOrderEvent {@link MarketDataEvent.NewOrderEvent} to handle.
      */
-    public void handle(final NewOrderEvent newOrderEvent);
+    public void handle(final MarketDataEvent.NewOrderEvent newOrderEvent);
 
     /**
-     * Handles {@link ExecutionEvent}.
+     * Handles {@link MarketDataEvent.RejectOrderEvent}.
      *
-     * @param executionEvent {@link ExecutionEvent} to handle.
+     * @param rejectOrderEvent {@link MarketDataEvent.RejectOrderEvent} to handle.
      */
-    public void handle(final ExecutionEvent executionEvent);
+    public void handle(final MarketDataEvent.RejectOrderEvent rejectOrderEvent);
 
     /**
-     * Handles {@link CancelOrderEvent}.
+     * Handles {@link MarketDataEvent.AddOrderEvent}.
      *
-     * @param cancelOrderEvent {@link CancelOrderEvent} to handle.
+     * @param addOrderEvent {@link MarketDataEvent.AddOrderEvent} to handle.
      */
-    public void handle(final CancelOrderEvent cancelOrderEvent);
+    public void handle(final MarketDataEvent.AddOrderEvent addOrderEvent);
+
+    /**
+     * Handles {@link MarketDataEvent.ExecutionEvent}.
+     *
+     * @param executionEvent {@link MarketDataEvent.ExecutionEvent} to handle.
+     */
+    public void handle(final MarketDataEvent.ExecutionEvent executionEvent);
+
+    /**
+     * Handles {@link MarketDataEvent.CancelOrderEvent}.
+     *
+     * @param cancelOrderEvent {@link MarketDataEvent.CancelOrderEvent} to handle.
+     */
+    public void handle(final MarketDataEvent.CancelOrderEvent cancelOrderEvent);
 }

@@ -1,6 +1,7 @@
 package eugene.market.esma.impl;
 
 import com.google.common.annotations.VisibleForTesting;
+import eugene.market.book.Order;
 import eugene.market.book.OrderStatus;
 import eugene.market.esma.impl.Repository.Tuple;
 import eugene.market.esma.impl.execution.Execution;
@@ -12,14 +13,18 @@ import eugene.market.ontology.field.LastPx;
 import eugene.market.ontology.field.LastQty;
 import eugene.market.ontology.field.LeavesQty;
 import eugene.market.ontology.field.OrderID;
+import eugene.market.ontology.field.OrderQty;
+import eugene.market.ontology.field.Price;
 import eugene.market.ontology.field.Symbol;
 import eugene.market.ontology.field.TradeID;
 import eugene.market.ontology.field.enums.ExecType;
 import eugene.market.ontology.field.enums.OrdStatus;
 import eugene.market.ontology.message.ExecutionReport;
+import eugene.market.ontology.message.data.AddOrder;
 import eugene.market.ontology.message.data.DeleteOrder;
 import eugene.market.ontology.message.data.OrderExecuted;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -104,5 +109,31 @@ public final class Messages {
         final DeleteOrder deleteOrder = new DeleteOrder();
         deleteOrder.setOrderID(new OrderID(orderStatus.getOrder().getOrderID().toString()));
         return deleteOrder;
+    }
+
+    /**
+     * Gets an instance of {@link AddOrder} constructed from this {@link OrderStatus} and <code>symbol</code>.
+     *
+     * @param orderStatus instance of {@link OrderStatus} to initialize this {@link AddOrder} with.
+     * @param symbol      symbol for this {@link Order}.
+     *
+     * @return {@link AddOrder} initialized from this {@link Order} and <code>symbol</code>.
+     */
+    public static AddOrder addOrder(final OrderStatus orderStatus, final String symbol) {
+
+        checkNotNull(orderStatus);
+        checkArgument(orderStatus.getOrder().getOrdType().isLimit());
+        checkNotNull(symbol);
+
+        final Order order = orderStatus.getOrder();
+
+        final AddOrder addOrder = new AddOrder();
+        addOrder.setOrderID(new OrderID(order.getOrderID().toString()));
+        addOrder.setOrderQty(new OrderQty(orderStatus.getLeavesQty()));
+        addOrder.setPrice(new Price(order.getPrice()));
+        addOrder.setSide(order.getSide().field());
+        addOrder.setSymbol(new Symbol(symbol));
+
+        return addOrder;
     }
 }

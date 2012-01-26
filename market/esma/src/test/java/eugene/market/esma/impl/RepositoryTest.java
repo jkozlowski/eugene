@@ -1,8 +1,9 @@
 package eugene.market.esma.impl;
 
-import eugene.market.esma.impl.Repository.Tuple;
 import eugene.market.book.Order;
+import eugene.market.esma.impl.Repository.Tuple;
 import jade.core.AID;
+import jade.lang.acl.ACLMessage;
 import org.testng.annotations.Test;
 
 import static eugene.market.book.MockOrders.buy;
@@ -12,6 +13,7 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Tests {@link Repository}.
@@ -22,8 +24,10 @@ import static org.mockito.Mockito.mock;
 public class RepositoryTest {
     
     private static final AID aid = mock(AID.class);
+    
+    private static final ACLMessage aclMessage = when(mock(ACLMessage.class).getSender()).thenReturn(aid).getMock();
 
-    private static final Tuple tuple = new Tuple(aid, TupleTest.clOrdID);
+    private static final Tuple tuple = new Tuple(aclMessage, TupleTest.clOrdID);
     
     @Test(expectedExceptions = NullPointerException.class)
     public void testAddNullAid() {
@@ -64,7 +68,7 @@ public class RepositoryTest {
     public void testPutGetWithAnotherTuple() {
         final Repository repository = new Repository();
         final Order order = order(buy());
-        final Tuple tupleCopy = new Tuple(aid, TupleTest.clOrdID);
+        final Tuple tupleCopy = new Tuple(aclMessage, TupleTest.clOrdID);
         repository.put(order, tuple);
         assertThat(repository.get(order), sameInstance(tuple));
         assertThat(repository.get(tupleCopy), sameInstance(order));

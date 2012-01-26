@@ -127,7 +127,7 @@ public class PlaceOrderBehaviour extends TickerBehaviour {
      */
     private Long getOrderQty() {
         final int additive = generator.nextInt(MAX_ORDER_QTY - MIN_ORDER_QTY);
-        return new Long(MIN_ORDER_QTY + additive);
+        return Long.valueOf(MIN_ORDER_QTY + additive);
     }
 
     /**

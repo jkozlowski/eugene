@@ -72,12 +72,11 @@ public class MarketAgent extends Agent {
 
 
             final OrderServer orderServer = new OrderServer(this, executionEngine, repository, symbol);
-
             final ThreadedBehaviourFactory factory = new ThreadedBehaviourFactory();
+            final MarketDataServer dataServer = new MarketDataServer(this, executionEngine.getMarketDataEngine(),
+                                                                     repository, symbol);
             addBehaviour(new OntologyServer(this, MarketOntology.getInstance(), REQUEST, orderServer));
-            addBehaviour(factory.wrap(new MarketDataServer(this, executionEngine.getMarketDataEngine(),
-                                                                       repository, 
-                                                      symbol)));
+            addBehaviour(factory.wrap(dataServer));
         }
         catch (FIPAException e) {
             e.printStackTrace();
@@ -87,7 +86,7 @@ public class MarketAgent extends Agent {
 
     /**
      * Gets an instance of a {@link Codec} used by {@link MarketAgent}s.
-     * 
+     *
      * @return instance of {@link Codec}.
      */
     public static Codec getCodec() {

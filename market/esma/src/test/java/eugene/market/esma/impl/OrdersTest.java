@@ -1,43 +1,49 @@
 package eugene.market.esma.impl;
 
 import eugene.market.book.Order;
-import eugene.market.ontology.message.data.AddOrder;
+import eugene.market.esma.impl.Orders.NewOrderSingleValidationException;
+import eugene.market.esma.impl.execution.ExecutionEngine;
+import eugene.market.ontology.field.enums.OrdType;
+import eugene.market.ontology.message.NewOrderSingle;
 import org.testng.annotations.Test;
 
-import static eugene.market.book.MockOrders.buy;
-import static eugene.market.book.MockOrders.order;
-import static eugene.market.esma.impl.Orders.addOrder;
-import static eugene.market.ontology.Defaults.defaultSymbol;
-import static org.hamcrest.CoreMatchers.is;
+import static eugene.market.esma.MockMessages.newOrderSingle;
+import static eugene.market.esma.impl.Orders.newOrder;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 
 /**
  * Tests {@link Orders}.
  *
  * @author Jakub D Kozlowski
- * @since 0.3
+ * @since 0.6
  */
 public class OrdersTest {
+    
+    @Test(expectedExceptions = NewOrderSingleValidationException.class)
+    public void testNewOrderNullExecutionEngine() throws NewOrderSingleValidationException {
+        newOrder(null, mock(NewOrderSingle.class));
+    }
 
-    @Test(expectedExceptions = NullPointerException.class)
-    public void testAddOrderNullOrder() {
-        addOrder(null, defaultSymbol);
+    @Test(expectedExceptions = NewOrderSingleValidationException.class)
+    public void testNewOrderNullNewOrderSingle() throws NewOrderSingleValidationException {
+        newOrder(new ExecutionEngine(), null);
     }
-    
-    @Test(expectedExceptions = NullPointerException.class)
-    public void testAddOrderNullSymbol() {
-        addOrder(mock(Order.class), null);
-    }
-    
+
     @Test
-    public void testAddOrder() {
-        final Order buy = order(buy());
-        final AddOrder addOrder = addOrder(buy, defaultSymbol);
-        assertThat(addOrder.getOrderID().getValue(), is(buy.getOrderID().toString()));
-        assertThat(addOrder.getOrderQty().getValue(), is(buy.getOrderQty()));
-        assertThat(addOrder.getPrice().getValue(), is(buy.getPrice()));
-        assertThat(addOrder.getSide(), is(buy.getSide().field()));
-        assertThat(addOrder.getSymbol().getValue(), is(defaultSymbol));
+    public void testNewOrderNullPrice() throws NewOrderSingleValidationException {
+        final NewOrderSingle newOrderSingle = newOrderSingle();
+        newOrderSingle.setOrdType(OrdType.MARKET.field());
+        newOrderSingle.setPrice(null);
+        
+        final ExecutionEngine executionEngine = new ExecutionEngine();
+        
+        final Order order = newOrder(executionEngine, newOrderSingle);
+        assertThat(order.getOrderQty(), is(newOrderSingle.getOrderQty().getValue()));
+        assertThat(order.getPrice(), is(Order.NO_PRICE));
+        assertThat(order.getOrderID(), is(executionEngine.getOrderID() - 1L));
+        assertThat(order.getOrdType(), is(OrdType.MARKET));
+        assertThat(order.getSide().field(), is(newOrderSingle.getSide()));
     }
 }

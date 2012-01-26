@@ -20,6 +20,7 @@
     <modules>
         <module>ontology</module>
         <module>esma</module>
+        <module>integration</module>
         <module>book</module>
         <module>client</module>
     </modules>

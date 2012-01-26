@@ -24,7 +24,6 @@ import eugene.market.ontology.message.NewOrderSingle;
 import eugene.market.ontology.message.OrderCancelReject;
 import eugene.market.ontology.message.OrderCancelRequest;
 import jade.content.onto.basic.Action;
-import jade.core.AID;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 import jade.util.Logger;
@@ -37,7 +36,7 @@ import static jade.lang.acl.ACLMessage.INFORM;
 import static jade.lang.acl.ACLMessage.REFUSE;
 
 /**
- * Methods for accepting {@link Message}s for execution.
+ * Accepts {@link Message}s for execution.
  *
  * @author Jakub D Kozlowski
  * @since 0.2
@@ -93,22 +92,12 @@ public class OrderServer {
      * @param request        original message.
      */
     public void serveNewOrderSingleRequest(final NewOrderSingle newOrderSingle, final ACLMessage request) {
+
         try {
-            
-            System.out.println("Queue size: " + agent.getCurQueueSize());
-            final Order order = newOrder(newOrderSingle);
-
-            final OrderStatus orderStatus = executionEngine.insertOrder(order);
-
-            if (null == orderStatus) {
-                rejectOrder(newOrderSingle, request);
-            }
-            else {
-                final AID aid = request.getSender();
-                final String clOrdID = newOrderSingle.getClOrdID().getValue();
-                repository.put(order, new Tuple(aid, clOrdID));
-                acceptOrder(orderStatus, newOrderSingle, request);
-            }
+            final Order newOrder = newOrder(executionEngine, newOrderSingle);
+            final String clOrdID = newOrderSingle.getClOrdID().getValue();
+            repository.put(newOrder, new Tuple(request, clOrdID));
+            executionEngine.execute(newOrder);
         }
         catch (NewOrderSingleValidationException e) {
             rejectOrder(newOrderSingle, request);
@@ -124,7 +113,7 @@ public class OrderServer {
     public void serveOrderCancelRequestRequest(final OrderCancelRequest orderCancelRequest, final ACLMessage request) {
 
         try {
-            final Tuple tuple = new Tuple(request.getSender(), orderCancelRequest.getClOrdID().getValue());
+            final Tuple tuple = new Tuple(request, orderCancelRequest.getClOrdID().getValue());
             final Order order = repository.get(tuple);
 
             if (null == order) {
@@ -138,8 +127,6 @@ public class OrderServer {
                 rejectCancel(orderCancelRequest, request);
                 return;
             }
-
-            cancelOrder(orderStatus, tuple, request);
         }
         catch (IllegalArgumentException e) {
             rejectCancel(orderCancelRequest, request);
@@ -169,30 +156,6 @@ public class OrderServer {
     }
 
     /**
-     * Sends an {@link ExecutionReport} with {@link ExecType#NEW}.
-     *
-     * @param orderStatus    orderStatus to send the {@link ExecutionReport} about.
-     * @param newOrderSingle {@link NewOrderSingle} from the <code>request</code>.
-     * @param request        original request.
-     */
-    private void acceptOrder(final OrderStatus orderStatus, final NewOrderSingle newOrderSingle,
-                             final ACLMessage request) {
-
-        final ExecutionReport executionReport = new ExecutionReport();
-        executionReport.setAvgPx(new AvgPx(orderStatus.getAvgPx()));
-        executionReport.setExecType(ExecType.NEW.field());
-        executionReport.setOrdStatus(OrdStatus.NEW.field());
-        executionReport.setLeavesQty(new LeavesQty(orderStatus.getLeavesQty()));
-        executionReport.setCumQty(new CumQty(orderStatus.getCumQty()));
-        executionReport.setOrderID(new OrderID(orderStatus.getOrder().getOrderID().toString()));
-        executionReport.setClOrdID(new ClOrdID(newOrderSingle.getClOrdID().getValue()));
-        executionReport.setSide(orderStatus.getOrder().getSide().field());
-        executionReport.setSymbol(new Symbol(symbol));
-
-        send(request, executionReport);
-    }
-
-    /**
      * Sends an {@link ExecutionReport} with {@link ExecType#REJECTED}.
      *
      * @param newOrderSingle {@link NewOrderSingle} from the <code>request</code>.
@@ -209,29 +172,6 @@ public class OrderServer {
         executionReport.setOrderID(new OrderID(newOrderSingle.getClOrdID().getValue()));
         executionReport.setClOrdID(new ClOrdID(newOrderSingle.getClOrdID().getValue()));
         executionReport.setSide(newOrderSingle.getSide());
-        executionReport.setSymbol(new Symbol(symbol));
-
-        send(request, executionReport);
-    }
-
-    /**
-     * Sends an {@link ExecutionReport} with this {@link ExecType#CANCELED}.
-     *
-     * @param orderStatus {@link OrderStatus} of cancelled order.
-     * @param tuple       {@link Tuple} for this {@link OrderStatus}.
-     * @param request     original request.
-     */
-    private void cancelOrder(final OrderStatus orderStatus, final Tuple tuple, final ACLMessage request) {
-
-        final ExecutionReport executionReport = new ExecutionReport();
-        executionReport.setAvgPx(new AvgPx(Order.NO_PRICE));
-        executionReport.setExecType(ExecType.REJECTED.field());
-        executionReport.setOrdStatus(OrdStatus.REJECTED.field());
-        executionReport.setLeavesQty(new LeavesQty(orderStatus.getLeavesQty()));
-        executionReport.setCumQty(new CumQty(Order.NO_QTY));
-        executionReport.setOrderID(new OrderID(orderStatus.getOrder().getOrderID().toString()));
-        executionReport.setClOrdID(new ClOrdID(tuple.getClOrdID()));
-        executionReport.setSide(orderStatus.getOrder().getSide().field());
         executionReport.setSymbol(new Symbol(symbol));
 
         send(request, executionReport);
@@ -307,7 +247,6 @@ public class OrderServer {
             final ACLMessage aclMessage = originalRequest.createReply();
             aclMessage.setOntology(MarketOntology.getInstance().getName());
             aclMessage.setLanguage(MarketOntology.LANGUAGE);
-            aclMessage.addReceiver(originalRequest.getSender());
             agent.getContentManager().fillContent(aclMessage, a);
             return aclMessage;
         }

@@ -5,6 +5,7 @@ import eugene.market.ontology.message.ExecutionReport;
 import eugene.market.ontology.message.Logon;
 import eugene.market.ontology.message.NewOrderSingle;
 import eugene.market.ontology.message.OrderCancelReject;
+import eugene.market.ontology.message.OrderCancelRequest;
 import eugene.market.ontology.message.data.AddOrder;
 import eugene.market.ontology.message.data.DeleteOrder;
 import eugene.market.ontology.message.data.OrderExecuted;
@@ -76,4 +77,12 @@ public interface Application {
      * @param session        {@link Session} that will send this <code>newOrderSingle</code>.
      */
     void fromApp(final NewOrderSingle newOrderSingle, final Session session);
+
+    /**
+     * This callback receives {@link OrderCancelRequest} before it is sent.
+     *
+     * @param orderCancelRequest {@link OrderCancelRequest} to send.
+     * @param session            {@link Session} that will send this <code>orderCancelRequest</code>.
+     */
+    void fromApp(final OrderCancelRequest orderCancelRequest, final Session session);
 }

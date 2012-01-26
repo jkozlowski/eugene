@@ -7,6 +7,7 @@ import eugene.market.ontology.field.ClOrdID;
 import eugene.market.ontology.field.Symbol;
 import eugene.market.ontology.message.Logon;
 import eugene.market.ontology.message.NewOrderSingle;
+import eugene.market.ontology.message.OrderCancelRequest;
 import jade.content.onto.basic.Action;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
@@ -85,4 +86,17 @@ public interface Session {
      *                                  is not null.
      */
     void send(final NewOrderSingle newOrderSingle) throws NullPointerException, IllegalArgumentException;
+
+    /**
+     * Sends this <code>orderCancelRequest</code>. {@link Symbol} will be set to the symbol handled by this {@link
+     * Session}.
+     *
+     * @param orderCancelRequest {@link OrderCancelRequest} to send.
+     *
+     * @throws NullPointerException     if <code>orderCancelRequest</code> is null.
+     * @throws IllegalArgumentException if {@link OrderCancelRequest#getSymbol()} is not null and it is not equal to
+     *                                  the symbol handled by this {@link Session} or {@link
+     *                                  OrderCancelRequest#getClOrdID()} is not null.
+     */
+    void send(final OrderCancelRequest orderCancelRequest) throws NullPointerException, IllegalArgumentException;
 }

@@ -10,6 +10,7 @@ import eugene.market.ontology.field.ClOrdID;
 import eugene.market.ontology.field.Symbol;
 import eugene.market.ontology.message.Logon;
 import eugene.market.ontology.message.NewOrderSingle;
+import eugene.market.ontology.message.OrderCancelRequest;
 import jade.content.ContentElement;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.OntologyException;
@@ -42,7 +43,7 @@ public final class DefaultSession implements Session {
     private final Application application;
 
     private final String symbol;
-    
+
     private final AtomicLong curClOrdID = new AtomicLong(1);
 
     /**
@@ -150,7 +151,7 @@ public final class DefaultSession implements Session {
      * {@inheritDoc}
      */
     @Override
-    public void send(final NewOrderSingle newOrderSingle) {
+    public void send(final NewOrderSingle newOrderSingle) throws NullPointerException, IllegalArgumentException {
         checkNotNull(newOrderSingle);
         checkArgument(null == newOrderSingle.getSymbol() || symbol.equals(newOrderSingle.getSymbol().getValue()));
         checkArgument(null == newOrderSingle.getClOrdID());
@@ -160,11 +161,20 @@ public final class DefaultSession implements Session {
         agent.send(aclRequest(newOrderSingle));
     }
 
+    @Override
+    public void send(OrderCancelRequest orderCancelRequest) throws NullPointerException, IllegalArgumentException {
+        checkNotNull(orderCancelRequest);
+        checkArgument(null == orderCancelRequest.getSymbol() || symbol.equals(orderCancelRequest.getSymbol().getValue()));
+        orderCancelRequest.setSymbol(new Symbol(symbol));
+        application.fromApp(orderCancelRequest, this);
+        agent.send(aclRequest(orderCancelRequest));
+    }
+
     @VisibleForTesting
     public Long getCurClOrdID() {
         return curClOrdID.get();
     }
-    
+
     private ClOrdID getClOrdID() {
         final StringBuilder b = new StringBuilder(agent.getAID().getName());
         b.append(curClOrdID.getAndIncrement());

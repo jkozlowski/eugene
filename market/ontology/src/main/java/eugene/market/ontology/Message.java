@@ -3,7 +3,6 @@ package eugene.market.ontology;
 import jade.content.AgentAction;
 import jade.content.onto.annotations.SuppressSlot;
 
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.TreeMap;
 
@@ -16,15 +15,7 @@ import java.util.TreeMap;
  */
 public abstract class Message implements AgentAction {
 
-    private final TreeMap<Integer, Field<?>> fields = new TreeMap<Integer, Field<?>>(fieldComparator);
-
-    public static final Comparator<Integer> fieldComparator = new Comparator<Integer>() {
-
-        @Override
-        public int compare(Integer i, Integer i1) {
-            return (i > i1 ? -1 : (i == i1 ? 0 : 1));
-        }
-    };
+    private final TreeMap<Integer, Field<?>> fields = new TreeMap<Integer, Field<?>>();
 
     /**
      * Sets the {@link Field} with this <code>tag</code>.

@@ -5,10 +5,10 @@ import eugene.market.book.Order;
 import eugene.market.book.OrderBook;
 import eugene.market.book.OrderStatus;
 import eugene.market.book.impl.DefaultOrderBook;
-import eugene.market.esma.impl.Orders;
 import eugene.market.esma.impl.execution.MatchingEngine.MatchingResult;
 import eugene.market.esma.impl.execution.data.MarketDataEngine;
-import eugene.market.ontology.field.enums.Side;
+import eugene.market.ontology.field.OrderID;
+import eugene.market.ontology.field.enums.OrdType;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -34,9 +34,7 @@ public class ExecutionEngine {
 
     private final AtomicLong curExecID = new AtomicLong(1L);
 
-    private long messagesReceived = 0;
-
-    private long lastNewOrderTime = System.currentTimeMillis();
+    private final AtomicLong curOrderID = new AtomicLong(1L);
 
     /**
      * Constructs a {@link ExecutionEngine} that will use {@link InsertionValidator}, {@link
@@ -73,27 +71,63 @@ public class ExecutionEngine {
     }
 
     /**
-     * Inserts this <code>order</code> into the {@link OrderBook}.
+     * Executes this <code>newOrder</code>.
      *
-     * @param order order to insert.
+     * Quantity not executed is is dealt with differently, depending on the <code>ordType</code>:
+     * <ul>
+     * <li>If {@link OrdType#MARKET}</li> the quantity not executed is cancelled.</li>
+     * <li>If {@link OrdType#LIMIT} the quantity not executed is put on the {@link OrderBook}</li>
+     * </ul>
      *
-     * @return <code>true</code> if insertion was successful, <code>null</code> otherwise.
+     * @return final status of this {@link Order}.
      */
-    public OrderStatus insertOrder(final Order order) {
+    public OrderStatus execute(final Order newOrder) {
 
-        checkNotNull(order);
+        checkNotNull(newOrder);
 
-        if (!insertionValidator.validate(orderBook, order)) {
-            return null;
+        OrderStatus newOrderStatus = new OrderStatus(newOrder);
+
+        if (!insertionValidator.validate(orderBook, newOrder)) {
+            marketDataEngine.reject(newOrder);
+            return newOrderStatus.reject();
         }
 
-        final OrderStatus orderStatus = orderBook.insert(order);
+        marketDataEngine.newOrder(newOrder);
 
-        marketDataEngine.newOrder(order);
+        while (!newOrderStatus.isFilled() && !orderBook.isEmpty(newOrder.getSide().getOpposite())) {
 
-        execute();
+            final Order limitOrder = orderBook.peek(newOrder.getSide().getOpposite());
+            final MatchingResult matchingResult = matchingEngine.match(newOrder, limitOrder);
 
-        return orderStatus;
+            if (!matchingResult.isMatch()) {
+                break;
+            }
+
+            final Double execPrice = matchingResult.getPrice();
+
+            final Long execQty = Longs.min(newOrderStatus.getLeavesQty(),
+                                           orderBook.getOrderStatus(limitOrder).getLeavesQty());
+
+            newOrderStatus = newOrderStatus.execute(execPrice, execQty);
+            final OrderStatus limitOrderStatus = orderBook.execute(limitOrder.getSide(), execQty, execPrice);
+
+            final Execution execution = new Execution(curExecID.getAndIncrement(), newOrderStatus, limitOrderStatus,
+                                                      execPrice, execQty);
+
+            marketDataEngine.execution(execution);
+        }
+
+        if (newOrder.getOrdType().isLimit() && !newOrderStatus.isFilled()) {
+            orderBook.insert(newOrder, newOrderStatus);
+            marketDataEngine.addOrder(newOrderStatus);
+        }
+
+        if (newOrder.getOrdType().isMarket() && !newOrderStatus.isFilled()) {
+            newOrderStatus = newOrderStatus.cancel();
+            marketDataEngine.cancel(newOrderStatus);
+        }
+
+        return newOrderStatus;
     }
 
     /**
@@ -117,58 +151,21 @@ public class ExecutionEngine {
     }
 
     /**
-     * Executes matching {@link Order}s in <code>orderBook</code>.
-     */
-    public void execute() {
-
-        messagesReceived++;
-        final long oldLastNewOrderTime = lastNewOrderTime;
-        final long curTime = System.currentTimeMillis();
-        if (curTime - oldLastNewOrderTime >= 1000) {
-            lastNewOrderTime = curTime;
-            System.out.print("Message rate=" + messagesReceived + " msg/min");
-            messagesReceived = 0;
-        }
-
-        while (!orderBook.isEmpty(Side.BUY) && !orderBook.isEmpty(Side.SELL)) {
-
-            final Order buyOrder = orderBook.peek(Side.BUY);
-            final Order sellOrder = orderBook.peek(Side.SELL);
-
-            final MatchingResult matchResult = matchingEngine.match(buyOrder, sellOrder);
-
-            if (!matchResult.isMatch()) {
-                break;
-            }
-
-            final Long orderQty = Longs.min(orderBook.getOrderStatus(buyOrder).getLeavesQty(),
-                                            orderBook.getOrderStatus(sellOrder).getLeavesQty());
-
-            final OrderStatus buyOrderStatus = orderBook.execute(Side.BUY, orderQty, matchResult.getPrice());
-            final OrderStatus sellOrderStatus = orderBook.execute(Side.SELL, orderQty, matchResult.getPrice());
-
-            final Execution execution = new Execution(curExecID.getAndIncrement(), buyOrderStatus, sellOrderStatus,
-                                                      matchResult.getPrice(), orderQty);
-
-            marketDataEngine.execution(execution);
-        }
-
-        System.out.println("Current price: buy=" +
-                                   (orderBook.isEmpty(Side.BUY) ? "no price" : orderBook.peek(Side.BUY).getPrice()) +
-
-                                   ", sell=" +
-                                   (orderBook.isEmpty(Side.SELL) ? "no price" : orderBook.peek(Side.SELL).getPrice())
-                                   + "; curExecID=" + curExecID.get() + "; curOrderID=" + Orders.curOrderID.get()
-        );
-    }
-
-    /**
      * Gets curExecID.
      *
      * @return the curExecID.
      */
     public Long getCurExecID() {
         return curExecID.get();
+    }
+
+    /**
+     * Returns a unique {@link OrderID}.
+     *
+     * @return unique {@link OrderID}.
+     */
+    public Long getOrderID() {
+        return curOrderID.getAndIncrement();
     }
 
     /**

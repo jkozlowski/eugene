@@ -2,8 +2,12 @@ package eugene.market.esma.impl.execution.data;
 
 import eugene.market.book.OrderStatus;
 import eugene.market.esma.impl.execution.Execution;
+import eugene.market.ontology.field.enums.OrdType;
 import org.testng.annotations.Test;
 
+import static eugene.market.book.MockOrders.buy;
+import static eugene.market.book.MockOrders.ordType;
+import static eugene.market.book.MockOrders.order;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -65,22 +69,27 @@ public class MarketDataEventTest {
         assertThat(marketDataEvent.getObject(), sameInstance(object));
     }
     
-    @Test(enabled = false)
+    @Test
     public void testConstructorCoverage() {
-        new ExecutionEvent(Long.MIN_VALUE, mock(Execution.class));
-        new ExecutionEvent(Long.MIN_VALUE, Long.MAX_VALUE, mock(Execution.class));
-        new CancelOrderEvent(Long.MIN_VALUE, mock(OrderStatus.class));
-        new CancelOrderEvent(Long.MIN_VALUE, Long.MAX_VALUE, mock(OrderStatus.class));
+        new MarketDataEvent.ExecutionEvent(Long.MIN_VALUE, mock(Execution.class));
+        new MarketDataEvent.ExecutionEvent(Long.MIN_VALUE, Long.MAX_VALUE, mock(Execution.class));
+        new MarketDataEvent.CancelOrderEvent(Long.MIN_VALUE, mock(OrderStatus.class));
+        new MarketDataEvent.CancelOrderEvent(Long.MIN_VALUE, Long.MAX_VALUE, mock(OrderStatus.class));
+    }
+    
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testAddOrderEventConstructorNotLimit() {
+        new MarketDataEvent.AddOrderEvent(Long.MIN_VALUE, new OrderStatus(order(ordType(buy(), OrdType.MARKET))));
     }
 
     @Test
     public void testAcceptCoverage() {
-        final ExecutionEvent executionEvent = new ExecutionEvent(Long.MIN_VALUE, mock(Execution.class));
+        final MarketDataEvent.ExecutionEvent executionEvent = new MarketDataEvent.ExecutionEvent(Long.MIN_VALUE, mock(Execution.class));
         final MarketDataEventHandler executionEventHandler = mock(MarketDataEventHandler.class);
         executionEvent.accept(executionEventHandler);
         verify(executionEventHandler).handle(executionEvent);
         
-        final CancelOrderEvent cancelOrderEvent = new CancelOrderEvent(Long.MIN_VALUE, mock(OrderStatus.class));
+        final MarketDataEvent.CancelOrderEvent cancelOrderEvent = new MarketDataEvent.CancelOrderEvent(Long.MIN_VALUE, mock(OrderStatus.class));
         final MarketDataEventHandler cancelOrderEventHandler = mock(MarketDataEventHandler.class);
         cancelOrderEvent.accept(cancelOrderEventHandler);
         verify(cancelOrderEventHandler).handle(cancelOrderEvent);

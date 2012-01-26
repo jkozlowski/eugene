@@ -5,14 +5,24 @@ import eugene.market.book.OrderStatus;
 import eugene.market.esma.impl.Repository;
 import eugene.market.esma.impl.Repository.Tuple;
 import eugene.market.esma.impl.execution.Execution;
-import eugene.market.esma.impl.execution.data.CancelOrderEvent;
-import eugene.market.esma.impl.execution.data.ExecutionEvent;
 import eugene.market.esma.impl.execution.data.MarketDataEngine;
 import eugene.market.esma.impl.execution.data.MarketDataEvent;
+import eugene.market.esma.impl.execution.data.MarketDataEvent.AddOrderEvent;
+import eugene.market.esma.impl.execution.data.MarketDataEvent.CancelOrderEvent;
+import eugene.market.esma.impl.execution.data.MarketDataEvent.ExecutionEvent;
+import eugene.market.esma.impl.execution.data.MarketDataEvent.NewOrderEvent;
+import eugene.market.esma.impl.execution.data.MarketDataEvent.RejectOrderEvent;
 import eugene.market.esma.impl.execution.data.MarketDataEventHandler;
-import eugene.market.esma.impl.execution.data.NewOrderEvent;
 import eugene.market.ontology.MarketOntology;
 import eugene.market.ontology.Message;
+import eugene.market.ontology.field.AvgPx;
+import eugene.market.ontology.field.ClOrdID;
+import eugene.market.ontology.field.CumQty;
+import eugene.market.ontology.field.LeavesQty;
+import eugene.market.ontology.field.OrderID;
+import eugene.market.ontology.field.Symbol;
+import eugene.market.ontology.field.enums.ExecType;
+import eugene.market.ontology.field.enums.OrdStatus;
 import eugene.market.ontology.message.ExecutionReport;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.OntologyException;
@@ -27,10 +37,10 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Level;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static eugene.market.esma.impl.Messages.addOrder;
 import static eugene.market.esma.impl.Messages.deleteOrder;
 import static eugene.market.esma.impl.Messages.executionReport;
 import static eugene.market.esma.impl.Messages.orderExecuted;
-import static eugene.market.esma.impl.Orders.addOrder;
 import static jade.lang.acl.ACLMessage.INFORM;
 
 /**
@@ -89,11 +99,52 @@ public class MarketDataServer extends CyclicBehaviour implements MarketDataEvent
      */
     @Override
     public void handle(final NewOrderEvent newOrderEvent) {
-        final Order order = newOrderEvent.getObject();
 
-        if (order.getOrdType().isLimit()) {
-            send(addOrder(order, symbol));
-        }
+        final Order order = newOrderEvent.getObject();
+        final Tuple orderTuple = repository.get(order);
+        checkNotNull(orderTuple);
+
+        final ExecutionReport executionReport = new ExecutionReport();
+        executionReport.setAvgPx(new AvgPx(Order.NO_PRICE));
+        executionReport.setExecType(ExecType.NEW.field());
+        executionReport.setOrdStatus(OrdStatus.NEW.field());
+        executionReport.setLeavesQty(new LeavesQty(order.getOrderQty()));
+        executionReport.setCumQty(new CumQty(Order.NO_QTY));
+        executionReport.setOrderID(new OrderID(order.getOrderID().toString()));
+        executionReport.setClOrdID(new ClOrdID(orderTuple.getClOrdID()));
+        executionReport.setSide(order.getSide().field());
+        executionReport.setSymbol(new Symbol(symbol));
+
+        send(executionReport, orderTuple);
+    }
+
+    @Override
+    public void handle(final RejectOrderEvent rejectOrderEvent) {
+        
+        final Order order = rejectOrderEvent.getObject();
+        final Tuple orderTuple = repository.get(order);
+        checkNotNull(orderTuple);
+
+        final ExecutionReport executionReport = new ExecutionReport();
+        executionReport.setAvgPx(new AvgPx(Order.NO_PRICE));
+        executionReport.setExecType(ExecType.REJECTED.field());
+        executionReport.setOrdStatus(OrdStatus.REJECTED.field());
+        executionReport.setLeavesQty(new LeavesQty(order.getOrderQty()));
+        executionReport.setCumQty(new CumQty(Order.NO_QTY));
+        executionReport.setOrderID(new OrderID(order.getOrderID().toString()));
+        executionReport.setClOrdID(new ClOrdID(orderTuple.getClOrdID()));
+        executionReport.setSide(order.getSide().field());
+        executionReport.setSymbol(new Symbol(symbol));
+
+        send(executionReport, orderTuple);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void handle(final AddOrderEvent addOrderEvent) {
+        sendToAll(addOrder(addOrderEvent.getObject(), symbol));
     }
 
     @Override
@@ -101,30 +152,45 @@ public class MarketDataServer extends CyclicBehaviour implements MarketDataEvent
 
         final Execution execution = executionEvent.getObject();
 
-        // Buy side
-        final OrderStatus buyOrderStatus = execution.getBuyOrderStatus();
-        final Tuple buyTuple = repository.get(buyOrderStatus.getOrder());
+        // New order
+        final OrderStatus newOrderStatus = execution.getNewOrderStatus();
+        final Tuple buyTuple = repository.get(newOrderStatus.getOrder());
         checkNotNull(buyTuple);
 
-        send(executionReport(buyOrderStatus, buyTuple, symbol), buyTuple);
-        if (buyOrderStatus.getOrder().getOrdType().isLimit()) {
-            send(orderExecuted(buyOrderStatus, execution));
-        }
+        send(executionReport(newOrderStatus, buyTuple, symbol), buyTuple);
 
-        // Sell side
-        final OrderStatus sellOrderStatus = execution.getSellOrderStatus();
-        final Tuple sellTuple = repository.get(sellOrderStatus.getOrder());
+        // Limit order
+        final OrderStatus limitOrderStatus = execution.getLimitOrderStatus();
+        final Tuple sellTuple = repository.get(limitOrderStatus.getOrder());
         checkNotNull(sellTuple);
 
-        send(executionReport(sellOrderStatus, sellTuple, symbol), sellTuple);
-        if (sellOrderStatus.getOrder().getOrdType().isLimit()) {
-            send(orderExecuted(sellOrderStatus, execution));
-        }
+        send(executionReport(limitOrderStatus, sellTuple, symbol), sellTuple);
+        sendToAll(orderExecuted(limitOrderStatus, execution));
     }
 
     @Override
     public void handle(final CancelOrderEvent cancelOrderEvent) {
-        send(deleteOrder(cancelOrderEvent.getObject()));
+
+        final OrderStatus cancelStatus = cancelOrderEvent.getObject();
+        final Tuple cancelTuple = repository.get(cancelStatus.getOrder());
+        checkNotNull(cancelTuple);
+
+        final ExecutionReport executionReport = new ExecutionReport();
+        executionReport.setAvgPx(new AvgPx(cancelStatus.getAvgPx()));
+        executionReport.setExecType(ExecType.CANCELED.field());
+        executionReport.setOrdStatus(OrdStatus.CANCELED.field());
+        executionReport.setLeavesQty(new LeavesQty(cancelStatus.getLeavesQty()));
+        executionReport.setCumQty(new CumQty(cancelStatus.getCumQty()));
+        executionReport.setOrderID(new OrderID(cancelStatus.getOrder().getOrderID().toString()));
+        executionReport.setClOrdID(new ClOrdID(cancelTuple.getClOrdID()));
+        executionReport.setSide(cancelStatus.getOrder().getSide().field());
+        executionReport.setSymbol(new Symbol(symbol));
+        
+        send(executionReport, cancelTuple);
+
+        if (cancelOrderEvent.getObject().getOrder().getOrdType().isLimit()) {
+            sendToAll(deleteOrder(cancelOrderEvent.getObject()));
+        }
     }
 
     /**
@@ -138,10 +204,10 @@ public class MarketDataServer extends CyclicBehaviour implements MarketDataEvent
         checkNotNull(tuple);
 
         try {
-            final Action a = new Action(tuple.getAID(), executionReport);
+            final Action a = new Action(tuple.getACLMessage().getSender(), executionReport);
 
-            final ACLMessage aclMessage = new ACLMessage(INFORM);
-            aclMessage.addReceiver(tuple.getAID());
+            final ACLMessage aclMessage = tuple.getACLMessage().createReply();
+            aclMessage.setPerformative(INFORM);
             aclMessage.setOntology(MarketOntology.getInstance().getName());
             aclMessage.setLanguage(MarketOntology.LANGUAGE);
             agent.getContentManager().fillContent(aclMessage, a);
@@ -160,7 +226,7 @@ public class MarketDataServer extends CyclicBehaviour implements MarketDataEvent
      *
      * @param message {@link Message} to send.
      */
-    private void send(final Message message) {
+    private void sendToAll(final Message message) {
 
         checkNotNull(message);
 

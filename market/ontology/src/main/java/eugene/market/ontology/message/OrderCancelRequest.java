@@ -2,7 +2,6 @@ package eugene.market.ontology.message;
 
 import eugene.market.ontology.Message;
 import eugene.market.ontology.field.ClOrdID;
-import eugene.market.ontology.field.OrderID;
 import eugene.market.ontology.field.OrderQty;
 import eugene.market.ontology.field.Side;
 import eugene.market.ontology.field.Symbol;
@@ -19,25 +18,6 @@ import jade.content.onto.annotations.Slot;
 public class OrderCancelRequest extends Message {
 
     public static final String TYPE = "F";
-
-    /**
-     * Gets the orderID.
-     *
-     * @return the orderID.
-     */
-    @Slot(mandatory = true)
-    public OrderID getOrderID() {
-        return getField(OrderID.TAGi);
-    }
-
-    /**
-     * Sets the orderID.
-     *
-     * @param orderID new orderID.
-     */
-    public void setOrderID(OrderID orderID) {
-        setField(OrderID.TAGi, orderID);
-    }
 
     /**
      * Gets the clOrdID.

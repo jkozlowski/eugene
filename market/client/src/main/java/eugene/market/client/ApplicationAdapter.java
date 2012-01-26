@@ -4,6 +4,7 @@ import eugene.market.ontology.message.ExecutionReport;
 import eugene.market.ontology.message.Logon;
 import eugene.market.ontology.message.NewOrderSingle;
 import eugene.market.ontology.message.OrderCancelReject;
+import eugene.market.ontology.message.OrderCancelRequest;
 import eugene.market.ontology.message.data.AddOrder;
 import eugene.market.ontology.message.data.DeleteOrder;
 import eugene.market.ontology.message.data.OrderExecuted;
@@ -43,5 +44,9 @@ public abstract class ApplicationAdapter implements Application {
 
     @Override
     public void fromApp(final NewOrderSingle newOrderSingle, final Session session) {
+    }
+
+    @Override
+    public void fromApp(final OrderCancelRequest orderCancelRequest, final Session session) {
     }
 }

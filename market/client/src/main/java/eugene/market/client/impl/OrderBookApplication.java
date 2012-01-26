@@ -95,7 +95,10 @@ public class OrderBookApplication extends ApplicationAdapter {
 
         final OrderStatus orderStatus = orderBook.execute(order.getSide(), orderExecuted.getLastQty().getValue(),
                                                           orderExecuted.getLastPx().getValue());
-
         checkState(orderStatus.getLeavesQty().equals(orderExecuted.getLeavesQty().getValue()));
+
+        if (orderStatus.isFilled()) {
+            orderMap.remove(orderExecuted.getOrderID().getValue());
+        }
     }
 }

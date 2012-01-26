@@ -8,6 +8,7 @@ import eugene.market.ontology.field.ClOrdID;
 import eugene.market.ontology.field.Symbol;
 import eugene.market.ontology.message.Logon;
 import eugene.market.ontology.message.NewOrderSingle;
+import eugene.market.ontology.message.OrderCancelRequest;
 import jade.content.ContentElement;
 import jade.content.ContentManager;
 import jade.content.lang.Codec.CodecException;
@@ -251,7 +252,7 @@ public class DefaultSessionTest {
     public void testSendNewOrderSingleNullNewOrderSingle() {
         final Session session = new DefaultSession(mock(Agent.class), mock(AID.class), mock(Application.class),
                                                    defaultSymbol);
-        session.send(null);
+        session.send((NewOrderSingle) null);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -285,7 +286,7 @@ public class DefaultSessionTest {
     public void testSendNewOrderSingle() throws CodecException, OntologyException {
         final AID to = mock(AID.class);
         final AID id = mock(AID.class);
-        when(id.getName() ).thenReturn(defaultAgentID);
+        when(id.getName()).thenReturn(defaultAgentID);
         final Agent agent = mock(Agent.class);
         when(agent.getAID()).thenReturn(id);
         final ContentManager contentManager = mock(ContentManager.class);
@@ -301,6 +302,52 @@ public class DefaultSessionTest {
         verify(application).fromApp(newOrderSingle, session);
         assertThat(newOrderSingle.getSymbol().getValue(), is(defaultSymbol));
         assertThat(newOrderSingle.getClOrdID().getValue(), is(defaultAgentID + (session.getCurClOrdID() - 1L)));
+    }
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testSendOrderCancelRequestNullOrderCancelRequest() {
+        final Session session = new DefaultSession(mock(Agent.class), mock(AID.class), mock(Application.class),
+                                                   defaultSymbol);
+        session.send((OrderCancelRequest) null);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testSendOrderCancelRequestIllegalSymbol() {
+        final Session session = new DefaultSession(mock(Agent.class), mock(AID.class), mock(Application.class),
+                                                   defaultSymbol);
+        final OrderCancelRequest orderCancelRequest = new OrderCancelRequest();
+        orderCancelRequest.setSymbol(new Symbol("BARC.L"));
+        session.send(orderCancelRequest);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testSendOrderCancelRequestNullValueOfSymbol() {
+        final Session session = new DefaultSession(mock(Agent.class), mock(AID.class), mock(Application.class),
+                                                   defaultSymbol);
+        final OrderCancelRequest orderCancelRequest = new OrderCancelRequest();
+        orderCancelRequest.setSymbol(new Symbol(null));
+        session.send(orderCancelRequest);
+    }
+
+    @Test
+    public void testOrderCancelRequest() throws CodecException, OntologyException {
+        final AID to = mock(AID.class);
+        final AID id = mock(AID.class);
+        when(id.getName()).thenReturn(defaultAgentID);
+        final Agent agent = mock(Agent.class);
+        when(agent.getAID()).thenReturn(id);
+        final ContentManager contentManager = mock(ContentManager.class);
+        final Application application = mock(Application.class);
+        final DefaultSession session = new DefaultSession(agent, to, application, defaultSymbol);
+        when(agent.getContentManager()).thenReturn(contentManager);
+
+        final OrderCancelRequest orderCancelRequest = new OrderCancelRequest();
+        session.send(orderCancelRequest);
+
+        verify(agent).getContentManager();
+        verify(agent).send(Mockito.any(ACLMessage.class));
+        verify(application).fromApp(orderCancelRequest, session);
+        assertThat(orderCancelRequest.getSymbol().getValue(), is(defaultSymbol));
     }
 
     @ObjectFactory

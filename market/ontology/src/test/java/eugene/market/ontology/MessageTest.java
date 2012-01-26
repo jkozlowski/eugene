@@ -45,7 +45,7 @@ public class MessageTest {
     @Test
     public void testHashCode() {
         final TestMessage testMessage = new TestMessage();
-        assertThat(testMessage.hashCode(), is(new TreeMap<Integer, Field<?>>(Message.fieldComparator).hashCode()));
+        assertThat(testMessage.hashCode(), is(new TreeMap<Integer, Field<?>>().hashCode()));
     }
 
     @Test
@@ -53,6 +53,6 @@ public class MessageTest {
         final TestMessage testMessage = new TestMessage();
         testMessage.setField(Side.TAGi, new Side(Side.BUY));
         testMessage.setField(Price.TAGi, new Price(defaultPrice));
-        assertThat(testMessage.toString(), is("TestMessage[Side=1, Price=" + defaultPrice + "]"));
+        assertThat(testMessage.toString(), is("TestMessage[Price=" + defaultPrice + ", Side=1]"));
     }
 }

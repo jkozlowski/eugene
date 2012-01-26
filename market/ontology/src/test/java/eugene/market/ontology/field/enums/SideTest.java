@@ -40,6 +40,21 @@ public class SideTest {
         assertThat(Side.SELL.getOpposite(), is(Side.BUY));
     }
     
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testParseNullField() {
+        Side.parse(null);
+    }
+    
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testParseNullValue() {
+        Side.parse(new eugene.market.ontology.field.Side());
+    }
+    
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testParseIllegalValue() {
+        Side.parse(new eugene.market.ontology.field.Side("Hello World!"));
+    }
+    
     @Test
     public void testParse() {
         final eugene.market.ontology.field.Side side = new eugene.market.ontology.field.Side();
@@ -49,15 +64,32 @@ public class SideTest {
         assertThat(Side.parse(side), is(Side.SELL));
     }
 
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testGetSideNullNewOrderSingle() {
+        Side.getSide(null);
+    }
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testGetSideNullValue() {
+        Side.getSide(new NewOrderSingle());
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testGetSideIllegalValue() {
+        final NewOrderSingle newOrderSingle = new NewOrderSingle();
+        newOrderSingle.setSide(new eugene.market.ontology.field.Side("Hello World!"));
+        Side.getSide(newOrderSingle);
+    }
+
     @Test
-    public void getSideBuy() {
+    public void testGetSideBuy() {
         final NewOrderSingle newOrderSingle = new NewOrderSingle();
         newOrderSingle.setSide(new eugene.market.ontology.field.Side(eugene.market.ontology.field.Side.BUY));
         assertThat(Side.getSide(newOrderSingle), is(Side.BUY));
     }
 
     @Test
-    public void getSideSell() {
+    public void testGetSideSell() {
         final NewOrderSingle newOrderSingle = new NewOrderSingle();
         newOrderSingle.setSide(new eugene.market.ontology.field.Side(eugene.market.ontology.field.Side.SELL));
         assertThat(Side.getSide(newOrderSingle), is(Side.SELL));

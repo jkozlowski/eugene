@@ -2,6 +2,8 @@ package eugene.market.ontology.field.enums;
 
 import eugene.market.ontology.message.NewOrderSingle;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Enum that mirrors {@link eugene.market.ontology.field.Side}.
  *
@@ -13,7 +15,7 @@ public enum Side {
     BUY(eugene.market.ontology.field.Side.BUY),
     SELL(eugene.market.ontology.field.Side.SELL);
 
-    public final String value;
+    private final String value;
 
     Side(final String value) {
         this.value = value;
@@ -52,9 +54,26 @@ public enum Side {
      * @param field {@link eugene.market.ontology.field.Side} to parse.
      *
      * @return {@link Side} for this <code>field</code>.
+     *
+     * @throws NullPointerException     if <code>field</code> or {@link eugene.market.ontology.field.Side#getValue()}
+     *                                  are null.
+     * @throws IllegalArgumentException if value returned from {@link eugene.market.ontology.field.Side#getValue()}
+     *                                  is invalid.
      */
-    public static Side parse(final eugene.market.ontology.field.Side field) {
-        return BUY.value.equals(field.getValue()) ? BUY : SELL;
+    public static Side parse(final eugene.market.ontology.field.Side field)
+            throws NullPointerException, IllegalArgumentException {
+
+        checkNotNull(field);
+        checkNotNull(field.getValue());
+
+        if (BUY.value.equals(field.getValue())) {
+            return BUY;
+        }
+        else if (SELL.value.equals(field.getValue())) {
+            return SELL;
+        }
+
+        throw new IllegalArgumentException();
     }
 
     /**
@@ -62,10 +81,24 @@ public enum Side {
      *
      * @param newOrderSingle order to get {@link Side} for.
      *
-     * @return {@link Side} for this <code>newOrderSingle</code>
+     * @return {@link Side} for this <code>newOrderSingle</code>.
+     *
+     * @throws NullPointerException     if <code>field</code> or {@link NewOrderSingle#getSide()} are null.
+     * @throws IllegalArgumentException if value returned from {@link NewOrderSingle#getSide()} is invalid.
      */
-    public static Side getSide(final NewOrderSingle newOrderSingle) {
-        return BUY.value.equals(newOrderSingle.getSide().getValue()) ? BUY : SELL;
+    public static Side getSide(final NewOrderSingle newOrderSingle)
+            throws NullPointerException, IllegalArgumentException {
+
+        checkNotNull(newOrderSingle);
+        checkNotNull(newOrderSingle.getSide());
+
+        if (BUY.value.equals(newOrderSingle.getSide().getValue())) {
+            return BUY;
+        } else if (SELL.value.equals(newOrderSingle.getSide().getValue())) {
+            return SELL;
+        }
+        
+        throw new IllegalArgumentException();
     }
 
     /**

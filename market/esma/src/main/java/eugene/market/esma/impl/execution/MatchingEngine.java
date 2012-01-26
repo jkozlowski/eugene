@@ -2,7 +2,9 @@ package eugene.market.esma.impl.execution;
 
 import eugene.market.book.Order;
 import eugene.market.ontology.field.enums.OrdType;
+import eugene.market.ontology.field.enums.Side;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
@@ -20,34 +22,41 @@ public class MatchingEngine {
     }
 
     /**
-     * Matches <code>buyOrder</code> with <code>sellOrder</code>.
+     * Matches <code>newOrder</code> with <code>limitOrder</code>.
      *
      * The following order pairs constitute a match:
      * <ul>
-     * <li>{@link OrdType#MARKET} and {@link OrdType#LIMIT}.</li>
-     * <li>{@link OrdType#LIMIT} and {@link OrdType#LIMIT}, if their prices cross.</li>
+     * <li>if <code>newOrder</code> is {@link OrdType#MARKET}, the match price will be that of the
+     * <code>limitOrder</code>.</li>
+     * <li>if <code>newOrder</code> is {@link OrdType#LIMIT} it's price crosses with <code>limitOrder</code>,
+     * the match price will be that of the <code>limitOrder</code>.</li>
      * </ul>
      *
-     * @param buyOrder  buy {@link Order} to match.
-     * @param sellOrder sell {@link Order} to match.
+     * @param newOrder   new {@link Order} to match.
+     * @param limitOrder limit {@link Order} to match.
      *
      * @return {@link MatchingResult} with {@link Match#YES} and a price or {@link MatchingResult#NO_MATCH}.
      *
-     * @throws IllegalStateException if both <code>buyOrder</code> and <code>sellOrder</code> are {@link
-     *                               OrdType#MARKET}.
+     * @throws IllegalArgumentException if <code>newOrder</code> and <code>limitOrder</code> have the same {@link
+     *                                  Side} or <code>limitOrder</code> is not {@link OrdType#LIMIT}.
      */
-    public MatchingResult match(final Order buyOrder, final Order sellOrder) throws IllegalStateException {
+    public MatchingResult match(final Order newOrder, final Order limitOrder) throws IllegalStateException {
 
-        checkNotNull(buyOrder);
-        checkNotNull(sellOrder);
+        checkNotNull(newOrder);
+        checkNotNull(limitOrder);
+        checkArgument(newOrder.getSide().getOpposite().equals(limitOrder.getSide()));
+        checkArgument(limitOrder.getOrdType().isLimit());
 
-        // MARKET vs MARKET
-        checkState(buyOrder.getOrdType().isLimit() || sellOrder.getOrdType().isLimit());
+        if (newOrder.getOrdType().isMarket()) {
+            return new MatchingResult(Match.YES, limitOrder.getPrice());
+        }
 
-        if (buyOrder.getOrdType().isMarket() || sellOrder.getOrdType().isMarket()
-                || (buyOrder.getPrice() >= sellOrder.getPrice())) {
-            final Double price = sellOrder.getOrdType().isLimit() ? sellOrder.getPrice() : buyOrder.getPrice();
-            return new MatchingResult(Match.YES, price);
+        if (newOrder.getSide().isBuy() && newOrder.getPrice().compareTo(limitOrder.getPrice()) >= 0) {
+            return new MatchingResult(Match.YES, limitOrder.getPrice());
+        }
+
+        if (newOrder.getSide().isSell() && newOrder.getPrice().compareTo(limitOrder.getPrice()) <= 0) {
+            return new MatchingResult(Match.YES, limitOrder.getPrice());
         }
 
         return MatchingResult.NO_MATCH;

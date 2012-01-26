@@ -4,6 +4,7 @@ import eugene.market.ontology.message.ExecutionReport;
 import eugene.market.ontology.message.Logon;
 import eugene.market.ontology.message.NewOrderSingle;
 import eugene.market.ontology.message.OrderCancelReject;
+import eugene.market.ontology.message.OrderCancelRequest;
 import eugene.market.ontology.message.data.AddOrder;
 import eugene.market.ontology.message.data.DeleteOrder;
 import eugene.market.ontology.message.data.OrderExecuted;
@@ -38,6 +39,7 @@ public class ApplicationAdapterTest {
         application.toApp(mock(OrderExecuted.class), mock(Session.class));
         application.toApp(mock(OrderCancelReject.class), mock(Session.class));
         application.fromApp(mock(NewOrderSingle.class), mock(Session.class));
+        application.fromApp(mock(OrderCancelRequest.class), mock(Session.class));
     }
 
     @ObjectFactory

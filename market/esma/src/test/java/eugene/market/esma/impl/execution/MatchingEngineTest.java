@@ -43,8 +43,22 @@ public class MatchingEngineTest {
     public void testMatchNullSellOrder() {
         match(mock(Order.class), null);
     }
+    
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testMatchBuyWithBuy() {
+        final Order buy = order(ordType(buy(), OrdType.LIMIT));
+        final Order sell = order(ordType(buy(), OrdType.LIMIT));
+        match(buy, sell);
+    }
 
-    @Test(expectedExceptions = IllegalStateException.class)
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testMatchSellWithSell() {
+        final Order buy = order(ordType(sell(), OrdType.LIMIT));
+        final Order sell = order(ordType(sell(), OrdType.LIMIT));
+        match(buy, sell);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
     public void testMatchMarketWithMarket() {
         final Order buy = order(ordType(buy(), OrdType.MARKET));
         final Order sell = order(ordType(sell(), OrdType.MARKET));
@@ -54,14 +68,14 @@ public class MatchingEngineTest {
     @Test
     public void testMatchMarketLimit() {
         final Order buy = order(ordType(buy(), OrdType.MARKET));
-        final Order sell = order(limitPrice(buy(), defaultPrice));
+        final Order sell = order(limitPrice(sell(), defaultPrice));
         assertThat(match(buy, sell), is(equalTo(defaultMatchingResult)));
     }
 
     @Test
     public void testMatchLimitMarket() {
-        final Order buy = order(limitPrice(buy(), defaultPrice));
-        final Order sell = order(ordType(sell(), OrdType.MARKET));
+        final Order buy = order(ordType(buy(), OrdType.MARKET));
+        final Order sell = order(limitPrice(sell(), defaultPrice));
         assertThat(match(buy, sell), is(equalTo(defaultMatchingResult)));
     }
 

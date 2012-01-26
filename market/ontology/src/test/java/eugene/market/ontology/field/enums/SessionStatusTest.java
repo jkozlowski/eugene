@@ -15,9 +15,7 @@ public class SessionStatusTest {
 
     @Test
     public void testField() {
-        assertThat(SessionStatus.SESSION_ACTIVE.field(), is(new eugene.market.ontology.field.SessionStatus(
-                eugene.market.ontology
-                        .field
-                        .SessionStatus.SESSION_ACTIVE)));
+        assertThat(SessionStatus.SESSION_ACTIVE.field(),
+                   is(new eugene.market.ontology.field.SessionStatus(eugene.market.ontology.field.SessionStatus.SESSION_ACTIVE)));
     }
 }

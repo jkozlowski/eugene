@@ -3,7 +3,6 @@ package eugene.market.ontology.message;
 import eugene.market.ontology.Defaults;
 import eugene.market.ontology.Message;
 import eugene.market.ontology.field.ClOrdID;
-import eugene.market.ontology.field.OrderID;
 import eugene.market.ontology.field.OrderQty;
 import eugene.market.ontology.field.Side;
 import eugene.market.ontology.field.Symbol;
@@ -34,7 +33,6 @@ public class OrderCancelRequestTest extends MessageTest {
         final Set<Message> toSend = new HashSet<Message>();
         final OrderCancelRequest orderCancelRequest = new OrderCancelRequest();
         orderCancelRequest.setClOrdID(new ClOrdID(Defaults.defaultClOrdID));
-        orderCancelRequest.setOrderID(new OrderID(Defaults.defaultOrderID));
         orderCancelRequest.setSide(new Side(Side.BUY));
         orderCancelRequest.setOrderQty(new OrderQty(defaultOrdQty));
         orderCancelRequest.setSymbol(new Symbol(Defaults.defaultSymbol));

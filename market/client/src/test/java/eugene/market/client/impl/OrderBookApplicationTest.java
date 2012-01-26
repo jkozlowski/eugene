@@ -1,8 +1,8 @@
 package eugene.market.client.impl;
 
-import eugene.market.book.impl.DefaultOrderBook;
 import eugene.market.book.Order;
 import eugene.market.book.OrderBook;
+import eugene.market.book.OrderBooks;
 import eugene.market.client.Session;
 import eugene.market.ontology.field.LastPx;
 import eugene.market.ontology.field.LastQty;
@@ -136,7 +136,7 @@ public class OrderBookApplicationTest {
 
     @Test(expectedExceptions = IllegalStateException.class)
     public void testToAppOrderExecutedOrderNotAtTopOfOrderBook() {
-        final OrderBook orderBook = new DefaultOrderBook();
+        final OrderBook orderBook = OrderBooks.defaultOrderBook();
         final OrderBookApplication application = new OrderBookApplication(orderBook);
 
         final AddOrder addOrder1 = new AddOrder();
@@ -167,7 +167,7 @@ public class OrderBookApplicationTest {
 
     @Test(expectedExceptions = IllegalStateException.class)
     public void testToAppOrderExecutedLeavesQtyDoesNotMatch() {
-        final OrderBook orderBook = new DefaultOrderBook();
+        final OrderBook orderBook = OrderBooks.defaultOrderBook();
         final OrderBookApplication application = new OrderBookApplication(orderBook);
 
         final AddOrder addOrder1 = new AddOrder();
@@ -189,8 +189,8 @@ public class OrderBookApplicationTest {
     }
 
     @Test
-    public void testToAppOrderExecuted() {
-        final OrderBook orderBook = new DefaultOrderBook();
+    public void testToAppOrderExecutedNotFilled() {
+        final OrderBook orderBook = OrderBooks.defaultOrderBook();
         final OrderBookApplication application = new OrderBookApplication(orderBook);
 
         final AddOrder addOrder1 = new AddOrder();
@@ -209,5 +209,32 @@ public class OrderBookApplicationTest {
         orderExecuted.setTradeID(new TradeID(defaultTradeID));
 
         application.toApp(orderExecuted, mock(Session.class));
+        
+        assertThat(application.getOrderMap().containsKey(defaultOrderID), is(true));
+    }
+
+    @Test
+    public void testToAppOrderExecutedFilled() {
+        final OrderBook orderBook = OrderBooks.defaultOrderBook();
+        final OrderBookApplication application = new OrderBookApplication(orderBook);
+
+        final AddOrder addOrder1 = new AddOrder();
+        addOrder1.setOrderID(new OrderID(defaultOrderID));
+        addOrder1.setOrderQty(new OrderQty(defaultOrdQty));
+        addOrder1.setPrice(new Price(defaultPrice));
+        addOrder1.setSide(Side.BUY.field());
+
+        application.toApp(addOrder1, mock(Session.class));
+
+        final OrderExecuted orderExecuted = new OrderExecuted();
+        orderExecuted.setOrderID(new OrderID(defaultOrderID));
+        orderExecuted.setLastPx(new LastPx(defaultPrice));
+        orderExecuted.setLastQty(new LastQty(defaultOrdQty));
+        orderExecuted.setLeavesQty(new LeavesQty(0L));
+        orderExecuted.setTradeID(new TradeID(defaultTradeID));
+
+        application.toApp(orderExecuted, mock(Session.class));
+
+        assertThat(application.getOrderMap().containsKey(defaultOrderID), is(false));
     }
 }

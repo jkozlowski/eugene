@@ -1,5 +1,6 @@
 package eugene.market.book;
 
+import eugene.market.ontology.field.enums.OrdType;
 import eugene.market.ontology.field.enums.Side;
 
 import java.util.SortedSet;
@@ -18,8 +19,11 @@ public interface OrderBook {
      * @param order order to insert.
      *
      * @return status of this <code>order</code>.
+     *
+     * @throws NullPointerException     if <code>order</code> is null.
+     * @throws IllegalArgumentException if <code>order</code> is {@link OrdType#MARKET}.
      */
-    OrderStatus insert(final Order order);
+    OrderStatus insert(final Order order) throws NullPointerException, IllegalArgumentException;
 
     /**
      * Inserts a partially executed <code>order</code> into this {@link OrderBook}.
@@ -28,8 +32,13 @@ public interface OrderBook {
      * @param orderStatus status of execution of this <code>order</code>.
      *
      * @return status of this <code>order</code>.
+     *
+     * @throws NullPointerException     if <code>order</code> is null.
+     * @throws IllegalArgumentException if <code>order</code> is {@link OrdType#MARKET} or <code>orderStatus</code>
+     *                                  is not about this <code>order</code>.
      */
-    OrderStatus insert(final Order order, final OrderStatus orderStatus);
+    OrderStatus insert(final Order order, final OrderStatus orderStatus)
+            throws NullPointerException, IllegalArgumentException;
 
     /**
      * Executes the <code>orderQty</code> of the {@link Order} at the top of the book on this <code>side</code> at
@@ -58,8 +67,10 @@ public interface OrderBook {
      *
      * @return {@link OrderStatus} of cancelled {@link Order} or <code>null</code> if <code>order</code> does not
      *         exist.
+     *
+     * @throws NullPointerException if <code>order</code> is null.
      */
-    OrderStatus cancel(final Order order);
+    OrderStatus cancel(final Order order) throws NullPointerException;
 
     /**
      * Gets the size of the book on this <code>side</code>.

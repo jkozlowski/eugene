@@ -1,7 +1,7 @@
 package eugene.market.esma.impl;
 
 import eugene.market.esma.impl.Repository.Tuple;
-import jade.core.AID;
+import jade.lang.acl.ACLMessage;
 import org.testng.annotations.Test;
 
 import static org.mockito.Mockito.mock;
@@ -23,11 +23,11 @@ public class TupleTest {
     
     @Test(expectedExceptions = NullPointerException.class)
     public void testConstructorNullClOrdID() {
-        new Tuple(mock(AID.class), null);
+        new Tuple(mock(ACLMessage.class), null);
     }
     
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testConstructorEmptyClOrdID() {
-        new Tuple(mock(AID.class), "");
+        new Tuple(mock(ACLMessage.class), "");
     }
 }
