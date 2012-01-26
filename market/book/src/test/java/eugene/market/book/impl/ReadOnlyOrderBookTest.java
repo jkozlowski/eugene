@@ -24,9 +24,15 @@ public class ReadOnlyOrderBookTest {
     }
 
     @Test(expectedExceptions = UnsupportedOperationException.class)
-    public void testInsertOrder() {
+    public void testInsert() {
         final OrderBook orderBook = readOnlyOrderBook(mock(OrderBook.class));
-        orderBook.insertOrder(null);
+        orderBook.insert(null);
+    }
+    
+    @Test(expectedExceptions = UnsupportedOperationException.class)
+    public void testInsertPartiallyExecuted() {
+        final OrderBook orderBook = readOnlyOrderBook(mock(OrderBook.class));
+        orderBook.insert(null, null);
     }
 
     @Test(expectedExceptions = UnsupportedOperationException.class)

@@ -87,7 +87,7 @@ public class ExecutionEngine {
             return null;
         }
 
-        final OrderStatus orderStatus = orderBook.insertOrder(order);
+        final OrderStatus orderStatus = orderBook.insert(order);
 
         marketDataEngine.newOrder(order);
 

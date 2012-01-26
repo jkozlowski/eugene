@@ -13,13 +13,23 @@ import java.util.SortedSet;
 public interface OrderBook {
 
     /**
-     * Inserts this <code>order</code> into this {@link OrderBook}.
+     * Inserts an unexecuted <code>order</code> into this {@link OrderBook}.
      *
      * @param order order to insert.
      *
-     * @return status of this {@link Order}.
+     * @return status of this <code>order</code>.
      */
-    public OrderStatus insertOrder(final Order order);
+    OrderStatus insert(final Order order);
+
+    /**
+     * Inserts a partially executed <code>order</code> into this {@link OrderBook}.
+     *
+     * @param order       order to insert.
+     * @param orderStatus status of execution of this <code>order</code>.
+     *
+     * @return status of this <code>order</code>.
+     */
+    OrderStatus insert(final Order order, final OrderStatus orderStatus);
 
     /**
      * Executes the <code>orderQty</code> of the {@link Order} at the top of the book on this <code>side</code> at
@@ -38,8 +48,8 @@ public interface OrderBook {
      *                                  or <code>orderQty > {@link OrderStatus#getLeavesQty()}</code>
      *                                  or the {@link OrderBook} is empty on this <code>side</code>.
      */
-    public OrderStatus execute(final Side side, final Long orderQty, final Double price) throws NullPointerException,
-                                                                                                IllegalArgumentException;
+    OrderStatus execute(final Side side, final Long orderQty, final Double price) throws NullPointerException,
+                                                                                         IllegalArgumentException;
 
     /**
      * Cancels this <code>order</code>.
@@ -49,7 +59,7 @@ public interface OrderBook {
      * @return {@link OrderStatus} of cancelled {@link Order} or <code>null</code> if <code>order</code> does not
      *         exist.
      */
-    public OrderStatus cancel(final Order order);
+    OrderStatus cancel(final Order order);
 
     /**
      * Gets the size of the book on this <code>side</code>.
@@ -58,7 +68,7 @@ public interface OrderBook {
      *
      * @return size of the book on this <code>side</code>.
      */
-    public int size(final Side side);
+    int size(final Side side);
 
     /**
      * Checks if the book is empty on this <code>side</code>.
@@ -67,7 +77,7 @@ public interface OrderBook {
      *
      * @return <code>true</code> is this <code>side</code> of the book is empty, <code>false</code> otherwise.
      */
-    public boolean isEmpty(final Side side);
+    boolean isEmpty(final Side side);
 
     /**
      * Gets the first {@link Order} on this <code>side</code>.
@@ -76,7 +86,7 @@ public interface OrderBook {
      *
      * @return first {@link Order} on this <code>side</code>.
      */
-    public Order peek(final Side side);
+    Order peek(final Side side);
 
     /**
      * Gets the {@link OrderStatus} for this <code>order</code>.
@@ -86,19 +96,19 @@ public interface OrderBook {
      * @return the {@link OrderStatus} for this <code>order</code> or null if this {@link Order} is not in
      *         this {@link OrderBook}.
      */
-    public OrderStatus getOrderStatus(final Order order);
+    OrderStatus getOrderStatus(final Order order);
 
     /**
      * Gets a {@link SortedSet} of {@link Side#BUY} orders.
      *
      * @return {@link SortedSet} of {@link Side#BUY} orders.
      */
-    public SortedSet<Order> getBuyOrders();
+    SortedSet<Order> getBuyOrders();
 
     /**
      * Gets a {@link SortedSet} of {@link Side#SELL} orders.
      *
      * @return {@link SortedSet} of {@link Side#SELL} orders.
      */
-    public SortedSet<Order> getSellOrders();
+    SortedSet<Order> getSellOrders();
 }

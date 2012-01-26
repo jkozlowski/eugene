@@ -108,7 +108,7 @@ public class ExecutionEngineTest {
 
         final Order order = order(buy());
         final OrderBook orderBook = executionEngine.getOrderBook();
-        final OrderStatus orderStatus = orderBook.insertOrder(order);
+        final OrderStatus orderStatus = orderBook.insert(order);
 
         assertThat(executionEngine.cancel(order), sameInstance(orderStatus));
         verify(executionEngine.getMarketDataEngine()).cancel(orderStatus);
@@ -119,7 +119,7 @@ public class ExecutionEngineTest {
         final ExecutionEngine executionEngine = getExecutionEngine();
         final OrderBook orderBook = executionEngine.getOrderBook();
         final Order sell = order(sell());
-        orderBook.insertOrder(sell);
+        orderBook.insert(sell);
 
         executionEngine.execute();
 
@@ -136,7 +136,7 @@ public class ExecutionEngineTest {
         final ExecutionEngine executionEngine = getExecutionEngine();
         final OrderBook orderBook = executionEngine.getOrderBook();
         final Order buy = order(buy());
-        orderBook.insertOrder(buy);
+        orderBook.insert(buy);
 
         executionEngine.execute();
 
@@ -233,8 +233,8 @@ public class ExecutionEngineTest {
                                                      final Order sellOrder) {
         final ExecutionEngine executionEngine = getExecutionEngine();
         final OrderBook orderBook = executionEngine.getOrderBook();
-        orderBook.insertOrder(buyOrder);
-        orderBook.insertOrder(sellOrder);
+        orderBook.insert(buyOrder);
+        orderBook.insert(sellOrder);
         return executionEngine;
     }
 }

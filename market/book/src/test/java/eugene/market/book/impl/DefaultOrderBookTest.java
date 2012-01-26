@@ -3,7 +3,6 @@ package eugene.market.book.impl;
 import eugene.market.book.Order;
 import eugene.market.book.OrderBook;
 import eugene.market.book.OrderStatus;
-import eugene.market.book.impl.DefaultOrderBook;
 import eugene.market.ontology.field.enums.Side;
 import org.testng.annotations.Test;
 
@@ -47,14 +46,14 @@ public class DefaultOrderBookTest {
     @Test(expectedExceptions = NullPointerException.class)
     public void testInsertNullOrder() {
         final OrderBook orderBook = new DefaultOrderBook();
-        orderBook.insertOrder(null);
+        orderBook.insert(null);
     }
 
     @Test
     public void testInsertLimitBuy() {
         final OrderBook orderBook = new DefaultOrderBook();
         final Order buy = order(buy());
-        final OrderStatus orderStatus = orderBook.insertOrder(buy);
+        final OrderStatus orderStatus = orderBook.insert(buy);
 
         assertThat(orderBook.isEmpty(Side.SELL), is(true));
         assertThat(orderBook.size(Side.SELL), is(0));
@@ -72,7 +71,7 @@ public class DefaultOrderBookTest {
     public void testInsertLimitSell() {
         final OrderBook orderBook = new DefaultOrderBook();
         final Order sell = order(sell());
-        final OrderStatus orderStatus = orderBook.insertOrder(sell);
+        final OrderStatus orderStatus = orderBook.insert(sell);
 
         assertThat(orderBook.isEmpty(Side.BUY), is(true));
         assertThat(orderBook.size(Side.BUY), is(0));
@@ -84,6 +83,16 @@ public class DefaultOrderBookTest {
         assertThat(sell, isIn(orderBook.getSellOrders()));
         assertThat(orderStatus, sameInstance(orderBook.getOrderStatus(sell)));
         assertThat(orderStatus.isEmpty(), is(true));
+    }
+    
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testInsertPartiallyExecutedNullOrderStatus() {
+        new DefaultOrderBook().insert(order(sell()), null);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testInsertPartiallyExecutedDifferentOrderInOrderStatus() {
+        new DefaultOrderBook().insert(order(sell()), new OrderStatus(order(buy())));
     }
 
     @Test(expectedExceptions = NullPointerException.class)
@@ -133,8 +142,8 @@ public class DefaultOrderBookTest {
         final OrderBook orderBook = new DefaultOrderBook();
         final Order buy = order(orderQty(buy(), defaultOrdQty));
         final Order sell = order(orderQty(sell(), defaultOrdQty));
-        orderBook.insertOrder(buy);
-        final OrderStatus sellOrderStatus = orderBook.insertOrder(sell);
+        orderBook.insert(buy);
+        final OrderStatus sellOrderStatus = orderBook.insert(sell);
 
         final OrderStatus orderStatus = orderBook.execute(Side.BUY, defaultOrdQty - 1L, defaultPrice);
 
@@ -155,8 +164,8 @@ public class DefaultOrderBookTest {
         final OrderBook orderBook = new DefaultOrderBook();
         final Order buy = order(orderQty(buy(), defaultOrdQty));
         final Order sell = order(orderQty(sell(), defaultOrdQty));
-        orderBook.insertOrder(buy);
-        final OrderStatus sellOrderStatus = orderBook.insertOrder(sell);
+        orderBook.insert(buy);
+        final OrderStatus sellOrderStatus = orderBook.insert(sell);
 
         final OrderStatus orderStatus = orderBook.execute(Side.BUY, defaultOrdQty, defaultPrice);
 
@@ -190,7 +199,7 @@ public class DefaultOrderBookTest {
     public void testCancelOrderInOrderBook() {
         final OrderBook orderBook = new DefaultOrderBook();
         final Order order = order(buy());
-        final OrderStatus expected = orderBook.insertOrder(order);
+        final OrderStatus expected = orderBook.insert(order);
         final OrderStatus actual = orderBook.cancel(order);
 
         assertThat(actual, sameInstance(expected));
@@ -220,13 +229,12 @@ public class DefaultOrderBookTest {
     public void testToStringSell() {
         final OrderBook orderBook = new DefaultOrderBook();
         final Order buy = order(buy());
-        orderBook.insertOrder(buy);
+        orderBook.insert(buy);
         final Order sell = order(sell());
-        orderBook.insertOrder(sell);
+        orderBook.insert(sell);
 
         final StringBuilder expected = new StringBuilder();
         expected.append(sell).append("\n");
-        expected.append(DefaultOrderBook.SEPARATOR);
         expected.append(buy).append("\n");
         assertThat(orderBook, hasToString(equalToIgnoringCase(expected.toString())));
     }

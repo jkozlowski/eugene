@@ -64,7 +64,7 @@ public class OrderBookApplication extends ApplicationAdapter {
         final Order order = new Order(orderID, OrdType.LIMIT, Side.parse(addOrder.getSide()),
                                       addOrder.getOrderQty().getValue(), addOrder.getPrice().getValue());
 
-        orderBook.insertOrder(order);
+        orderBook.insert(order);
         orderMap.put(addOrder.getOrderID().getValue(), order);
     }
 

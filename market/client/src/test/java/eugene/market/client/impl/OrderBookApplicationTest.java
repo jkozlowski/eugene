@@ -73,7 +73,7 @@ public class OrderBookApplicationTest {
         application.toApp(addOrder, mock(Session.class));
 
         final ArgumentCaptor<Order> captor = ArgumentCaptor.forClass(Order.class);
-        verify(orderBook).insertOrder(captor.capture());
+        verify(orderBook).insert(captor.capture());
 
         assertThat(captor.getValue().getOrderID(), is(Long.parseLong(defaultOrderID)));
         assertThat(captor.getValue().getOrderQty(), is(defaultOrdQty));
@@ -108,7 +108,7 @@ public class OrderBookApplicationTest {
         application.toApp(addOrder, mock(Session.class));
 
         final ArgumentCaptor<Order> captor = ArgumentCaptor.forClass(Order.class);
-        verify(orderBook).insertOrder(captor.capture());
+        verify(orderBook).insert(captor.capture());
 
         final DeleteOrder deleteOrder = new DeleteOrder();
         deleteOrder.setOrderID(new OrderID(defaultOrderID));

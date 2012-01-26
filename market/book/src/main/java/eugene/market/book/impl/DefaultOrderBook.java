@@ -26,8 +26,6 @@ import static com.google.common.collect.Sets.newTreeSet;
  */
 public class DefaultOrderBook implements OrderBook {
 
-    public static final String SEPARATOR = "*****************\n";
-
     private final Map<Order, OrderStatus> orderStatusMap;
 
     private final Queue<Order> buyOrders;
@@ -47,10 +45,16 @@ public class DefaultOrderBook implements OrderBook {
      * {@inheritDoc}
      */
     @Override
-    public OrderStatus insertOrder(final Order order) {
+    public OrderStatus insert(final Order order) {
+        return insert(order, new OrderStatus(order));
+    }
+
+    @Override
+    public OrderStatus insert(final Order order, final OrderStatus orderStatus) {
         checkNotNull(order);
+        checkNotNull(orderStatus);
+        checkArgument(orderStatus.getOrder().equals(order));
         getQueue(order.getSide()).offer(order);
-        final OrderStatus orderStatus = new OrderStatus(order);
         orderStatusMap.put(order, orderStatus);
         return orderStatus;
     }
@@ -156,8 +160,6 @@ public class DefaultOrderBook implements OrderBook {
         for (Order o : getSellOrders()) {
             b.append(o).append("\n");
         }
-
-        b.append(SEPARATOR);
 
         for (Order o : getBuyOrders()) {
             b.append(o).append("\n");

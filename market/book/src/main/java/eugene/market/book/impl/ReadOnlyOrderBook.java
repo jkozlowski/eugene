@@ -38,7 +38,17 @@ public final class ReadOnlyOrderBook implements OrderBook {
      * @throws UnsupportedOperationException this {@link OrderBook} is read-only.
      */
     @Override
-    public OrderStatus insertOrder(Order order) throws UnsupportedOperationException {
+    public OrderStatus insert(Order order) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException(ERROR_MESSAGE);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws UnsupportedOperationException this {@link OrderBook} is read-only.
+     */
+    @Override
+    public OrderStatus insert(Order order, OrderStatus orderStatus) {
         throw new UnsupportedOperationException(ERROR_MESSAGE);
     }
 
