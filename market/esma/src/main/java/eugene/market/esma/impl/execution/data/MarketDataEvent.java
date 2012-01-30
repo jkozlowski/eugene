@@ -159,20 +159,20 @@ public abstract class MarketDataEvent<T> {
     /**
      * Indicates that a new {@link Order} has been accepted by {@link ExecutionEngine}.
      */
-    public static final class NewOrderEvent extends MarketDataEvent<Order> {
+    public static final class NewOrderEvent extends MarketDataEvent<OrderStatus> {
 
         /**
          * {@inheritDoc}
          */
-        public NewOrderEvent(final Long eventId, final Order order) {
-            this(eventId, System.currentTimeMillis(), order);
+        public NewOrderEvent(final Long eventId, final OrderStatus orderStatus) {
+            this(eventId, System.currentTimeMillis(), orderStatus);
         }
 
         /**
          * {@inheritDoc}
          */
-        public NewOrderEvent(final Long eventId, final Long time, final Order order) {
-            super(eventId, time, order);
+        public NewOrderEvent(final Long eventId, final Long time, final OrderStatus orderStatus) {
+            super(eventId, time, orderStatus);
         }
 
         /**
@@ -190,20 +190,20 @@ public abstract class MarketDataEvent<T> {
      * @author Jakub D Kozlowski
      * @since 0.6
      */
-    public static final class RejectOrderEvent extends MarketDataEvent<Order> {
+    public static final class RejectOrderEvent extends MarketDataEvent<OrderStatus> {
 
         /**
          * {@inheritDoc}
          */
-        public RejectOrderEvent(final Long eventId, final Order order) {
-            this(eventId, System.currentTimeMillis(), order);
+        public RejectOrderEvent(final Long eventId, final OrderStatus orderStatus) {
+            this(eventId, System.currentTimeMillis(), orderStatus);
         }
 
         /**
          * {@inheritDoc}
          */
-        public RejectOrderEvent(final Long eventId, final Long time, final Order order) {
-            super(eventId, time, order);
+        public RejectOrderEvent(final Long eventId, final Long time, final OrderStatus orderStatus) {
+            super(eventId, time, orderStatus);
         }
 
         /**

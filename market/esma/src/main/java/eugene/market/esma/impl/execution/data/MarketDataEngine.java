@@ -26,22 +26,22 @@ public class MarketDataEngine {
     /**
      * Indicates that a new {@link Order} has been accepted by {@link ExecutionEngine}.
      *
-     * @param order new {@link Order}.
+     * @param orderStatus status of a new {@link Order}.
      */
-    public void newOrder(final Order order) {
+    public void newOrder(final OrderStatus orderStatus) {
         final Long eventId = currentEventId.getAndIncrement();
-        final MarketDataEvent.NewOrderEvent event = new MarketDataEvent.NewOrderEvent(eventId, order);
+        final MarketDataEvent.NewOrderEvent event = new MarketDataEvent.NewOrderEvent(eventId, orderStatus);
         events.put(eventId, event);
     }
 
     /**
      * Indicates that a {@link OrdType#MARKET} has been rejected by the {@link ExecutionEngine}.
      *
-     * @param order rejected {@link Order}.
+     * @param orderStatus status rejected {@link Order}.
      */
-    public void reject(final Order order) {
+    public void reject(final OrderStatus orderStatus) {
         final Long eventId = currentEventId.getAndIncrement();
-        final MarketDataEvent.RejectOrderEvent event = new MarketDataEvent.RejectOrderEvent(eventId, order);
+        final MarketDataEvent.RejectOrderEvent event = new MarketDataEvent.RejectOrderEvent(eventId, orderStatus);
         events.put(eventId, event);
     }
 

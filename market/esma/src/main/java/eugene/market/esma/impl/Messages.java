@@ -66,14 +66,43 @@ public final class Messages {
         executionReport.setClOrdID(new ClOrdID(tuple.getClOrdID()));
         executionReport.setAvgPx(new AvgPx(orderStatus.getAvgPx()));
         executionReport.setCumQty(new CumQty(orderStatus.getCumQty()));
-        executionReport.setExecType(orderStatus.isEmpty() ? ExecType.NEW.field() : ExecType.TRADE.field());
+
+        switch (orderStatus.getOrdStatus()) {
+
+            case NEW:
+                executionReport.setExecType(ExecType.NEW.field());
+                executionReport.setOrdStatus(OrdStatus.NEW.field());
+                break;
+
+            case CANCELED:
+                executionReport.setExecType(ExecType.CANCELED.field());
+                executionReport.setOrdStatus(OrdStatus.CANCELED.field());
+                break;
+
+            case PARTIALLY_FILLED:
+                executionReport.setExecType(ExecType.TRADE.field());
+                executionReport.setOrdStatus(OrdStatus.PARTIALLY_FILLED.field());
+                break;
+
+            case FILLED:
+                executionReport.setExecType(ExecType.TRADE.field());
+                executionReport.setOrdStatus(OrdStatus.FILLED.field());
+                break;
+
+            case REJECTED:
+                executionReport.setExecType(ExecType.REJECTED.field());
+                executionReport.setOrdStatus(OrdStatus.REJECTED.field());
+                break;
+
+            default:
+                throw new IllegalArgumentException();
+        }
+
         executionReport.setLeavesQty(new LeavesQty(orderStatus.getLeavesQty()));
         executionReport.setOrderID(new OrderID(orderStatus.getOrder().getOrderID().toString()));
-        executionReport.setOrdStatus(orderStatus.isEmpty() ? OrdStatus.NEW.field() : (orderStatus.isFilled() ?
-                OrdStatus.FILLED.field() :
-                OrdStatus.PARTIALLY_FILLED.field()));
         executionReport.setSide(orderStatus.getOrder().getSide().field());
         executionReport.setSymbol(new Symbol(symbol));
+
         return executionReport;
     }
 

@@ -95,7 +95,11 @@ public class DefaultOrderBook implements OrderBook {
     public OrderStatus cancel(final Order order) {
         checkNotNull(order);
         getQueue(order.getSide()).remove(order);
-        return orderStatusMap.remove(order);
+        final OrderStatus orderStatus = orderStatusMap.remove(order);
+        if (null != orderStatus) {
+            return orderStatus.cancel();
+        }
+        return null;
     }
 
     /**

@@ -9,6 +9,7 @@ import static eugene.market.book.MockOrders.buy;
 import static eugene.market.book.MockOrders.order;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.sameInstance;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -23,14 +24,15 @@ public class MarketDataEngineTest {
     public void testNewOrder() {
         final MarketDataEngine marketDataEngine = new MarketDataEngine();
         final Order order = order(buy());
+        final OrderStatus orderStatus = new OrderStatus(order);
         final Long currentEventId = marketDataEngine.getCurrentEventId();
 
-        marketDataEngine.newOrder(order);
+        marketDataEngine.newOrder(orderStatus);
 
         assertThat(marketDataEngine.getMarketDataEvent(currentEventId), is(MarketDataEvent.NewOrderEvent.class));
         final MarketDataEvent.NewOrderEvent newOrderEvent = (MarketDataEvent.NewOrderEvent) marketDataEngine.getMarketDataEvent(currentEventId);
         assertThat(newOrderEvent.getEventId(), is(currentEventId));
-        assertThat(newOrderEvent.getObject(), is(order));
+        assertThat(newOrderEvent.getObject(), sameInstance(orderStatus));
     }
 
     @Test

@@ -1,6 +1,5 @@
 package eugene.market.esma.impl.behaviours;
 
-import eugene.market.book.Order;
 import eugene.market.book.OrderStatus;
 import eugene.market.esma.impl.Repository;
 import eugene.market.esma.impl.Repository.Tuple;
@@ -100,43 +99,21 @@ public class MarketDataServer extends CyclicBehaviour implements MarketDataEvent
     @Override
     public void handle(final NewOrderEvent newOrderEvent) {
 
-        final Order order = newOrderEvent.getObject();
-        final Tuple orderTuple = repository.get(order);
+        final OrderStatus orderStatus = newOrderEvent.getObject();
+        final Tuple orderTuple = repository.get(orderStatus.getOrder());
         checkNotNull(orderTuple);
 
-        final ExecutionReport executionReport = new ExecutionReport();
-        executionReport.setAvgPx(new AvgPx(Order.NO_PRICE));
-        executionReport.setExecType(ExecType.NEW.field());
-        executionReport.setOrdStatus(OrdStatus.NEW.field());
-        executionReport.setLeavesQty(new LeavesQty(order.getOrderQty()));
-        executionReport.setCumQty(new CumQty(Order.NO_QTY));
-        executionReport.setOrderID(new OrderID(order.getOrderID().toString()));
-        executionReport.setClOrdID(new ClOrdID(orderTuple.getClOrdID()));
-        executionReport.setSide(order.getSide().field());
-        executionReport.setSymbol(new Symbol(symbol));
-
-        send(executionReport, orderTuple);
+        send(executionReport(orderStatus, orderTuple, symbol), orderTuple);
     }
 
     @Override
     public void handle(final RejectOrderEvent rejectOrderEvent) {
         
-        final Order order = rejectOrderEvent.getObject();
-        final Tuple orderTuple = repository.get(order);
+        final OrderStatus orderStatus = rejectOrderEvent.getObject();
+        final Tuple orderTuple = repository.get(orderStatus.getOrder());
         checkNotNull(orderTuple);
 
-        final ExecutionReport executionReport = new ExecutionReport();
-        executionReport.setAvgPx(new AvgPx(Order.NO_PRICE));
-        executionReport.setExecType(ExecType.REJECTED.field());
-        executionReport.setOrdStatus(OrdStatus.REJECTED.field());
-        executionReport.setLeavesQty(new LeavesQty(order.getOrderQty()));
-        executionReport.setCumQty(new CumQty(Order.NO_QTY));
-        executionReport.setOrderID(new OrderID(order.getOrderID().toString()));
-        executionReport.setClOrdID(new ClOrdID(orderTuple.getClOrdID()));
-        executionReport.setSide(order.getSide().field());
-        executionReport.setSymbol(new Symbol(symbol));
-
-        send(executionReport, orderTuple);
+        send(executionReport(orderStatus, orderTuple, symbol), orderTuple);
     }
 
     /**

@@ -3,6 +3,7 @@ package eugene.market.book.impl;
 import eugene.market.book.Order;
 import eugene.market.book.OrderBook;
 import eugene.market.book.OrderStatus;
+import eugene.market.ontology.field.enums.OrdStatus;
 import eugene.market.ontology.field.enums.OrdType;
 import eugene.market.ontology.field.enums.Side;
 import org.testng.annotations.Test;
@@ -222,7 +223,11 @@ public class DefaultOrderBookTest {
         final OrderStatus expected = orderBook.insert(order);
         final OrderStatus actual = orderBook.cancel(order);
 
-        assertThat(actual, sameInstance(expected));
+        assertThat(actual.getOrdStatus(), is(OrdStatus.CANCELED));
+        assertThat(actual.getAvgPx(), is(expected.getAvgPx()));
+        assertThat(actual.getCumQty(), is(expected.getCumQty()));
+        assertThat(actual.getLeavesQty(), is(expected.getLeavesQty()));
+        assertThat(actual.getOrder(), is(expected.getOrder()));
         assertThat(orderBook.getOrderStatus(order), nullValue());
         assertThat(orderBook.getBuyOrders(), not(hasItem(order)));
     }

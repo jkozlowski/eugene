@@ -88,11 +88,12 @@ public class ExecutionEngine {
         OrderStatus newOrderStatus = new OrderStatus(newOrder);
 
         if (!insertionValidator.validate(orderBook, newOrder)) {
-            marketDataEngine.reject(newOrder);
-            return newOrderStatus.reject();
+            final OrderStatus rejectedOrderStatus = newOrderStatus.reject();
+            marketDataEngine.reject(rejectedOrderStatus);
+            return rejectedOrderStatus;
         }
 
-        marketDataEngine.newOrder(newOrder);
+        marketDataEngine.newOrder(newOrderStatus);
 
         while (!newOrderStatus.isFilled() && !orderBook.isEmpty(newOrder.getSide().getOpposite())) {
 

@@ -1,5 +1,6 @@
 package eugene.market.book;
 
+import eugene.market.ontology.field.enums.OrdStatus;
 import eugene.market.ontology.field.enums.OrdType;
 import eugene.market.ontology.field.enums.Side;
 
@@ -65,8 +66,8 @@ public interface OrderBook {
      *
      * @param order {@link Order} to cancel.
      *
-     * @return {@link OrderStatus} of cancelled {@link Order} or <code>null</code> if <code>order</code> does not
-     *         exist.
+     * @return {@link OrderStatus} of cancelled {@link Order} with {@link OrdStatus#CANCELED} or <code>null</code> if
+     *         <code>order</code> does not exist.
      *
      * @throws NullPointerException if <code>order</code> is null.
      */

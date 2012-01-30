@@ -85,7 +85,7 @@ public class ExecutionEngineTest {
         assertThat(orderStatus.getOrdStatus(), is(OrdStatus.REJECTED));
         assertThat(orderStatus.isEmpty(), is(true));
         
-        verify(executionEngine.getMarketDataEngine()).reject(order);
+        verify(executionEngine.getMarketDataEngine()).reject(orderStatus);
         verifyNoMoreInteractions(executionEngine.getMarketDataEngine());
     }
 
@@ -102,7 +102,7 @@ public class ExecutionEngineTest {
         final OrderBook orderBook = executionEngine.getOrderBook();
         final MarketDataEngine marketDataEngine = executionEngine.getMarketDataEngine();
 
-        verify(marketDataEngine).newOrder(newSellOrder);
+        verify(marketDataEngine).newOrder(newOrderStatus);
         verify(marketDataEngine).addOrder(newOrderStatus);
         verifyNoMoreInteractions(marketDataEngine);
         
@@ -125,23 +125,30 @@ public class ExecutionEngineTest {
 
         final ExecutionEngine executionEngine = getExecutionEngine(buy);
 
-        final OrderStatus newOrderStatus = executionEngine.execute(newSellOrder);
+        final OrderStatus cancelled = executionEngine.execute(newSellOrder);
 
         final OrderBook orderBook = executionEngine.getOrderBook();
         final MarketDataEngine marketDataEngine = executionEngine.getMarketDataEngine();
         
+        final ArgumentCaptor<OrderStatus> newOrderStatusCaptor = ArgumentCaptor.forClass(OrderStatus.class);
         final ArgumentCaptor<Execution> executionArgumentCaptor = ArgumentCaptor.forClass(Execution.class);
 
-        verify(marketDataEngine).newOrder(newSellOrder);
+        verify(marketDataEngine).newOrder(newOrderStatusCaptor.capture());
         verify(marketDataEngine).execution(executionArgumentCaptor.capture());
-        verify(marketDataEngine).cancel(newOrderStatus);
+        verify(marketDataEngine).cancel(cancelled);
         verifyNoMoreInteractions(marketDataEngine);
 
+        assertThat(newOrderStatusCaptor.getValue().getOrder(), sameInstance(newSellOrder));
+        assertThat(newOrderStatusCaptor.getValue().getOrdStatus(), is(OrdStatus.NEW));
+        assertThat(newOrderStatusCaptor.getValue().getCumQty(), is(Order.NO_QTY));
+        assertThat(newOrderStatusCaptor.getValue().getAvgPx(), is(Order.NO_PRICE));
+        assertThat(newOrderStatusCaptor.getValue().getLeavesQty(), is(defaultOrdQty + 1L));
+        
         assertThat(executionArgumentCaptor.getValue().getExecID(), is(executionEngine.getCurExecID() - 1));
         assertThat(executionArgumentCaptor.getValue().getPrice(), is(defaultPrice));
         assertThat(executionArgumentCaptor.getValue().getQuantity(), is(defaultOrdQty));
-        assertThat(newOrderStatus.getOrdStatus(), is(OrdStatus.CANCELED));
-        assertThat(newOrderStatus.getLeavesQty(), is(1L));
+        assertThat(cancelled.getOrdStatus(), is(OrdStatus.CANCELED));
+        assertThat(cancelled.getLeavesQty(), is(1L));
         assertThat(orderBook.isEmpty(Side.SELL), is(true));
         assertThat(orderBook.isEmpty(Side.BUY), is(true));
     }
@@ -153,10 +160,18 @@ public class ExecutionEngineTest {
         
         final OrderStatus orderStatus = executionEngine.execute(order);
 
+        final ArgumentCaptor<OrderStatus> newOrderStatusCaptor = ArgumentCaptor.forClass(OrderStatus.class);
+
         assertThat(orderStatus, sameInstance(executionEngine.getOrderBook().getOrderStatus(order)));
-        verify(executionEngine.getMarketDataEngine()).newOrder(order);
+        verify(executionEngine.getMarketDataEngine()).newOrder(newOrderStatusCaptor.capture());
         verify(executionEngine.getMarketDataEngine()).addOrder(orderStatus);
         verifyNoMoreInteractions(executionEngine.getMarketDataEngine());
+
+        assertThat(newOrderStatusCaptor.getValue().getOrder(), sameInstance(order));
+        assertThat(newOrderStatusCaptor.getValue().getOrdStatus(), is(OrdStatus.NEW));
+        assertThat(newOrderStatusCaptor.getValue().getCumQty(), is(Order.NO_QTY));
+        assertThat(newOrderStatusCaptor.getValue().getAvgPx(), is(Order.NO_PRICE));
+        assertThat(newOrderStatusCaptor.getValue().getLeavesQty(), is(defaultOrdQty));
     }
 
     @Test
@@ -167,10 +182,17 @@ public class ExecutionEngineTest {
 
         executionEngine.execute(sell);
 
+        final ArgumentCaptor<OrderStatus> newOrderStatusCaptor = ArgumentCaptor.forClass(OrderStatus.class);
         final ArgumentCaptor<OrderStatus> orderStatusArgumentCaptor = ArgumentCaptor.forClass(OrderStatus.class);
-        verify(executionEngine.getMarketDataEngine()).newOrder(sell);
+        verify(executionEngine.getMarketDataEngine()).newOrder(newOrderStatusCaptor.capture());
         verify(executionEngine.getMarketDataEngine()).addOrder(orderStatusArgumentCaptor.capture());
         verifyNoMoreInteractions(executionEngine.getMarketDataEngine());
+
+        assertThat(newOrderStatusCaptor.getValue().getOrder(), sameInstance(sell));
+        assertThat(newOrderStatusCaptor.getValue().getOrdStatus(), is(OrdStatus.NEW));
+        assertThat(newOrderStatusCaptor.getValue().getCumQty(), is(Order.NO_QTY));
+        assertThat(newOrderStatusCaptor.getValue().getAvgPx(), is(Order.NO_PRICE));
+        assertThat(newOrderStatusCaptor.getValue().getLeavesQty(), is(defaultOrdQty));
 
         assertThat(orderStatusArgumentCaptor.getValue().isEmpty(), is(true));
         assertThat(orderBook.isEmpty(Side.SELL), is(false));
@@ -187,10 +209,17 @@ public class ExecutionEngineTest {
 
         executionEngine.execute(buy);
 
+        final ArgumentCaptor<OrderStatus> newOrderStatusCaptor = ArgumentCaptor.forClass(OrderStatus.class);
         final ArgumentCaptor<OrderStatus> orderStatusArgumentCaptor = ArgumentCaptor.forClass(OrderStatus.class);
-        verify(executionEngine.getMarketDataEngine()).newOrder(buy);
+        verify(executionEngine.getMarketDataEngine()).newOrder(newOrderStatusCaptor.capture());
         verify(executionEngine.getMarketDataEngine()).addOrder(orderStatusArgumentCaptor.capture());
         verifyNoMoreInteractions(executionEngine.getMarketDataEngine());
+
+        assertThat(newOrderStatusCaptor.getValue().getOrder(), sameInstance(buy));
+        assertThat(newOrderStatusCaptor.getValue().getOrdStatus(), is(OrdStatus.NEW));
+        assertThat(newOrderStatusCaptor.getValue().getCumQty(), is(Order.NO_QTY));
+        assertThat(newOrderStatusCaptor.getValue().getAvgPx(), is(Order.NO_PRICE));
+        assertThat(newOrderStatusCaptor.getValue().getLeavesQty(), is(defaultOrdQty));
 
         assertThat(orderStatusArgumentCaptor.getValue().isEmpty(), is(true));
 
@@ -202,6 +231,7 @@ public class ExecutionEngineTest {
 
     @Test
     public void testExecuteOrderValidMatch() {
+        final ArgumentCaptor<OrderStatus> newOrderStatusCaptor = ArgumentCaptor.forClass(OrderStatus.class);
         final ArgumentCaptor<Execution> tradeReport = ArgumentCaptor.forClass(Execution.class);
         final Order buy = order(orderQty(buy(), defaultOrdQty));
         final ExecutionEngine executionEngine = getExecutionEngine(buy);
@@ -212,8 +242,14 @@ public class ExecutionEngineTest {
         final OrderBook orderBook = executionEngine.getOrderBook();
         final MarketDataEngine marketDataEngine = executionEngine.getMarketDataEngine();
 
-        verify(marketDataEngine).newOrder(newOrder);
+        verify(marketDataEngine).newOrder(newOrderStatusCaptor.capture());
         verify(marketDataEngine).execution(tradeReport.capture());
+
+        assertThat(newOrderStatusCaptor.getValue().getOrder(), sameInstance(newOrder));
+        assertThat(newOrderStatusCaptor.getValue().getOrdStatus(), is(OrdStatus.NEW));
+        assertThat(newOrderStatusCaptor.getValue().getCumQty(), is(Order.NO_QTY));
+        assertThat(newOrderStatusCaptor.getValue().getAvgPx(), is(Order.NO_PRICE));
+        assertThat(newOrderStatusCaptor.getValue().getLeavesQty(), is(defaultOrdQty - 1L));
 
         assertThat(tradeReport.getValue().getExecID(), is(executionEngine.getCurExecID() - 1L));
         assertThat(tradeReport.getValue().getPrice(), is(defaultPrice));
@@ -251,8 +287,13 @@ public class ExecutionEngineTest {
         final OrderBook orderBook = executionEngine.getOrderBook();
         final OrderStatus orderStatus = orderBook.insert(order);
 
-        assertThat(executionEngine.cancel(order), sameInstance(orderStatus));
-        verify(executionEngine.getMarketDataEngine()).cancel(orderStatus);
+        final OrderStatus orderCanceledStatus = executionEngine.cancel(order);
+        assertThat(orderCanceledStatus.getOrdStatus(), is(OrdStatus.CANCELED));
+        assertThat(orderCanceledStatus.getOrder(), sameInstance(order));
+        assertThat(orderCanceledStatus.getLeavesQty(), is(orderStatus.getLeavesQty()));
+        assertThat(orderCanceledStatus.getAvgPx(), is(orderStatus.getAvgPx()));
+        assertThat(orderCanceledStatus.getCumQty(), is(orderStatus.getCumQty()));
+        verify(executionEngine.getMarketDataEngine()).cancel(orderCanceledStatus);
     }
 
     /**

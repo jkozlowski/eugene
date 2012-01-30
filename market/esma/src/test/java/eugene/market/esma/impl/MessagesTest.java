@@ -58,12 +58,18 @@ public class MessagesTest {
         final OrderStatus newOrderStatus = new OrderStatus(order);
         orders.add(new OrderStatus[]{newOrderStatus});
 
+        final OrderStatus rejectedNewOrderStatus = newOrderStatus.reject();
+        orders.add(new OrderStatus[]{rejectedNewOrderStatus});
+
         final OrderStatus partiallyFilledOrderStatus = new OrderStatus(order, defaultPrice, defaultOrdQty - 1L,
-                                                                       1L, OrdStatus.NEW);
+                                                                       1L, OrdStatus.PARTIALLY_FILLED);
         orders.add(new OrderStatus[]{partiallyFilledOrderStatus});
 
-        final OrderStatus filledOrderStatus = new OrderStatus(order, defaultPrice, 0L, defaultOrdQty, OrdStatus.NEW);
+        final OrderStatus filledOrderStatus = new OrderStatus(order, defaultPrice, 0L, defaultOrdQty, OrdStatus.FILLED);
         orders.add(new OrderStatus[]{filledOrderStatus});
+
+        final OrderStatus partiallyFilledCanceled = partiallyFilledOrderStatus.cancel();
+        orders.add(new OrderStatus[]{partiallyFilledCanceled});
 
         return orders.toArray(new OrderStatus[][]{});
     }
@@ -94,20 +100,24 @@ public class MessagesTest {
 
         final ExecutionReport executionReport = executionReport(orderStatus, defaultTuple, defaultSymbol);
 
-
-        if (orderStatus.isFilled()) {
+        if (orderStatus.getOrdStatus().isCanceled()) {
+            assertThat(executionReport.getExecType(), is(ExecType.CANCELED.field()));
+            assertThat(executionReport.getOrdStatus(), is(OrdStatus.CANCELED.field()));
+        }
+        else if (orderStatus.getOrdStatus().isRejected()) {
+            assertThat(executionReport.getExecType(), is(ExecType.REJECTED.field()));
+            assertThat(executionReport.getOrdStatus(), is(OrdStatus.REJECTED.field()));
+        }
+        else if (orderStatus.getOrdStatus().isFilled()) {
             assertThat(executionReport.getExecType(), is(ExecType.TRADE.field()));
             assertThat(executionReport.getOrdStatus(), is(OrdStatus.FILLED.field()));
         }
-        else {
-            if (orderStatus.isEmpty()) {
-                assertThat(executionReport.getExecType(), is(ExecType.NEW.field()));
-                assertThat(executionReport.getOrdStatus(), is(OrdStatus.NEW.field()));
-            }
-            else {
-                assertThat(executionReport.getExecType(), is(ExecType.TRADE.field()));
-                assertThat(executionReport.getOrdStatus(), is(OrdStatus.PARTIALLY_FILLED.field()));
-            }
+        else if (orderStatus.getOrdStatus().isPartiallyFilled()) {
+            assertThat(executionReport.getExecType(), is(ExecType.TRADE.field()));
+            assertThat(executionReport.getOrdStatus(), is(OrdStatus.PARTIALLY_FILLED.field()));
+        } else if (orderStatus.getOrdStatus().isRejected()) {
+            assertThat(executionReport.getExecType(), is(ExecType.REJECTED.field()));
+            assertThat(executionReport.getOrdStatus(), is(OrdStatus.CANCELED.field()));
         }
 
         assertThat(executionReport.getAvgPx().getValue(), is(orderStatus.getAvgPx()));
@@ -125,7 +135,7 @@ public class MessagesTest {
     }
 
     @Test(expectedExceptions = NullPointerException.class)
-    public void testOrderExecutedNullTradeReport() {
+    public void testOrderExecutedNullExecution() {
         orderExecuted(mock(OrderStatus.class), null);
     }
 
