@@ -108,6 +108,7 @@
         <module>demo</module>
         <module>jade-unit</module>
         <module>market</module>
+        <module>simulation</module>
     </modules>
 
     <dependencies>

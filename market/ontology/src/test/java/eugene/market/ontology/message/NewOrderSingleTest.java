@@ -1,13 +1,13 @@
 package eugene.market.ontology.message;
 
 import eugene.market.ontology.Defaults;
-import eugene.market.ontology.Message;
 import eugene.market.ontology.field.ClOrdID;
 import eugene.market.ontology.field.OrdType;
 import eugene.market.ontology.field.OrderQty;
 import eugene.market.ontology.field.Price;
 import eugene.market.ontology.field.Side;
 import eugene.market.ontology.field.Symbol;
+import jade.content.Concept;
 import jade.util.Event;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
@@ -32,7 +32,7 @@ public class NewOrderSingleTest extends MessageTest {
     public void testSendNewOrderSingleWithPrice() throws InterruptedException, StaleProxyException,
                                                          IllegalAccessException {
 
-        final Set<Message> toSend = new HashSet<Message>();
+        final Set<Concept> toSend = new HashSet<Concept>();
         final NewOrderSingle newOrder = new NewOrderSingle();
         newOrder.setClOrdID(new ClOrdID(Defaults.defaultClOrdID));
         newOrder.setSide(new Side(Side.BUY));
@@ -66,7 +66,7 @@ public class NewOrderSingleTest extends MessageTest {
     public void testSendNewOrderSingleWithoutPrice() throws InterruptedException, StaleProxyException,
                                                             IllegalAccessException {
 
-        final Set<Message> toSend = new HashSet<Message>();
+        final Set<Concept> toSend = new HashSet<Concept>();
         final NewOrderSingle newOrder = new NewOrderSingle();
         newOrder.setClOrdID(new ClOrdID(Defaults.defaultClOrdID));
         newOrder.setSide(new Side(Side.BUY));

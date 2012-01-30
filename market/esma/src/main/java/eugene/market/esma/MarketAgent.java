@@ -5,8 +5,6 @@ import eugene.market.esma.impl.behaviours.MarketDataServer;
 import eugene.market.esma.impl.behaviours.OrderServer;
 import eugene.market.esma.impl.execution.ExecutionEngine;
 import eugene.market.ontology.MarketOntology;
-import jade.content.lang.Codec;
-import jade.content.lang.leap.LEAPCodec;
 import jade.core.Agent;
 import jade.core.behaviours.OntologyServer;
 import jade.core.behaviours.ThreadedBehaviourFactory;
@@ -59,7 +57,7 @@ public class MarketAgent extends Agent {
     @Override
     public void setup() {
         try {
-            getContentManager().registerLanguage(getCodec(), MarketOntology.LANGUAGE);
+            getContentManager().registerLanguage(MarketOntology.getCodec(), MarketOntology.LANGUAGE);
             getContentManager().registerOntology(MarketOntology.getInstance());
 
             final DFAgentDescription agentDescription = getDFAgentDescription();
@@ -69,7 +67,6 @@ public class MarketAgent extends Agent {
             agentDescription.setName(getAID());
             agentDescription.addServices(serviceDescription);
             register(this, agentDescription);
-
 
             final OrderServer orderServer = new OrderServer(this, executionEngine, repository, symbol);
             final ThreadedBehaviourFactory factory = new ThreadedBehaviourFactory();
@@ -82,15 +79,6 @@ public class MarketAgent extends Agent {
             e.printStackTrace();
             LOG.severe(e.toString());
         }
-    }
-
-    /**
-     * Gets an instance of a {@link Codec} used by {@link MarketAgent}s.
-     *
-     * @return instance of {@link Codec}.
-     */
-    public static Codec getCodec() {
-        return new LEAPCodec();
     }
 
     /**

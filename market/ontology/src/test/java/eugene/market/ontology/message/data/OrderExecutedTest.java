@@ -1,15 +1,15 @@
 package eugene.market.ontology.message.data;
 
 import eugene.market.ontology.Defaults;
-import eugene.market.ontology.Message;
-import eugene.market.ontology.field.TradeID;
 import eugene.market.ontology.field.LastPx;
 import eugene.market.ontology.field.LastQty;
 import eugene.market.ontology.field.LeavesQty;
 import eugene.market.ontology.field.OrderID;
+import eugene.market.ontology.field.TradeID;
 import eugene.market.ontology.message.MessageTest;
 import eugene.market.ontology.message.ReceiverBehaviour;
 import eugene.market.ontology.message.SenderBehaviour;
+import jade.content.Concept;
 import jade.util.Event;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
@@ -33,7 +33,7 @@ public class OrderExecutedTest extends MessageTest {
     @Test
     public void testSendOrderExecuted() throws InterruptedException, StaleProxyException, IllegalAccessException {
 
-        final Set<Message> toSend = new HashSet<Message>();
+        final Set<Concept> toSend = new HashSet<Concept>();
         final OrderExecuted orderExecuted = new OrderExecuted();
         orderExecuted.setOrderID(new OrderID(Defaults.defaultOrderID));
         orderExecuted.setTradeID(new TradeID(Defaults.defaultTradeID));

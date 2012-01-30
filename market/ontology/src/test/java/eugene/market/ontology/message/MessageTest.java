@@ -3,7 +3,6 @@ package eugene.market.ontology.message;
 import eugene.market.ontology.Defaults;
 import eugene.market.ontology.MarketOntology;
 import eugene.market.ontology.Message;
-import jade.content.lang.sl.SLCodec;
 import jade.core.Agent;
 import jade.core.Profile;
 import jade.imtp.memory.MemoryProfile;
@@ -58,7 +57,7 @@ public abstract class MessageTest {
      * @param a agent to initialize.
      */
     public static void initAgent(final Agent a) {
-        a.getContentManager().registerLanguage(new SLCodec(), MarketOntology.LANGUAGE);
+        a.getContentManager().registerLanguage(MarketOntology.getCodec(), MarketOntology.LANGUAGE);
         a.getContentManager().registerOntology(MarketOntology.getInstance());
     }
 }

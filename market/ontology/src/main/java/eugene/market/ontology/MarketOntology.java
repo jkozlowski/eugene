@@ -3,7 +3,6 @@ package eugene.market.ontology;
 import eugene.market.ontology.field.AvgPx;
 import eugene.market.ontology.field.ClOrdID;
 import eugene.market.ontology.field.CumQty;
-import eugene.market.ontology.field.TradeID;
 import eugene.market.ontology.field.ExecType;
 import eugene.market.ontology.field.LastPx;
 import eugene.market.ontology.field.LastQty;
@@ -16,6 +15,7 @@ import eugene.market.ontology.field.Price;
 import eugene.market.ontology.field.SessionStatus;
 import eugene.market.ontology.field.Side;
 import eugene.market.ontology.field.Symbol;
+import eugene.market.ontology.field.TradeID;
 import eugene.market.ontology.message.ExecutionReport;
 import eugene.market.ontology.message.Logon;
 import eugene.market.ontology.message.NewOrderSingle;
@@ -24,6 +24,8 @@ import eugene.market.ontology.message.OrderCancelRequest;
 import eugene.market.ontology.message.data.AddOrder;
 import eugene.market.ontology.message.data.DeleteOrder;
 import eugene.market.ontology.message.data.OrderExecuted;
+import jade.content.lang.Codec;
+import jade.content.lang.leap.LEAPCodec;
 import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
@@ -89,6 +91,16 @@ public final class MarketOntology extends BeanOntology {
         catch (OntologyException e) {
             throw new RuntimeException(e);
         }
+    }
+
+
+    /**
+     * Gets an instance of a {@link Codec} that should be used with {@link MarketOntology}.
+     *
+     * @return instance of {@link Codec}.
+     */
+    public static Codec getCodec() {
+        return new LEAPCodec();
     }
 
     /**

@@ -1,11 +1,11 @@
 package eugene.market.ontology.message.data;
 
 import eugene.market.ontology.Defaults;
-import eugene.market.ontology.Message;
 import eugene.market.ontology.field.OrderID;
 import eugene.market.ontology.message.MessageTest;
 import eugene.market.ontology.message.ReceiverBehaviour;
 import eugene.market.ontology.message.SenderBehaviour;
+import jade.content.Concept;
 import jade.util.Event;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
@@ -28,7 +28,7 @@ public class DeleteOrderTest extends MessageTest {
     @Test
     public void testSendDeleteOrder() throws InterruptedException, StaleProxyException, IllegalAccessException {
 
-        final Set<Message> toSend = new HashSet<Message>();
+        final Set<Concept> toSend = new HashSet<Concept>();
         final DeleteOrder deleteOrder = new DeleteOrder();
         deleteOrder.setOrderID(new OrderID(Defaults.defaultOrderID));
         toSend.add(deleteOrder);

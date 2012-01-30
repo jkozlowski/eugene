@@ -1,6 +1,5 @@
-package eugene.market.ontology.message;
+package eugene.simulation.ontology;
 
-import eugene.market.ontology.MarketOntology;
 import jade.content.Concept;
 import jade.content.ContentElement;
 import jade.content.onto.basic.Action;
@@ -28,9 +27,9 @@ public class ReceiverBehaviour extends SimpleBehaviour {
     public final Set<ACLMessage> failed = new HashSet<ACLMessage>();
 
     final MessageTemplate template =
-            and(MatchLanguage(MarketOntology.LANGUAGE), and(MatchOntology(MarketOntology.getInstance()
-                                                                                  .getName()),
-                                                            MatchPerformative(ACLMessage.REQUEST)));
+            and(MatchLanguage(SimulationOntology.LANGUAGE), and(MatchOntology(SimulationOntology.getInstance()
+                                                                                      .getName()),
+                                                                MatchPerformative(ACLMessage.REQUEST)));
 
     public ReceiverBehaviour(int toReceive) {
         this.toReceive = toReceive;
@@ -42,13 +41,12 @@ public class ReceiverBehaviour extends SimpleBehaviour {
         try {
             ContentElement ce = myAgent.getContentManager().extractContent(msg);
 
-            if (Action.class != ce.getClass() && !(((Action) ce).getAction() instanceof Concept)) {
+            if (Action.class != ce.getClass()) {
                 failed.add(msg);
                 return;
             }
 
-            final Concept order = (Concept) ((Action) ce).getAction();
-            received.add(order);
+            received.add(((Action) ce).getAction());
         }
         catch (Exception e) {
             failed.add(msg);

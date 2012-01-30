@@ -1,9 +1,9 @@
 package eugene.market.ontology.message;
 
 import eugene.market.ontology.Defaults;
-import eugene.market.ontology.Message;
 import eugene.market.ontology.field.SessionStatus;
 import eugene.market.ontology.field.Symbol;
+import jade.content.Concept;
 import jade.util.Event;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
@@ -27,7 +27,7 @@ public class LogonTest extends MessageTest {
     public void testSendLogonWithSessionStatus() throws InterruptedException, StaleProxyException,
                                                         IllegalAccessException {
 
-        final Set<Message> toSend = new HashSet<Message>();
+        final Set<Concept> toSend = new HashSet<Concept>();
         final Logon logon = new Logon();
         logon.setSymbol(new Symbol(Defaults.defaultSymbol));
         logon.setSessionStatus(new SessionStatus(SessionStatus.SESSION_ACTIVE));
@@ -57,7 +57,7 @@ public class LogonTest extends MessageTest {
     public void testSendLogonWithoutSessionStatus() throws InterruptedException, StaleProxyException,
                                                            IllegalAccessException {
 
-        final Set<Message> toSend = new HashSet<Message>();
+        final Set<Concept> toSend = new HashSet<Concept>();
         final Logon logon = new Logon();
         logon.setSymbol(new Symbol(Defaults.defaultSymbol));
         toSend.add(logon);

@@ -76,7 +76,8 @@
                         <Export-Package>${bundle.namespace}, ${bundle.namespace}.field, ${bundle.namespace}.message
                         </Export-Package>
                         <Import-Package>
-                            jade.content, jade.content.onto, jade.content.onto.annotations, com.google.common.base
+                            jade.content, jade.content.lang, jade.content.lang.leap, jade.content.onto,
+                            jade.content.onto.annotations, com.google.common.base
                         </Import-Package>
                     </instructions>
                 </configuration>

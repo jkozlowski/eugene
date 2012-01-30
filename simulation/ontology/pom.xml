@@ -5,37 +5,27 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>eugene.agent</groupId>
+        <groupId>eugene.market</groupId>
         <artifactId>parent</artifactId>
         <version>0.5-SNAPSHOT</version>
     </parent>
 
-    <groupId>eugene.agent</groupId>
-    <artifactId>noise</artifactId>
+    <groupId>eugene.simulation</groupId>
+    <artifactId>ontology</artifactId>
     <version>0.5-SNAPSHOT</version>
     <name>${bundle.namespace}</name>
-    <description>Implements the Noise Trader Agent.</description>
+    <description>Implements the ontology for sending and receiving instructions from the Simulation Agent.</description>
     <packaging>bundle</packaging>
 
     <properties>
-        <bundle.namespace>${project.groupId}.noise</bundle.namespace>
+        <bundle.namespace>${project.groupId}.ontology</bundle.namespace>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>eugene</groupId>
-            <artifactId>jade-unit</artifactId>
-            <version>${current.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>eugene.market</groupId>
-            <artifactId>ontology</artifactId>
-            <version>${current.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>eugene.market</groupId>
-            <artifactId>client</artifactId>
-            <version>${current.version}</version>
+            <groupId>jade</groupId>
+            <artifactId>jade-osgi</artifactId>
+            <version>${jade.osgi.version}</version>
         </dependency>
         <dependency>
             <groupId>com.googlecode.guava-osgi</groupId>
@@ -49,27 +39,15 @@
             <classifier>tests</classifier>
         </dependency>
         <dependency>
+            <groupId>eugene</groupId>
+            <artifactId>jade-unit</artifactId>
+            <version>${current.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>${testng.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-module-testng</artifactId>
-            <version>${powermock.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-api-mockito</artifactId>
-            <version>${powermock.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -93,14 +71,11 @@
                         <Bundle-SymbolicName>${bundle.namespace}</Bundle-SymbolicName>
                         <Bundle-Version>${project.version}</Bundle-Version>
                         <Bundle-Description>${project.description}</Bundle-Description>
-                        <Export-Package>${bundle.namespace}</Export-Package>
+                        <Export-Package>${bundle.namespace}, ${bundle.namespace}.field, ${bundle.namespace}.message
+                        </Export-Package>
                         <Import-Package>
-                            com.google.common.base, com.google.common.collect, com.google.common.primitives,
-                            jade.core, jade.core.behaviours, eugene.market.ontology.message,
-                            eugene.market.ontology.message.data, eugene.market.book, eugene.market.ontology.field,
-                            eugene.market.ontology.field.enums, eugene.market.client, eugene.market.ontology,
-                            jade.content, jade.content.lang, jade.content.lang.sl, jade.content.onto,
-                            jade.content.lang.leap, eugene.market.esma
+                            jade.content, jade.content.lang, jade.content.lang.leap, jade.content.onto,
+                            jade.content.onto.annotations, com.google.common.base
                         </Import-Package>
                     </instructions>
                 </configuration>

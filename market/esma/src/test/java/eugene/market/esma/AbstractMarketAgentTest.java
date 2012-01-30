@@ -49,7 +49,7 @@ public abstract class AbstractMarketAgentTest {
     private void initTraderAgent(final AgentContainer agentContainer) throws StaleProxyException {
         traderAgent = new GatewayAgent();
         gatewayAgentController = agentContainer.acceptNewAgent(GATEWAY_AGENT, traderAgent);
-        traderAgent.getContentManager().registerLanguage(MarketAgent.getCodec(), MarketOntology.LANGUAGE);
+        traderAgent.getContentManager().registerLanguage(MarketOntology.getCodec(), MarketOntology.LANGUAGE);
         traderAgent.getContentManager().registerOntology(MarketOntology.getInstance());
         gatewayAgentController.start();
     }

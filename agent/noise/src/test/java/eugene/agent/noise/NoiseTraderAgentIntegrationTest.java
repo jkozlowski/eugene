@@ -72,7 +72,7 @@ public class NoiseTraderAgentIntegrationTest {
 
         for (int i = 0; i < 2; i++) {
             final GatewayAgent gatewayAgent = new GatewayAgent();
-            gatewayAgent.getContentManager().registerLanguage(MarketAgent.getCodec(), MarketOntology.LANGUAGE);
+            gatewayAgent.getContentManager().registerLanguage(MarketOntology.getCodec(), MarketOntology.LANGUAGE);
             gatewayAgent.getContentManager().registerOntology(MarketOntology.getInstance());
             final AgentController gatewayAgentController = agentContainer.acceptNewAgent("orderBookPrinter" + i,
                                                                                         gatewayAgent);

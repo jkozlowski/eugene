@@ -4,7 +4,6 @@ import eugene.agent.noise.impl.PlaceOrderBehaviour;
 import eugene.market.book.OrderBook;
 import eugene.market.client.ApplicationAdapter;
 import eugene.market.client.Session;
-import eugene.market.esma.MarketAgent;
 import eugene.market.ontology.MarketOntology;
 import eugene.market.ontology.message.Logon;
 import jade.core.Agent;
@@ -34,7 +33,7 @@ public class NoiseTraderAgent extends Agent {
 
     @Override
     public void setup() {
-        getContentManager().registerLanguage(MarketAgent.getCodec(), MarketOntology.LANGUAGE);
+        getContentManager().registerLanguage(MarketOntology.getCodec(), MarketOntology.LANGUAGE);
         getContentManager().registerOntology(MarketOntology.getInstance());
 
         final OrderBook orderBook = defaultOrderBook();

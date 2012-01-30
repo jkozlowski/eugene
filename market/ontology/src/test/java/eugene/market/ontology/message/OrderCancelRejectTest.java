@@ -1,10 +1,10 @@
 package eugene.market.ontology.message;
 
 import eugene.market.ontology.Defaults;
-import eugene.market.ontology.Message;
 import eugene.market.ontology.field.ClOrdID;
 import eugene.market.ontology.field.OrdStatus;
 import eugene.market.ontology.field.OrderID;
+import jade.content.Concept;
 import jade.util.Event;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
@@ -28,7 +28,7 @@ public class OrderCancelRejectTest extends MessageTest {
     public void testSendOrderCancelReject() throws InterruptedException, StaleProxyException,
                                                    IllegalAccessException {
 
-        final Set<Message> toSend = new HashSet<Message>();
+        final Set<Concept> toSend = new HashSet<Concept>();
         final OrderCancelReject orderCancelReject = new OrderCancelReject();
         orderCancelReject.setClOrdID(new ClOrdID(Defaults.defaultClOrdID));
         orderCancelReject.setOrderID(new OrderID(Defaults.defaultOrderID));
