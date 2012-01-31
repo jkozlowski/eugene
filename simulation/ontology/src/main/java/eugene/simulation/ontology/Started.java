@@ -1,6 +1,6 @@
 package eugene.simulation.ontology;
 
-import jade.content.Concept;
+import jade.content.AgentAction;
 
 /**
  * {@link Started} message is sent by either Market Agent or Trader Agents in reply to {@link Start} message.
@@ -8,5 +8,5 @@ import jade.content.Concept;
  * @author Jakub D Kozlowski
  * @since 0.6
  */
-public class Started implements Concept {
+public class Started implements AgentAction {
 }

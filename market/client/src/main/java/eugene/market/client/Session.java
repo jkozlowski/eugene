@@ -8,6 +8,8 @@ import eugene.market.ontology.field.Symbol;
 import eugene.market.ontology.message.Logon;
 import eugene.market.ontology.message.NewOrderSingle;
 import eugene.market.ontology.message.OrderCancelRequest;
+import eugene.simulation.agent.Simulation;
+import jade.content.AgentAction;
 import jade.content.onto.basic.Action;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
@@ -29,11 +31,11 @@ import jade.lang.acl.ACLMessage;
 public interface Session {
 
     /**
-     * Gets the {@link AID} of the {@link MarketAgent}.
+     * Gets the current {@link Simulation}.
      *
-     * @return the {@link AID} of the {@link MarketAgent}.
+     * @return the current {@link Simulation}.
      */
-    AID getMarketAgent();
+    Simulation getSimulation();
 
     /**
      * Gets the application.
@@ -43,28 +45,21 @@ public interface Session {
     Application getApplication();
 
     /**
-     * Gets the symbol.
-     *
-     * @return the symbol.
-     */
-    String getSymbol();
-
-    /**
-     * Gets the {@link Message} from this <code>aclMessage</code> <code>:content</code> slot.
+     * Gets the <code>type</code> message from this <code>aclMessage</code> <code>:content</code> slot.
      *
      * @param aclMessage {@link ACLMessage} to extract from.
-     * @param type       type of {@link Message} expected.
+     * @param type       type of message expected.
      *
-     * @return extracted {@link Message}, or <code>null</code> if <code>aclMessage</code> does not have a {@link
-     *         Message} of type <code>type</code> in <code>:content</code> slot.
+     * @return extracted message, or <code>null</code> if <code>aclMessage</code> does not have a message of type
+     *         <code>type</code> in <code>:content</code> slot.
      */
-    <T extends Message> T extractMessage(final ACLMessage aclMessage, final Class<T> type);
+    <T extends AgentAction> T extractMessage(final ACLMessage aclMessage, final Class<T> type);
 
     /**
-     * Gets the {@link ACLMessage} with <code>:receiver</code> slot set to <code>to</code>, <code>:content</code>
-     * slot set to <code>message</code> wrapped with {@link Action}, <code>:ontology</code> slot set to {@link
-     * MarketOntology#getName()}, <code>:language</code> slot set to {@link MarketOntology#LANGUAGE} and {@link
-     * ACLMessage#REQUEST} performative.
+     * Gets the {@link ACLMessage} with <code>:receiver</code> slot set to the {@link AID} of the Market Agent,
+     * <code>:content</code> slot set to <code>message</code> wrapped with {@link Action},
+     * <code>:ontology</code> slot set to {@link MarketOntology#getName()}, <code>:language</code> slot set to {@link
+     * MarketOntology#LANGUAGE} and {@link ACLMessage#REQUEST} performative.
      *
      * @param message {@link Message} to set the <code>:content</code> slot to.
      *

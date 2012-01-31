@@ -1,33 +1,26 @@
 package eugene.market.client.impl;
 
 import eugene.market.client.Application;
-import eugene.utils.BehaviourResult;
+import eugene.simulation.agent.Simulation;
 import jade.content.ContentManager;
-import jade.content.lang.Codec.CodecException;
-import jade.content.onto.OntologyException;
 import jade.core.AID;
 import jade.core.Agent;
-import jade.domain.DFService;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.SearchConstraints;
-import jade.domain.FIPAException;
+import jade.core.behaviours.Behaviour;
+import jade.core.behaviours.ParallelBehaviour;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.testng.PowerMockObjectFactory;
 import org.testng.IObjectFactory;
 import org.testng.annotations.ObjectFactory;
 import org.testng.annotations.Test;
 
+import java.util.Iterator;
+
+import static eugene.market.esma.AbstractMarketAgentTest.MARKET_AGENT;
 import static eugene.market.ontology.Defaults.defaultSymbol;
-import static jade.domain.DFService.searchUntilFound;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mock;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import static org.powermock.api.mockito.PowerMockito.when;
 
 /**
  * Tests {@link SessionInitiator}.
@@ -35,90 +28,42 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
  * @author Jakub D Kozlowski
  * @since 0.4
  */
-@PrepareForTest({Agent.class, DFService.class, DFAgentDescription.class})
+@PrepareForTest(Agent.class)
 public class SessionInitiatorTest {
 
     @Test(expectedExceptions = NullPointerException.class)
-    public void testConstructorNullAgent() {
-        new SessionInitiator(null, mock(Application.class), defaultSymbol);
-    }
-
-    @Test(expectedExceptions = NullPointerException.class)
     public void testConstructorNullApplication() {
-        new SessionInitiator(mock(Agent.class), null, defaultSymbol);
+        new SessionInitiator(null, mock(Simulation.class));
     }
 
     @Test(expectedExceptions = NullPointerException.class)
-    public void testConstructorNullSymbol() {
-        new SessionInitiator(mock(Agent.class), mock(Application.class), null);
-    }
-
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testConstructorEmptySymbol() {
-        new SessionInitiator(mock(Agent.class), mock(Application.class), "");
+    public void testConstructorNullSimulation() {
+        new SessionInitiator(mock(Application.class), null);
     }
 
     @Test
-    public void testActionMarketAgentFound() throws FIPAException, CodecException, OntologyException {
-        mockStatic(DFService.class);
+    public void testSessionInitiator() throws Exception {
 
-        final AID marketAgentAID = mock(AID.class);
-        final DFAgentDescription agentDescription = mock(DFAgentDescription.class);
-        when(agentDescription.getName()).thenReturn(marketAgentAID);
-
-        final AID dfAID = mock(AID.class);
         final Agent agent = mock(Agent.class);
-        when(agent.getDefaultDF()).thenReturn(dfAID);
-        final ContentManager contentManager = mock(ContentManager.class);
-        when(agent.getContentManager()).thenReturn(contentManager);
+        when(agent.getContentManager()).thenReturn(mock(ContentManager.class));
 
-        when(searchUntilFound(any(Agent.class), any(AID.class), any(DFAgentDescription.class),
-                              any(SearchConstraints.class), anyInt()))
-                .thenReturn(new DFAgentDescription[]{agentDescription});
-
-        final SessionInitiator initiator = new SessionInitiator(agent, mock(Application.class), defaultSymbol);
-        initiator.action();
-
-        verify(agent).addBehaviour(any(LogonBehaviour.class));
-        assertThat(initiator.onEnd(), is(BehaviourResult.SUCCESS));
-    }
-
-    @Test
-    public void testActionMarketAgentNotFound() throws FIPAException {
-        mockStatic(DFService.class);
-
-        final AID dfAID = mock(AID.class);
-        final Agent agent = mock(Agent.class);
-        when(agent.getDefaultDF()).thenReturn(dfAID);
-
-        when(searchUntilFound(any(Agent.class), any(AID.class), any(DFAgentDescription.class),
-                              any(SearchConstraints.class), anyInt()))
-                .thenReturn(new DFAgentDescription[]{});
-
-        final SessionInitiator initiator = new SessionInitiator(agent, mock(Application.class), defaultSymbol);
-        initiator.action();
-
-        verify(agent, never()).addBehaviour(any(LogonBehaviour.class));
-        assertThat(initiator.onEnd(), is(BehaviourResult.FAILURE));
-    }
-
-    @Test
-    public void testActionMarketAgentNotFoundNull() throws FIPAException {
-        mockStatic(DFService.class);
-
-        final AID dfAID = mock(AID.class);
-        final Agent agent = mock(Agent.class);
-        when(agent.getDefaultDF()).thenReturn(dfAID);
-
-        when(searchUntilFound(any(Agent.class), any(AID.class), any(DFAgentDescription.class),
-                              any(SearchConstraints.class), anyInt()))
-                .thenReturn(null);
-
-        final SessionInitiator initiator = new SessionInitiator(agent, mock(Application.class), defaultSymbol);
-        initiator.action();
-
-        verify(agent, never()).addBehaviour(any(LogonBehaviour.class));
-        assertThat(initiator.onEnd(), is(BehaviourResult.FAILURE));
+        final Simulation simulation = mock(Simulation.class);
+        when(simulation.getSymbol()).thenReturn(defaultSymbol);
+        when(simulation.getMarketAgent()).thenReturn(new AID(MARKET_AGENT, AID.ISGUID));
+        final SessionInitiator initiator = new SessionInitiator(mock(Application.class), simulation);
+        initiator.setAgent(agent);
+        initiator.onStart();
+        
+        final Iterator<Behaviour> i = (Iterator<Behaviour>) initiator.getChildren().iterator();
+        
+        assertThat(i.next(), is(LogonBehaviour.class));
+        
+        final ParallelBehaviour b = (ParallelBehaviour) i.next();
+        
+        final Iterator<Behaviour> parallelI = (Iterator<Behaviour>) b.getChildren().iterator();
+        assertThat(parallelI.next(), is(MessageRoutingBehaviour.class));
+        assertThat(parallelI.next(), is(StartStopBehaviour.class));
+        assertThat(parallelI.hasNext(), is(false));
     }
 
     @ObjectFactory

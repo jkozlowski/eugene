@@ -29,7 +29,6 @@ import jade.content.lang.leap.LEAPCodec;
 import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
-import jade.domain.FIPANames.ContentLanguage;
 
 /**
  * Defines the Market Ontology used to send messages between Agents and the Market.
@@ -42,7 +41,7 @@ public final class MarketOntology extends BeanOntology {
     /**
      * Language for this {@link MarketOntology}.
      */
-    public static final String LANGUAGE = ContentLanguage.FIPA_SL;
+    public static final String LANGUAGE = getCodec().getName();
 
     /**
      * Singleton instance of {@link MarketOntology}.

@@ -1,6 +1,6 @@
 package eugene.simulation.ontology;
 
-import jade.content.Concept;
+import jade.content.AgentAction;
 
 /**
  * {@link Stop} message is sent by the Simulation Agent to indicate that either:
@@ -13,5 +13,5 @@ import jade.content.Concept;
  * @author Jakub D Kozlowski
  * @since 0.6
  */
-public class Stop implements Concept {
+public class Stop implements AgentAction {
 }

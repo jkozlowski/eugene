@@ -39,6 +39,11 @@
             <version>${current.version}</version>
         </dependency>
         <dependency>
+            <groupId>eugene.simulation</groupId>
+            <artifactId>ontology</artifactId>
+            <version>${current.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.googlecode.guava-osgi</groupId>
             <artifactId>guava-osgi</artifactId>
             <version>${guava.version}</version>
@@ -93,7 +98,8 @@
                             javax.validation.constraints, com.google.common.collect, eugene.market.ontology,
                             jade.content.lang, jade.content.lang.sl, jade.content.onto.basic, jade.core.behaviours,
                             com.google.common.primitives, java.util.logging, jade.util,
-                            eugene.market.ontology.message.data, eugene.market.book, jade.content.lang.leap
+                            eugene.market.ontology.message.data, eugene.market.book, jade.content.lang.leap,
+                            eugene.simulation.ontology
                         </Import-Package>
                     </instructions>
                 </configuration>

@@ -1,6 +1,6 @@
 package eugene.simulation.ontology;
 
-import jade.content.Concept;
+import jade.content.AgentAction;
 
 /**
  * {@link Start} is sent by the Simulation Agents to a Trader Agent in order to activate the Trader Agent.
@@ -8,5 +8,5 @@ import jade.content.Concept;
  * @author Jakub D Kozlowski
  * @since 0.6
  */
-public class Start implements Concept {
+public class Start implements AgentAction {
 }

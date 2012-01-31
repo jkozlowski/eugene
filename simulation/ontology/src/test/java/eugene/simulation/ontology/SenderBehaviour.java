@@ -1,6 +1,7 @@
 package eugene.simulation.ontology;
 
 import eugene.market.ontology.Defaults;
+import jade.content.AgentAction;
 import jade.content.Concept;
 import jade.content.onto.basic.Action;
 import jade.core.AID;
@@ -19,19 +20,19 @@ import java.util.Set;
  */
 public class SenderBehaviour extends OneShotBehaviour {
 
-    public final Set<Concept> sent = new HashSet<Concept>();
+    public final Set<AgentAction> sent = new HashSet<AgentAction>();
 
-    public final Set<Concept> failed = new HashSet<Concept>();
+    public final Set<AgentAction> failed = new HashSet<AgentAction>();
 
-    private final Set<Concept> toSend;
+    private final Set<AgentAction> toSend;
 
-    public SenderBehaviour(final Set<Concept> toSend) {
+    public SenderBehaviour(final Set<AgentAction> toSend) {
         this.toSend = toSend;
     }
 
     @Override
     public void action() {
-        for (Concept msg : toSend) {
+        for (AgentAction msg : toSend) {
             try {
                 final Action a = new Action(new AID(Defaults.RECEIVER_AGENT, AID.ISLOCALNAME), msg);
                 final ACLMessage aclMessage = new ACLMessage(ACLMessage.REQUEST);

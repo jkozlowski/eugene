@@ -5,13 +5,14 @@ import eugene.market.client.Application;
 import eugene.market.client.Session;
 import eugene.market.ontology.Message;
 import eugene.market.ontology.message.ExecutionReport;
-import eugene.market.ontology.message.Logon;
 import eugene.market.ontology.message.NewOrderSingle;
 import eugene.market.ontology.message.OrderCancelReject;
 import eugene.market.ontology.message.OrderCancelRequest;
 import eugene.market.ontology.message.data.AddOrder;
 import eugene.market.ontology.message.data.DeleteOrder;
 import eugene.market.ontology.message.data.OrderExecuted;
+import eugene.simulation.ontology.Start;
+import eugene.simulation.ontology.Stop;
 import jade.core.Agent;
 
 import java.util.List;
@@ -42,11 +43,22 @@ public class ProxyApplication implements Application {
     }
 
     @Override
-    public void onLogon(final Logon logon, final Agent agent, final Session session) {
+    public void onStart(final Start start, final Agent agent, final Session session) {
         forAll(new Function<Application, Void>() {
             @Override
             public Void apply(final Application application) {
-                application.onLogon(logon, agent, session);
+                application.onStart(start, agent, session);
+                return null;
+            }
+        });
+    }
+
+    @Override
+    public void onStop(final Stop stop, final Agent agent, final Session session) {
+        forAll(new Function<Application, Void>() {
+            @Override
+            public Void apply(final Application application) {
+                application.onStop(stop, agent, session);
                 return null;
             }
         });

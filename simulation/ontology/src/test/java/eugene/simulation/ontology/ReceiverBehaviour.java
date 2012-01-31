@@ -1,5 +1,6 @@
 package eugene.simulation.ontology;
 
+import jade.content.AgentAction;
 import jade.content.Concept;
 import jade.content.ContentElement;
 import jade.content.onto.basic.Action;
@@ -22,7 +23,7 @@ public class ReceiverBehaviour extends SimpleBehaviour {
 
     public final int toReceive;
 
-    public final Set<Concept> received = new HashSet<Concept>();
+    public final Set<AgentAction> received = new HashSet<AgentAction>();
 
     public final Set<ACLMessage> failed = new HashSet<ACLMessage>();
 
@@ -41,12 +42,12 @@ public class ReceiverBehaviour extends SimpleBehaviour {
         try {
             ContentElement ce = myAgent.getContentManager().extractContent(msg);
 
-            if (Action.class != ce.getClass()) {
+            if (Action.class != ce.getClass() || !(((Action) ce).getAction() instanceof AgentAction)) {
                 failed.add(msg);
                 return;
             }
 
-            received.add(((Action) ce).getAction());
+            received.add((AgentAction) ((Action) ce).getAction());
         }
         catch (Exception e) {
             failed.add(msg);

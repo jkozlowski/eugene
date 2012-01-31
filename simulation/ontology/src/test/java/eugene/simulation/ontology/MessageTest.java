@@ -1,7 +1,7 @@
 package eugene.simulation.ontology;
 
 import eugene.market.ontology.Defaults;
-import jade.content.Concept;
+import jade.content.AgentAction;
 import jade.core.Agent;
 import jade.core.Profile;
 import jade.imtp.memory.MemoryProfile;
@@ -10,7 +10,6 @@ import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
 import jade.wrapper.gateway.GatewayAgent;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -31,35 +30,6 @@ public class MessageTest {
     
     private static final String DATA_PROVIDER = "message-provider";
 
-    public AgentContainer agentContainer;
-
-    public GatewayAgent senderAgent;
-
-    public GatewayAgent receiverAgent;
-
-    public AgentController senderAgentController;
-
-    public AgentController receiverAgentController;
-
-    public ReceiverBehaviour receiverBehaviour;
-
-    /**
-     * Creates the container.
-     */
-    @BeforeMethod
-    public void setupContainer() throws StaleProxyException {
-        final Profile profile = new MemoryProfile();
-        agentContainer = instance().createMainContainer(profile);
-
-        senderAgent = new GatewayAgent();
-        senderAgentController = agentContainer.acceptNewAgent(Defaults.SENDER_AGENT, senderAgent);
-        initAgent(senderAgent);
-
-        receiverAgent = new GatewayAgent();
-        receiverAgentController = agentContainer.acceptNewAgent(Defaults.RECEIVER_AGENT, receiverAgent);
-        initAgent(receiverAgent);
-    }
-
     /**
      * Initializes {@link Agent}'s language and ontology.
      *
@@ -71,32 +41,44 @@ public class MessageTest {
     }
 
     @DataProvider(name = DATA_PROVIDER)
-    public Concept[][] setupDictionary() {
-        final Set<Concept[]> messages = new HashSet<Concept[]>();
-        messages.add(new Concept[] {new LogonComplete()});
-        messages.add(new Concept[] {new Start()});
-        messages.add(new Concept[] {new Started()});
-        messages.add(new Concept[] {new Stop()});
-        messages.add(new Concept[] {new Stopped()});
-        return messages.toArray(new Concept[][]{});
+    public AgentAction[][] setupDictionary() {
+        final Set<AgentAction[]> messages = new HashSet<AgentAction[]>();
+        messages.add(new AgentAction[] {new LogonComplete()});
+        messages.add(new AgentAction[] {new Start()});
+        messages.add(new AgentAction[] {new Started()});
+        messages.add(new AgentAction[] {new Stop()});
+        messages.add(new AgentAction[] {new Stopped()});
+        return messages.toArray(new AgentAction[][]{});
     }
 
     @Test(dataProvider = DATA_PROVIDER)
-    public void testSendLogonComplete(final Concept message) throws InterruptedException, StaleProxyException,
+    public void testSendLogonComplete(final AgentAction message) throws InterruptedException, StaleProxyException,
                                                                     IllegalAccessException {
 
-        final Set<Concept> toSend = new HashSet<Concept>();
+        final Profile profile = new MemoryProfile();
+        final AgentContainer container = instance().createMainContainer(profile);
+
+        final GatewayAgent senderAgent = new GatewayAgent();
+        final AgentController senderController = container.acceptNewAgent(Defaults.SENDER_AGENT, senderAgent);
+        initAgent(senderAgent);
+
+        final GatewayAgent receiverAgent = new GatewayAgent();
+        final AgentController receiverController = container.acceptNewAgent(Defaults.RECEIVER_AGENT, 
+                                                                                  receiverAgent);
+        initAgent(receiverAgent);
+        
+        final Set<AgentAction> toSend = new HashSet<AgentAction>();
         toSend.add(message);
 
-        receiverBehaviour = new ReceiverBehaviour(toSend.size());
+        final ReceiverBehaviour receiverBehaviour = new ReceiverBehaviour(toSend.size());
         final Event receiverEvent = new Event(-1, receiverBehaviour);
-        receiverAgentController.start();
-        receiverAgentController.putO2AObject(receiverEvent, AgentController.ASYNC);
+        receiverController.start();
+        receiverController.putO2AObject(receiverEvent, AgentController.ASYNC);
 
         final SenderBehaviour senderBehaviour = new SenderBehaviour(toSend);
         final Event senderEvent = new Event(-1, senderBehaviour);
-        senderAgentController.start();
-        senderAgentController.putO2AObject(senderEvent, AgentController.ASYNC);
+        senderController.start();
+        senderController.putO2AObject(senderEvent, AgentController.ASYNC);
         senderEvent.waitUntilProcessed();
 
         assertThat(senderBehaviour.failed.isEmpty(), is(true));
@@ -106,5 +88,7 @@ public class MessageTest {
 
         assertThat(receiverBehaviour.failed.isEmpty(), is(true));
         assertThat(receiverBehaviour.received.iterator().next(), is(message.getClass()));
+
+        container.kill();
     }
 }

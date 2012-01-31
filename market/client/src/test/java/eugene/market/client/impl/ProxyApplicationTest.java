@@ -3,18 +3,15 @@ package eugene.market.client.impl;
 import eugene.market.client.Application;
 import eugene.market.client.Session;
 import eugene.market.ontology.message.ExecutionReport;
-import eugene.market.ontology.message.Logon;
 import eugene.market.ontology.message.NewOrderSingle;
 import eugene.market.ontology.message.OrderCancelReject;
 import eugene.market.ontology.message.OrderCancelRequest;
 import eugene.market.ontology.message.data.AddOrder;
 import eugene.market.ontology.message.data.DeleteOrder;
 import eugene.market.ontology.message.data.OrderExecuted;
+import eugene.simulation.ontology.Start;
+import eugene.simulation.ontology.Stop;
 import jade.core.Agent;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.testng.PowerMockObjectFactory;
-import org.testng.IObjectFactory;
-import org.testng.annotations.ObjectFactory;
 import org.testng.annotations.Test;
 
 import static org.mockito.Mockito.verify;
@@ -27,7 +24,6 @@ import static org.powermock.api.mockito.PowerMockito.verifyNoMoreInteractions;
  * @author Jakub D Kozlowski
  * @since 0.5
  */
-@PrepareForTest(Agent.class)
 public class ProxyApplicationTest {
     
     @Test(expectedExceptions = NullPointerException.class)
@@ -41,18 +37,34 @@ public class ProxyApplicationTest {
     }
     
     @Test
-    public void testOnLogon() {
+    public void testOnStart() {
         final Application application1 = mock(Application.class);
         final Application application2 = mock(Application.class);
         final Session session = mock(Session.class);
         final Agent agent = mock(Agent.class);
-        final Logon logon = new Logon();
+        final Start start = new Start();
         final ProxyApplication proxy = new ProxyApplication(application1, application2);
 
-        proxy.onLogon(logon, agent, session);
+        proxy.onStart(start, agent, session);
 
-        verify(application1).onLogon(logon, agent, session);
-        verify(application2).onLogon(logon, agent, session);
+        verify(application1).onStart(start, agent, session);
+        verify(application2).onStart(start, agent, session);
+        verifyNoMoreInteractions(application1, application2);
+    }
+
+    @Test
+    public void testOnStop() {
+        final Application application1 = mock(Application.class);
+        final Application application2 = mock(Application.class);
+        final Session session = mock(Session.class);
+        final Agent agent = mock(Agent.class);
+        final Stop start = new Stop();
+        final ProxyApplication proxy = new ProxyApplication(application1, application2);
+
+        proxy.onStop(start, agent, session);
+
+        verify(application1).onStop(start, agent, session);
+        verify(application2).onStop(start, agent, session);
         verifyNoMoreInteractions(application1, application2);
     }
 
@@ -159,10 +171,5 @@ public class ProxyApplicationTest {
         verify(application1).fromApp(orderCancelRequest, session);
         verify(application2).fromApp(orderCancelRequest, session);
         verifyNoMoreInteractions(application1, application2);
-    }
-
-    @ObjectFactory
-    public IObjectFactory getObjectFactory() {
-        return new PowerMockObjectFactory();
     }
 }

@@ -43,6 +43,16 @@
             <version>${current.version}</version>
         </dependency>
         <dependency>
+            <groupId>eugene.simulation</groupId>
+            <artifactId>agent</artifactId>
+            <version>${current.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>eugene.simulation</groupId>
+            <artifactId>ontology</artifactId>
+            <version>${current.version}</version>
+        </dependency>
+        <dependency>
             <groupId>eugene</groupId>
             <artifactId>utils</artifactId>
             <version>${current.version}</version>
@@ -120,7 +130,8 @@
                             javax.validation.constraints, com.google.common.collect, eugene.market.ontology,
                             jade.content.lang, jade.content.lang.sl, jade.content.onto.basic, jade.core.behaviours,
                             com.google.common.primitives, java.util.logging, jade.util, eugene.market.esma,
-                            eugene.market.ontology.message.data, eugene.market.book, eugene.utils
+                            eugene.market.ontology.message.data, eugene.market.book, eugene.utils,
+                            eugene.simulation.agent, eugene.simulation.ontology
                         </Import-Package>
                     </instructions>
                 </configuration>

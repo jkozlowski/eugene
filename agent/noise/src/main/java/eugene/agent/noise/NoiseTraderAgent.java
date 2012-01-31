@@ -5,7 +5,8 @@ import eugene.market.book.OrderBook;
 import eugene.market.client.ApplicationAdapter;
 import eugene.market.client.Session;
 import eugene.market.ontology.MarketOntology;
-import eugene.market.ontology.message.Logon;
+import eugene.simulation.agent.Simulation;
+import eugene.simulation.ontology.Start;
 import jade.core.Agent;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -23,31 +24,30 @@ import static eugene.market.client.Sessions.initiate;
  */
 public class NoiseTraderAgent extends Agent {
 
-    private final String symbol;
-
-    public NoiseTraderAgent(final String symbol) {
-        checkNotNull(symbol);
-        checkArgument(!symbol.isEmpty());
-        this.symbol = symbol;
-    }
-
     @Override
     public void setup() {
-        getContentManager().registerLanguage(MarketOntology.getCodec(), MarketOntology.LANGUAGE);
+
+        checkNotNull(getArguments());
+        checkArgument(getArguments().length == 1);
+        checkArgument(getArguments()[0] instanceof Simulation);
+
+        final Simulation simulation = (Simulation) getArguments()[0];
+
+        getContentManager().registerLanguage(MarketOntology.getCodec());
         getContentManager().registerOntology(MarketOntology.getInstance());
 
         final OrderBook orderBook = defaultOrderBook();
-        addBehaviour(initiate(
-                this,
-                proxy(
-                        orderBook(orderBook),
-                        new ApplicationAdapter() {
-                            @Override
-                            public void onLogon(final Logon logon, final Agent agent, final Session session) {
-                                agent.addBehaviour(new PlaceOrderBehaviour(orderBook, session));
-                            }
-                        }
-                ),
-                symbol));
+        addBehaviour(
+                initiate(
+                        proxy(
+                                orderBook(orderBook),
+                                new ApplicationAdapter() {
+                                    @Override
+                                    public void onStart(final Start start, final Agent agent, final Session session) {
+                                        agent.addBehaviour(new PlaceOrderBehaviour(orderBook, session));
+                                    }
+                                }
+                        ),
+                        simulation));
     }
 }

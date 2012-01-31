@@ -100,7 +100,8 @@
                             eugene.market.ontology.message.data, eugene.market.book, eugene.market.ontology.field,
                             eugene.market.ontology.field.enums, eugene.market.client, eugene.market.ontology,
                             jade.content, jade.content.lang, jade.content.lang.sl, jade.content.onto,
-                            jade.content.lang.leap, eugene.market.esma
+                            jade.content.lang.leap, eugene.market.esma, eugene.simulation.agent,
+                            eugene.simulation.ontology
                         </Import-Package>
                     </instructions>
                 </configuration>

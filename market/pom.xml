@@ -18,10 +18,9 @@
     <description>Modules that relate to the Eugene's Stock Market Agent and Client API.</description>
 
     <modules>
-        <module>ontology</module>
-        <module>esma</module>
-        <module>integration</module>
         <module>book</module>
         <module>client</module>
+        <module>esma</module>
+        <module>ontology</module>
     </modules>
 </project>

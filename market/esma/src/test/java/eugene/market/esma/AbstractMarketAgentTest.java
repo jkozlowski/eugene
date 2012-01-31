@@ -2,6 +2,7 @@ package eugene.market.esma;
 
 import eugene.market.ontology.MarketOntology;
 import eugene.market.ontology.Message;
+import eugene.simulation.ontology.SimulationOntology;
 import jade.core.Agent;
 import jade.core.Profile;
 import jade.core.behaviours.Behaviour;
@@ -9,9 +10,9 @@ import jade.imtp.memory.MemoryProfile;
 import jade.util.Event;
 import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
+import jade.wrapper.ControllerException;
 import jade.wrapper.StaleProxyException;
 import jade.wrapper.gateway.GatewayAgent;
-import org.testng.annotations.BeforeMethod;
 
 import static eugene.market.ontology.Defaults.defaultSymbol;
 import static jade.core.Runtime.instance;
@@ -28,48 +29,59 @@ public abstract class AbstractMarketAgentTest {
 
     public static final String MARKET_AGENT = "market";
 
-    public Agent traderAgent;
-
-    public AgentController gatewayAgentController;
-
-    public AgentController marketAgentController;
-
     /**
      * Creates the container.
      */
-    @BeforeMethod
-    public void setupContainer() throws StaleProxyException {
+    public static AgentContainer getContainer() throws StaleProxyException {
         final Profile profile = new MemoryProfile();
         final AgentContainer agentContainer = instance().createMainContainer(profile);
 
-        initTraderAgent(agentContainer);
-        initMarketAgent(agentContainer);
-    }
+        final GatewayAgent trader = new GatewayAgent();
+        final AgentController gatewayController = agentContainer.acceptNewAgent(GATEWAY_AGENT, trader);
+        trader.getContentManager().registerLanguage(MarketOntology.getCodec());
+        trader.getContentManager().registerOntology(MarketOntology.getInstance());
+        trader.getContentManager().registerLanguage(SimulationOntology.getCodec());
+        trader.getContentManager().registerOntology(SimulationOntology.getInstance());
+        gatewayController.start();
 
-    private void initTraderAgent(final AgentContainer agentContainer) throws StaleProxyException {
-        traderAgent = new GatewayAgent();
-        gatewayAgentController = agentContainer.acceptNewAgent(GATEWAY_AGENT, traderAgent);
-        traderAgent.getContentManager().registerLanguage(MarketOntology.getCodec(), MarketOntology.LANGUAGE);
-        traderAgent.getContentManager().registerOntology(MarketOntology.getInstance());
-        gatewayAgentController.start();
-    }
+        final Agent market = new MarketAgent(defaultSymbol);
+        final AgentController marketController = agentContainer.acceptNewAgent(MARKET_AGENT, market);
+        marketController.start();
 
-    private void initMarketAgent(final AgentContainer agentContainer) throws StaleProxyException {
-        final Agent marketAgent = new MarketAgent(defaultSymbol);
-        marketAgentController = agentContainer.acceptNewAgent(MARKET_AGENT, marketAgent);
-        marketAgentController.start();
-    }
-
-    public Message send(final Message msg) throws StaleProxyException, InterruptedException {
-        final SendMessage sendMessage = new SendMessage(traderAgent, msg);
-        final Event traderEvent = new Event(-1, sendMessage);
-        gatewayAgentController.putO2AObject(traderEvent, AgentController.ASYNC);
-        traderEvent.waitUntilProcessed();
-        return sendMessage.received.get();
+        return agentContainer;
     }
     
-    public void submit(final Behaviour behaviour) throws StaleProxyException {
+    public static AgentContainer getNakedContainer() {
+        final Profile profile = new MemoryProfile();
+        return instance().createMainContainer(profile);
+    }
+
+    public static Message send(final Message msg, final AgentContainer container) throws ControllerException,
+                                                                                         InterruptedException {
+        final SendMessage sendMessage = new SendMessage(msg);
+        final Event traderEvent = new Event(-1, sendMessage);
+        final AgentController traderController = container.getAgent(GATEWAY_AGENT);
+        traderController.putO2AObject(traderEvent, AgentController.ASYNC);
+        traderEvent.waitUntilProcessed(10000000);
+        return sendMessage.received.get();
+    }
+
+    public static void submit(final Behaviour behaviour, final AgentContainer container)
+            throws ControllerException, InterruptedException {
         final Event traderEvent = new Event(-1, behaviour);
-        gatewayAgentController.putO2AObject(traderEvent, AgentController.ASYNC);
+        final AgentController traderController = container.getAgent(GATEWAY_AGENT);
+        traderController.putO2AObject(traderEvent, AgentController.ASYNC);
+        traderEvent.waitUntilProcessed(10000000);
+    }
+
+    public static void submitNoWait(final Behaviour behaviour, final AgentContainer container)
+            throws ControllerException, InterruptedException {
+        final Event traderEvent = new Event(-1, behaviour);
+        final AgentController traderController = container.getAgent(GATEWAY_AGENT);
+        traderController.putO2AObject(traderEvent, AgentController.ASYNC);
+    }
+
+    public static AgentController getMarket(final AgentContainer container) throws ControllerException {
+        return container.getAgent(MARKET_AGENT);
     }
 }

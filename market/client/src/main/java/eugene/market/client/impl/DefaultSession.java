@@ -3,7 +3,6 @@ package eugene.market.client.impl;
 import com.google.common.annotations.VisibleForTesting;
 import eugene.market.client.Application;
 import eugene.market.client.Session;
-import eugene.market.esma.MarketAgent;
 import eugene.market.ontology.MarketOntology;
 import eugene.market.ontology.Message;
 import eugene.market.ontology.field.ClOrdID;
@@ -11,11 +10,12 @@ import eugene.market.ontology.field.Symbol;
 import eugene.market.ontology.message.Logon;
 import eugene.market.ontology.message.NewOrderSingle;
 import eugene.market.ontology.message.OrderCancelRequest;
+import eugene.simulation.agent.Simulation;
+import jade.content.AgentAction;
 import jade.content.ContentElement;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
-import jade.core.AID;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 
@@ -36,13 +36,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public final class DefaultSession implements Session {
 
+    private final Simulation simulation;
+
     private final Agent agent;
 
-    private final AID marketAgent;
-
     private final Application application;
-
-    private final String symbol;
 
     private final AtomicLong curClOrdID = new AtomicLong(1);
 
@@ -50,32 +48,26 @@ public final class DefaultSession implements Session {
      * Creates a {@link DefaultSession} that will route all messages to this <code>application</code> and will be
      * executed by this <code>agent</code>.
      *
+     * @param simulation  {@link Simulation} that is being run.
      * @param agent       {@link Agent} that will execute this {@link DefaultSession}.
-     * @param marketAgent {@link AID} of the {@link MarketAgent} to communicate with.
      * @param application implementation of {@link Application} that this {@link DefaultSession} will route {@link
      *                    Message}s to.
-     * @param symbol      symbol handled by this {@link DefaultSession}.
      */
-    public DefaultSession(final Agent agent, final AID marketAgent, final Application application,
-                          final String symbol) {
+    public DefaultSession(final Simulation simulation, final Agent agent, final Application application) {
+        checkNotNull(simulation);
         checkNotNull(agent);
-        checkNotNull(marketAgent);
         checkNotNull(application);
-        checkNotNull(symbol);
-        checkArgument(!symbol.isEmpty());
+        this.simulation = simulation;
         this.agent = agent;
-        this.marketAgent = marketAgent;
         this.application = application;
-        this.symbol = symbol;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    // TODO: clone the AID.
-    public AID getMarketAgent() {
-        return marketAgent;
+    public Simulation getSimulation() {
+        return simulation;
     }
 
     /**
@@ -90,15 +82,7 @@ public final class DefaultSession implements Session {
      * {@inheritDoc}
      */
     @Override
-    public String getSymbol() {
-        return symbol;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public <T extends Message> T extractMessage(final ACLMessage aclMessage, final Class<T> type) {
+    public <T extends AgentAction> T extractMessage(final ACLMessage aclMessage, final Class<T> type) {
 
         checkNotNull(aclMessage);
         checkNotNull(type);
@@ -129,11 +113,11 @@ public final class DefaultSession implements Session {
         checkNotNull(message);
 
         try {
-            final Action action = new Action(marketAgent, message);
+            final Action action = new Action(simulation.getMarketAgent(), message);
             final ACLMessage aclMessage = new ACLMessage(ACLMessage.REQUEST);
             aclMessage.setOntology(MarketOntology.getInstance().getName());
             aclMessage.setLanguage(MarketOntology.LANGUAGE);
-            aclMessage.addReceiver(marketAgent);
+            aclMessage.addReceiver(simulation.getMarketAgent());
 
             agent.getContentManager().fillContent(aclMessage, action);
 
@@ -153,9 +137,10 @@ public final class DefaultSession implements Session {
     @Override
     public void send(final NewOrderSingle newOrderSingle) throws NullPointerException, IllegalArgumentException {
         checkNotNull(newOrderSingle);
-        checkArgument(null == newOrderSingle.getSymbol() || symbol.equals(newOrderSingle.getSymbol().getValue()));
+        checkArgument(null == newOrderSingle.getSymbol() ||
+                              simulation.getSymbol().equals(newOrderSingle.getSymbol().getValue()));
         checkArgument(null == newOrderSingle.getClOrdID());
-        newOrderSingle.setSymbol(new Symbol(symbol));
+        newOrderSingle.setSymbol(new Symbol(simulation.getSymbol()));
         newOrderSingle.setClOrdID(getClOrdID());
         application.fromApp(newOrderSingle, this);
         agent.send(aclRequest(newOrderSingle));
@@ -164,8 +149,9 @@ public final class DefaultSession implements Session {
     @Override
     public void send(OrderCancelRequest orderCancelRequest) throws NullPointerException, IllegalArgumentException {
         checkNotNull(orderCancelRequest);
-        checkArgument(null == orderCancelRequest.getSymbol() || symbol.equals(orderCancelRequest.getSymbol().getValue()));
-        orderCancelRequest.setSymbol(new Symbol(symbol));
+        checkArgument(null == orderCancelRequest.getSymbol() ||
+                              simulation.getSymbol().equals(orderCancelRequest.getSymbol().getValue()));
+        orderCancelRequest.setSymbol(new Symbol(simulation.getSymbol()));
         application.fromApp(orderCancelRequest, this);
         agent.send(aclRequest(orderCancelRequest));
     }

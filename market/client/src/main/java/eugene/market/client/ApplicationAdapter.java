@@ -1,13 +1,14 @@
 package eugene.market.client;
 
 import eugene.market.ontology.message.ExecutionReport;
-import eugene.market.ontology.message.Logon;
 import eugene.market.ontology.message.NewOrderSingle;
 import eugene.market.ontology.message.OrderCancelReject;
 import eugene.market.ontology.message.OrderCancelRequest;
 import eugene.market.ontology.message.data.AddOrder;
 import eugene.market.ontology.message.data.DeleteOrder;
 import eugene.market.ontology.message.data.OrderExecuted;
+import eugene.simulation.ontology.Start;
+import eugene.simulation.ontology.Stop;
 import jade.core.Agent;
 
 /**
@@ -18,8 +19,11 @@ import jade.core.Agent;
  */
 public abstract class ApplicationAdapter implements Application {
 
+    public void onStart(final Start start, final Agent agent, final Session session) {
+    }
+
     @Override
-    public void onLogon(final Logon logon, final Agent agent, final Session session) {
+    public void onStop(final Stop stop, final Agent agent, final Session session) {
     }
 
     @Override

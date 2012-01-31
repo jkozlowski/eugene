@@ -2,18 +2,22 @@ package eugene.market.client;
 
 import eugene.market.ontology.Message;
 import eugene.market.ontology.message.ExecutionReport;
-import eugene.market.ontology.message.Logon;
 import eugene.market.ontology.message.NewOrderSingle;
 import eugene.market.ontology.message.OrderCancelReject;
 import eugene.market.ontology.message.OrderCancelRequest;
 import eugene.market.ontology.message.data.AddOrder;
 import eugene.market.ontology.message.data.DeleteOrder;
 import eugene.market.ontology.message.data.OrderExecuted;
+import eugene.simulation.ontology.Start;
+import eugene.simulation.ontology.Stop;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 
 /**
- * Interface for receiving {@link Message}s sent through and received by {@link Session}.
+ * Interface for receiving {@link Message}s sent through and received by {@link Session}. Depending on the
+ * simulation, {@link Application} can receive {@link Message}s before receiving {@link Start} message. Nevertheless,
+ * {@link Application} should not send any {@link Message}s before receiving {@link Start} message; failre to do so
+ * may lead to unexpected behaviour.
  *
  * @author Jakub D Kozlowski
  * @since 0.4
@@ -21,14 +25,24 @@ import jade.core.behaviours.Behaviour;
 public interface Application {
 
     /**
-     * Called when a valid {@link Logon} has been established with the Market Agent. This method should be used by
+     * Called when {@link Start} message has been received from the Simulation Agent. This method should be used by
      * {@link Application} implementations to register {@link Behaviour}s with the <code>agent</code>.
      *
-     * @param logon   {@link Logon} message received from the Market Agent.
+     * @param start   {@link Start} message received from the Simulation Agent.
      * @param agent   {@link Agent} that is executing the this <code>session</code>.
      * @param session active {@link Session}.
      */
-    void onLogon(final Logon logon, final Agent agent, final Session session);
+    void onStart(final Start start, final Agent agent, final Session session);
+
+    /**
+     * Called when {@link Stop} message has been received from the Simulation Agent. This method should be used by
+     * {@link Application} implementations to unregister {@link Behaviour}s with the <code>agent</code>.
+     *
+     * @param stop    {@link Stop} message received from the Simulation Agent.
+     * @param agent   {@link Agent} that is executing the this <code>session</code>.
+     * @param session active {@link Session}.
+     */
+    void onStop(final Stop stop, final Agent agent, final Session session);
 
     /**
      * This callback receives {@link ExecutionReport} for the application.

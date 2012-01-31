@@ -1,101 +1,73 @@
 package eugene.market.client.impl;
 
 import eugene.market.client.Application;
+import eugene.market.client.ApplicationAdapter;
 import eugene.market.client.Session;
 import eugene.market.esma.MarketAgent;
+import eugene.market.ontology.MarketOntology;
 import eugene.market.ontology.Message;
+import eugene.simulation.agent.Simulation;
+import eugene.simulation.ontology.SimulationOntology;
+import eugene.simulation.ontology.Stop;
 import eugene.utils.BehaviourResult;
-import jade.core.AID;
 import jade.core.Agent;
-import jade.core.behaviours.OneShotBehaviour;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.SearchConstraints;
-import jade.domain.FIPAException;
+import jade.core.behaviours.ParallelBehaviour;
+import jade.core.behaviours.SequentialBehaviour;
 
-import java.util.logging.Logger;
-
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static eugene.market.esma.MarketAgent.getDFAgentDescription;
-import static jade.domain.DFService.searchUntilFound;
+import static eugene.market.client.Applications.proxy;
 
 /**
- * Searches for the Market Agent and initiates the {@link DefaultSession}. The Agents should provide an implementation of
- * {@link Application} that will receive callbacks whenever {@link Message}s are received.
+ * Starts the {@link DefaultSession} with the {@link MarketAgent}. The Agents should provide an implementation
+ * of {@link Application} that will receive callbacks whenever {@link Message}s are received.
  *
  * @author Jakub D Kozlowski
  * @since 0.4
  */
-public final class SessionInitiator extends OneShotBehaviour {
-
-    private final Logger LOG = Logger.getLogger(SessionInitiator.class.getName());
-
-    public static final int RETRY = 3;
-
-    public static final int TIMEOUT = 10 * 1000;
+public final class SessionInitiator extends SequentialBehaviour {
 
     private final Application application;
 
-    private final String symbol;
+    private final Simulation simulation;
 
     private final BehaviourResult result = new BehaviourResult();
 
     /**
-     * Creates a {@link DefaultSession} that will search for the Market Agent for this <code>symbol</code> and that will
-     * pass this {@link Application} to {@link DefaultSession}.
+     * Creates a {@link DefaultSession} that will start a session with the Market Agent for this
+     * <code>simulation</code> and this <code>application</code>.
      *
-     * @param agent       {@link Agent} that will execute this {@link SessionInitiator}.
      * @param application implementation of {@link Application} that will be passed to {@link DefaultSession}.
-     * @param symbol      symbol that the Market Agent needs to handle.
+     * @param simulation  implementation of {@link Simulation} that will be run.
      */
-    public SessionInitiator(final Agent agent, final Application application, final String symbol) {
-        super(agent);
-        checkNotNull(agent);
+    public SessionInitiator(final Application application, final Simulation simulation) {
         checkNotNull(application);
-        checkNotNull(symbol);
-        checkArgument(!symbol.isEmpty());
+        checkNotNull(simulation);
         this.application = application;
-        this.symbol = symbol;
+        this.simulation = simulation;
     }
 
     @Override
-    public void action() {
-        final AID marketAgent = getMarketAgent();
-        if (null == marketAgent) {
-            LOG.severe("Market agent for " + symbol + " not found");
-            return;
-        }
-        
-        final Session session = new DefaultSession(myAgent, marketAgent, application, symbol);
+    public void onStart() {
+        myAgent.getContentManager().registerLanguage(MarketOntology.getCodec());
+        myAgent.getContentManager().registerLanguage(SimulationOntology.getCodec());
+        myAgent.getContentManager().registerOntology(MarketOntology.getInstance());
+        myAgent.getContentManager().registerOntology(SimulationOntology.getInstance());
 
-        myAgent.addBehaviour(new LogonBehaviour(myAgent, session));
-        result.success();
-    }
+        final ParallelBehaviour parallel = new ParallelBehaviour();
 
-    /**
-     * Tries to find the {@link MarketAgent} {@link SessionInitiator#RETRY} times,
-     * with {@link SessionInitiator#TIMEOUT} delay between retries.
-     *
-     * @return {@link AID} of the {@link MarketAgent} or <code>null</code> if not found.
-     */
-    private AID getMarketAgent() {
-        try {
-            final DFAgentDescription agentDescription = getDFAgentDescription(symbol);
-            final SearchConstraints constraints = new SearchConstraints();
-            constraints.setMaxResults(-1L);
-            for (int i = 0; i < RETRY; i++) {
-                final DFAgentDescription[] results = searchUntilFound(myAgent, myAgent.getDefaultDF(), agentDescription,
-                                                                      constraints, TIMEOUT);
-                if (null != results && results.length > 0) {
-                    return results[0].getName();
-                }
+        final Application proxy = proxy(application, new ApplicationAdapter() {
+            @Override
+            public void onStop(Stop stop, Agent agent, Session session) {
+                SessionInitiator.this.removeSubBehaviour(parallel);
             }
-        }
-        catch (FIPAException e) {
-            LOG.severe(e.toString());
-        }
+        });
+        
+        final Session session = new DefaultSession(simulation, myAgent, proxy);
+        addSubBehaviour(new LogonBehaviour(session));
 
-        return null;
+        parallel.addSubBehaviour(new MessageRoutingBehaviour(session));
+        parallel.addSubBehaviour(new StartStopBehaviour(session));
+        addSubBehaviour(parallel);
     }
 
     @Override

@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>eugene.market</groupId>
+        <groupId>eugene.simulation</groupId>
         <artifactId>parent</artifactId>
         <version>0.5-SNAPSHOT</version>
     </parent>
@@ -71,11 +71,11 @@
                         <Bundle-SymbolicName>${bundle.namespace}</Bundle-SymbolicName>
                         <Bundle-Version>${project.version}</Bundle-Version>
                         <Bundle-Description>${project.description}</Bundle-Description>
-                        <Export-Package>${bundle.namespace}, ${bundle.namespace}.field, ${bundle.namespace}.message
+                        <Export-Package>${bundle.namespace}
                         </Export-Package>
                         <Import-Package>
                             jade.content, jade.content.lang, jade.content.lang.leap, jade.content.onto,
-                            jade.content.onto.annotations, com.google.common.base
+                            jade.content.onto.annotations, com.google.common.base, jade.content.lang.sl
                         </Import-Package>
                     </instructions>
                 </configuration>

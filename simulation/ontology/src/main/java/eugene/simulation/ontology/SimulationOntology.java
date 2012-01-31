@@ -1,11 +1,10 @@
 package eugene.simulation.ontology;
 
 import jade.content.lang.Codec;
-import jade.content.lang.leap.LEAPCodec;
+import jade.content.lang.sl.SLCodec;
 import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
-import jade.domain.FIPANames.ContentLanguage;
 
 /**
  * Defines the Simulation Ontology used to send messages between Trader Agents, Market Agent and Simulation Agent.
@@ -18,7 +17,7 @@ public final class SimulationOntology extends BeanOntology {
     /**
      * Language for this {@link SimulationOntology}.
      */
-    public static final String LANGUAGE = ContentLanguage.FIPA_SL;
+    public static final String LANGUAGE = getCodec().getName();
 
     /**
      * Singleton instance of {@link SimulationOntology}.
@@ -52,7 +51,7 @@ public final class SimulationOntology extends BeanOntology {
      * @return instance of {@link Codec}.
      */
     public static Codec getCodec() {
-        return new LEAPCodec();
+        return new SLCodec();
     }
 
     /**

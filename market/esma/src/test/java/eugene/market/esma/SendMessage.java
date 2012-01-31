@@ -24,10 +24,15 @@ public class SendMessage extends SequentialBehaviour {
     public final AID marketAgent = new AID(AbstractMarketAgentTest.MARKET_AGENT, AID.ISLOCALNAME);
 
     public final AtomicReference<Message> received = new AtomicReference<Message>(null);
+    
+    private final Message toSend;
 
-    public SendMessage(final Agent agent, final Message toSend) {
-        super(agent);
-
+    public SendMessage(final Message toSend) {
+        this.toSend = toSend;
+    }
+    
+    @Override
+    public void onStart() {
         try {
             final Action a = new Action(marketAgent, toSend);
             final ACLMessage aclMessage = new ACLMessage(ACLMessage.REQUEST);
@@ -35,10 +40,10 @@ public class SendMessage extends SequentialBehaviour {
             aclMessage.setOntology(MarketOntology.getInstance().getName());
             aclMessage.setLanguage(MarketOntology.LANGUAGE);
             myAgent.getContentManager().fillContent(aclMessage, a);
-            addSubBehaviour(new SenderBehaviour(agent, aclMessage));
+            addSubBehaviour(new SenderBehaviour(myAgent, aclMessage));
         }
         catch (Exception e) {
-        }
+        }    
     }
 
     private class SenderBehaviour extends AchieveREInitiator {

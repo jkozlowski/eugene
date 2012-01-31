@@ -8,6 +8,7 @@ import eugene.market.ontology.message.OrderCancelReject;
 import eugene.market.ontology.message.data.AddOrder;
 import eugene.market.ontology.message.data.DeleteOrder;
 import eugene.market.ontology.message.data.OrderExecuted;
+import eugene.simulation.agent.Simulation;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -36,13 +37,8 @@ import static org.powermock.api.mockito.PowerMockito.when;
 public class MessageRoutingBehaviourTest {
 
     @Test(expectedExceptions = NullPointerException.class)
-    public void testConstructorNullAgent() {
-        new MessageRoutingBehaviour(null, mock(Session.class));
-    }
-
-    @Test(expectedExceptions = NullPointerException.class)
     public void testConstructorNullSession() {
-        new MessageRoutingBehaviour(mock(Agent.class), null);
+        new MessageRoutingBehaviour(null);
     }
 
     @Test
@@ -50,8 +46,10 @@ public class MessageRoutingBehaviourTest {
         final Agent agent = mock(Agent.class);
         final Application application = mock(Application.class);
         final Session session = mock(Session.class);
+        when(session.getSimulation()).thenReturn(mock(Simulation.class));
         when(session.getApplication()).thenReturn(application);
-        final MessageRoutingBehaviour messageRoutingBehaviour = new MessageRoutingBehaviour(agent, session);
+        final MessageRoutingBehaviour messageRoutingBehaviour = new MessageRoutingBehaviour(session);
+        messageRoutingBehaviour.setAgent(agent);
 
         messageRoutingBehaviour.action();
         verify(agent).receive(any(MessageTemplate.class));
@@ -66,9 +64,11 @@ public class MessageRoutingBehaviourTest {
         when(agent.receive(any(MessageTemplate.class))).thenReturn(aclMessage);
         final Application application = mock(Application.class);
         final Session session = mock(Session.class);
+        when(session.getSimulation()).thenReturn(mock(Simulation.class));
         when(session.getApplication()).thenReturn(application);
         when(session.extractMessage(aclMessage, Message.class)).thenReturn(null);
-        final MessageRoutingBehaviour messageRoutingBehaviour = new MessageRoutingBehaviour(agent, session);
+        final MessageRoutingBehaviour messageRoutingBehaviour = new MessageRoutingBehaviour(session);
+        messageRoutingBehaviour.setAgent(agent);
 
         messageRoutingBehaviour.action();
         verify(agent).receive(any(MessageTemplate.class));
@@ -84,9 +84,11 @@ public class MessageRoutingBehaviourTest {
         final ExecutionReport executionReport = new ExecutionReport();
         final Application application = mock(Application.class);
         final Session session = mock(Session.class);
+        when(session.getSimulation()).thenReturn(mock(Simulation.class));
         when(session.getApplication()).thenReturn(application);
         when(session.extractMessage(aclMessage, Message.class)).thenReturn(executionReport);
-        final MessageRoutingBehaviour messageRoutingBehaviour = new MessageRoutingBehaviour(agent, session);
+        final MessageRoutingBehaviour messageRoutingBehaviour = new MessageRoutingBehaviour(session);
+        messageRoutingBehaviour.setAgent(agent);
 
         messageRoutingBehaviour.action();
         verify(agent).receive(any(MessageTemplate.class));
@@ -103,9 +105,11 @@ public class MessageRoutingBehaviourTest {
         final OrderCancelReject orderCancelReject = new OrderCancelReject();
         final Application application = mock(Application.class);
         final Session session = mock(Session.class);
+        when(session.getSimulation()).thenReturn(mock(Simulation.class));
         when(session.getApplication()).thenReturn(application);
         when(session.extractMessage(aclMessage, Message.class)).thenReturn(orderCancelReject);
-        final MessageRoutingBehaviour messageRoutingBehaviour = new MessageRoutingBehaviour(agent, session);
+        final MessageRoutingBehaviour messageRoutingBehaviour = new MessageRoutingBehaviour(session);
+        messageRoutingBehaviour.setAgent(agent);
 
         messageRoutingBehaviour.action();
         verify(agent).receive(any(MessageTemplate.class));
@@ -122,9 +126,11 @@ public class MessageRoutingBehaviourTest {
         final AddOrder addOrder = new AddOrder();
         final Application application = mock(Application.class);
         final Session session = mock(Session.class);
+        when(session.getSimulation()).thenReturn(mock(Simulation.class));
         when(session.getApplication()).thenReturn(application);
         when(session.extractMessage(aclMessage, Message.class)).thenReturn(addOrder);
-        final MessageRoutingBehaviour messageRoutingBehaviour = new MessageRoutingBehaviour(agent, session);
+        final MessageRoutingBehaviour messageRoutingBehaviour = new MessageRoutingBehaviour(session);
+        messageRoutingBehaviour.setAgent(agent);
 
         messageRoutingBehaviour.action();
         verify(agent).receive(any(MessageTemplate.class));
@@ -141,9 +147,11 @@ public class MessageRoutingBehaviourTest {
         final DeleteOrder deleteOrder = new DeleteOrder();
         final Application application = mock(Application.class);
         final Session session = mock(Session.class);
+        when(session.getSimulation()).thenReturn(mock(Simulation.class));
         when(session.getApplication()).thenReturn(application);
         when(session.extractMessage(aclMessage, Message.class)).thenReturn(deleteOrder);
-        final MessageRoutingBehaviour messageRoutingBehaviour = new MessageRoutingBehaviour(agent, session);
+        final MessageRoutingBehaviour messageRoutingBehaviour = new MessageRoutingBehaviour(session);
+        messageRoutingBehaviour.setAgent(agent);
 
         messageRoutingBehaviour.action();
         verify(agent).receive(any(MessageTemplate.class));
@@ -160,9 +168,11 @@ public class MessageRoutingBehaviourTest {
         final OrderExecuted orderExecuted = new OrderExecuted();
         final Application application = mock(Application.class);
         final Session session = mock(Session.class);
+        when(session.getSimulation()).thenReturn(mock(Simulation.class));
         when(session.getApplication()).thenReturn(application);
         when(session.extractMessage(aclMessage, Message.class)).thenReturn(orderExecuted);
-        final MessageRoutingBehaviour messageRoutingBehaviour = new MessageRoutingBehaviour(agent, session);
+        final MessageRoutingBehaviour messageRoutingBehaviour = new MessageRoutingBehaviour(session);
+        messageRoutingBehaviour.setAgent(agent);
 
         messageRoutingBehaviour.action();
         verify(agent).receive(any(MessageTemplate.class));
@@ -179,9 +189,11 @@ public class MessageRoutingBehaviourTest {
         final Message message = mock(Message.class);
         final Application application = mock(Application.class);
         final Session session = mock(Session.class);
+        when(session.getSimulation()).thenReturn(mock(Simulation.class));
         when(session.getApplication()).thenReturn(application);
         when(session.extractMessage(aclMessage, Message.class)).thenReturn(message);
-        final MessageRoutingBehaviour messageRoutingBehaviour = new MessageRoutingBehaviour(agent, session);
+        final MessageRoutingBehaviour messageRoutingBehaviour = new MessageRoutingBehaviour(session);
+        messageRoutingBehaviour.setAgent(agent);
 
         messageRoutingBehaviour.action();
         verify(agent).receive(any(MessageTemplate.class));

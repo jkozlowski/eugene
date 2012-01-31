@@ -8,6 +8,7 @@ import jade.core.behaviours.SimpleBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,9 +24,9 @@ public class ReceiverBehaviour extends SimpleBehaviour {
 
     public final int toReceive;
 
-    public final Set<Concept> received = new HashSet<Concept>();
+    public final Set<Concept> received = Collections.synchronizedSet(new HashSet<Concept>());
 
-    public final Set<ACLMessage> failed = new HashSet<ACLMessage>();
+    public final Set<ACLMessage> failed = Collections.synchronizedSet(new HashSet<ACLMessage>());
 
     final MessageTemplate template =
             and(MatchLanguage(MarketOntology.LANGUAGE), and(MatchOntology(MarketOntology.getInstance()

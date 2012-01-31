@@ -9,7 +9,6 @@ import eugene.market.ontology.message.OrderCancelReject;
 import eugene.market.ontology.message.data.AddOrder;
 import eugene.market.ontology.message.data.DeleteOrder;
 import eugene.market.ontology.message.data.OrderExecuted;
-import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -35,17 +34,14 @@ public class MessageRoutingBehaviour extends CyclicBehaviour {
     /**
      * Creates a {@link MessageRoutingBehaviour} that will route messages as part of this <code>session</code>.
      *
-     * @param agent   {@link Agent} to use to listen to messages.
      * @param session owner of this {@link MessageRoutingBehaviour}.
      */
-    public MessageRoutingBehaviour(final Agent agent, final Session session) {
-        super(agent);
-        checkNotNull(agent);
+    public MessageRoutingBehaviour(final Session session) {
         checkNotNull(session);
         this.session = session;
         this.template = and(MatchLanguage(MarketOntology.LANGUAGE),
                             and(MatchOntology(MarketOntology.getInstance().getName()),
-                                MatchSender(session.getMarketAgent())));
+                                MatchSender(session.getSimulation().getMarketAgent())));
     }
 
     @Override
