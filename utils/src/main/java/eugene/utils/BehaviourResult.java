@@ -1,10 +1,9 @@
-package eugene.market.client.impl;
+package eugene.utils;
 
+import com.google.common.base.Preconditions;
 import jade.core.behaviours.Behaviour;
 
 import java.util.concurrent.atomic.AtomicInteger;
-
-import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * Thread safe class that can be used by {@link Behaviour}s to indicate the result of their operation.
@@ -39,7 +38,7 @@ public class BehaviourResult {
      * @param defaultResult default result.
      */
     public BehaviourResult(final int defaultResult) {
-        checkArgument(SUCCESS == defaultResult || FAILURE == defaultResult);
+        Preconditions.checkArgument(SUCCESS == defaultResult || FAILURE == defaultResult);
         this.result = new AtomicInteger(defaultResult);
     }
 

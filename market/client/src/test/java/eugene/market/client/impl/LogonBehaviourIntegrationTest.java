@@ -3,6 +3,7 @@ package eugene.market.client.impl;
 import eugene.market.client.Application;
 import eugene.market.esma.AbstractMarketAgentTest;
 import eugene.market.ontology.message.Logon;
+import eugene.utils.BehaviourResult;
 import jade.core.AID;
 import jade.util.Event;
 import jade.wrapper.AgentController;

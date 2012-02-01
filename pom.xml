@@ -109,6 +109,7 @@
         <module>jade-unit</module>
         <module>market</module>
         <module>simulation</module>
+        <module>utils</module>
     </modules>
 
     <dependencies>

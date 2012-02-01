@@ -4,6 +4,7 @@ import eugene.market.client.Application;
 import eugene.market.client.Session;
 import eugene.market.esma.MarketAgent;
 import eugene.market.ontology.Message;
+import eugene.utils.BehaviourResult;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.OneShotBehaviour;

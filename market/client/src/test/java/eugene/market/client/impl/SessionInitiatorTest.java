@@ -1,9 +1,7 @@
 package eugene.market.client.impl;
 
 import eugene.market.client.Application;
-import eugene.market.client.impl.BehaviourResult;
-import eugene.market.client.impl.LogonBehaviour;
-import eugene.market.client.impl.SessionInitiator;
+import eugene.utils.BehaviourResult;
 import jade.content.ContentManager;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.OntologyException;

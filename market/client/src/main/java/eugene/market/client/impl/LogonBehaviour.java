@@ -6,6 +6,7 @@ import eugene.market.esma.MarketAgent;
 import eugene.market.ontology.field.Symbol;
 import eugene.market.ontology.field.enums.SessionStatus;
 import eugene.market.ontology.message.Logon;
+import eugene.utils.BehaviourResult;
 import jade.core.Agent;
 import jade.core.behaviours.SequentialBehaviour;
 import jade.lang.acl.ACLMessage;
