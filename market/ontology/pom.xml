@@ -49,7 +49,7 @@
         <dependency>
             <groupId>quickfixj</groupId>
             <artifactId>quickfixj-core</artifactId>
-            <version>1.3.1</version>
+            <version>${quickfix.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -73,7 +73,9 @@
                         <Bundle-SymbolicName>${bundle.namespace}</Bundle-SymbolicName>
                         <Bundle-Version>${project.version}</Bundle-Version>
                         <Bundle-Description>${project.description}</Bundle-Description>
-                        <Export-Package>${bundle.namespace}, ${bundle.namespace}.field, ${bundle.namespace}.message
+                        <Export-Package>${bundle.namespace}, ${bundle.namespace}.field,
+                            ${bundle.namespace}.field.enums, ${bundle.namespace}.message,
+                            ${bundle.namespace}.message.data
                         </Export-Package>
                         <Import-Package>
                             jade.content, jade.content.lang, jade.content.lang.leap, jade.content.onto,

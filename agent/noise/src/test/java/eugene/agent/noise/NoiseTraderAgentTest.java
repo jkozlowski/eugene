@@ -24,7 +24,7 @@ import jade.wrapper.gateway.GatewayAgent;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import static eugene.market.client.Applications.orderBook;
+import static eugene.market.client.Applications.orderBookApplication;
 import static eugene.market.client.Applications.proxy;
 import static eugene.market.ontology.Defaults.defaultSymbol;
 import static jade.core.Runtime.instance;
@@ -86,7 +86,7 @@ public class NoiseTraderAgentTest {
             final OrderBook orderBook = OrderBooks.defaultOrderBook();
             final Simulation simulation = mock(Simulation.class);
             when(simulation.getSymbol()).thenReturn(defaultSymbol);
-            final Behaviour behaviour = Sessions.initiate(proxy(orderBook(orderBook),
+            final Behaviour behaviour = Sessions.initiate(proxy(orderBookApplication(orderBook),
                 new ApplicationAdapter() {
                     @Override
                     public void toApp(final AddOrder addOrder, final Session session) {

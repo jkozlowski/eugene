@@ -5,20 +5,19 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>eugene</groupId>
+        <groupId>eugene.demo</groupId>
         <artifactId>parent</artifactId>
         <version>0.6-SNAPSHOT</version>
     </parent>
 
-    <groupId>eugene.demo</groupId>
+    <groupId>eugene.demo.eugene</groupId>
     <artifactId>parent</artifactId>
     <version>0.6-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>${project.groupId}</name>
-    <description>JADE and eugene demos</description>
+    <description>JADE demos</description>
 
     <modules>
-        <module>jade</module>
-        <module>eugene</module>
+        <module>noise</module>
     </modules>
 </project>

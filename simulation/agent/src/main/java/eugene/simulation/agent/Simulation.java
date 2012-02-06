@@ -1,10 +1,9 @@
 package eugene.simulation.agent;
 
 import eugene.market.esma.MarketAgent;
+import eugene.utils.Immutable;
 import jade.core.AID;
 import jade.core.Agent;
-
-import javax.annotation.concurrent.Immutable;
 
 /**
  * Parameters of the simulation, passed from the {@link SimulationAgent} to Trader Agents and Market Agent. {@link

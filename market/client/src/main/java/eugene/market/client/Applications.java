@@ -4,6 +4,7 @@ import com.google.common.annotations.VisibleForTesting;
 import eugene.market.book.OrderBook;
 import eugene.market.client.impl.OrderBookApplication;
 import eugene.market.client.impl.ProxyApplication;
+import eugene.market.client.impl.TopOfBookPrinter;
 import eugene.market.esma.impl.Messages;
 
 /**
@@ -51,7 +52,20 @@ public final class Applications {
      *
      * @throws NullPointerException if <code>orderBook</code> is null.
      */
-    public static Application orderBook(final OrderBook orderBook) throws NullPointerException {
+    public static Application orderBookApplication(final OrderBook orderBook) throws NullPointerException {
         return new OrderBookApplication(orderBook);
+    }
+
+    /**
+     * Gets an {@link Application} that will print the top of this <code>orderBook</code>.
+     *
+     * @param orderBook {@link OrderBook} to check.
+     *
+     * @return {@link Application} that will print the top of this <code>orderBook</code>.
+     *
+     * @throws NullPointerException if <code>orderBook</code> is null.
+     */
+    public static Application topOfBookPrinterApplication(final OrderBook orderBook) throws NullPointerException {
+        return new TopOfBookPrinter(orderBook);
     }
 }

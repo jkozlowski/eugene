@@ -23,11 +23,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>eugene</groupId>
-            <artifactId>jade-unit</artifactId>
-            <version>${current.version}</version>
-        </dependency>
-        <dependency>
             <groupId>eugene.market</groupId>
             <artifactId>ontology</artifactId>
             <version>${current.version}</version>
@@ -42,6 +37,7 @@
             <artifactId>ontology</artifactId>
             <version>${current.version}</version>
             <classifier>tests</classifier>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.testng</groupId>
@@ -77,8 +73,7 @@
                         <Bundle-Version>${project.version}</Bundle-Version>
                         <Bundle-Description>${project.description}</Bundle-Description>
                         <Export-Package>${bundle.namespace}</Export-Package>
-                        <Import-Package>
-                            com.google.common.base, com.google.common.collect, com.google.common.primitives,
+                        <Import-Package>com.google.common.base, com.google.common.collect, com.google.common.primitives,
                             eugene.market.ontology.field.enums
                         </Import-Package>
                     </instructions>

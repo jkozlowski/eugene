@@ -17,17 +17,15 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Places either {@link Strategy#AGGRESSIVE}, {@link Strategy#MID} or {@link Strategy#PASSIVE} order for a random
  * {@link OrderQty} (between {@link PlaceOrderBehaviour#MIN_ORDER_QTY} and {@link PlaceOrderBehaviour#MAX_ORDER_QTY})
- * and to a random {@link Side}, and then sleeps for a noise period of time.
+ * and to a random {@link Side}, and then sleeps for a random period of time.
  *
- * If there is no price on the side of the {@link OrderBook} that {@link PlaceOrderBehaviour} want to hit,
- * {@link PlaceOrderBehaviour#DEFAULT_CURRENT_PRICE} will be used as current price.
+ * If there is no price on the {@link OrderBook}, {@link PlaceOrderBehaviour#DEFAULT_CURRENT_PRICE} will be used as
+ * current price.
  *
  * @author Jakub D Kozlowski
  * @since 0.5
  */
 public class PlaceOrderBehaviour extends TickerBehaviour {
-
-    public static final int INITIAL_DELAY = 20000;
 
     public static final int MAX_SPREAD = 10;
 
@@ -52,12 +50,12 @@ public class PlaceOrderBehaviour extends TickerBehaviour {
     private enum Strategy {
 
         /**
-         * Sends a {@link OrdType#LIMIT} order with a price that is one tick above the current best price.
+         * Sends a {@link OrdType#MARKET}.
          */
         AGGRESSIVE,
 
         /**
-         * Sends a {@link OrdType#LIMIT} order at the current best price.
+         * Sends a {@link OrdType#LIMIT} order with a price that is one tick better than the the current best price.
          */
         MID,
 
@@ -87,7 +85,7 @@ public class PlaceOrderBehaviour extends TickerBehaviour {
      * @param session   {@link Session} to use to send orders.
      */
     public PlaceOrderBehaviour(final Random generator, final OrderBook orderBook, final Session session) {
-        super(null, INITIAL_DELAY);
+        super(null, generator.nextInt(MAX_SLEEP) + 1);
         checkNotNull(generator);
         checkNotNull(orderBook);
         checkNotNull(session);
@@ -146,22 +144,22 @@ public class PlaceOrderBehaviour extends TickerBehaviour {
         newOrderSingle.setOrderQty(new OrderQty(orderQty));
         newOrderSingle.setSide(side.field());
         newOrderSingle.setOrdType(OrdType.LIMIT.field());
-        
+
         final double curPrice = orderBook.isEmpty(side) ? DEFAULT_CURRENT_PRICE : orderBook.peek(side).getPrice();
 
         switch (strategy) {
 
             case AGGRESSIVE:
+                newOrderSingle.setOrdType(OrdType.MARKET.field());
+                break;
+
+            case MID:
                 if (side.isBuy()) {
                     newOrderSingle.setPrice(new Price(curPrice + DEFAULT_TICK));
                 }
                 else {
                     newOrderSingle.setPrice(new Price(curPrice - DEFAULT_TICK));
                 }
-                break;
-
-            case MID:
-                newOrderSingle.setPrice(new Price(curPrice));
                 break;
 
             case PASSIVE:

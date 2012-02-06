@@ -28,15 +28,11 @@
             <version>${jade.osgi.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.googlecode.guava-osgi</groupId>
-            <artifactId>guava-osgi</artifactId>
-            <version>${guava.version}</version>
-        </dependency>
-        <dependency>
             <groupId>eugene.market</groupId>
             <artifactId>ontology</artifactId>
             <version>${current.version}</version>
             <classifier>tests</classifier>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>eugene</groupId>
@@ -73,30 +69,9 @@
                         <Bundle-Description>${project.description}</Bundle-Description>
                         <Export-Package>${bundle.namespace}
                         </Export-Package>
-                        <Import-Package>
-                            jade.content, jade.content.lang, jade.content.lang.leap, jade.content.onto,
-                            jade.content.onto.annotations, com.google.common.base, jade.content.lang.sl
+                        <Import-Package>jade.content, jade.content.lang, jade.content.lang.sl, jade.content.onto
                         </Import-Package>
                     </instructions>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>${maven.jar.version}</version>
-                <executions>
-                    <execution>
-                        <id>jar-test-classes</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>test-jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <excludes>
-                        <exclude>**/*Test.*</exclude>
-                    </excludes>
                 </configuration>
             </plugin>
         </plugins>

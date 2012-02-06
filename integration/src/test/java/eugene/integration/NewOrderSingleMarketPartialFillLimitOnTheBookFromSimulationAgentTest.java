@@ -45,6 +45,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 /**
  * Sends a {@link OrdType#MARKET} order that is bigger than a matching {@link OrdType#LIMIT} submitted by the
@@ -112,7 +113,7 @@ public class NewOrderSingleMarketPartialFillLimitOnTheBookFromSimulationAgentTes
         assertThat(addOrder.getValue().getSymbol().getValue(), is(defaultSymbol));
 
         final ArgumentCaptor<NewOrderSingle> newOrderSingleCaptor = ArgumentCaptor.forClass(NewOrderSingle.class);
-        inOrder.verify(application).fromApp(newOrderSingleCaptor.capture(), any(Session.class));
+        verify(application).fromApp(newOrderSingleCaptor.capture(), any(Session.class));
 
         // Outgoing NewOrderSingle for the Market order
         final NewOrderSingle newOrderSingleMarket = newOrderSingleCaptor.getValue();

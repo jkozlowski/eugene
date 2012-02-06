@@ -1,13 +1,14 @@
 package eugene.market.client;
 
 import eugene.market.book.OrderBook;
-import eugene.market.book.OrderBooks;
 import eugene.market.client.impl.OrderBookApplication;
 import eugene.market.client.impl.ProxyApplication;
+import eugene.market.client.impl.TopOfBookPrinter;
 import org.testng.annotations.Test;
 
-import static eugene.market.client.Applications.orderBook;
+import static eugene.market.client.Applications.orderBookApplication;
 import static eugene.market.client.Applications.proxy;
+import static eugene.market.client.Applications.topOfBookPrinterApplication;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
@@ -31,7 +32,12 @@ public class ApplicationsTest {
     }
 
     @Test
-    public void testOrderBook() {
-        assertThat(orderBook(mock(OrderBook.class)), is(OrderBookApplication.class));
+    public void testOrderBookApplication() {
+        assertThat(orderBookApplication(mock(OrderBook.class)), is(OrderBookApplication.class));
+    }
+    
+    @Test
+    public void testTopOfBookPrinterApplication() {
+        assertThat(topOfBookPrinterApplication(mock(OrderBook.class)), is(TopOfBookPrinter.class));
     }
 }

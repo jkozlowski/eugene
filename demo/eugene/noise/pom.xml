@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>eugene.demo.eugene</groupId>
+        <artifactId>parent</artifactId>
+        <version>0.6-SNAPSHOT</version>
+    </parent>
+
+    <groupId>eugene.demo.eugene</groupId>
+    <artifactId>noise</artifactId>
+    <version>0.6-SNAPSHOT</version>
+    <name>${bundle.namespace}</name>
+    <description>Starts a simulation with Noise Trader Agents that runs for a period of time.</description>
+    <packaging>bundle</packaging>
+
+    <properties>
+        <bundle.namespace>${project.groupId}.noise</bundle.namespace>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>jade</groupId>
+            <artifactId>jade-osgi</artifactId>
+            <version>${jade.osgi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.core</artifactId>
+            <version>${osgi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>eugene.simulation</groupId>
+            <artifactId>agent</artifactId>
+            <version>${current.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>eugene.agent</groupId>
+            <artifactId>noise</artifactId>
+            <version>${current.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>eugene.market</groupId>
+            <artifactId>client</artifactId>
+            <version>${current.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>eugene.market</groupId>
+            <artifactId>book</artifactId>
+            <version>${current.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ops4j.pax.runner</groupId>
+            <artifactId>pax-runner</artifactId>
+            <version>${pax.runner.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>${maven.bundle.version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Bundle-Name>${bundle.namespace}</Bundle-Name>
+                        <Bundle-SymbolicName>${bundle.namespace}</Bundle-SymbolicName>
+                        <Bundle-Version>${project.version}</Bundle-Version>
+                        <Bundle-Activator>${bundle.namespace}.internal.ExperimentActivator</Bundle-Activator>
+                        <Bundle-Description>${project.description}</Bundle-Description>
+                        <Import-Package>com.google.common.collect, eugene.agent.noise, eugene.market.book,
+                            eugene.market.client, eugene.simulation.agent, jade.core, jade.core.behaviours,
+                            jade.osgi.service.agentFactory, jade.osgi.service.runtime, jade.wrapper, org.osgi.framework
+                        </Import-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>${maven.assembly.version}</version>
+                <configuration>
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <finalName>${project.artifactId}-${project.version}</finalName>
+                    <descriptors>
+                        <descriptor>src/main/assembly/assembly.xml</descriptor>
+                    </descriptors>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

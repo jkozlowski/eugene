@@ -2,6 +2,7 @@ package eugene.simulation.agent.impl;
 
 import eugene.simulation.agent.Simulation;
 import eugene.utils.BehaviourResult;
+import eugene.utils.Nullable;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.OneShotBehaviour;
@@ -9,7 +10,6 @@ import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
 
-import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,9 +25,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class StartAgentsBehaviour extends OneShotBehaviour {
 
     private final BehaviourResult<AID> marketAgent;
-    
+
     private final String symbol;
-    
+
     private final Set<Agent> agents;
 
     private final BehaviourResult<Set<String>> result = new BehaviourResult<Set<String>>();
@@ -50,7 +50,7 @@ public class StartAgentsBehaviour extends OneShotBehaviour {
             int i = 0;
             for (final Agent a : agents) {
                 final Simulation simulation = new SimulationImpl(myAgent.getAID(), marketAgent.getObject(), symbol);
-                a.setArguments(new Simulation[] { simulation });
+                a.setArguments(new Simulation[]{simulation});
                 final AgentContainer container = myAgent.getContainerController();
                 final AgentController controller = container.acceptNewAgent(a.getClass().getName() + i++, a);
                 controller.start();

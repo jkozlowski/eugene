@@ -33,17 +33,6 @@
             <version>${guava.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.google.code.findbugs</groupId>
-            <artifactId>jsr305</artifactId>
-            <version>${google.findbugs.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>eugene.market</groupId>
-            <artifactId>ontology</artifactId>
-            <version>${current.version}</version>
-            <classifier>tests</classifier>
-        </dependency>
-        <dependency>
             <groupId>eugene</groupId>
             <artifactId>jade-unit</artifactId>
             <version>${current.version}</version>
@@ -82,31 +71,10 @@
                         <Bundle-SymbolicName>${bundle.namespace}</Bundle-SymbolicName>
                         <Bundle-Version>${project.version}</Bundle-Version>
                         <Bundle-Description>${project.description}</Bundle-Description>
-                        <Export-Package>${bundle.namespace}, ${bundle.namespace}.field, ${bundle.namespace}.message
+                        <Export-Package>${bundle.namespace}
                         </Export-Package>
-                        <Import-Package>
-                            com.google.common.base, javax.annotation, jade.wrapper
-                        </Import-Package>
+                        <Import-Package>com.google.common.base</Import-Package>
                     </instructions>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>${maven.jar.version}</version>
-                <executions>
-                    <execution>
-                        <id>jar-test-classes</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>test-jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <excludes>
-                        <exclude>**/*Test.*</exclude>
-                    </excludes>
                 </configuration>
             </plugin>
         </plugins>

@@ -23,11 +23,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>eugene</groupId>
-            <artifactId>jade-unit</artifactId>
-            <version>${current.version}</version>
-        </dependency>
-        <dependency>
             <groupId>eugene.market</groupId>
             <artifactId>ontology</artifactId>
             <version>${current.version}</version>
@@ -53,16 +48,24 @@
             <version>${guava.version}</version>
         </dependency>
         <dependency>
+            <groupId>eugene</groupId>
+            <artifactId>jade-unit</artifactId>
+            <version>${current.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>eugene.market</groupId>
             <artifactId>ontology</artifactId>
             <version>${current.version}</version>
             <classifier>tests</classifier>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>eugene.market</groupId>
             <artifactId>esma</artifactId>
             <version>${current.version}</version>
             <classifier>tests</classifier>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.testng</groupId>
@@ -95,28 +98,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>${maven.jar.version}</version>
-                <executions>
-                    <execution>
-                        <id>jar-test-classes</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>test-jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <excludes>
-                        <exclude>**/*Test.*</exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>

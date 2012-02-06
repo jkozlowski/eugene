@@ -24,9 +24,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>eugene</groupId>
-            <artifactId>jade-unit</artifactId>
-            <version>${current.version}</version>
+            <groupId>jade</groupId>
+            <artifactId>jade-osgi</artifactId>
+            <version>${jade.osgi.version}</version>
         </dependency>
         <dependency>
             <groupId>eugene.market</groupId>
@@ -47,6 +47,19 @@
             <groupId>com.googlecode.guava-osgi</groupId>
             <artifactId>guava-osgi</artifactId>
             <version>${guava.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>eugene</groupId>
+            <artifactId>jade-unit</artifactId>
+            <version>${current.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>eugene.market</groupId>
+            <artifactId>ontology</artifactId>
+            <version>${current.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>eugene.market</groupId>
@@ -90,16 +103,11 @@
                         <Bundle-Description>${project.description}</Bundle-Description>
                         <Export-Package>${bundle.namespace}
                         </Export-Package>
-                        <Import-Package>
-                            jade.content, jade.domain, jade.domain.FIPAAgentManagement, jade.content.onto,
-                            jade.content.onto.annotations, com.google.common.base,
-                            jade.core, eugene.market.ontology.field, eugene.market.ontology.field.enums,
-                            eugene.market.ontology.message, jade.lang.acl,
-                            javax.validation.constraints, com.google.common.collect, eugene.market.ontology,
-                            jade.content.lang, jade.content.lang.sl, jade.content.onto.basic, jade.core.behaviours,
-                            com.google.common.primitives, java.util.logging, jade.util,
-                            eugene.market.ontology.message.data, eugene.market.book, jade.content.lang.leap,
-                            eugene.simulation.ontology
+                        <Import-Package>com.google.common.base, com.google.common.primitives, eugene.market.book,
+                            eugene.market.ontology, eugene.market.ontology.field, eugene.market.ontology.field.enums,
+                            eugene.market.ontology.message, eugene.market.ontology.message.data,
+                            eugene.simulation.ontology, jade.content, jade.content.lang, jade.content.onto,
+                            jade.content.onto.basic, jade.core, jade.core.behaviours, jade.lang.acl, jade.util
                         </Import-Package>
                     </instructions>
                 </configuration>
