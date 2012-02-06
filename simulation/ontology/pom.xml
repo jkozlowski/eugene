@@ -7,12 +7,12 @@
     <parent>
         <groupId>eugene.simulation</groupId>
         <artifactId>parent</artifactId>
-        <version>0.5-SNAPSHOT</version>
+        <version>0.6-SNAPSHOT</version>
     </parent>
 
     <groupId>eugene.simulation</groupId>
     <artifactId>ontology</artifactId>
-    <version>0.5-SNAPSHOT</version>
+    <version>0.6-SNAPSHOT</version>
     <name>${bundle.namespace}</name>
     <description>Implements the ontology for sending and receiving instructions from the Simulation Agent.</description>
     <packaging>bundle</packaging>

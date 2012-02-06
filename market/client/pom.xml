@@ -7,12 +7,12 @@
     <parent>
         <groupId>eugene.market</groupId>
         <artifactId>parent</artifactId>
-        <version>0.5-SNAPSHOT</version>
+        <version>0.6-SNAPSHOT</version>
     </parent>
 
     <groupId>eugene.market</groupId>
     <artifactId>client</artifactId>
-    <version>0.5-SNAPSHOT</version>
+    <version>0.6-SNAPSHOT</version>
     <name>${bundle.namespace}</name>
     <description>Implements the Client API.</description>
     <packaging>bundle</packaging>

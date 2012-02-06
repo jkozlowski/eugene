@@ -3,6 +3,33 @@
 * Redmine: http://abfm.cs.ucl.ac.uk/redmine/projects/eugene
 * Jenkins: http://abfm.cs.ucl.ac.uk/jenkins/job/eugene
 
+== 2012-02-06: Release v0.6  - Jakub D Kozlowski <mail@jakub-kozlowski.com>
+
+=== Order Book [market/book]
+* Refactored OrderBook to accept partially filled Orders.
+* Moved OrderBook implementations to eugene.market.book.impl package and created a OrderBooks factory class.
+
+=== Simulation Ontology [simulation/ontology]
+* Implemented SimulationOntology.
+
+=== Simulation Agent [simulation/agent]
+* Implemented a Simulation Agent that synchronizes the start of the Traders and Market Agent, initializes the
+Order Book and stops the simulation.
+
+=== Client API [market/client]
+* Integrated Simulation Ontology with Client API.
+
+=== Market Agent [market/esma]
+* Refactored ExecutionEngine to immediately execute orders.
+* Improved performance by putting MarkedDataServer into a separate thread and using LEAP codec.
+* Integrated Simulation Ontology with the Market Agent.
+
+=== Integration Tests [integration]
+* Implemented integration tests for market/client, market/esma and simulation/agent.
+
+=== Documentation [doc]
+* Interim Report.
+
 == 2012-01-21: Release v0.5  - Jakub D Kozlowski <mail@jakub-kozlowski.com>
 
 === Noise Trader Agent [agent/noise]
