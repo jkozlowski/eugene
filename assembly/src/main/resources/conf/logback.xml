@@ -1,0 +1,45 @@
+<configuration>
+
+    <!-- Logging all MarketDataEvents -->
+    <appender name="MARKETDATA" class="ch.qos.logback.core.FileAppender">
+        <file>marketData.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>[%marker],%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Logging just RejectOrderEvents -->
+    <appender name="REJECTIONS" class="ch.qos.logback.core.FileAppender">
+        <file>rejections.log</file>
+        <filter class="eugene.utils.MarkerFilter">
+            <marker>REJECTORDER</marker>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Logging just ExecutionEvents -->
+    <appender name="EXECUTIONS" class="ch.qos.logback.core.FileAppender">
+        <file>executions.log</file>
+        <filter class="eugene.utils.MarkerFilter">
+            <marker>EXECUTION</marker>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="eugene.market.esma" level="INFO">
+        <appender-ref ref="MARKETDATA" />
+        <appender-ref ref="EXECUTIONS" />
+        <appender-ref ref="REJECTIONS" />
+    </logger>
+
+    <root level="off"/>
+
+</configuration>

@@ -30,10 +30,12 @@ import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
-import jade.util.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Marker;
+import org.slf4j.MarkerFactory;
 
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.logging.Level;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static eugene.market.esma.impl.Messages.addOrder;
@@ -50,7 +52,17 @@ import static jade.lang.acl.ACLMessage.INFORM;
  */
 public class MarketDataServer extends CyclicBehaviour implements MarketDataEventHandler {
 
-    private static Logger LOG = Logger.getMyLogger(OrderServer.class.getName());
+    private final Logger LOG = LoggerFactory.getLogger(MarketDataServer.class);
+
+    private final Marker NEWORDER = MarkerFactory.getMarker("NEWORDER");
+
+    private final Marker REJECTORDER = MarkerFactory.getMarker("REJECTORDER");
+
+    private final Marker EXECUTION = MarkerFactory.getMarker("EXECUTION");
+
+    private final Marker ADDORDER = MarkerFactory.getMarker("ADDORDER");
+
+    private final Marker CANCELORDER = MarkerFactory.getMarker("CANCELORDER");
 
     private final Agent agent;
 
@@ -104,16 +116,44 @@ public class MarketDataServer extends CyclicBehaviour implements MarketDataEvent
         checkNotNull(orderTuple);
 
         send(executionReport(orderStatus, orderTuple, symbol), orderTuple);
+
+        LOG.info(NEWORDER,
+                 "{},{},{},{},{},{},{},{}",
+                 new Object[]{
+                         newOrderEvent.getTime(),
+                         orderTuple.getACLMessage().getSender().getLocalName(),
+                         orderStatus.getOrder().getOrderID(),
+                         orderTuple.getClOrdID(),
+                         orderStatus.getOrder().getOrdType(),
+                         orderStatus.getOrder().getSide(),
+                         orderStatus.getOrder().getOrderQty(),
+                         orderStatus.getOrder().getPrice()
+                 }
+        );
     }
 
     @Override
     public void handle(final RejectOrderEvent rejectOrderEvent) {
-        
+
         final OrderStatus orderStatus = rejectOrderEvent.getObject();
         final Tuple orderTuple = repository.get(orderStatus.getOrder());
         checkNotNull(orderTuple);
 
         send(executionReport(orderStatus, orderTuple, symbol), orderTuple);
+
+        LOG.info(REJECTORDER,
+                 "{},{},{},{},{},{},{},{}",
+                 new Object[]{
+                         rejectOrderEvent.getTime(),
+                         orderTuple.getACLMessage().getSender().getLocalName(),
+                         orderStatus.getOrder().getOrderID(),
+                         orderTuple.getClOrdID(),
+                         orderStatus.getOrder().getOrdType(),
+                         orderStatus.getOrder().getSide(),
+                         orderStatus.getOrder().getOrderQty(),
+                         orderStatus.getOrder().getPrice()
+                 }
+        );
     }
 
     /**
@@ -122,6 +162,17 @@ public class MarketDataServer extends CyclicBehaviour implements MarketDataEvent
     @Override
     public void handle(final AddOrderEvent addOrderEvent) {
         sendToAll(addOrder(addOrderEvent.getObject(), symbol));
+
+        LOG.info(ADDORDER,
+                 "{},{},{},{},{}",
+                 new Object[]{
+                         addOrderEvent.getTime(),
+                         addOrderEvent.getObject().getOrder().getOrderID(),
+                         addOrderEvent.getObject().getOrder().getSide(),
+                         addOrderEvent.getObject().getOrder().getOrderQty(),
+                         addOrderEvent.getObject().getOrder().getPrice()
+                 }
+        );
     }
 
     @Override
@@ -131,18 +182,31 @@ public class MarketDataServer extends CyclicBehaviour implements MarketDataEvent
 
         // New order
         final OrderStatus newOrderStatus = execution.getNewOrderStatus();
-        final Tuple buyTuple = repository.get(newOrderStatus.getOrder());
-        checkNotNull(buyTuple);
+        final Tuple newOrderTuple = repository.get(newOrderStatus.getOrder());
+        checkNotNull(newOrderTuple);
 
-        send(executionReport(newOrderStatus, buyTuple, symbol), buyTuple);
+        send(executionReport(newOrderStatus, newOrderTuple, symbol), newOrderTuple);
 
         // Limit order
         final OrderStatus limitOrderStatus = execution.getLimitOrderStatus();
-        final Tuple sellTuple = repository.get(limitOrderStatus.getOrder());
-        checkNotNull(sellTuple);
+        final Tuple limitOrderTuple = repository.get(limitOrderStatus.getOrder());
+        checkNotNull(limitOrderTuple);
 
-        send(executionReport(limitOrderStatus, sellTuple, symbol), sellTuple);
+        send(executionReport(limitOrderStatus, limitOrderTuple, symbol), limitOrderTuple);
         sendToAll(orderExecuted(limitOrderStatus, execution));
+
+        LOG.info(EXECUTION,
+                 "{},{},{},{},{},{},{}",
+                 new Object[]{
+                         executionEvent.getTime(),
+                         newOrderStatus.getOrder().getOrderID(),
+                         newOrderStatus.getOrder().getSide(),
+                         limitOrderStatus.getOrder().getOrderID(),
+                         limitOrderStatus.getOrder().getSide(),
+                         execution.getQuantity(),
+                         execution.getPrice()
+                 }
+        );
     }
 
     @Override
@@ -162,12 +226,25 @@ public class MarketDataServer extends CyclicBehaviour implements MarketDataEvent
         executionReport.setClOrdID(new ClOrdID(cancelTuple.getClOrdID()));
         executionReport.setSide(cancelStatus.getOrder().getSide().field());
         executionReport.setSymbol(new Symbol(symbol));
-        
+
         send(executionReport, cancelTuple);
 
         if (cancelOrderEvent.getObject().getOrder().getOrdType().isLimit()) {
             sendToAll(deleteOrder(cancelOrderEvent.getObject()));
         }
+
+        LOG.info(CANCELORDER,
+                 "{},{},{},{},{},{},{}",
+                 new Object[]{
+                         cancelOrderEvent.getTime(),
+                         cancelTuple.getACLMessage().getSender().getLocalName(),
+                         cancelOrderEvent.getObject().getOrder().getOrderID(),
+                         cancelOrderEvent.getObject().getOrder().getOrdType(),
+                         cancelOrderEvent.getObject().getOrder().getSide(),
+                         cancelOrderEvent.getObject().getOrder().getOrderQty(),
+                         cancelOrderEvent.getObject().getOrder().getPrice()
+                 }
+        );
     }
 
     /**
@@ -191,10 +268,10 @@ public class MarketDataServer extends CyclicBehaviour implements MarketDataEvent
             agent.send(aclMessage);
         }
         catch (CodecException e) {
-            LOG.log(Level.SEVERE, e.getMessage());
+            LOG.error("Failed to send {}", executionReport, e);
         }
         catch (OntologyException e) {
-            LOG.log(Level.SEVERE, e.getMessage());
+            LOG.error("Failed to send {}", executionReport, e);
         }
     }
 
@@ -219,10 +296,10 @@ public class MarketDataServer extends CyclicBehaviour implements MarketDataEvent
             agent.send(aclMessage);
         }
         catch (CodecException e) {
-            LOG.log(Level.SEVERE, e.getMessage());
+            LOG.error("Failed to send to all {}", message, e);
         }
         catch (OntologyException e) {
-            LOG.log(Level.SEVERE, e.getMessage());
+            LOG.error("Failed to send to all {}", message, e);
         }
     }
 }

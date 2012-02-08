@@ -1,0 +1,1 @@
+--vmOptions=-Dlogback.configurationFile=conf/logback.xml

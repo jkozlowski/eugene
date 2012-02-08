@@ -5,9 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>eugene.demo.eugene</groupId>
+        <groupId>eugene.experiment</groupId>
         <artifactId>parent</artifactId>
         <version>0.6-SNAPSHOT</version>
+        <relativePath>../../../experiment/pom.xml</relativePath>
     </parent>
 
     <groupId>eugene.demo.eugene</groupId>
@@ -22,16 +23,6 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>jade</groupId>
-            <artifactId>jade-osgi</artifactId>
-            <version>${jade.osgi.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.core</artifactId>
-            <version>${osgi.version}</version>
-        </dependency>
         <dependency>
             <groupId>eugene.simulation</groupId>
             <artifactId>agent</artifactId>
@@ -51,11 +42,6 @@
             <groupId>eugene.market</groupId>
             <artifactId>book</artifactId>
             <version>${current.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.ops4j.pax.runner</groupId>
-            <artifactId>pax-runner</artifactId>
-            <version>${pax.runner.version}</version>
         </dependency>
     </dependencies>
 
@@ -78,17 +64,6 @@
                             jade.osgi.service.agentFactory, jade.osgi.service.runtime, jade.wrapper, org.osgi.framework
                         </Import-Package>
                     </instructions>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>${maven.assembly.version}</version>
-                <configuration>
-                    <appendAssemblyId>false</appendAssemblyId>
-                    <finalName>${project.artifactId}-${project.version}</finalName>
-                    <descriptors>
-                        <descriptor>src/main/assembly/assembly.xml</descriptor>
-                    </descriptors>
                 </configuration>
             </plugin>
         </plugins>

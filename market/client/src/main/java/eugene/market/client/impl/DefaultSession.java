@@ -162,7 +162,7 @@ public final class DefaultSession implements Session {
     }
 
     private ClOrdID getClOrdID() {
-        final StringBuilder b = new StringBuilder(agent.getAID().getName());
+        final StringBuilder b = new StringBuilder(agent.getAID().getLocalName());
         b.append(curClOrdID.getAndIncrement());
         return new ClOrdID(b.toString());
     }

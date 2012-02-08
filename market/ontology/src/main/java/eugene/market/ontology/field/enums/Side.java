@@ -94,10 +94,11 @@ public enum Side {
 
         if (BUY.value.equals(newOrderSingle.getSide().getValue())) {
             return BUY;
-        } else if (SELL.value.equals(newOrderSingle.getSide().getValue())) {
+        }
+        else if (SELL.value.equals(newOrderSingle.getSide().getValue())) {
             return SELL;
         }
-        
+
         throw new IllegalArgumentException();
     }
 
@@ -108,5 +109,13 @@ public enum Side {
      */
     public eugene.market.ontology.field.Side field() {
         return new eugene.market.ontology.field.Side(value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return this == BUY ? "BUY" : "SELL";
     }
 }

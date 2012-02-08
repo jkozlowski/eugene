@@ -1,4 +1,8 @@
 --vmOptions=-Dbundles.configuration.location=../../conf\
+    -Dlogback.configurationFile=../../conf/logback.xml\
     -Djade.gui=true
+
+# Using equinox
 --platform=equinox
+
 scan-dir:../lib

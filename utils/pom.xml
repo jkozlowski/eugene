@@ -23,6 +23,24 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>${logback.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>jade</groupId>
             <artifactId>jade-osgi</artifactId>
             <version>${jade.osgi.version}</version>
@@ -71,9 +89,11 @@
                         <Bundle-SymbolicName>${bundle.namespace}</Bundle-SymbolicName>
                         <Bundle-Version>${project.version}</Bundle-Version>
                         <Bundle-Description>${project.description}</Bundle-Description>
-                        <Export-Package>${bundle.namespace}
-                        </Export-Package>
-                        <Import-Package>com.google.common.base</Import-Package>
+                        <Fragment-Host>ch.qos.logback.classic</Fragment-Host>
+                        <Export-Package>${bundle.namespace}</Export-Package>
+                        <Import-Package>com.google.common.base, ch.qos.logback.classic.spi, ch.qos.logback.core.filter,
+                            ch.qos.logback.core.spi, org.slf4j
+                        </Import-Package>
                     </instructions>
                 </configuration>
             </plugin>

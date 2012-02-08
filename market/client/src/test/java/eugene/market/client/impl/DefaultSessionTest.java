@@ -279,7 +279,7 @@ public class DefaultSessionTest {
         when(simulation.getMarketAgent()).thenReturn(to);
         when(simulation.getSymbol()).thenReturn(defaultSymbol);
         final AID id = mock(AID.class);
-        when(id.getName()).thenReturn(defaultAgentID);
+        when(id.getLocalName()).thenReturn(defaultAgentID);
         final Agent agent = mock(Agent.class);
         when(agent.getAID()).thenReturn(id);
         final ContentManager contentManager = mock(ContentManager.class);

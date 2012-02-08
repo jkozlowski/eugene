@@ -28,6 +28,23 @@
             <artifactId>jade-osgi</artifactId>
             <version>${jade.osgi.version}</version>
         </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.ops4j.pax.logging</groupId>-->
+            <!--<artifactId>pax-logging-api </artifactId>-->
+            <!--<version>${pax.logging.version}</version>-->
+            <!--<scope>provided</scope>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.ops4j.pax.logging</groupId>-->
+            <!--<artifactId>pax-logging-service</artifactId>-->
+            <!--<version>${pax.logging.version}</version>-->
+            <!--<scope>provided</scope>-->
+        <!--</dependency>-->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
         <dependency>
             <groupId>eugene.market</groupId>
             <artifactId>ontology</artifactId>
@@ -107,10 +124,17 @@
                             eugene.market.ontology, eugene.market.ontology.field, eugene.market.ontology.field.enums,
                             eugene.market.ontology.message, eugene.market.ontology.message.data,
                             eugene.simulation.ontology, jade.content, jade.content.lang, jade.content.onto,
-                            jade.content.onto.basic, jade.core, jade.core.behaviours, jade.lang.acl, jade.util
+                            jade.content.onto.basic, jade.core, jade.core.behaviours, jade.lang.acl, jade.util,
+                            org.slf4j
                         </Import-Package>
                     </instructions>
                 </configuration>
+                <!--com.google.common.base, com.google.common.primitives, eugene.market.book,-->
+                <!--eugene.market.ontology, eugene.market.ontology.field, eugene.market.ontology.field.enums,-->
+                <!--eugene.market.ontology.message, eugene.market.ontology.message.data,-->
+                <!--eugene.simulation.ontology, jade.content, jade.content.lang, jade.content.onto,-->
+                <!--jade.content.onto.basic, jade.core, jade.core.behaviours, jade.lang.acl, jade.util,-->
+                <!--org.slf4j;provider=paxlogging-->
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

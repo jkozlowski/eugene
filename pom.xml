@@ -78,11 +78,13 @@
         <pax.runner.version>1.7.5</pax.runner.version>
         <pax.confman.version>0.2.2</pax.confman.version>
         <pax.exam.version>2.3.0.M1</pax.exam.version>
+        <pax.logging.version>1.6.3</pax.logging.version>
         <jade.osgi.version>1.2.0</jade.osgi.version>
         <osgi.version>4.2.0</osgi.version>
         <javax.inject.version>1</javax.inject.version>
         <javax.annotation.version>1.0</javax.annotation.version>
         <slf4j.simple.version>1.6.3</slf4j.simple.version>
+        <logback.version>1.0.0</logback.version>
         <junit.version>4.10</junit.version>
         <testng.version>6.3</testng.version>
         <google.findbugs.version>1.3.9</google.findbugs.version>
@@ -92,6 +94,7 @@
         <easymock.version>3.0</easymock.version>
         <powermock.version>1.4.10</powermock.version>
         <quickfix.version>1.3.1</quickfix.version>
+        <slf4j.version>1.6.3</slf4j.version>
         <maven.compiler.version>2.3.2</maven.compiler.version>
         <maven.clean.version>2.4.1</maven.clean.version>
         <maven.assembly.version>2.2.1</maven.assembly.version>
@@ -108,13 +111,24 @@
 
     <modules>
         <module>agent</module>
+        <module>assembly</module>
         <module>demo</module>
+        <module>experiment</module>
         <module>integration</module>
         <module>jade-unit</module>
         <module>market</module>
         <module>simulation</module>
         <module>utils</module>
     </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-nop</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
@@ -145,21 +159,9 @@
                             <directory>${basedir}</directory>
                             <includes>
                                 <include>APDescription.txt</include>
-                                <include>runner</include>
                             </includes>
                         </fileset>
                     </filesets>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.ops4j</groupId>
-                <artifactId>maven-pax-plugin</artifactId>
-                <version>${maven.pax.version}</version>
-                <configuration>
-                    <provision>
-                        <param>--platform=equinox</param>
-                        <param>--profiles=minimal</param>
-                    </provision>
                 </configuration>
             </plugin>
             <plugin>

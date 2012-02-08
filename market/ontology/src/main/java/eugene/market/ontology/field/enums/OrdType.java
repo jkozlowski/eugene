@@ -73,4 +73,12 @@ public enum OrdType {
     public eugene.market.ontology.field.OrdType field() {
         return new eugene.market.ontology.field.OrdType(value);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return this == MARKET ? "MARKET" : "LIMIT";
+    }
 }

@@ -52,7 +52,7 @@ public class StartAgentsBehaviour extends OneShotBehaviour {
                 final Simulation simulation = new SimulationImpl(myAgent.getAID(), marketAgent.getObject(), symbol);
                 a.setArguments(new Simulation[]{simulation});
                 final AgentContainer container = myAgent.getContainerController();
-                final AgentController controller = container.acceptNewAgent(a.getClass().getName() + i++, a);
+                final AgentController controller = container.acceptNewAgent(a.getClass().getSimpleName() + i++, a);
                 controller.start();
                 started.add(controller.getName());
             }
