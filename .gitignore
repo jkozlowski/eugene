@@ -1,0 +1,12 @@
+# Latex compiler files
+*.synctex.gz
+*.toc
+*.out
+*.pdf
+*.log
+*.aux
+*.bbl
+*.blg
+
+# Mac OSX files
+.DS_Store
