@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import eugene.market.book.Order;
 import eugene.market.client.Application;
 import eugene.market.client.ApplicationAdapter;
+import eugene.market.client.OrderReference;
 import eugene.market.client.Session;
 import eugene.market.ontology.field.OrderQty;
 import eugene.market.ontology.field.enums.ExecType;
@@ -27,6 +28,7 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static eugene.integration.CountingApplication.TIMEOUT;
 import static eugene.market.client.Applications.proxy;
@@ -36,6 +38,7 @@ import static eugene.market.ontology.Defaults.defaultOrdQty;
 import static eugene.market.ontology.Defaults.defaultSymbol;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
@@ -55,6 +58,7 @@ public class NewOrderSingleMarketNoLiquidityTest {
 
         final CountDownLatch latch = new CountDownLatch(1);
         final Application application = mock(Application.class);
+        final AtomicReference<OrderReference> orderReference = new AtomicReference<OrderReference>();
         final Application proxy = proxy(application,
             new ApplicationAdapter() {
                 @Override
@@ -64,7 +68,7 @@ public class NewOrderSingleMarketNoLiquidityTest {
                     newOrderSingle.setOrderQty(new OrderQty(defaultOrdQty));
                     newOrderSingle.setSide(Side.BUY.field());
 
-                    session.send(newOrderSingle);
+                    orderReference.set(session.send(newOrderSingle));
                 }
             }, new CountingApplication(latch));
 
@@ -103,8 +107,19 @@ public class NewOrderSingleMarketNoLiquidityTest {
         assertThat(rejectedNewOrderSingle.getValue().getOrdStatus(), is(OrdStatus.REJECTED.field()));
         assertThat(rejectedNewOrderSingle.getValue().getSide(), is(Side.BUY.field()));
         assertThat(rejectedNewOrderSingle.getValue().getSymbol().getValue(), is(defaultSymbol));
+        assertThat(rejectedNewOrderSingle.getValue().getLastPx(), nullValue());
+        assertThat(rejectedNewOrderSingle.getValue().getLastQty(), nullValue());
 
         inOrder.verifyNoMoreInteractions();
+
+        assertThat(orderReference.get().getClOrdID(), is(rejectedNewOrderSingle.getValue().getClOrdID().getValue()));
+        assertThat(orderReference.get().getOrdStatus(), is(OrdStatus.REJECTED));
+        assertThat(orderReference.get().getAvgPx(), is(Order.NO_PRICE));
+        assertThat(orderReference.get().getPrice(), is(Order.NO_PRICE));
+        assertThat(orderReference.get().getSide(), is(Side.BUY));
+        assertThat(orderReference.get().getCumQty(), is(0L));
+        assertThat(orderReference.get().getLeavesQty(), is(defaultOrdQty));
+        assertThat(orderReference.get().getOrdType(), is(OrdType.MARKET));
 
         container.kill();
     }

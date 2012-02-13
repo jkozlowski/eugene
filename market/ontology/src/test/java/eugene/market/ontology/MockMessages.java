@@ -1,4 +1,4 @@
-package eugene.market.esma;
+package eugene.market.ontology;
 
 import eugene.market.ontology.Message;
 import eugene.market.ontology.field.ClOrdID;

@@ -45,6 +45,7 @@ public class SenderBehaviour extends OneShotBehaviour {
                 sent.add(msg);
             }
             catch (Exception e1) {
+                e1.printStackTrace();
                 failed.add(msg);
             }
         }

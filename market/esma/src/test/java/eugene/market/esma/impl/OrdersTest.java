@@ -7,7 +7,7 @@ import eugene.market.ontology.field.enums.OrdType;
 import eugene.market.ontology.message.NewOrderSingle;
 import org.testng.annotations.Test;
 
-import static eugene.market.esma.MockMessages.newOrderSingle;
+import static eugene.market.ontology.MockMessages.newOrderSingle;
 import static eugene.market.esma.impl.Orders.newOrder;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;

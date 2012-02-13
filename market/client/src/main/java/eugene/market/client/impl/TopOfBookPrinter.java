@@ -20,7 +20,7 @@ import static eugene.market.ontology.field.enums.Side.SELL;
  * @author Jakub D Kozlowski
  * @since 0.7
  */
-public class TopOfBookPrinter extends ApplicationAdapter {
+public final class TopOfBookPrinter extends ApplicationAdapter {
 
     public static final String PRINT_FORMAT = "bid: %d @ %f; ask: %d @ %f\n";
 

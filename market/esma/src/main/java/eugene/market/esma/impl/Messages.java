@@ -49,23 +49,30 @@ public final class Messages {
     }
 
     /**
-     * Gets a {@link ExecutionReport} message for this <code>orderStatus</code>,
-     * <code>tuple</code> and <code>symbol</code>.
+     * Gets a {@link ExecutionReport} {@link OrdStatus#CANCELED}, {@link OrdStatus#REJECTED} or {@link OrdStatus#NEW}
+     * message for this <code>orderStatus</code>, <code>tuple</code> and <code>symbol</code>.
      *
      * @param orderStatus {@link OrderStatus} to initialize the {@link ExecutionReport} with.
      * @param tuple       {@link Tuple} to initialize the {@link ExecutionReport} with.
      * @param symbol      <code>symbol</code> to initialize the {@link ExecutionReport} with.
      *
      * @return initialized {@link ExecutionReport}.
+     *
+     * @throws NullPointerException     if either argument is null.
+     * @throws IllegalArgumentException if <code>symbol</code> is empty.
+     * @throws IllegalArgumentException if {@link OrderStatus#getOrdStatus()} is {@link OrdStatus#FILLED} or {@link
+     *                                  OrdStatus#PARTIALLY_FILLED}.
+     * @see #tradeExecutionReport(OrderStatus, Execution, Tuple, String)
      */
     public static ExecutionReport executionReport(final OrderStatus orderStatus, final Tuple tuple,
                                                   final String symbol) {
         checkNotNull(orderStatus);
         checkNotNull(tuple);
+        checkNotNull(symbol);
+        checkArgument(!symbol.isEmpty());
+        checkArgument(!orderStatus.getOrdStatus().isFilled() && !orderStatus.getOrdStatus().isPartiallyFilled());
+
         final ExecutionReport executionReport = new ExecutionReport();
-        executionReport.setClOrdID(new ClOrdID(tuple.getClOrdID()));
-        executionReport.setAvgPx(new AvgPx(orderStatus.getAvgPx()));
-        executionReport.setCumQty(new CumQty(orderStatus.getCumQty()));
 
         switch (orderStatus.getOrdStatus()) {
 
@@ -79,16 +86,6 @@ public final class Messages {
                 executionReport.setOrdStatus(OrdStatus.CANCELED.field());
                 break;
 
-            case PARTIALLY_FILLED:
-                executionReport.setExecType(ExecType.TRADE.field());
-                executionReport.setOrdStatus(OrdStatus.PARTIALLY_FILLED.field());
-                break;
-
-            case FILLED:
-                executionReport.setExecType(ExecType.TRADE.field());
-                executionReport.setOrdStatus(OrdStatus.FILLED.field());
-                break;
-
             case REJECTED:
                 executionReport.setExecType(ExecType.REJECTED.field());
                 executionReport.setOrdStatus(OrdStatus.REJECTED.field());
@@ -98,6 +95,9 @@ public final class Messages {
                 throw new IllegalArgumentException();
         }
 
+        executionReport.setClOrdID(new ClOrdID(tuple.getClOrdID()));
+        executionReport.setAvgPx(new AvgPx(orderStatus.getAvgPx()));
+        executionReport.setCumQty(new CumQty(orderStatus.getCumQty()));
         executionReport.setLeavesQty(new LeavesQty(orderStatus.getLeavesQty()));
         executionReport.setOrderID(new OrderID(orderStatus.getOrder().getOrderID().toString()));
         executionReport.setSide(orderStatus.getOrder().getSide().field());
@@ -107,10 +107,68 @@ public final class Messages {
     }
 
     /**
+     * Gets a {@link ExecutionReport} {@link OrdStatus#FILLED} or {@link OrdStatus#PARTIALLY_FILLED} message for this
+     * <code>orderStatus</code>, <code>lastQty</code>, <code>lastPx</code>, <code>tuple</code> and <code>symbol</code>.
+     *
+     * @param orderStatus {@link OrderStatus} to initialize the {@link ExecutionReport} with.
+     * @param execution   {@link Execution} to initialize the {@link ExecutionReport} with.
+     * @param tuple       {@link Tuple} to initialize the {@link ExecutionReport} with.
+     * @param symbol      <code>symbol</code> to initialize the {@link ExecutionReport} with.
+     *
+     * @return initialized {@link ExecutionReport}.
+     *
+     * @throws NullPointerException     if either argument is null.
+     * @throws IllegalArgumentException if <code>symbol</code> is empty.
+     * @throws IllegalArgumentException if {@link OrderStatus#getOrdStatus()} is {@link OrdStatus#NEW}, {@link
+     *                                  OrdStatus#CANCELED} or {@link OrdStatus#REJECTED}.
+     * @see #executionReport(OrderStatus, Tuple, String)
+     */
+    public static ExecutionReport tradeExecutionReport(final OrderStatus orderStatus, final Execution execution,
+                                                       final Tuple tuple, final String symbol) {
+
+        checkNotNull(orderStatus);
+        checkNotNull(tuple);
+        checkNotNull(symbol);
+        checkArgument(!symbol.isEmpty());
+        checkArgument(orderStatus.getOrdStatus().isFilled() || orderStatus.getOrdStatus().isPartiallyFilled());
+
+        final ExecutionReport executionReport = new ExecutionReport();
+
+        switch (orderStatus.getOrdStatus()) {
+
+            case FILLED:
+                executionReport.setExecType(ExecType.TRADE.field());
+                executionReport.setOrdStatus(OrdStatus.FILLED.field());
+                break;
+
+            case PARTIALLY_FILLED:
+                executionReport.setExecType(ExecType.TRADE.field());
+                executionReport.setOrdStatus(OrdStatus.PARTIALLY_FILLED.field());
+                break;
+
+            default:
+                throw new IllegalArgumentException();
+        }
+
+        executionReport.setClOrdID(new ClOrdID(tuple.getClOrdID()));
+        executionReport.setAvgPx(new AvgPx(orderStatus.getAvgPx()));
+        executionReport.setCumQty(new CumQty(orderStatus.getCumQty()));
+        executionReport.setLeavesQty(new LeavesQty(orderStatus.getLeavesQty()));
+        executionReport.setOrderID(new OrderID(orderStatus.getOrder().getOrderID().toString()));
+        executionReport.setSide(orderStatus.getOrder().getSide().field());
+        executionReport.setSymbol(new Symbol(symbol));
+        executionReport.setLastQty(new LastQty(execution.getQuantity()));
+        executionReport.setLastPx(new LastPx(execution.getPrice()));
+
+        return executionReport;
+    }
+
+
+    /**
      * Gets a {@link OrderExecuted} message for this <code>orderStatus</code> and <code>execution</code>.
      *
      * @param orderStatus {@link OrderStatus} to initialize the {@link OrderExecuted} with.
-     * @param execution {@link Execution} to initialize the {@link OrderExecuted} with.
+     * @param execution   {@link Execution} to initialize the {@link OrderExecuted} with.
      *
      * @return initialized {@link OrderExecuted}.
      */

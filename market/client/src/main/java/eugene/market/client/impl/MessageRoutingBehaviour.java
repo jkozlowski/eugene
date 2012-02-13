@@ -25,7 +25,7 @@ import static jade.lang.acl.MessageTemplate.and;
  * @author Jakub D Kozlowski
  * @since 0.4
  */
-public class MessageRoutingBehaviour extends CyclicBehaviour {
+public final class MessageRoutingBehaviour extends CyclicBehaviour {
 
     private final MessageTemplate template;
 

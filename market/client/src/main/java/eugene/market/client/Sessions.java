@@ -1,6 +1,5 @@
 package eugene.market.client;
 
-import com.google.common.annotations.VisibleForTesting;
 import eugene.market.client.impl.SessionInitiator;
 import eugene.market.esma.MarketAgent;
 import eugene.simulation.agent.Simulation;
@@ -15,20 +14,7 @@ import jade.core.behaviours.Behaviour;
  * @author Jakub D Kozlowski
  * @since 0.5
  */
-public final class Sessions {
-
-    private static final String ERROR_MESSAGE = "This class should not be instantiated";
-
-    /**
-     * This constructor should not be invoked. It is only visible for the purposes of keeping global test coverage
-     * high.
-     *
-     * @throws UnsupportedOperationException this constructor should not be invoked.
-     */
-    @VisibleForTesting
-    public Sessions() throws UnsupportedOperationException {
-        throw new UnsupportedOperationException(ERROR_MESSAGE);
-    }
+public abstract class Sessions {
 
     /**
      * Gets a {@link Behaviour} that will initiate a {@link Session} for this <code>simulation</code> and

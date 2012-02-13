@@ -28,18 +28,6 @@
             <artifactId>jade-osgi</artifactId>
             <version>${jade.osgi.version}</version>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.ops4j.pax.logging</groupId>-->
-            <!--<artifactId>pax-logging-api </artifactId>-->
-            <!--<version>${pax.logging.version}</version>-->
-            <!--<scope>provided</scope>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.ops4j.pax.logging</groupId>-->
-            <!--<artifactId>pax-logging-service</artifactId>-->
-            <!--<version>${pax.logging.version}</version>-->
-            <!--<scope>provided</scope>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>

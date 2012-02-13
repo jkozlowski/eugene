@@ -25,7 +25,7 @@ import static java.util.Collections.unmodifiableMap;
  * @author Jakub D Kozlowski
  * @since 0.5
  */
-public class OrderBookApplication extends ApplicationAdapter {
+public final class OrderBookApplication extends ApplicationAdapter {
 
     private final Map<String, Order> orderMap;
 

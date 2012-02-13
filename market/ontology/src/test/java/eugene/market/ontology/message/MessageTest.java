@@ -41,6 +41,8 @@ import java.util.Set;
 import static eugene.market.ontology.Defaults.defaultAvgPx;
 import static eugene.market.ontology.Defaults.defaultClOrdID;
 import static eugene.market.ontology.Defaults.defaultCumQty;
+import static eugene.market.ontology.Defaults.defaultLastPx;
+import static eugene.market.ontology.Defaults.defaultLastQty;
 import static eugene.market.ontology.Defaults.defaultLeavesQty;
 import static eugene.market.ontology.Defaults.defaultOrdQty;
 import static eugene.market.ontology.Defaults.defaultOrderID;
@@ -59,7 +61,7 @@ public class MessageTest {
 
 
     @Test
-    public void testSendLogonWithSessionStatus() throws InterruptedException, ControllerException,
+    public void testSendMessages() throws InterruptedException, ControllerException,
                                                         IllegalAccessException {
 
         final AgentContainer container = getContainer();
@@ -115,6 +117,32 @@ public class MessageTest {
         executionReport.setOrderID(new OrderID(defaultOrderID));
         executionReport.setClOrdID(new ClOrdID(defaultClOrdID));
         messages.add(executionReport);
+
+        final ExecutionReport executionReportNoLastPx = new ExecutionReport();
+        executionReportNoLastPx.setExecType(new ExecType(ExecType.NEW));
+        executionReportNoLastPx.setSymbol(new Symbol(defaultSymbol));
+        executionReportNoLastPx.setSide(new Side(Side.BUY));
+        executionReportNoLastPx.setLeavesQty(new LeavesQty(defaultLeavesQty));
+        executionReportNoLastPx.setLastQty(new LastQty(defaultLastQty));
+        executionReportNoLastPx.setCumQty(new CumQty(defaultCumQty));
+        executionReportNoLastPx.setAvgPx(new AvgPx(defaultAvgPx));
+        executionReportNoLastPx.setOrdStatus(new OrdStatus(OrdStatus.FILLED));
+        executionReportNoLastPx.setOrderID(new OrderID(defaultOrderID));
+        executionReportNoLastPx.setClOrdID(new ClOrdID(defaultClOrdID));
+        messages.add(executionReportNoLastPx);
+
+        final ExecutionReport executionReportNoLastQty = new ExecutionReport();
+        executionReportNoLastQty.setExecType(new ExecType(ExecType.NEW));
+        executionReportNoLastQty.setSymbol(new Symbol(defaultSymbol));
+        executionReportNoLastQty.setSide(new Side(Side.BUY));
+        executionReportNoLastQty.setLeavesQty(new LeavesQty(defaultLeavesQty));
+        executionReportNoLastQty.setCumQty(new CumQty(defaultCumQty));
+        executionReportNoLastQty.setAvgPx(new AvgPx(defaultAvgPx));
+        executionReportNoLastQty.setLastPx(new LastPx(defaultLastPx));
+        executionReportNoLastQty.setOrdStatus(new OrdStatus(OrdStatus.FILLED));
+        executionReportNoLastQty.setOrderID(new OrderID(defaultOrderID));
+        executionReportNoLastQty.setClOrdID(new ClOrdID(defaultClOrdID));
+        messages.add(executionReportNoLastQty);
 
         // NewOrderSingle
         final NewOrderSingle newOrder = new NewOrderSingle();

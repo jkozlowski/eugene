@@ -5,6 +5,8 @@ import eugene.market.ontology.field.AvgPx;
 import eugene.market.ontology.field.ClOrdID;
 import eugene.market.ontology.field.CumQty;
 import eugene.market.ontology.field.ExecType;
+import eugene.market.ontology.field.LastPx;
+import eugene.market.ontology.field.LastQty;
 import eugene.market.ontology.field.LeavesQty;
 import eugene.market.ontology.field.OrdStatus;
 import eugene.market.ontology.field.OrderID;
@@ -200,6 +202,44 @@ public class ExecutionReport extends Message {
      */
     public void setClOrdID(ClOrdID clOrdID) {
         setField(ClOrdID.TAGi, clOrdID);
+    }
+
+    /**
+     * Gets the lastPx.
+     *
+     * @return the lastPx.
+     */
+    @Slot(mandatory = false)
+    public LastPx getLastPx() {
+        return getField(LastPx.TAGi);
+    }
+
+    /**
+     * Sets the lastPx.
+     *
+     * @param lastPx new lastPx.
+     */
+    public void setLastPx(LastPx lastPx) {
+        setField(LastPx.TAGi, lastPx);
+    }
+
+    /**
+     * Gets the lastQty.
+     *
+     * @return the lastQty.
+     */
+    @Slot(mandatory = false)
+    public LastQty getLastQty() {
+        return getField(LastQty.TAGi);
+    }
+
+    /**
+     * Sets the lastQty.
+     *
+     * @param lastQty new lastQty.
+     */
+    public void setLastQty(LastQty lastQty) {
+        setField(LastQty.TAGi, lastQty);
     }
 
     /**

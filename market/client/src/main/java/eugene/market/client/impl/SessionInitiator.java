@@ -18,7 +18,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static eugene.market.client.Applications.proxy;
 
 /**
- * Starts the {@link DefaultSession} with the {@link MarketAgent}. The Agents should provide an implementation
+ * Starts the {@link SessionImpl} with the {@link MarketAgent}. The Agents should provide an implementation
  * of {@link Application} that will receive callbacks whenever {@link Message}s are received.
  *
  * @author Jakub D Kozlowski
@@ -33,10 +33,10 @@ public final class SessionInitiator extends SequentialBehaviour {
     private final BehaviourResult result = new BehaviourResult();
 
     /**
-     * Creates a {@link DefaultSession} that will start a session with the Market Agent for this
+     * Creates a {@link SessionImpl} that will start a session with the Market Agent for this
      * <code>simulation</code> and this <code>application</code>.
      *
-     * @param application implementation of {@link Application} that will be passed to {@link DefaultSession}.
+     * @param application implementation of {@link Application} that will be passed to {@link SessionImpl}.
      * @param simulation  implementation of {@link Simulation} that will be run.
      */
     public SessionInitiator(final Application application, final Simulation simulation) {
@@ -61,8 +61,8 @@ public final class SessionInitiator extends SequentialBehaviour {
                 SessionInitiator.this.removeSubBehaviour(parallel);
             }
         });
-        
-        final Session session = new DefaultSession(simulation, myAgent, proxy);
+
+        final Session session = new SessionImpl(simulation, myAgent, proxy);
         addSubBehaviour(new LogonBehaviour(session));
 
         parallel.addSubBehaviour(new MessageRoutingBehaviour(session));

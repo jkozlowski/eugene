@@ -27,7 +27,7 @@ import static jade.lang.acl.MessageTemplate.and;
  * @author Jakub D Kozlowski
  * @since 0.6
  */
-public class StartStopBehaviour extends CyclicBehaviour {
+public final class StartStopBehaviour extends CyclicBehaviour {
 
     private final MessageTemplate template;
 

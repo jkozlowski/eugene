@@ -1,11 +1,19 @@
 package eugene.market.client.impl;
 
+import eugene.market.book.Order;
 import eugene.market.client.Application;
+import eugene.market.client.OrderReference;
+import eugene.market.client.ProxyApplication;
 import eugene.market.client.Session;
+import eugene.market.ontology.MockMessages;
 import eugene.market.ontology.MarketOntology;
 import eugene.market.ontology.Message;
 import eugene.market.ontology.field.ClOrdID;
 import eugene.market.ontology.field.Symbol;
+import eugene.market.ontology.field.enums.OrdStatus;
+import eugene.market.ontology.field.enums.OrdType;
+import eugene.market.ontology.field.enums.Side;
+import eugene.market.ontology.message.ExecutionReport;
 import eugene.market.ontology.message.Logon;
 import eugene.market.ontology.message.NewOrderSingle;
 import eugene.market.ontology.message.OrderCancelRequest;
@@ -28,9 +36,12 @@ import org.testng.annotations.Test;
 import java.util.Iterator;
 
 import static eugene.market.ontology.Defaults.defaultClOrdID;
+import static eugene.market.ontology.Defaults.defaultOrdQty;
+import static eugene.market.ontology.Defaults.defaultPrice;
 import static eugene.market.ontology.Defaults.defaultSymbol;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.mockito.Mockito.verify;
@@ -39,29 +50,29 @@ import static org.powermock.api.mockito.PowerMockito.mock;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 /**
- * Tests {@link DefaultSession}.
+ * Tests {@link SessionImpl}.
  *
  * @author Jakub D Kozlowski
  * @since 0.4
  */
 @PrepareForTest({Agent.class, AID.class, ContentManager.class})
-public class DefaultSessionTest {
+public class SessionImplTest {
 
     private static final String defaultAgentID = "trader01";
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testConstructorNullSimulation() {
-        new DefaultSession(null, mock(Agent.class), mock(Application.class));
+        new SessionImpl(null, mock(Agent.class), mock(Application.class));
     }
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testConstructorNullAgent() {
-        new DefaultSession(mock(Simulation.class), null, mock(Application.class));
+        new SessionImpl(mock(Simulation.class), null, mock(Application.class));
     }
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testConstructorNullApplication() {
-        new DefaultSession(mock(Simulation.class), mock(Agent.class), null);
+        new SessionImpl(mock(Simulation.class), mock(Agent.class), null);
     }
 
     @Test
@@ -69,21 +80,22 @@ public class DefaultSessionTest {
         final Agent agent = mock(Agent.class);
         final Simulation simulation = mock(Simulation.class);
         final Application application = mock(Application.class);
-        final Session session = new DefaultSession(simulation, agent, application);
+        final SessionImpl session = new SessionImpl(simulation, agent, application);
 
-        assertThat(session.getApplication(), sameInstance(application));
+        assertThat(session.getApplication(), is(ProxyApplication.class));
+        assertThat(session.getOrderReferenceApplication(), notNullValue());
         assertThat(session.getSimulation(), sameInstance(simulation));
     }
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testExtractMessageNullAclMessage() {
-        final Session session = new DefaultSession(mock(Simulation.class), mock(Agent.class), mock(Application.class));
+        final Session session = new SessionImpl(mock(Simulation.class), mock(Agent.class), mock(Application.class));
         session.extractMessage(null, Logon.class);
     }
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testExtractMessageNullClazz() {
-        final Session session = new DefaultSession(mock(Simulation.class), mock(Agent.class), mock(Application.class)
+        final Session session = new SessionImpl(mock(Simulation.class), mock(Agent.class), mock(Application.class)
         );
         session.extractMessage(mock(ACLMessage.class), null);
     }
@@ -93,7 +105,7 @@ public class DefaultSessionTest {
         final ACLMessage aclMessage = mock(ACLMessage.class);
         final Agent agent = mock(Agent.class);
         final ContentManager contentManager = mock(ContentManager.class);
-        final Session session = new DefaultSession(mock(Simulation.class), agent, mock(Application.class));
+        final Session session = new SessionImpl(mock(Simulation.class), agent, mock(Application.class));
         when(agent.getContentManager()).thenReturn(contentManager);
         when(contentManager.extractContent(aclMessage)).thenThrow(CodecException.class);
 
@@ -105,7 +117,7 @@ public class DefaultSessionTest {
         final ACLMessage aclMessage = mock(ACLMessage.class);
         final Agent agent = mock(Agent.class);
         final ContentManager contentManager = mock(ContentManager.class);
-        final Session session = new DefaultSession(mock(Simulation.class), agent, mock(Application.class));
+        final Session session = new SessionImpl(mock(Simulation.class), agent, mock(Application.class));
         when(agent.getContentManager()).thenReturn(contentManager);
         when(contentManager.extractContent(aclMessage)).thenThrow(OntologyException.class);
 
@@ -117,7 +129,7 @@ public class DefaultSessionTest {
         final ACLMessage aclMessage = mock(ACLMessage.class);
         final Agent agent = mock(Agent.class);
         final ContentManager contentManager = mock(ContentManager.class);
-        final Session session = new DefaultSession(mock(Simulation.class), agent, mock(Application.class));
+        final Session session = new SessionImpl(mock(Simulation.class), agent, mock(Application.class));
         when(agent.getContentManager()).thenReturn(contentManager);
         when(contentManager.extractContent(aclMessage)).thenReturn(mock(ContentElement.class));
 
@@ -129,7 +141,7 @@ public class DefaultSessionTest {
         final ACLMessage aclMessage = mock(ACLMessage.class);
         final Agent agent = mock(Agent.class);
         final ContentManager contentManager = mock(ContentManager.class);
-        final Session session = new DefaultSession(mock(Simulation.class), agent, mock(Application.class));
+        final Session session = new SessionImpl(mock(Simulation.class), agent, mock(Application.class));
         when(agent.getContentManager()).thenReturn(contentManager);
         when(contentManager.extractContent(aclMessage)).thenReturn(mock(Action.class));
 
@@ -142,7 +154,7 @@ public class DefaultSessionTest {
         final Agent agent = mock(Agent.class);
         final ContentManager contentManager = mock(ContentManager.class);
         final Action action = mock(Action.class);
-        final Session session = new DefaultSession(mock(Simulation.class), agent, mock(Application.class));
+        final Session session = new SessionImpl(mock(Simulation.class), agent, mock(Application.class));
         when(agent.getContentManager()).thenReturn(contentManager);
         when(contentManager.extractContent(aclMessage)).thenReturn(action);
         when(action.getAction()).thenReturn(mock(NewOrderSingle.class));
@@ -157,7 +169,7 @@ public class DefaultSessionTest {
         final ContentManager contentManager = mock(ContentManager.class);
         final Action action = mock(Action.class);
         final Logon logon = mock(Logon.class);
-        final Session session = new DefaultSession(mock(Simulation.class), agent, mock(Application.class));
+        final Session session = new SessionImpl(mock(Simulation.class), agent, mock(Application.class));
         when(agent.getContentManager()).thenReturn(contentManager);
         when(contentManager.extractContent(aclMessage)).thenReturn(action);
         when(action.getAction()).thenReturn(logon);
@@ -172,7 +184,7 @@ public class DefaultSessionTest {
         final ContentManager contentManager = mock(ContentManager.class);
         final Action action = mock(Action.class);
         final Logon logon = mock(Logon.class);
-        final Session session = new DefaultSession(mock(Simulation.class), agent, mock(Application.class));
+        final Session session = new SessionImpl(mock(Simulation.class), agent, mock(Application.class));
         when(agent.getContentManager()).thenReturn(contentManager);
         when(contentManager.extractContent(aclMessage)).thenReturn(action);
         when(action.getAction()).thenReturn(logon);
@@ -184,7 +196,7 @@ public class DefaultSessionTest {
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testAclRequestNullMessage() {
-        final Session session = new DefaultSession(mock(Simulation.class), mock(Agent.class), mock(Application.class)
+        final Session session = new SessionImpl(mock(Simulation.class), mock(Agent.class), mock(Application.class)
         );
         session.aclRequest(null);
     }
@@ -197,7 +209,7 @@ public class DefaultSessionTest {
         when(simulation.getMarketAgent()).thenReturn(to);
         final Agent agent = mock(Agent.class);
         final ContentManager contentManager = mock(ContentManager.class);
-        final Session session = new DefaultSession(simulation, agent, mock(Application.class));
+        final Session session = new SessionImpl(simulation, agent, mock(Application.class));
         when(agent.getContentManager()).thenReturn(contentManager);
 
         final ACLMessage aclMessage = session.aclRequest(message);
@@ -219,7 +231,7 @@ public class DefaultSessionTest {
         final Message message = mock(Message.class);
         final Agent agent = mock(Agent.class);
         final ContentManager contentManager = mock(ContentManager.class);
-        final Session session = new DefaultSession(mock(Simulation.class), agent, mock(Application.class));
+        final Session session = new SessionImpl(mock(Simulation.class), agent, mock(Application.class));
         when(agent.getContentManager()).thenReturn(contentManager);
         doThrow(new CodecException("")).when(contentManager).fillContent(Mockito.any(ACLMessage.class),
                                                                          Mockito.any(Action.class));
@@ -232,7 +244,7 @@ public class DefaultSessionTest {
         final Message message = mock(Message.class);
         final Agent agent = mock(Agent.class);
         final ContentManager contentManager = mock(ContentManager.class);
-        final Session session = new DefaultSession(mock(Simulation.class), agent, mock(Application.class));
+        final Session session = new SessionImpl(mock(Simulation.class), agent, mock(Application.class));
         when(agent.getContentManager()).thenReturn(contentManager);
         doThrow(new OntologyException("")).when(contentManager).fillContent(Mockito.any(ACLMessage.class),
                                                                             Mockito.any(Action.class));
@@ -242,14 +254,14 @@ public class DefaultSessionTest {
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testSendNewOrderSingleNullNewOrderSingle() {
-        final Session session = new DefaultSession(mock(Simulation.class), mock(Agent.class), mock(Application.class));
+        final Session session = new SessionImpl(mock(Simulation.class), mock(Agent.class), mock(Application.class));
         session.send((NewOrderSingle) null);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testSendNewOrderSingleIllegalSymbol() {
         final Simulation simulation = when(mock(Simulation.class).getSymbol()).thenReturn(defaultSymbol).getMock();
-        final Session session = new DefaultSession(simulation, mock(Agent.class), mock(Application.class));
+        final Session session = new SessionImpl(simulation, mock(Agent.class), mock(Application.class));
         final NewOrderSingle newOrderSingle = new NewOrderSingle();
         newOrderSingle.setSymbol(new Symbol("BARC.L"));
         session.send(newOrderSingle);
@@ -258,7 +270,7 @@ public class DefaultSessionTest {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testSendNewOrderSingleNullValueOfSymbol() {
         final Simulation simulation = when(mock(Simulation.class).getSymbol()).thenReturn(defaultSymbol).getMock();
-        final Session session = new DefaultSession(simulation, mock(Agent.class), mock(Application.class));
+        final Session session = new SessionImpl(simulation, mock(Agent.class), mock(Application.class));
         final NewOrderSingle newOrderSingle = new NewOrderSingle();
         newOrderSingle.setSymbol(new Symbol(null));
         session.send(newOrderSingle);
@@ -266,7 +278,7 @@ public class DefaultSessionTest {
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testSendNewOrderSingleNotNullClOrdID() {
-        final Session session = new DefaultSession(mock(Simulation.class), mock(Agent.class), mock(Application.class));
+        final Session session = new SessionImpl(mock(Simulation.class), mock(Agent.class), mock(Application.class));
         final NewOrderSingle newOrderSingle = new NewOrderSingle();
         newOrderSingle.setClOrdID(new ClOrdID(defaultClOrdID));
         session.send(newOrderSingle);
@@ -284,29 +296,45 @@ public class DefaultSessionTest {
         when(agent.getAID()).thenReturn(id);
         final ContentManager contentManager = mock(ContentManager.class);
         final Application application = mock(Application.class);
-        final DefaultSession session = new DefaultSession(simulation, agent, application);
+        final SessionImpl session = new SessionImpl(simulation, agent, application);
         when(agent.getContentManager()).thenReturn(contentManager);
 
-        final NewOrderSingle newOrderSingle = new NewOrderSingle();
-        session.send(newOrderSingle);
+        final NewOrderSingle newOrderSingle = MockMessages.newOrderSingle();
+        newOrderSingle.setClOrdID(null);
+        final OrderReference orderReference = session.send(newOrderSingle);
 
         verify(agent).getContentManager();
         verify(agent).send(Mockito.any(ACLMessage.class));
         verify(application).fromApp(newOrderSingle, session);
         assertThat(newOrderSingle.getSymbol().getValue(), is(defaultSymbol));
         assertThat(newOrderSingle.getClOrdID().getValue(), is(defaultAgentID + (session.getCurClOrdID() - 1L)));
+        
+        assertThat(orderReference.getCumQty(), is(0L));
+        assertThat(orderReference.getLeavesQty(), is(defaultOrdQty));
+        assertThat(orderReference.getOrderQty(), is(defaultOrdQty));
+        assertThat(orderReference.getOrdStatus(), is(OrdStatus.NEW));
+        assertThat(orderReference.getOrdType(), is(OrdType.LIMIT));
+        assertThat(orderReference.getPrice(), is(defaultPrice));
+        assertThat(orderReference.getSide(), is(Side.BUY));
+        assertThat(orderReference.getAvgPx(), is(Order.NO_PRICE));
+        assertThat(orderReference.getClOrdID(), is(defaultAgentID + (session.getCurClOrdID() - 1L)));
+        
+        final ExecutionReport executionReport = new ExecutionReport();
+        executionReport.setClOrdID(new ClOrdID(orderReference.getClOrdID()));
+        assertThat(session.getOrderReferenceApplication().getOrderReference(executionReport),
+                   sameInstance(orderReference));
     }
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testSendOrderCancelRequestNullOrderCancelRequest() {
-        final Session session = new DefaultSession(mock(Simulation.class), mock(Agent.class), mock(Application.class));
+        final Session session = new SessionImpl(mock(Simulation.class), mock(Agent.class), mock(Application.class));
         session.send((OrderCancelRequest) null);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testSendOrderCancelRequestIllegalSymbol() {
         final Simulation simulation = when(mock(Simulation.class).getSymbol()).thenReturn(defaultSymbol).getMock();
-        final Session session = new DefaultSession(simulation, mock(Agent.class), mock(Application.class));
+        final Session session = new SessionImpl(simulation, mock(Agent.class), mock(Application.class));
         final OrderCancelRequest orderCancelRequest = new OrderCancelRequest();
         orderCancelRequest.setSymbol(new Symbol("BARC.L"));
         session.send(orderCancelRequest);
@@ -315,7 +343,7 @@ public class DefaultSessionTest {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testSendOrderCancelRequestNullValueOfSymbol() {
         final Simulation simulation = when(mock(Simulation.class).getSymbol()).thenReturn(defaultSymbol).getMock();
-        final Session session = new DefaultSession(simulation, mock(Agent.class), mock(Application.class));
+        final Session session = new SessionImpl(simulation, mock(Agent.class), mock(Application.class));
         final OrderCancelRequest orderCancelRequest = new OrderCancelRequest();
         orderCancelRequest.setSymbol(new Symbol(null));
         session.send(orderCancelRequest);
@@ -333,7 +361,7 @@ public class DefaultSessionTest {
         when(agent.getAID()).thenReturn(id);
         final ContentManager contentManager = mock(ContentManager.class);
         final Application application = mock(Application.class);
-        final DefaultSession session = new DefaultSession(simulation, agent, application);
+        final SessionImpl session = new SessionImpl(simulation, agent, application);
         when(agent.getContentManager()).thenReturn(contentManager);
 
         final OrderCancelRequest orderCancelRequest = new OrderCancelRequest();

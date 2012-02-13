@@ -32,7 +32,11 @@ public class Defaults {
 
     public static final Long defaultLeavesQty = 1L;
 
-    public static final Long defaultCumQty = 2L;
+    public static final Long defaultCumQty = 99L;
+    
+    public static final Long defaultLastQty = 99L;
+
+    public static final Double defaultLastPx = 100.0D;
 
     public static final Double defaultAvgPx = 1.2;
 }

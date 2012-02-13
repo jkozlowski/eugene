@@ -25,6 +25,8 @@ import jade.lang.acl.ACLMessage;
  * through a {@link Session} should not have {@link NewOrderSingle#getSymbol()} equal to a different symbol,
  * than the one handled by this {@link Session}.
  *
+ * {@link OrderReference}s returned from {@link #send(NewOrderSingle)} will be automatically updated.
+ *
  * @author Jakub D Kozlowski
  * @since 0.5
  */
@@ -65,7 +67,7 @@ public interface Session {
      *
      * @return {@link ACLMessage#REQUEST} message.
      *
-     * @throws RuntimeException if it is impossible to construct an {@link ACLMessage}.
+     * @throws RuntimeException if it was impossible to construct an {@link ACLMessage}.
      */
     ACLMessage aclRequest(final Message message) throws RuntimeException;
 
@@ -75,12 +77,16 @@ public interface Session {
      *
      * @param newOrderSingle {@link NewOrderSingle} to send.
      *
+     * @return {@link OrderReference} for this <code>newOrderSingle</code>.
+     *
      * @throws NullPointerException     if <code>newOrderSingle</code> is null.
      * @throws IllegalArgumentException if {@link NewOrderSingle#getSymbol()} is not null and it is not equal to the
      *                                  symbol handled by this {@link Session} or {@link NewOrderSingle#getClOrdID()}
      *                                  is not null.
+     * @throws RuntimeException         if it was impossible to construct an {@link ACLMessage}.
      */
-    void send(final NewOrderSingle newOrderSingle) throws NullPointerException, IllegalArgumentException;
+    OrderReference send(final NewOrderSingle newOrderSingle)
+            throws NullPointerException, IllegalArgumentException, RuntimeException;
 
     /**
      * Sends this <code>orderCancelRequest</code>. {@link Symbol} will be set to the symbol handled by this {@link
@@ -92,6 +98,8 @@ public interface Session {
      * @throws IllegalArgumentException if {@link OrderCancelRequest#getSymbol()} is not null and it is not equal to
      *                                  the symbol handled by this {@link Session} or {@link
      *                                  OrderCancelRequest#getClOrdID()} is not null.
+     * @throws RuntimeException         if it was impossible to construct an {@link ACLMessage}.
      */
-    void send(final OrderCancelRequest orderCancelRequest) throws NullPointerException, IllegalArgumentException;
+    void send(final OrderCancelRequest orderCancelRequest)
+            throws NullPointerException, IllegalArgumentException, RuntimeException;
 }

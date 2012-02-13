@@ -1,5 +1,9 @@
 package eugene.market.ontology.field.enums;
 
+import eugene.market.ontology.message.ExecutionReport;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * Enum that mirrors {@link eugene.market.ontology.field.OrdType}.
  *
@@ -27,6 +31,42 @@ public enum OrdStatus {
      */
     public eugene.market.ontology.field.OrdStatus field() {
         return new eugene.market.ontology.field.OrdStatus(value);
+    }
+
+    /**
+     * Gets {@link OrdStatus} for this <code>executionReport</code>.
+     *
+     * @param executionReport order to get {@link OrdStatus} for.
+     *
+     * @return {@link OrdStatus} for this <code>executionReport</code>
+     *
+     * @throws NullPointerException     if <code>executionReport</code> or {@link ExecutionReport#getOrdStatus()}
+     *                                  are null.
+     * @throws IllegalArgumentException if value returned from {@link ExecutionReport#getOrdStatus()} is invalid.
+     */
+    public static OrdStatus getOrdStatus(final ExecutionReport executionReport)
+            throws NullPointerException, IllegalArgumentException {
+
+        checkNotNull(executionReport);
+        checkNotNull(executionReport.getOrdStatus());
+
+        if (NEW.value.equals(executionReport.getOrdStatus().getValue())) {
+            return NEW;
+        }
+        else if (CANCELED.value.equals(executionReport.getOrdStatus().getValue())) {
+            return CANCELED;
+        }
+        else if (FILLED.value.equals(executionReport.getOrdStatus().getValue())) {
+            return FILLED;
+        }
+        else if (PARTIALLY_FILLED.value.equals(executionReport.getOrdStatus().getValue())) {
+            return PARTIALLY_FILLED;
+        }
+        else if (REJECTED.value.equals(executionReport.getOrdStatus().getValue())) {
+            return REJECTED;
+        }
+
+        throw new IllegalArgumentException();
     }
 
     /**

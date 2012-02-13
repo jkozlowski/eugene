@@ -52,9 +52,10 @@ public class LogonBehaviourTest {
     public void testLogonBehaviour() throws Exception {
 
         final AgentContainer container = getContainer();
-        
+        final String containerName = container.getName();
+
         final CountDownLatch latch = new CountDownLatch(1);
-        
+
         final BehaviourResult result = new BehaviourResult();
         final Agent simulationAgent = new Agent() {
             @Override
@@ -96,10 +97,13 @@ public class LogonBehaviourTest {
         final AgentController simulationController = container.acceptNewAgent(SimulationAgent.NAME, simulationAgent);
         simulationController.start();
 
+
         final Simulation simulation = mock(Simulation.class);
-        when(simulation.getSimulationAgent()).thenReturn(new AID(SimulationAgent.NAME, AID.ISLOCALNAME));
+        when(simulation.getSimulationAgent()).thenReturn(new AID(SimulationAgent.NAME.concat("@" + containerName),
+                                                                 AID.ISGUID));
         when(simulation.getSymbol()).thenReturn(defaultSymbol);
-        when(simulation.getMarketAgent()).thenReturn(new AID(MARKET_AGENT, AID.ISLOCALNAME));
+        when(simulation.getMarketAgent()).thenReturn(new AID(MARKET_AGENT.concat("@" + containerName),
+                                                             AID.ISGUID));
         final Application application = mock(Application.class);
 
         final Behaviour b = new SequentialBehaviour() {
@@ -108,7 +112,7 @@ public class LogonBehaviourTest {
 
             @Override
             public void onStart() {
-                final DefaultSession session = new DefaultSession(simulation, myAgent, application);
+                final SessionImpl session = new SessionImpl(simulation, myAgent, application);
                 logon = new LogonBehaviour(session);
                 addSubBehaviour(logon);
             }
@@ -122,7 +126,7 @@ public class LogonBehaviourTest {
         submit(b, container);
 
         latch.await(TIMEOUT, TimeUnit.MILLISECONDS);
-        
+
         assertThat(result.getResult(), is(BehaviourResult.SUCCESS));
 
         assertThat(b.onEnd(), is(BehaviourResult.SUCCESS));

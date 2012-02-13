@@ -42,6 +42,7 @@ import static eugene.market.esma.impl.Messages.addOrder;
 import static eugene.market.esma.impl.Messages.deleteOrder;
 import static eugene.market.esma.impl.Messages.executionReport;
 import static eugene.market.esma.impl.Messages.orderExecuted;
+import static eugene.market.esma.impl.Messages.tradeExecutionReport;
 import static jade.lang.acl.ACLMessage.INFORM;
 
 /**
@@ -185,14 +186,14 @@ public class MarketDataServer extends CyclicBehaviour implements MarketDataEvent
         final Tuple newOrderTuple = repository.get(newOrderStatus.getOrder());
         checkNotNull(newOrderTuple);
 
-        send(executionReport(newOrderStatus, newOrderTuple, symbol), newOrderTuple);
+        send(tradeExecutionReport(newOrderStatus, execution, newOrderTuple, symbol), newOrderTuple);
 
         // Limit order
         final OrderStatus limitOrderStatus = execution.getLimitOrderStatus();
         final Tuple limitOrderTuple = repository.get(limitOrderStatus.getOrder());
         checkNotNull(limitOrderTuple);
 
-        send(executionReport(limitOrderStatus, limitOrderTuple, symbol), limitOrderTuple);
+        send(tradeExecutionReport(limitOrderStatus, execution, limitOrderTuple, symbol), limitOrderTuple);
         sendToAll(orderExecuted(limitOrderStatus, execution));
 
         LOG.info(EXECUTION,

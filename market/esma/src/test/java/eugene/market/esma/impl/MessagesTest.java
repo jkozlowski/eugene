@@ -27,12 +27,16 @@ import static eugene.market.esma.impl.Messages.addOrder;
 import static eugene.market.esma.impl.Messages.deleteOrder;
 import static eugene.market.esma.impl.Messages.executionReport;
 import static eugene.market.esma.impl.Messages.orderExecuted;
+import static eugene.market.esma.impl.Messages.tradeExecutionReport;
 import static eugene.market.ontology.Defaults.defaultClOrdID;
+import static eugene.market.ontology.Defaults.defaultLastPx;
+import static eugene.market.ontology.Defaults.defaultLastQty;
 import static eugene.market.ontology.Defaults.defaultOrdQty;
 import static eugene.market.ontology.Defaults.defaultPrice;
 import static eugene.market.ontology.Defaults.defaultSymbol;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -47,7 +51,13 @@ public class MessagesTest {
 
     public static final String ORDER_STATUS_PROVIDER = "order-status-provider";
 
+    public static final String TRADE_ORDER_STATUS_PROVIDER = "trade-order-status-provider";
+
     public static final Long execID = 1L;
+
+    private final Execution execution = new Execution(execID, new OrderStatus(order(buy()), defaultPrice,
+    defaultOrdQty - 2L, 2L, OrdStatus.NEW), new OrderStatus(order(sell()), defaultPrice, defaultOrdQty - 1L, 1L, OrdStatus.NEW), defaultPrice,
+                                              defaultOrdQty - 1L);
 
     @DataProvider(name = ORDER_STATUS_PROVIDER)
     public OrderStatus[][] getOrderStatus() {
@@ -63,16 +73,29 @@ public class MessagesTest {
 
         final OrderStatus partiallyFilledOrderStatus = new OrderStatus(order, defaultPrice, defaultOrdQty - 1L,
                                                                        1L, OrdStatus.PARTIALLY_FILLED);
-        orders.add(new OrderStatus[]{partiallyFilledOrderStatus});
-
-        final OrderStatus filledOrderStatus = new OrderStatus(order, defaultPrice, 0L, defaultOrdQty, OrdStatus.FILLED);
-        orders.add(new OrderStatus[]{filledOrderStatus});
 
         final OrderStatus partiallyFilledCanceled = partiallyFilledOrderStatus.cancel();
         orders.add(new OrderStatus[]{partiallyFilledCanceled});
 
         return orders.toArray(new OrderStatus[][]{});
     }
+
+    @DataProvider(name = TRADE_ORDER_STATUS_PROVIDER)
+    public OrderStatus[][] getTradeOrderStatus() {
+        final List<OrderStatus[]> orders = new ArrayList<OrderStatus[]>();
+
+        final Order order = order(buy());
+
+        final OrderStatus partiallyFilledOrderStatus = new OrderStatus(order, defaultPrice, defaultOrdQty - 1L,
+                                                                       1L, OrdStatus.PARTIALLY_FILLED);
+        orders.add(new OrderStatus[]{partiallyFilledOrderStatus});
+
+        final OrderStatus filledOrderStatus = new OrderStatus(order, defaultPrice, 0L, defaultOrdQty, OrdStatus.FILLED);
+        orders.add(new OrderStatus[]{filledOrderStatus});
+
+        return orders.toArray(new OrderStatus[][]{});
+    }
+
 
     @Test(expectedExceptions = UnsupportedOperationException.class)
     public void testConstructor() {
@@ -94,8 +117,23 @@ public class MessagesTest {
         executionReport(mock(OrderStatus.class), defaultTuple, null);
     }
 
+    @Test(dataProvider = ORDER_STATUS_PROVIDER, expectedExceptions = NullPointerException.class)
+    public void testExecutionReportNullSymbol(final OrderStatus orderStatus) {
+        executionReport(orderStatus, defaultTuple, null);
+    }
+
+    @Test(dataProvider = ORDER_STATUS_PROVIDER, expectedExceptions = IllegalArgumentException.class)
+    public void testExecutionReportEmptySymbol(final OrderStatus orderStatus) {
+        executionReport(orderStatus, defaultTuple, "");
+    }
+
+    @Test(dataProvider = TRADE_ORDER_STATUS_PROVIDER, expectedExceptions = IllegalArgumentException.class)
+    public void testExecutionReportTradeOrderStatus(final OrderStatus orderStatus) {
+        executionReport(orderStatus, defaultTuple, defaultSymbol);
+    }
+
     @Test(dataProvider = ORDER_STATUS_PROVIDER)
-    public void testExecutionReportNew(final OrderStatus orderStatus) {
+    public void testExecutionReport(final OrderStatus orderStatus) {
         final Order order = orderStatus.getOrder();
 
         final ExecutionReport executionReport = executionReport(orderStatus, defaultTuple, defaultSymbol);
@@ -108,16 +146,79 @@ public class MessagesTest {
             assertThat(executionReport.getExecType(), is(ExecType.REJECTED.field()));
             assertThat(executionReport.getOrdStatus(), is(OrdStatus.REJECTED.field()));
         }
-        else if (orderStatus.getOrdStatus().isFilled()) {
+
+        assertThat(executionReport.getAvgPx().getValue(), is(orderStatus.getAvgPx()));
+        assertThat(executionReport.getClOrdID().getValue(), is(defaultTuple.getClOrdID()));
+        assertThat(executionReport.getCumQty().getValue(), is(orderStatus.getCumQty()));
+        assertThat(executionReport.getLeavesQty().getValue(), is(orderStatus.getLeavesQty()));
+        assertThat(executionReport.getOrderID().getValue(), is(order.getOrderID().toString()));
+        assertThat(executionReport.getSide(), is(order.getSide().field()));
+        assertThat(executionReport.getSymbol().getValue(), is(defaultSymbol));
+        assertThat(executionReport.getLastPx(), nullValue());
+        assertThat(executionReport.getLastQty(), nullValue());
+    }
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testTradeExecutionReportNullOrderStatus() {
+        final Order buy = order(buy());
+        final Order sell = order(sell());
+        final OrderStatus buyOrderStatus = new OrderStatus(buy, defaultPrice, defaultOrdQty - 2L, 2L, OrdStatus.NEW);
+        final OrderStatus sellOrderStatus = new OrderStatus(sell, defaultPrice, defaultOrdQty - 1L, 1L, OrdStatus.NEW);
+        final Execution execution = new Execution(execID, buyOrderStatus, sellOrderStatus, defaultPrice,
+                                                  defaultOrdQty - 1L);
+        tradeExecutionReport(null, execution, defaultTuple, defaultSymbol);
+    }
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testTradeExecutionReportExecution() {
+        tradeExecutionReport(mock(OrderStatus.class), null, defaultTuple, defaultSymbol);
+    }
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testTradeExecutionReportNullExecution() {
+        tradeExecutionReport(mock(OrderStatus.class), null, defaultTuple, defaultSymbol);
+    }
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testTradeExecutionReportNullTuple() {
+        final Order buy = order(buy());
+        final Order sell = order(sell());
+        final OrderStatus buyOrderStatus = new OrderStatus(buy, defaultPrice, defaultOrdQty - 2L, 2L, OrdStatus.NEW);
+        final OrderStatus sellOrderStatus = new OrderStatus(sell, defaultPrice, defaultOrdQty - 1L, 1L, OrdStatus.NEW);
+        final Execution execution = new Execution(execID, buyOrderStatus, sellOrderStatus, defaultPrice,
+                                                  defaultOrdQty - 1L);
+        tradeExecutionReport(mock(OrderStatus.class), execution, null, defaultSymbol);
+    }
+
+    @Test(dataProvider = TRADE_ORDER_STATUS_PROVIDER, expectedExceptions = NullPointerException.class)
+    public void testTradeExecutionReportNullSymbol(final OrderStatus orderStatus) {
+        tradeExecutionReport(orderStatus, execution, defaultTuple, null);
+    }
+
+    @Test(dataProvider = TRADE_ORDER_STATUS_PROVIDER, expectedExceptions = IllegalArgumentException.class)
+    public void testTradeExecutionReportEmptySymbol(final OrderStatus orderStatus) {
+        tradeExecutionReport(orderStatus, execution, defaultTuple, "");
+    }
+
+    @Test(dataProvider = ORDER_STATUS_PROVIDER, expectedExceptions = IllegalArgumentException.class)
+    public void testTradeExecutionReportTradeOrderStatus(final OrderStatus orderStatus) {
+        tradeExecutionReport(orderStatus, execution, defaultTuple, defaultSymbol);
+    }
+
+    @Test(dataProvider = TRADE_ORDER_STATUS_PROVIDER)
+    public void testTradeExecutionReport(final OrderStatus orderStatus) {
+        final Order order = orderStatus.getOrder();
+
+        final ExecutionReport executionReport = tradeExecutionReport(orderStatus, execution, defaultTuple,
+                                                                     defaultSymbol);
+
+        if (orderStatus.getOrdStatus().isFilled()) {
             assertThat(executionReport.getExecType(), is(ExecType.TRADE.field()));
             assertThat(executionReport.getOrdStatus(), is(OrdStatus.FILLED.field()));
         }
         else if (orderStatus.getOrdStatus().isPartiallyFilled()) {
             assertThat(executionReport.getExecType(), is(ExecType.TRADE.field()));
             assertThat(executionReport.getOrdStatus(), is(OrdStatus.PARTIALLY_FILLED.field()));
-        } else if (orderStatus.getOrdStatus().isRejected()) {
-            assertThat(executionReport.getExecType(), is(ExecType.REJECTED.field()));
-            assertThat(executionReport.getOrdStatus(), is(OrdStatus.CANCELED.field()));
         }
 
         assertThat(executionReport.getAvgPx().getValue(), is(orderStatus.getAvgPx()));
@@ -127,6 +228,8 @@ public class MessagesTest {
         assertThat(executionReport.getOrderID().getValue(), is(order.getOrderID().toString()));
         assertThat(executionReport.getSide(), is(order.getSide().field()));
         assertThat(executionReport.getSymbol().getValue(), is(defaultSymbol));
+        assertThat(executionReport.getLastPx().getValue(), is(defaultLastPx));
+        assertThat(executionReport.getLastQty().getValue(), is(defaultLastQty));
     }
 
     @Test(expectedExceptions = NullPointerException.class)

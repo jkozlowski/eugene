@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import eugene.market.book.Order;
 import eugene.market.client.Application;
 import eugene.market.client.ApplicationAdapter;
+import eugene.market.client.OrderReference;
 import eugene.market.client.Session;
 import eugene.market.ontology.field.OrdType;
 import eugene.market.ontology.field.OrderQty;
@@ -28,6 +29,7 @@ import org.testng.annotations.Test;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static eugene.integration.CountingApplication.TIMEOUT;
 import static eugene.market.client.Applications.proxy;
@@ -63,6 +65,8 @@ public class NewOrderSingleMarketMatchingLimitOnTheBookFromSimulationAgentTest {
         final AgentContainer container = getNakedContainer();
 
         final CountDownLatch latch = new CountDownLatch(4);
+        
+        final AtomicReference<OrderReference> orderReference = new AtomicReference<OrderReference>();
 
         final Set<Order> orders = Sets.newHashSet();
         orders.add(new Order(Long.valueOf(defaultOrderID), LIMIT, Side.BUY, defaultOrdQty, defaultPrice));
@@ -79,7 +83,7 @@ public class NewOrderSingleMarketMatchingLimitOnTheBookFromSimulationAgentTest {
                         newOrderSingleMarket.setOrderQty(new OrderQty(defaultOrdQty));
                         newOrderSingleMarket.setSide(Side.SELL.field());
 
-                        session.send(newOrderSingleMarket);
+                        orderReference.set(session.send(newOrderSingleMarket));
                     }
                 },
                 new CountingApplication(latch)
@@ -136,6 +140,8 @@ public class NewOrderSingleMarketMatchingLimitOnTheBookFromSimulationAgentTest {
         assertThat(newMarketExecutionReport.getOrdStatus(), is(OrdStatus.NEW.field()));
         assertThat(newMarketExecutionReport.getSide(), is(Side.SELL.field()));
         assertThat(newMarketExecutionReport.getSymbol().getValue(), is(defaultSymbol));
+        assertThat(newMarketExecutionReport.getLastPx(), nullValue());
+        assertThat(newMarketExecutionReport.getLastQty(), nullValue());
 
         // TRADE ExecutionReport for Market
         final ExecutionReport tradeMarketExecutionReport = executionReport.getAllValues().get(1);
@@ -148,6 +154,8 @@ public class NewOrderSingleMarketMatchingLimitOnTheBookFromSimulationAgentTest {
         assertThat(tradeMarketExecutionReport.getOrdStatus(), is(OrdStatus.FILLED.field()));
         assertThat(tradeMarketExecutionReport.getSide(), is(Side.SELL.field()));
         assertThat(tradeMarketExecutionReport.getSymbol().getValue(), is(defaultSymbol));
+        assertThat(tradeMarketExecutionReport.getLastPx().getValue(), is(defaultPrice));
+        assertThat(tradeMarketExecutionReport.getLastQty().getValue(), is(defaultOrdQty));
 
         // OrderExecuted for Limit
         final ArgumentCaptor<OrderExecuted> orderExecuted = ArgumentCaptor.forClass(OrderExecuted.class);
@@ -159,6 +167,16 @@ public class NewOrderSingleMarketMatchingLimitOnTheBookFromSimulationAgentTest {
         assertThat(orderExecuted.getValue().getTradeID().getValue(), is(Long.valueOf(1L).toString()));
 
         inOrder.verifyNoMoreInteractions();
+
+        // Verify OrderReference
+        assertThat(orderReference.get().getClOrdID(), is(newMarketExecutionReport.getClOrdID().getValue()));
+        assertThat(orderReference.get().getOrdStatus(), is(OrdStatus.FILLED));
+        assertThat(orderReference.get().getAvgPx(), is(defaultPrice));
+        assertThat(orderReference.get().getPrice(), is(Order.NO_PRICE));
+        assertThat(orderReference.get().getSide(), is(Side.SELL));
+        assertThat(orderReference.get().getCumQty(), is(defaultOrdQty));
+        assertThat(orderReference.get().getLeavesQty(), is(0L));
+        assertThat(orderReference.get().getOrdType(), is(eugene.market.ontology.field.enums.OrdType.MARKET));
 
         container.kill();
     }

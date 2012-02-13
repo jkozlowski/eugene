@@ -38,11 +38,6 @@
             <version>${current.version}</version>
         </dependency>
         <dependency>
-            <groupId>eugene.market</groupId>
-            <artifactId>esma</artifactId>
-            <version>${current.version}</version>
-        </dependency>
-        <dependency>
             <groupId>eugene.simulation</groupId>
             <artifactId>agent</artifactId>
             <version>${current.version}</version>
@@ -135,8 +130,9 @@
                         <Bundle-Version>${project.version}</Bundle-Version>
                         <Bundle-Description>${project.description}</Bundle-Description>
                         <Export-Package>${bundle.namespace}</Export-Package>
-                        <Import-Package>com.google.common.base, com.google.common.collect, eugene.market.book,
-                            eugene.market.ontology, eugene.market.ontology.field, eugene.market.ontology.field.enums,
+                        <Import-Package>com.google.common.base, com.google.common.collect,
+                            com.google.common.primitives, eugene.market.book, eugene.market.ontology,
+                            eugene.market.ontology.field, eugene.market.ontology.field.enums,
                             eugene.market.ontology.message, eugene.market.ontology.message.data,
                             eugene.simulation.agent, eugene.simulation.ontology, eugene.utils, jade.content,
                             jade.content.lang, jade.content.onto, jade.content.onto.basic, jade.core,

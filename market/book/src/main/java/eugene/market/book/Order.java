@@ -55,6 +55,8 @@ public class Order implements Comparable<Order> {
 
     private final Double price;
 
+    private final int hashCode;
+
     /**
      * Constructs an {@link Order} with {@link System#nanoTime()} <code>entryTime</code>.
      *
@@ -101,6 +103,14 @@ public class Order implements Comparable<Order> {
         this.side = side;
         this.ordType = ordType;
         this.price = price;
+
+        int hashCode = entryTime.hashCode();
+        hashCode = 31 * hashCode + orderID.hashCode();
+        hashCode = 31 * hashCode + ordType.hashCode();
+        hashCode = 31 * hashCode + side.hashCode();
+        hashCode = 31 * hashCode + orderQty.hashCode();
+        hashCode = 31 * hashCode + price.hashCode();
+        this.hashCode = hashCode;
     }
 
     /**
@@ -176,13 +186,7 @@ public class Order implements Comparable<Order> {
 
     @Override
     public int hashCode() {
-        int result = entryTime.hashCode();
-        result = 31 * result + orderID.hashCode();
-        result = 31 * result + ordType.hashCode();
-        result = 31 * result + side.hashCode();
-        result = 31 * result + orderQty.hashCode();
-        result = 31 * result + price.hashCode();
-        return result;
+        return hashCode;
     }
 
     @Override

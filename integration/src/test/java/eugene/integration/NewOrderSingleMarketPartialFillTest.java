@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import eugene.market.book.Order;
 import eugene.market.client.Application;
 import eugene.market.client.ApplicationAdapter;
+import eugene.market.client.OrderReference;
 import eugene.market.client.Session;
 import eugene.market.ontology.field.OrdType;
 import eugene.market.ontology.field.OrderQty;
@@ -30,6 +31,7 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static eugene.integration.CountingApplication.TIMEOUT;
 import static eugene.market.client.Applications.proxy;
@@ -61,6 +63,8 @@ public class NewOrderSingleMarketPartialFillTest {
 
         final CountDownLatch latch = new CountDownLatch(7);
         final Application application = mock(Application.class);
+        final AtomicReference<OrderReference> limitOrderReference = new AtomicReference<OrderReference>();
+        final AtomicReference<OrderReference> marketOrderReference = new AtomicReference<OrderReference>();
         final Application proxy = proxy(application,
             new ApplicationAdapter() {
                 @Override
@@ -73,14 +77,14 @@ public class NewOrderSingleMarketPartialFillTest {
                     newOrderSingleLimit.setPrice(new Price(defaultPrice));
                     newOrderSingleLimit.setSide(Side.BUY.field());
 
-                    session.send(newOrderSingleLimit);
+                    limitOrderReference.set(session.send(newOrderSingleLimit));
 
                     final NewOrderSingle newOrderSingleMarket = new NewOrderSingle();
                     newOrderSingleMarket.setOrdType(eugene.market.ontology.field.enums.OrdType.MARKET.field());
                     newOrderSingleMarket.setOrderQty(new OrderQty(defaultOrdQty + 1L));
                     newOrderSingleMarket.setSide(Side.SELL.field());
 
-                    session.send(newOrderSingleMarket);
+                    marketOrderReference.set(session.send(newOrderSingleMarket));
                 }
             }, new CountingApplication(latch));
 
@@ -135,6 +139,8 @@ public class NewOrderSingleMarketPartialFillTest {
         assertThat(newLimitExecutionReport.getValue().getOrdStatus(), is(OrdStatus.NEW.field()));
         assertThat(newLimitExecutionReport.getValue().getSide(), is(Side.BUY.field()));
         assertThat(newLimitExecutionReport.getValue().getSymbol().getValue(), is(defaultSymbol));
+        assertThat(newLimitExecutionReport.getValue().getLastPx(), nullValue());
+        assertThat(newLimitExecutionReport.getValue().getLastQty(), nullValue());
 
         // AddOrder for Limit
         final ArgumentCaptor<AddOrder> addOrder = ArgumentCaptor.forClass(AddOrder.class);
@@ -161,6 +167,8 @@ public class NewOrderSingleMarketPartialFillTest {
         assertThat(newMarketExecutionReport.getOrdStatus(), is(OrdStatus.NEW.field()));
         assertThat(newMarketExecutionReport.getSide(), is(Side.SELL.field()));
         assertThat(newMarketExecutionReport.getSymbol().getValue(), is(defaultSymbol));
+        assertThat(newMarketExecutionReport.getLastPx(), nullValue());
+        assertThat(newMarketExecutionReport.getLastQty(), nullValue());
 
         // TRADE ExecutionReport for Market
         final ExecutionReport tradeMarketExecutionReport = executionReport.getAllValues().get(1);
@@ -173,6 +181,8 @@ public class NewOrderSingleMarketPartialFillTest {
         assertThat(tradeMarketExecutionReport.getOrdStatus(), is(OrdStatus.PARTIALLY_FILLED.field()));
         assertThat(tradeMarketExecutionReport.getSide(), is(Side.SELL.field()));
         assertThat(tradeMarketExecutionReport.getSymbol().getValue(), is(defaultSymbol));
+        assertThat(tradeMarketExecutionReport.getLastPx().getValue(), is(defaultPrice));
+        assertThat(tradeMarketExecutionReport.getLastQty().getValue(), is(defaultOrdQty));
 
         // TRADE ExecutionReport for Limit
         final ExecutionReport tradeLimitExecutionReport = executionReport.getAllValues().get(2);
@@ -185,6 +195,8 @@ public class NewOrderSingleMarketPartialFillTest {
         assertThat(tradeLimitExecutionReport.getOrdStatus(), is(OrdStatus.FILLED.field()));
         assertThat(tradeLimitExecutionReport.getSide(), is(Side.BUY.field()));
         assertThat(tradeLimitExecutionReport.getSymbol().getValue(), is(defaultSymbol));
+        assertThat(tradeLimitExecutionReport.getLastPx().getValue(), is(defaultPrice));
+        assertThat(tradeLimitExecutionReport.getLastQty().getValue(), is(defaultOrdQty));
 
         // OrderExecuted for Limit
         final ArgumentCaptor<OrderExecuted> orderExecuted = ArgumentCaptor.forClass(OrderExecuted.class);
@@ -209,8 +221,30 @@ public class NewOrderSingleMarketPartialFillTest {
         assertThat(canceledMarketExecutionReport.getOrdStatus(), is(OrdStatus.CANCELED.field()));
         assertThat(canceledMarketExecutionReport.getSide(), is(Side.SELL.field()));
         assertThat(canceledMarketExecutionReport.getSymbol().getValue(), is(defaultSymbol));
+        assertThat(canceledMarketExecutionReport.getLastPx(), nullValue());
+        assertThat(canceledMarketExecutionReport.getLastQty(), nullValue());
 
         inOrder.verifyNoMoreInteractions();
+
+        // Verify OrderReferences
+        assertThat(limitOrderReference.get().getClOrdID(), is(
+                newLimitExecutionReport.getValue().getClOrdID().getValue()));
+        assertThat(limitOrderReference.get().getOrdStatus(), is(OrdStatus.FILLED));
+        assertThat(limitOrderReference.get().getAvgPx(), is(defaultPrice));
+        assertThat(limitOrderReference.get().getPrice(), is(defaultPrice));
+        assertThat(limitOrderReference.get().getSide(), is(Side.BUY));
+        assertThat(limitOrderReference.get().getCumQty(), is(defaultOrdQty));
+        assertThat(limitOrderReference.get().getLeavesQty(), is(0L));
+        assertThat(limitOrderReference.get().getOrdType(), is(eugene.market.ontology.field.enums.OrdType.LIMIT));
+
+        assertThat(marketOrderReference.get().getClOrdID(), is(newMarketExecutionReport.getClOrdID().getValue()));
+        assertThat(marketOrderReference.get().getOrdStatus(), is(OrdStatus.CANCELED));
+        assertThat(marketOrderReference.get().getAvgPx(), is(defaultPrice));
+        assertThat(marketOrderReference.get().getPrice(), is(Order.NO_PRICE));
+        assertThat(marketOrderReference.get().getSide(), is(Side.SELL));
+        assertThat(marketOrderReference.get().getCumQty(), is(defaultOrdQty));
+        assertThat(marketOrderReference.get().getLeavesQty(), is(1L));
+        assertThat(marketOrderReference.get().getOrdType(), is(eugene.market.ontology.field.enums.OrdType.MARKET));
 
         container.kill();
     }

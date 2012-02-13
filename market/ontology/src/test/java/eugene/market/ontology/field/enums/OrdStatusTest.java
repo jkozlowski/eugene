@@ -1,5 +1,6 @@
 package eugene.market.ontology.field.enums;
 
+import eugene.market.ontology.message.ExecutionReport;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -76,5 +77,69 @@ public class OrdStatusTest {
         assertThat(OrdStatus.REJECTED.isPartiallyFilled(), is(false));
         assertThat(OrdStatus.FILLED.isPartiallyFilled(), is(false));
         assertThat(OrdStatus.PARTIALLY_FILLED.isPartiallyFilled(), is(true));
+    }
+    
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testGetOrdStatusNullExecutionReport() {
+        OrdStatus.getOrdStatus(null);
+    }
+    
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testGetOrdStatusNullOrdStatus() {
+        OrdStatus.getOrdStatus(new ExecutionReport());
+    }
+    
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testGetOrdStatusIllegalOrdStatus() {
+        final ExecutionReport executionReport = new ExecutionReport();
+        executionReport.setOrdStatus(new eugene.market.ontology.field.OrdStatus("Illegal OrdStatus"));
+        OrdStatus.getOrdStatus(executionReport);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testGetOrdStatusNullValueOfOrdStatus() {
+        final ExecutionReport executionReport = new ExecutionReport();
+        executionReport.setOrdStatus(new eugene.market.ontology.field.OrdStatus(null));
+        OrdStatus.getOrdStatus(executionReport);
+    }
+    
+    @Test
+    public void testGetOrdStatusNewOrdStatus() {
+        final ExecutionReport executionReport = new ExecutionReport();
+        executionReport.setOrdStatus(new eugene.market.ontology.field.OrdStatus(eugene.market.ontology.field
+                                                                                        .OrdStatus.NEW));
+        assertThat(OrdStatus.getOrdStatus(executionReport), is(OrdStatus.NEW));
+    }
+
+    @Test
+    public void testGetOrdStatusCanceledOrdStatus() {
+        final ExecutionReport executionReport = new ExecutionReport();
+        executionReport.setOrdStatus(new eugene.market.ontology.field.OrdStatus(eugene.market.ontology.field
+                                                                                        .OrdStatus.CANCELLED));
+        assertThat(OrdStatus.getOrdStatus(executionReport), is(OrdStatus.CANCELED));
+    }
+
+    @Test
+    public void testGetOrdStatusRejectedOrdStatus() {
+        final ExecutionReport executionReport = new ExecutionReport();
+        executionReport.setOrdStatus(new eugene.market.ontology.field.OrdStatus(eugene.market.ontology.field
+                                                                                        .OrdStatus.REJECTED));
+        assertThat(OrdStatus.getOrdStatus(executionReport), is(OrdStatus.REJECTED));
+    }
+
+    @Test
+    public void testGetOrdStatusPartiallyFilledOrdStatus() {
+        final ExecutionReport executionReport = new ExecutionReport();
+        executionReport.setOrdStatus(new eugene.market.ontology.field.OrdStatus(eugene.market.ontology.field
+                                                                                        .OrdStatus.PARTIALLY_FILLED));
+        assertThat(OrdStatus.getOrdStatus(executionReport), is(OrdStatus.PARTIALLY_FILLED));
+    }
+
+    @Test
+    public void testGetOrdStatusFilledOrdStatus() {
+        final ExecutionReport executionReport = new ExecutionReport();
+        executionReport.setOrdStatus(new eugene.market.ontology.field.OrdStatus(eugene.market.ontology.field
+                                                                                        .OrdStatus.FILLED));
+        assertThat(OrdStatus.getOrdStatus(executionReport), is(OrdStatus.FILLED));
     }
 }

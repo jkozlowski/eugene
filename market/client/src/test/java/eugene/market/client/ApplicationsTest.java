@@ -2,7 +2,7 @@ package eugene.market.client;
 
 import eugene.market.book.OrderBook;
 import eugene.market.client.impl.OrderBookApplication;
-import eugene.market.client.impl.ProxyApplication;
+import eugene.market.client.impl.ProxyApplicationImpl;
 import eugene.market.client.impl.TopOfBookPrinter;
 import org.testng.annotations.Test;
 
@@ -20,15 +20,10 @@ import static org.mockito.Mockito.mock;
  * @since 0.5
  */
 public class ApplicationsTest {
-    
-    @Test(expectedExceptions = UnsupportedOperationException.class)
-    public void testConstructor() {
-        new Applications();
-    }
 
     @Test
     public void testProxy() {
-        assertThat(proxy(mock(Application.class)), is(ProxyApplication.class));
+        assertThat(proxy(mock(Application.class)), is(ProxyApplicationImpl.class));
     }
 
     @Test

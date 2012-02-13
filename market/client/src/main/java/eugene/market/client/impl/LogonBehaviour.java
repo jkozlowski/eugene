@@ -29,7 +29,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author Jakub D Kozlowski
  * @since 0.4
  */
-public class LogonBehaviour extends SequentialBehaviour {
+public final class LogonBehaviour extends SequentialBehaviour {
     
     private final Logger LOG = Logger.getLogger(LogonBehaviour.class.getName());
 

@@ -2,6 +2,7 @@ package eugene.market.client.impl;
 
 import com.google.common.base.Function;
 import eugene.market.client.Application;
+import eugene.market.client.ProxyApplication;
 import eugene.market.client.Session;
 import eugene.market.ontology.Message;
 import eugene.market.ontology.message.ExecutionReport;
@@ -15,11 +16,10 @@ import eugene.simulation.ontology.Start;
 import eugene.simulation.ontology.Stop;
 import jade.core.Agent;
 
-import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.ImmutableList.copyOf;
 
 /**
  * Implementation of {@link Application} that can proxy {@link Message}s to other {@link Application}s.
@@ -27,19 +27,19 @@ import static com.google.common.collect.ImmutableList.copyOf;
  * @author Jakub D Kozlowski
  * @since 0.5
  */
-public class ProxyApplication implements Application {
+public final class ProxyApplicationImpl implements ProxyApplication {
 
-    private final List<Application> applications;
+    private final CopyOnWriteArrayList<Application> applications;
 
     /**
-     * Creates a {@link ProxyApplication} that will proxy {@link Message}s to these <code>applications</code>.
+     * Creates a {@link ProxyApplicationImpl} that will proxy {@link Message}s to these <code>applications</code>.
      *
      * @param applications {@link Application}s to proxy {@link Message}s to.
      */
-    public ProxyApplication(final Application... applications) {
+    public ProxyApplicationImpl(final Application... applications) {
         checkNotNull(applications);
         checkArgument(0 != applications.length);
-        this.applications = copyOf(applications);
+        this.applications = new CopyOnWriteArrayList<Application>(applications);
     }
 
     @Override
@@ -145,5 +145,21 @@ public class ProxyApplication implements Application {
         for (final Application application : applications) {
             function.apply(application);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean addApplication(Application application) {
+        return applications.addIfAbsent(application);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean removeApplication(Application application) {
+        return applications.remove(application);
     }
 }
