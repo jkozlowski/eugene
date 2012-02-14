@@ -1,11 +1,12 @@
 \documentclass{report}
 \usepackage[utf8]{inputenc}
-
 \usepackage{listings}
+\usepackage{todonotes}
+\usepackage{fancyhdr}
 \lstset{language=Java, numbers=left, frame=single}
 
-\title{Eugene: Agent-Based Market Simulator for use in System Testing of Trading Algorithms}
-\author{Jakub Kozlowski} 
+\title{Eugene: Agent-Based Market Simulator for use in Validation of Trading Algorithms}
+\author{Jakub Koz\l owski} 
 \date{\today}
 
 \begin{document}
@@ -14,20 +15,28 @@
 
 \tableofcontents
 
+\pagestyle{fancy}
+
 \chapter{Introduction}
+\label{introduction}
 \input{introduction/motivation}
 \input{introduction/trading-system-design}
 \input{introduction/automated-trading-testing-environment}
 \input{introduction/eugene}
 
 \chapter{Background}
+\label{background}
 
 \chapter{Analysis and Design}
+\label{analysis-and-design}
 
 \chapter{Implementation}
+\label{implementation}
 
 \chapter{Testing and Validation}
+\label{testing}
 
 \chapter{Conclusion and Further Work}
+\label{conclusion}
 
 \end{document}
