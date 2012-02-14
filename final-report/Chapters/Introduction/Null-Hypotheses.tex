@@ -1,0 +1,27 @@
+\section{Research Objective and Null Hypotheses}
+\label{Chapters/Introduction/Research-Objective-and-Null-Hypotheses}
+
+\subsection{Research Objective}
+We focus in this thesis on testing Trading Algorithms using Agent-Based Simulation and try to demonstrate that the results obtained from the simulations can be used to automatically detect a difference in behaviour resulting from simple programming errors using statistical analysis. This will allow us to clearly test whether the proposed approach could be successfully applied as a complementary tool for verification of Trading Algorithms. We decided to focus on semantic programming errors, as those are particularly difficult to discover using other approaches. 
+
+As an extension, we attempt to explore whether the proposed system is able to detect a difference in behaviour of two correctly implemented algorithms, but ones that operate with different parameters. If successful, we will demonstrate that the proposed methodology could potentially be applied to evaluating economic performance of Trading Algorithms.
+
+In order to demonstrate the efficacy of applying this approach to verification of Trading Algorithms, we will study an implementation of a VWAP algorithm that will trade in a Simulated Stock Market that consists of Noise Traders. Given this VWAP algorithm implementation, a logical polarity error will be introduced into the implementation, which will cause the algorithm to always cross the spread, by checking the wrong side of the limit order book for a price when sending a limit order. We hypothesise that by performing statistical analysis on the distribution of errors between VWAPs achieved by both algorithms and those of the overall market, it will be possible to detect a statistically significant change in the distribution of errors. In this work we do not focus on building a classification of errors and their possible manifestations, and thus we are not able to demonstrate whether the change in behaviour is a result of a particular error; we only set out demonstrate that the two tested setups do exhibit statistically different behaviour. 
+
+Similarly, we want to see whether the system could be used to detect a change in the distribution of errors from target VWAP between two correctly implemented VWAP algorithms, but ones that divide the trading duration into a different number of equal time intervals. It is hypothesised that the VWAP algorithm that trades more often, should track the target VWAP more closely.
+
+\subsection{Null Hypothesis 1}
+\label{Chapters/Introduction/Null-Hypothesis-1}
+\begin{quote}
+Given a correct implementation of a VWAP Algorithm, if a logical polarity error is introduced that causes the algorithm to always check the wrong price when sending a limit order, there will be no effect on the distribution of percentage errors from the target VWAP.
+\end{quote}
+
+\subsection{Null Hypothesis 2}
+\label{Chapters/Introduction/Null-Hypothesis-2}
+\begin{quote}
+Given 2 correct implementations of a VWAP Algorithm, one that divides the trading duration into 10 equal time intervals and the second that divides the trading duration into 40 equal time intervals, there will be no effect on the distribution of percentage errors from the target VWAP.
+\end{quote}
+
+
+
+

@@ -1,0 +1,8 @@
+\section{Simulating a Trading System}
+Trading Algorithms respond to messages received from the Stock Exchange (via the Market Data Bus) and send orders to the Stock Exchange (via the Order Management System). They expect the orders to have some influence on the situation on the Stock Exchange, based on the analysis of past behaviour received from the Tick Database. In our implementation we are going to explicitly omit the issue of past behaviour analysis and the Tick Database, as it is beyond the scope of this report\footnote{The Tick Database is not explicitly modelled, however the VWAP algorithm (see \Cref{Chapters/Implementation/Vwap-Agent}) will be parameterised and provided with expected volume.}. 
+
+Therefore, in order to simulate a Trading System for testing Trading Algorithms, two systems need to be put in place:
+\begin{itemize}
+\item Order Matching Engine that will accept orders on to a limit order book, match orders and send executions/market data back to traders, as described in~\Cref{Chapters/Background/Market-Microstructure}.
+\item Market behaviour simulator to generate a realistic order flow, as described in~\Cref{Chapters/Background/Agent-Based-Modelling}. 
+\end{itemize}

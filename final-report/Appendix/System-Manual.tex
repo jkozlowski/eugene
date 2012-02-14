@@ -1,0 +1,48 @@
+\chapter{User and System Manual}
+\label{Appendix/System-Manual}
+
+\section{Requirements}
+\begin{itemize}
+\item JDK 1.6
+\item Maven3
+\item Git
+\end{itemize}
+
+\section{Build}
+To compile and run all the tests, in the project root directory run: 
+\begin{quote}
+\texttt{\$ mvn clean install}
+\end{quote}
+
+\section{Run}
+
+The experiments are located in the \texttt{experiment/} module: \texttt{vwap-error} and \texttt{vwap-no-error}.
+
+\begin{quote}
+\texttt{\$ mvn pax:run}
+\end{quote}
+
+\section{Distribution}
+In order to run a \texttt{*.zip} file with a standalone experiment that can be run without \texttt{Maven3}, execute:
+\begin{quote}
+\texttt{\$ mvn clean install assembly:single}
+\end{quote}
+This will create a \texttt{*.zip} file in the \texttt{target/} subdirectory, which can be distributed. In order to run the experiment, unpack the \texttt{*.zip} file and use the bash script located in the \texttt{bin/} directory:
+\begin{quote}
+\texttt{\$ sh start.sh}
+\end{quote}
+
+\section{Continuous Integration}
+
+\url{http://abfm.cs.ucl.ac.uk/jenkins/job/eugene/}
+
+\section{Wiki and Issue Tracker}
+
+\url{http://abfm.cs.ucl.ac.uk/redmine/projects/eugene}
+
+\section{Version Control}
+
+\url{http://github.com/jkozlowski/eugene}
+
+\section{Licence}
+This work is licensed under MIT licence. Please see \texttt{LICENCE.txt}.

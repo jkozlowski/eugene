@@ -1,0 +1,11 @@
+\section{Trading System Design} 
+
+\input{Trading-System-Architecture}
+
+\Cref{Figure/Trading-System-Architecture} shows a high-level design and the direction of the flow of messages in a Trading System \cite{Cisco}. Various market participants submit orders to the Stock Exchange in order to trade. Different stock exchanges publish Level 2 data feed messages in a variety of formats (\Cref{Chapters/Background/Electronic-Communications-Protocols}). In order to deal with this complexity, investment banks have developed internal Market Data Buses that subscribe to feeds published by different stock exchanges in order to republish them in a standardised way to various internal systems, e.g. Trading Algorithms.
+
+Similarly, in order to allow Automatic Order Routing between different stock exchanges and enhance other back-office roles, investment banks develop Order Management Systems that register with various stock exchanges in order to provide a standardised way of submitting orders for various internal systems, e.g. Trading Algorithms.
+
+Historical data is stored in Tick Databases that subscribe to the Market Data Bus in order to perform statistical analysis on the behaviour of different stocks. The result of the statistical analysis is a set of parameters which describe various aspects of stock behaviour. The parameters are published to various internal systems, e.g. Trading Algorithms.
+
+Trading Algorithms are highly sophisticated and parameterised systems which accept parent orders and execute them using different strategies (\Cref{Chapters/Background/Trading-Algorithms}). Trading Algorithms register with the Market Data Bus in order to react to the current situation on the market. They continuously compare the behaviour of stocks with their historical behaviour (using data and analysis from the Tick Database) in order to minimise market impact of the different strategies.

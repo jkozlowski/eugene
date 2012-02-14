@@ -1,0 +1,72 @@
+\section{Experimental Procedure}
+\label{Chapters/Experiments-and-Results/Experimental-Procedure}
+Before running the experiments, we have performed several test runs with \texttt{Noise Trader Agents} only and a set of randomly generated initial orders (requirement \textit{F10}), that were approximating a log-normal price/volume shape of a stable limit order book, with most of the volume near the top of the book. This approach was introduced in order to control the initial period of the simulation, when the limit order book needs to accumulate enough liquidity to become stable. However, we discovered that those initial orders acted as resistance points, as they were not owned by any of the \texttt{Trader Agents}, and thus could not be canceled (\Cref{Chapters/Background/Zero-Intelligence-Model}). Therefore, we reverted to only using the \texttt{default price} (\Cref{Chapters/Implementation/Simulation-Agent}) as the starting price and let the price dynamics arise from the interaction of all the agents. 
+
+All experimental setups consisted of several \texttt{Noise Trader Agents} and one appropriate \texttt{Vwap Agent}, and were run for a fixed time period. After each run of an experiment, the \texttt{executions.log} (see~\Cref{Appendix/Logging}) file was parsed using a \texttt{Mathematica}~\cite{Mathematica} script in order to calculate the $VWAP_{Market}$ and $VWAP_{Algorithm}$, and from those derive the \textit{percentage difference from the target VWAP} (\Cref{Chapters/Background/Price-Volume-Trading-Model}). Afterwards, the results of all runs were analysed using another \texttt{Mathematica} script, to determine the distribution of results and compare the results of two setups using an appropriate \texttt{Student T-Test}. All results are quoted with $\alpha=.05$ confidence level.
+
+\FloatBarrier
+\section{Null Hypothesis 1}
+\label{Chapters/Experiments-and-Results/Null-Hypothesis-1}
+In order to test the \texttt{Null Hypothesis 1} (see~\Cref{Chapters/Introduction/Null-Hypothesis-1}), we have setup an experiment with \texttt{Noise Trader Agents} (see~\Cref{Chapters/Implementation/Noise-Agent}) and \texttt{Vwap Agents} (see~\Cref{Chapters/Implementation/Vwap-Agent}). The data was gathered in two experimental setups, the first with a correct VWAP implementation ($A$), and the second with an implementation that contains a logical polarity error ($B$).
+
+To control the experimental variables, we kept the remaining parameters constant throughout the two experimental setups, i.e. the simulation length, VWAP volume, VWAP targets, the number of \texttt{Noise Trader Agents}, tick size and default price. \Cref{Tables/Null-Hypothesis-1/Parameters} summarises the parameters.
+
+Both setups were run $18$ times and for each run the result was the \textit{percentage difference from the target VWAP} (see~\Cref{Chapters/Background/Price-Volume-Trading-Model}). We performed an appropriate statistical test to determine whether the samples from the two setups are statistically different, in order to reject or confirm the \texttt{Null~Hypothesis~1}.
+
+\begin{table}[htbp]
+\begin{center}
+\begin{tabular}{ l p{2in} }
+\textbf{Parameter} & \textbf{Value} \\
+\cmidrule(r){1-2}
+
+Simulation length		& $6$ minutes  	\\ 
+VWAP Volume				& $8000$  		\\ 
+VWAP Targets ($12$)			& $4\%$, $12\%$, $7\%$, $9\%$, $8\%$, $8\%$,
+            $8\%$, $8\%$, $8\%$, $8\%$, $8\%$, $12\%$ \\ 
+Number of \texttt{Noise Traders}  	& $20$	\\
+Tick size  	& $0.001$	\\
+Default Price  	& $100.000$	\\
+
+\end{tabular}
+\end{center}
+\caption{Summary of parameters for \texttt{Null Hypothesis 1}.}
+\label{Tables/Null-Hypothesis-1/Parameters}
+\end{table}
+
+\FloatBarrier
+\subsection{Experimental Results}
+\Cref{Tables/Null-Hypothesis-1/Results} summarises the results. The \texttt{Kolmogorov-Smirnov} test for normal distribution concluded that the observed errors from the target VWAP for setup $A$ and $B$ were both normally distributed (setup $A$: $p=.08$; setup $B$: $p=.59$), therefore a parametric \texttt{T-Test} was conducted. The results showed that the difference between the setups was significant, $t(17)=2.44, p=.02$, therefore the \texttt{Null Hypothesis 1} was rejected. 
+
+Hence, the analysis showed that given a correct implementation of a VWAP Algorithm, if a logical polarity error is introduced that causes the algorithm to always check the wrong price when sending a limit order, there was a statistically significant effect on the distribution of percentage errors from the target VWAP. 
+
+\begin{table}[htbp]
+\begin{center}
+\begin{tabular}{ r r }
+$\Delta\%_{VWAP_M, VWAP_A}$ & $\Delta\%_{VWAP_M, VWAP_B}$ \\
+\cmidrule(r){1-2}
+
+$0.000909961$	& $-0.00122571$ 	\\
+$0.00438393$ 	& $-0.00576884$		\\
+$-0.000867167$	& $0.00213636$		\\
+$0.00114055$	& $-0.00596133$		\\
+$-0.00104553$	& $0.00230666$		\\
+$0.000489347$	& $-0.000478133$	\\
+$-0.000615812$	& $0.00162665$		\\
+$0.000931747$	& $0.000996034$		\\
+$0.000170407$	& $-0.00230045$		\\
+$-0.00168723$	& $-0.00172148$		\\
+$-0.00145683$	& $-0.00240636$		\\	 
+$-0.00187975$	& $-0.00108177$		\\
+$0.00276645$	& $-0.00294432$		\\
+$-0.00152978$	& $-0.000635886$	\\
+$-0.00104757$	& $-0.00714921$		\\
+$0.0012759$		& $0.0000479285$	\\
+$0.0068051$		& $-0.00267876$		\\
+$0.0000606508$	& $-0.000568892$	\\
+
+\end{tabular}
+\end{center}
+\caption{Summary of results for \texttt{Null Hypothesis 1}.}
+\label{Tables/Null-Hypothesis-1/Results}
+\end{table}
+

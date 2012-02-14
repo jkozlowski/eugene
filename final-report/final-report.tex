@@ -1,0 +1,73 @@
+\documentclass[ oneside,openany,titlepage,numbers=noenddot,headinclude,
+                footinclude=true,BCOR=5mm,paper=a4,fontsize=12pt,a4paper,english]{scrreprt}
+\input{classicthesis-config}
+
+\begin{document}
+
+\input{FrontBackmatter/Titlepage}
+\input{FrontBackmatter/Abstract}
+\input{FrontBackmatter/Contents}
+
+\pagestyle{scrheadings}
+\linespread{2}
+
+\chapter{Introduction}
+\label{Chapters/Introduction}
+\input{Chapters/Introduction/Motivation}
+\input{Chapters/Introduction/Null-Hypotheses}
+\input{Chapters/Introduction/Research-Methodology}
+\input{Chapters/Introduction/Outline}
+
+\chapter{Background}
+\input{Chapters/Background/Market-Microstructure}
+\input{Chapters/Background/Agent-Based-Modelling}
+\input{Chapters/Background/Trading-Algorithms}
+\input{Chapters/Background/VWAP-Trading}
+\input{Chapters/Background/Tools-and-Frameworks}
+\input{Chapters/Background/Previous-Work}
+
+\chapter{Analysis and Design}
+\label{Chapters/Analysis-and-Design}
+\input{Chapters/Analysis-and-Design/Trading-System-Design}
+\input{Chapters/Analysis-and-Design/Simulating-Trading-System}
+\input{Chapters/Analysis-and-Design/Overall-Design}
+\input{Chapters/Analysis-and-Design/Requirements-Analysis}
+\input{Chapters/Analysis-and-Design/Use-Case-Analysis}
+
+\chapter{Implementation and Testing}
+\label{Chapters/Implementation}
+\input{Chapters/Implementation/Implementation-Testing}
+\input{Chapters/Implementation/Overall-Principles}
+\input{Chapters/Implementation/Jade-Unit}
+\input{Chapters/Implementation/Order-Book}
+\input{Chapters/Implementation/Simulation-Ontology}
+\input{Chapters/Implementation/Simulation-Agent}
+\input{Chapters/Implementation/Market-Ontology}
+\input{Chapters/Implementation/Market-Agent}
+\input{Chapters/Implementation/Client-API}
+\input{Chapters/Implementation/Noise-Agent}
+\input{Chapters/Implementation/Vwap-Agent}
+\input{Chapters/Implementation/Testing}
+
+\chapter{Experiments and Results}
+\label{Chapters/Experiments-and-Results}
+\input{Chapters/Experiments-and-Results/Null-Hypothesis-1}
+\input{Chapters/Experiments-and-Results/Null-Hypothesis-2}
+\input{Chapters/Experiments-and-Results/Analysis}
+
+\chapter{Conclusions and Further Work}
+\label{Chapters/Conclusions-and-Further-Work}
+\input{Chapters/Conclusions-and-Further-Work/Conclusions-and-Further-Work}
+
+\appendix
+\input{Appendix/Use-Cases}
+\input{Appendix/Simulation-Ontology}
+\input{Appendix/Market-Ontology}
+\input{Appendix/Logging}
+\input{Appendix/System-Manual}
+\input{Appendix/Coverage}
+
+\bibliographystyle{plainnat}
+\bibliography{Bibliography}
+
+\end{document}

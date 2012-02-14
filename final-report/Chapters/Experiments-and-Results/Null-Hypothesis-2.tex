@@ -1,0 +1,61 @@
+\FloatBarrier
+\section{Null Hypothesis 2}
+\label{Chapters/Experiments-and-Results/Null-Hypothesis-2}
+In order to test the \texttt{Null Hypothesis 2} (see~\Cref{Chapters/Introduction/Null-Hypothesis-2}), we setup a similar experiment to \Cref{Chapters/Experiments-and-Results/Null-Hypothesis-1}. The data was gathered in two experimental setups, both involving a correctly implemented VWAP algorithm. In the first setup, however, the VWAP algorithm trades according to 10 equal targets ($A$), and the second according to 40 equal targets ($B$).
+
+To control the experimental variables, we kept the remaining parameters constant throughout the two experimental setups, i.e. the simulation length, VWAP volume, the number of \texttt{Noise Traders}, tick size and default price. \Cref{Tables/Null-Hypothesis-2/Parameters} summarises the parameters. We gathered the same experimental data as in \Cref{Chapters/Introduction/Null-Hypothesis-1}.
+
+\begin{table}[htbp]
+\begin{center}
+\begin{tabular}{ l p{2in} }
+\textbf{Parameter} & \textbf{Value} \\
+\cmidrule(r){1-2}
+
+Simulation length		& 6 minutes  	\\ 
+VWAP Volume				& 20000  		\\ 
+Number of \texttt{Noise Traders}  	& 20	\\
+Tick size  	& $0.001$	\\
+Default Price  	& $100.000$	\\
+
+\end{tabular}
+\end{center}
+\caption{Summary of parameters for \texttt{Null Hypothesis 2}.}
+\label{Tables/Null-Hypothesis-2/Parameters}
+\end{table}
+
+\FloatBarrier
+\subsection{Experimental Results}
+\Cref{Tables/Null-Hypothesis-2/Results} summarises the results. The \texttt{Kolmogorov-Smirnov} test for normal distribution concluded that the observed errors from the target VWAP for setup $A$ and $B$ were both normally distributed (setup $A$: $p=.23$; setup $B$: $p=.12$), therefore a parametric \texttt{T-Test} test was conducted. The results showed that the difference between the setups was not significant, $t(17)=1.04, p=.31$, therefore the \texttt{Null Hypothesis 2} was not rejected. 
+
+Hence, the analysis showed that given 2 correct implementations of a VWAP Algorithm, one that divides the trading duration into 10 equal time intervals and the second that divides the trading duration into 40 equal time intervals, there was no effect on the distribution of percentage errors from the target VWAP.
+
+\begin{table}[htbp]
+\begin{center}
+\begin{tabular}{ r r }
+$\Delta\%_{VWAP_M, VWAP_A}$ & $\Delta\%_{VWAP_M, VWAP_B}$ \\
+\cmidrule(r){1-2}
+
+$0.00277385$	& $0.000791962$ 	\\
+$0.00213915$	& $0.00105847$		\\
+$0.00140453$	& $0.00090313$		\\
+$-0.000168954$	& $0.00142062$		\\
+$0.000982506$	& $0.00113082$		\\
+$0.00196194$	& $0.00211302$		\\
+$0.00450798$	& $0.00199672$		\\
+$0.00287382$	& $-0.000372864$	\\
+$0.00161029$	& $0.000886285$		\\
+$0.00103771$	& $0.00122396$		\\
+$0.00206086$	& $0.000306701$		\\
+$-0.00253224$	& $0.00132408$		\\
+$-0.000945702$	& $-0.000667823$	\\
+$-0.00173609$	& $-0.0000434588$	\\	
+$0.000099006$	& $0.00186177$		\\	
+$0.00131022$	& $0.0010309$		\\
+$0.0083891$		& $0.000822814$		\\
+$0.00301218$	& $0.00170759$		\\	
+
+\end{tabular}
+\end{center}
+\caption{Summary of results for \texttt{Null Hypothesis 2}.}
+\label{Tables/Null-Hypothesis-2/Results}
+\end{table}

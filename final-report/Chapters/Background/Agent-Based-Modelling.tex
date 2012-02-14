@@ -1,0 +1,28 @@
+\section{Agent-Based Artificial Stock Markets}
+\label{Chapters/Background/Agent-Based-Modelling}
+
+In this section we summarise several artificial stock markets from the available literature. We provide a model of zero-intelligence agents that will be implemented by the Noise Traders (\Cref{Chapters/Implementation/Noise-Agent}), that is based on the work by~\citet[chap.~4]{Gilles2006}. Moreover, in order to provide a background material for implementing a VWAP Trading Algorithm for the experiments, we survey available sources, most prominently the work in~\citet{Coggins2006} and \citet{Kakade2004}. 
+
+\subsection{Agent-Based Modelling}
+Agent-Based Modelling is a simulation technique concerned with designing societies of rule-based software agents that interact in particular ways, with a view of assessing the influence of individual (or groups of) agents on the system as a whole. Among the benefits of agent-based modelling is the ability to study emergent phenomena: behaviour resulting from complex interactions of many individual entities.
+
+Agent-Based Models that attempt to explain economic processes are branded as Agent-Based Computational Economics~\cite{Tesfatsion2006}. In recent years, building Artificial Stock Markets has become a promising research area due to the fact that this methodology reflects the fundamental nature of a stock market, where the current situation is a result of the complex interaction of actions of many heterogenous investors that have various expectations and different levels of rationality.
+
+\subsection{Discrete Time Artificial Stock Markets}
+Most efforts in Artificial Stock Markets to date focus on studying discrete time simulations, i.e. at each time period $t$, some fraction of traders submit orders to the market, the orders are cleared, a new market price is announced, the agents update their positions and a new time period $t+1$ starts. This style of simulation is well suited to study of \textit{call markets}~\cite{Schwartz1995}, where batches of orders are executed at predetermined time intervals, at prices that best match supply and demand. The ASMs employ a wide range of techniques in order to best approximate \textit{stylised facts} (i.e. statistical properties) observed in real stock markets, with promising results. For a comparative study of discrete time Artificial Stock Markets, see~\citet{Jha2010} and \citet{Sorban2008}.
+
+\subsection{ABSTRACTE}
+The discrete time simulation fails to reflect the nature of continuous trading sessions, that evolve in a highly asynchronous manner thanks to the limit order book microstructure. The importance of continuous time simulation was demonstrated by~\citet{Sorban2008}, who describes \textit{ABSTRACTE}: Agent-Based Simulation of Trading Roles in an Asynchronous Continuous Trading Environment. \textit{ABSTRACTE} was used to model a market with information asymmetry, where prices are set by a learning market maker; this model extends the work in~\citep{Das2006}, but evolves the simulation in continuous time. \citet{Sorban2008} showed that moving to asynchronous, continuous time simulation renders different price dynamics and concluded that the continuous nature of trading in real stock markets should be explicitly taken into account in agent-based models.
+
+\subsection{Zero-intelligence model of price formation}
+\label{Chapters/Background/Zero-Intelligence-Model}
+
+Another strong case for turning to continuous time simulation is presented by~\citet[chap.~4]{Gilles2006}, who studied the primary role played by liquidity dynamics in the price formation mechanism. Liquidity is modelled using zero-intelligence agents trading through the asynchronous limit order book, whose order placement and cancellation process, in terms of order type, size and limit price, are designed to come as close to a realistic aggregate order flow. The simulation is implemented on top of the \textit{Natural Asynchronous-Time Event-Lead Agent-Based Platform (NatLab)}~\cite[chap.~3]{Gilles2006}.  
+
+The simulation consists of $N$ Zero-intelligence agents, initially endowed with a fixed amount of cash and shares (similarly to~\cite{Raberto2001}). The stock does not distribute dividends and cash does not yield interest; the price formation mechanism arises through the non-linear interactions between agents' demand and supply.
+
+The agents place buy or sell orders with equal probability. The agents can either cancel an existing order with probability $\pi_c$, send a market order ($\pi_m$), or send a limit order ($1-\pi_c-\pi_m$). The limit order price is either in the spread and uniformly distributed between best bid and best ask ($\pi_{in}$), or outside the spread and power law distributed ($\pi_{out}$).
+
+The order sizes of limit orders follow a log-normal distribution, and market order sizes match the best counterpart. In order to model the well documented pattern of trading activity that is more dense at the start and end of the day~\cite{Clark1973}, the agents sleep for random times that are drawn from a stretched exponential distribution, that is obtained as a mixture of two exponential distributions with different means (this work cites the influence of sleep time on price dynamics, as explored in~\cite{Scalas2004}).
+
+This simple model of zero-intelligence agents was able to reproduce realistic dynamics in terms of spread and book shape, and some stylised facts. A simplified version of zero-intelligence model~\cite[chap.~4]{Gilles2006} will be used to implement the Noise Traders (see~\Cref{Chapters/Implementation/Noise-Agent}).

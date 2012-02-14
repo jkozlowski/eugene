@@ -1,0 +1,39 @@
+\chapter{Logging}
+\label{Appendix/Logging}
+This section describes the format of the log files. Most fields refer to the message fields, as defined in \Cref{Appendix/Market-Ontology}. Otherwise, \texttt{timestamp} is a \texttt{UNIX timestamp} obtained by calling \texttt{System.currentTimeMillis()} when the event occured, and \texttt{TraderID} is the name of the \texttt{JADE} Agent that sent the original order. The logs are in \textit{comma-separated value} format.
+
+\section{Events}
+
+\subsection{NEWORDER}
+Indicates that an order was accepted by the \texttt{Market Agent}, but it did not yet go through the matching process. If the \texttt{OrdType} is \texttt{MARKET}, the \texttt{Price} is \texttt{0}.
+
+\subsubsection*{Format}
+\texttt{timestamp,TraderID,OrderID,ClOrdID,OrdType,Side,OrderQty,Price}
+
+\subsection{REJECTORDER}
+Indicates that a market order was rejected, because there was no liquidity on the opposite side of the limit order book.
+
+\subsubsection*{Format}
+\texttt{timestamp,TraderID,OrderID,ClOrdID,OrdType,Side,OrderQty,Price}
+
+\subsection{ADDORDER}
+Indicates that a limit order entered the limit order book. The \texttt{OrderQty} is not necessarily equal to the \texttt{OrderQty} in the original \texttt{NEWORDER} event; the order could have been partially executed before entering the limit order book.
+
+\needspace{5in}
+\subsubsection*{Format}
+\texttt{timestamp,OrderID,Side,OrderQty,Price}
+
+\subsection{EXECUTION}
+Indicates that a pair of orders have been executed. The orders must have already been referred to in a previous \texttt{NEWORDER} event, however fields are repeated for ease of data extraction. \texttt{I} refers to fields that concern the incoming order, i.e. either market or limit order that has not yet entered the limit order book, and \texttt{L} refers to the resting limit order, that has already entered the limit ordered book.
+
+\subsubsection*{Format}
+\texttt{timestamp,ITraderID,IOrderID,ISide,LTraderID,LOrderID,LSide,Quantity,Price}
+
+\section{\texttt{marketData.log}}
+Contains a log of all events; the events are disambiguated by putting \texttt{[EVENTNAME],} in front of the formatted log entry, \\ e.g.  \texttt{"[ADDORDER],timestamp,OrderID,Side,OrderQty,Price"}.
+
+\section{\texttt{executions.log}}
+Contains a filtered log of only \texttt{EXECUTION} events.
+
+\section{\texttt{rejections.log}}
+Contains a filtered log of only \texttt{REJECTORDER} events.

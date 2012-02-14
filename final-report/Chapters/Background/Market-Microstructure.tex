@@ -1,0 +1,42 @@
+\section{Market microstructure}
+\label{Chapters/Background/Market-Microstructure}
+
+In this section we describe the model of the market mechanism we will use in the simulator. We describe the market microstructure employed in major stock exchanges during continuous trading sessions, namely the model of a limit order book, and how it enables market participants to interact asynchronously (for a study of market microstructures in main stock exchanges, see~\cite{Comerton2004}). 
+
+
+\subsection{Instruments}
+Instruments are the different types of \textit{contracts} that can be traded on an exchange, e.g. cash equities, fixed income and derivatives. Every instrument is associated with a set of technicalities, such as the minimum tick size (minimum amount of money by which the price can change) or price variation controls (conditions for a market halt due to unexpected price volatility). In this work we focus on cash equities trading, but the methodology could be applied to trading other instruments.
+
+\subsection{Order Types}
+\label{Chapters/Background/Order-Types}
+Market participants indicate their intentions in the form of trading instructions called orders. We will consider only two types of orders: limit and market orders. A market order specifies the instrument to trade, the quantity (order size) and the side of the trade (buy or sell). A limit order additionally specifies a limit price: the maximum (buy) or minimum (sell) price that the trader accepts for an order. 
+
+Traders can also cancel existing orders that have not been executed. \citet{Lilo2004} estimate that on the London Stock Exchange (LSE) on-book market, up to 30\% of outstanding limit orders are cancelled before execution and order cancellations play an important role in the price formation process. 
+
+\subsection{The limit order book}
+A limit order book for a single instrument consists of limit orders, sorted by price and time of arrival and stored in two queues: one for bid (buy) orders and one for ask (sell) orders. At a specific time $t$, the order book can be described as~\cite{Gilles2006}: 
+\begin{equation*}
+\beta_n \leq \ldots \leq \beta_2 \leq \beta_1 < \alpha_1 \leq \alpha_2 \leq \ldots \alpha_m
+\end{equation*}
+where $\beta_i$ represent bid orders and $\alpha_j$ represent ask orders. The highest bid $\beta_1$ (or best bid) and lowest ask $\alpha_1$ (or best ask) define the spread $\alpha_1 - \beta_1$, and are referred to as the top of the book.
+
+\subsection{The matching process}
+\label{Chapters/Background/Matching-Process}
+
+An incoming order goes through the matching process. If the incoming order is a market order and there are no limit orders on the opposite side of the limit order book, the order is rejected. If the incoming order is either a market ask order or a limit ask order, the matching process will proceed from the highest bid. $\beta_1$ will be executed only if the incoming order is a market order, or a limit order with a limit price lower than or equal to $\beta_1$. If that is the case, the orders match, therefore a trade will be executed at the price of $\beta_1$ and the quantity of the smaller of the two orders. If the quantity specified by $\beta_1$ is smaller than or equal to that of the incoming order, $\beta_1$ is said to be filled. If the trade leaves the incoming order with outstanding quantity, the matching process continues on the following orders in the queue, until either the incoming order is filled, or there are no more matching orders, in which case if the incoming order is a market order, the remaining quantity will be rejected, otherwise if the incoming order is a limit order, the remaining quantity will be placed at the top of the ask queue.
+
+Similarly, if the incoming order is a market bid order, or a limit bid order, the matching process will proceed in an analogous way on the ask side.
+
+\subsection{Transparency}
+\label{Chapters/Background/Transparency}
+Market transparency is defined as the \textit{"ability of market participants to observe information in the market"}\cite{Comerton2004}. It can refer to two stages in the lifetime of an order: pre-trade and post-trade transparency. Pre-trade transparency refers to the ability of other market participants to observe the limit orders entering the order book, whereas post-trade transparency refers to observing trades after they have taken place.
+
+The extent of pre-trade transparency varies across different exchanges, but generally two levels of disclosure emerge: level 1 and level 2. Level 1 usually refers to publishing best bid/ask quotes  with aggregate volumes, whereas level 2 discloses entire limit order book in real-time (often referred to as tick-by-tick, where a tick refers to a single execution), by publishing messages whenever a new limit order enters the limit order book, or an existing limit order is cancelled or executed. In case of level 2 access, the identity of the traders is hidden behind exchange-generated order IDs~\cite{Comerton2004}.
+
+\subsection{Electronic Communications Protocols}
+\label{Chapters/Background/Electronic-Communications-Protocols}
+Since the mid 80-s, the financial markets have undergone a phase of extensive automation towards an electronic handling of order flows. This has led to the establishment of industry-wide messaging protocols for real-time exchange of financial information. 
+
+The de-facto standard for order management is \textit{Financial Information eXchange (FIX) protocol}~\cite{FIX5}, that defines message types and fields that can be used for pre-trade communications and trade execution.
+
+Similarly, exchanges usually publish real-time full depth of book quotations and execution information (level 2) through a derivative of the \textit{ITCH} protocol (in this work we focus on the \textit{BATS Multicast PITCH 2.X protocol}~\cite{BATSPITCH}). Whereas \textit{FIX} is the de-facto standard for order management, the exchanges compete on the speed of Level 2 access and the design of the protocol can have a great impact on the overall latency, therefore the exact format differs from exchange to exchange.

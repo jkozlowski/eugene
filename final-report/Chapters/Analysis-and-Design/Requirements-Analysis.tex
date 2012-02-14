@@ -1,0 +1,58 @@
+\FloatBarrier
+\section{Requirements Analysis}
+\label{Chapters/Analysis-and-Design/Requirements-Analysis}
+
+Having analysed available literature on the design of asynchronous, limit order book markets in \Cref{Chapters/Background/Market-Microstructure}, as well as existing Agent-Based ASMs in \Cref{Chapters/Background/Agent-Based-Modelling}, we will now list the requirements that the trading simulator needs to satisfy. Requirements are prioritised according to the MoSCoW approach (M - Must, S - Should, C - Could and W - Would).
+
+\subsection{Functional Requirements}
+\begin{center}
+\begin{longtable}[htbp]{c p{4.2in} c }
+
+\multicolumn{1}{c}{\textbf{ID}}           &
+\multicolumn{1}{c}{\textbf{Requirement}}  &
+\multicolumn{1}{c}{\textbf{Priority}}     \\              
+\toprule
+
+\multicolumn{3}{c}{\textbf{Market Agent}}   	         \\
+F01  & The Execution Engine shall match orders in the Order Book & M \\ 
+F02  & The Market Agent shall accept limit/market orders and order cancellations. & M \\
+F03  & The Market Agent shall provide \textit{level 2} market data access with anonymous OrderIDs to Trader Agents. & M \\
+F04  & The Market Agent shall report order executions and status changes back to the original Trader Agent. & M \\ 
+F05  & The Market Agent shall log all market events to a file.        & M \\
+F06  & The Market Agent shall publish performance statistics at runtime. & C \\
+
+\multicolumn{3}{c}{\textbf{Simulation Agent}}   \\
+F07  & The Simulation Agent shall start  the Market Agent and Trader Agents.  & M \\
+F08  & The Simulation Agent shall synchronise the start of a simulation. & M \\
+F09  & The Simulation Agent shall stop a simulation after a specified amount of time. & M \\
+F10  & The Simulation Agent shall send initial orders before starting the simulation. & M \\ 
+
+\multicolumn{3}{c}{\textbf{Client API}}   \\
+F11  & The Client API shall handle the low-level interaction with the Market Agent and Simulation Agent and provide callback methods for receiving messages. & M \\
+         
+\end{longtable}
+\end{center}
+
+\needspace{11\baselineskip}
+\subsection{Non Functional Requirements}
+
+\begin{table}[htbp]
+\begin{center}
+\begin{longtable}{c p{4.2in} c }
+
+\multicolumn{1}{c}{\textbf{ID}}           &
+\multicolumn{1}{c}{\textbf{Requirement}}  &
+\multicolumn{1}{c}{\textbf{Priority}}     \\        
+\toprule
+
+N01  & The System shall maintain $\geq70\%$ unit test coverage.    & M \\
+N02  & The System shall be integration tested.                     & M \\
+N03  & The System shall be highly modular and decoupled.           & M \\
+N04  & The System shall be very well javadoced.                    & M \\
+N05  & The System shall be implemented on top of the JADE Framework.   & M \\
+N06  & The System shall closely approximate message types and formats of industry standard messaging formats. & C \\
+ 
+\end{longtable}
+\end{center}
+\end{table}
+

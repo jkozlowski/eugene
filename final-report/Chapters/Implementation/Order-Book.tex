@@ -1,0 +1,8 @@
+\section{Order Book (market/book/)}
+\label{Chapters/Implementation/Order-Book}
+This module implements the data structure behind a limit order book and maintains the status of the limit orders. Due to this separation of concerns, the module is used both by the \texttt{Market~Agent} (\Cref{Chapters/Implementation/Market-Agent}) and \texttt{Client~API} (\Cref{Chapters/Implementation/Client-API}) modules (see \Cref{Chapters/Analysis-and-Design/Overall-Design} for an explanation why the \texttt{Client~API} needs to maintain a limit order book), thus contributing to requirement \textit{N03}.
+
+Following the principles outlined in \Cref{Chapters/Implementation/Overall-Principles}, an interface is defined in \\ \texttt{eugene.market.book.OrderBook} that specifies the methods for inserting new orders, executing and cancelling existing orders, and inspecting the orders at the top of the book. There are two implementations: \texttt{eugene.market.book.impl.DefaultOrderBook} and a delegate \texttt{eugene.market.book.impl.ReadOnlyOrderBook}, both hidden in a private package behind the \texttt{eugene.market.book.OrderBooks} factory.  
+
+Two classes represent an order: \texttt{Order} and \texttt{OrderStatus} (both located in the \texttt{eugene.market.book} package). The \texttt{Order} class maintains static information about an order (see \Cref{Chapters/Background/Order-Types}), whereas the \texttt{OrderStatus} class tracks the execution of an order. Both classes are immutable (see~\Cref{Chapters/Implementation/Overall-Principles}). The mutable state, i.e. the mapping from the current \texttt{OrderStatus} to \texttt{Order}, is maintained by the \texttt{OrderBook} implementations internally.
+

@@ -1,0 +1,12 @@
+\section{Overall Principles}
+\label{Chapters/Implementation/Overall-Principles}
+In this section we will describe the overall programming and design principles that have informed the implementation of the system in order to refer to them in the later sections that describe the particular modules of the system. The principles will be described in no particular order, as their scope usually cuts through different architectural levels. Adherence to these principles allows for modular and decoupled implementation (requirement \textit{N03}).
+
+\paragraph{Design by contract, assertions and fail fast} 
+Input is checked for correctness and the contract for the method or constructor parameters is clearly documented. To that end, \texttt{com.google.common.base.Preconditions} class from \texttt{guava-libraries}\cite{guava} is used extensively, and corresponding tests that verify whether the method or constructor enforces the contract are always present. Post-conditions and invariants are verified in a similar way. Strict adherence to these principles allows for much safer code that is guaranteed to be used correctly. From the point of view of the programmer, the code is much easier to reason about and is guaranteed to fail fast instead of continuing to work incorrectly,  whenever an implementation error is present.
+
+\paragraph{Separation of concerns, programming to an interface and information hiding}
+The code is separated into many modules, so that responsibility of each part of the code is very narrowly defined. The APIs between different modules are defined in terms of interfaces, and specific implementations are hidden behind factories and private packages (Java does not have private packages, therefore we use the capabilities of the \textit{OSGi} container instead to enforce this principle, see \Cref{Chapters/Background/OSGi}). This allows for low coupling between components, that leads to a robust implementation.
+
+\paragraph{Immutable objects}
+An object is considered immutable if its state cannot be changed after it is constructed. Reliance on immutable objects is considered a sound strategy for creating simple code. Immutable objects have an additional advantage of inherent \textit{thread-safety}: since there is no state that can be changed, they can be safely shared by multiple threads, without interference. The code relies on the use of the Java \texttt{final} keyword extensively to delegate the responsibility of enforcing immutability to the compiler.

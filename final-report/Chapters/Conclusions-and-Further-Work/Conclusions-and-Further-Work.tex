@@ -1,0 +1,27 @@
+\section{Summary and Evaluation}
+In this thesis we focused on testing a VWAP Trading Algorithm using Agent-Based Simulation to demonstrate that the results obtained from the simulation can be used to automatically detect simple programming errors using statistical analysis.
+
+In particular, we demonstrated the efficacy of this approach, by comparing a correctly implemented VWAP algorithm to a VWAP algorithm with a logical polarity error introduced into the implementation. We hypothesised that by performing statistical analysis on the distribution of errors between VWAPs achieved by both algorithms and those of the overall market, it would be possible to detect the error with high level of confidence. Indeed, the analysis showed that the simple measurements performed were enough to detect a statistically significant difference between the two implementations.
+
+In the second experiment, we tried to detect a difference in error distribution between two correctly implemented VWAP algorithms, where one traded more aggressively than the other. The same analysis showed no statistically significant effect and we believe that that the effect was too subtle to be detected by the particular experimental setup.
+
+Nevertheless, the project has clearly achieved its goals and is a proof of concept that the technique could be developed further in order to be used to complement the existing testing strategies. All requirements were satisfied and use cases correctly implemented (as verified by integration tests). The simulator was excellently engineered, with great focus on adhering to principles of good design and thorough testing. 
+
+\section{Future Work}
+\label{Chapters/Conclusions-and-Further-Work/Future-Work}
+The technique presented was positively evaluated and we think it could be developed further into a full-featured tool for testing and verification of Trading Algorithms. 
+
+First extension would be to see whether the experiments could be fully reproducible, by saving the random seeds used by \texttt{Noise Traders}. This would allow for a regression testing approach that could continuously validate the implementation of a Trading Algorithm, as it goes through stages of development, to ensure consistent quality.
+
+Secondly, in this work we have approached the question of whether, given that we know there is an error in the implementation, we can detect a  significant difference in the behaviour, when compared to the benchmark implementation. We did not, however, try to determine the type of the programming error that we are dealing with, or try to differentiate between different types of programming errors. In order to take this work further, it would be advantageous start building a classification of errors, and their possible manifestations, in order to come up with a procedure that can, given some set of measurements, determine whether a previously unseen algorithm has a particular type of error, with a confidence measure attached to it. Given this classification, we would proceed to evaluate its accuracy and breadth of application.
+
+Thirdly, in this work we have specifically focused on a VWAP algorithm, therefore it would be interesting to see how to generalise this work to other trading algorithms, most importantly profit algorithms (\Cref{Chapters/Background/Trading-Algorithms}). Our second hypothesis aimed to approach this question, however the current setup was not powerful enough to discover a difference.
+
+Next, the implementation of the VWAP algorithm chosen for evaluation was deliberately simple. An investigation into implementing more sophisticated trading algorithms, and similarly simulating other traders, would provide for a more realistic setup.
+
+Next, we think that in a production setup, the experiments should be run on a cluster of machines in order to complete in a reasonable time to provide instant feedback to developers. The current method of manually running the experiments and collecting results in order to perform the statistical analysis is not automated enough. 
+
+Lastly, all the simulations that were run exhibit relatively unstable behaviour at the start of the simulation. We set out to mitigate this issue through sending initial orders (\Cref{Chapters/Implementation/Simulation-Agent}), but we had to abandon this approach, see \Cref{Chapters/Experiments-and-Results/Experimental-Procedure}. We believe that this issue could be addressed by explicitly simulating opening \textit{call auctions}~\cite{Comerton2004} to build up liquidity and establish the opening price. Similarly, as the previous paragraph suggest, implementing more types of agents to complement the \texttt{Noise Trader Agents}, should also help stabilise the order book.
+
+\section{Final Thoughts}
+To summarise, we believe that the technique presented in this thesis has a potential to be developed into a useful tool for testing and verification of Trading Algorithms. We managed to demonstrate that a simple experimental setup can already provide useful feedback as to the difference in behaviour between a correctly and incorrectly implemented algorithm. Unfortunately, the extension proposed in \Cref{Chapters/Introduction/Research-Objective-and-Null-Hypotheses} was not achieved, but still provided with useful insight as to how to improve the simulator. Overall, we believe that the project clearly fulfilled its goals and thus provides a useful methodological advancement over the more established ways of testing Trading Algorithms.

@@ -1,0 +1,28 @@
+\FloatBarrier
+\section{Noise Trader Agent (agent/noise/)}
+\label{Chapters/Implementation/Noise-Agent}
+
+The \texttt{Noise Trader Agent} implements the \textit{zero-intelligence model of price formation} (see~\Cref{Chapters/Background/Zero-Intelligence-Model}), with the following simplifications:
+\begin{itemize}
+\item The \texttt{Noise Trader Agent} does not track neither its cash nor inventory position. This decision was made in order to simplify the implementation.
+\item The sleeping times come from a uniform distribution $[1,s_{max}]$, as the library code used for generating numbers from required distributions did not have the functionality to generate numbers from a mixture of two exponential distributions, and no suitable replacement library was found. Moreover, preliminary results showed that the \texttt{Noise Trader Agent} activity was irregular enough for the experiments.
+\end{itemize}
+
+The remaining parameters and distributions come from the original paper by~\citet{Gilles2006} and are summarised in~\Cref{Table/Zero-Intelligence}. The \texttt{Noise Trader Agent} uses \texttt{commons-math} library~\cite{commons-math} to generate random numbers from required distributions. Also, the \texttt{Noise Trader Agent} uses the \texttt{Client API} (see~\Cref{Chapters/Implementation/Client-API}) to rebuild the \texttt{Order Book} in order to track current prices, through the \texttt{TopOfBookApplication} (see~\Cref{Chapters/Implementation/Order-Book}) .
+
+\begin{table}[h]
+\begin{center}
+\begin{tabular}{ l l l }
+\textbf{Description} & \textbf{Parameter} & \textbf{Value} \\
+\cmidrule(r){1-3}
+Prob. of cancelling an order & $\pi_c$    		& 0.5                \\
+Prob. of market order		 & $\pi_m$   		& 0.15               \\
+Prob. limit order in spread  & $\pi_{in}$ 		& 0.35               \\ 
+Limit price outside spread   & $\alpha$ 		& 0.3                \\
+Order size					 & $(\mu, \sigma)$	& (4.5, 0.8) shares  \\
+Sleeping time				 & $s_{max}$ & 3000 ms   \\
+\end{tabular}
+\end{center}
+\caption{Summary of \texttt{Noise Trader Agent} parameters.}
+\label{Table/Zero-Intelligence}
+\end{table}

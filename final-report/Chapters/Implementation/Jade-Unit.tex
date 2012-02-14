@@ -1,0 +1,11 @@
+\section{jade-unit (jade-unit/)}
+\label{Chapters/Implementation/Jade-Unit}
+In order to fulfil requirements \textit{N01} and \textit{N02}, there needs to be a way to create and tear down an arbitrary number of \texttt{JADE} nodes, potentially within a single JVM. Such capability allows for reuse of established testing tools and frameworks. 
+
+There exists a \texttt{Test Suite Framework} available through the official \texttt{JADE} website, however maintenance of two entirely different testing environments seemed like an unnecessary complication.
+
+Unfortunately, \textit{JADE} contains a messaging module\footnote{To communicate with other nodes.} that opens a socket and renders creating multiple \texttt{JADE} nodes impossible, especially when tests are run in parallel. That is because \texttt{JADE} would attempt to open the same socket multiple times, and there was no simple way to randomise the choice of sockets to avoid clashes. Also, side effects in tests are considered bad testing practice.
+
+Luckily, the \texttt{JADE} architecture is modular and hence the implementation of the messaging module can be replaced. The \texttt{jade-unit} extension implemented for this project provides a no-op messaging module that simply ignores any messages directed to it. This allows the integration tests to reuse the entire testing architecture for tests that need to run inside a \texttt{JADE} node. It is expected that the patch file with \texttt{jade-unit} extension will find its way to the \texttt{JADE} maintainers, in due time.
+
+The \texttt{jade-unit} extension does not have an adverse effect on the quality of testing, because the messaging module replaced is used only for cross-node communication (i.e. to send messages to \texttt{Agent}s located in different nodes), and \texttt{JADE} is designed to handle this communication transparently (i.e. \texttt{Agent}s are not directly affected by their node location, or the node location of other \texttt{Agent}s).

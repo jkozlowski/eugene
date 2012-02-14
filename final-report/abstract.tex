@@ -1,0 +1,42 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\parindent=1in
+\usepackage[T1]{fontenc}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{listings}
+\lstset{language=Java, numbers=left, frame=single}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{cleveref}
+\usepackage{multirow}
+\usepackage[square,numbers]{natbib}
+\usepackage{placeins}
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+
+\title{Eugene: Agent-Based Market Simulator for use in Validation and System Testing of Trading Algorithms}
+
+\author{Jakub Kozlowski \\
+Internal Supervisor: Dr. Christopher D. Clack \\
+External Supervisor: Ian Rose-Miller, UBS} 
+\date{27th April 2012}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+At 3:40 PM on November 14\textsuperscript{th}, 2007, a buggy Credit Suisse proprietary algorithm (SmartWB) sent approximately 600,000 cancel/replace messages for non existent orders that lead to a disruption of trading. Credit Suisse was fined \$150,000~\cite{Nyse2009}. On May 6, 2010, the U.S. stock market has experienced a sudden price drop of 5\%, followed by a rapid recovery, all in the course of about 30 minutes. Subsequent analyses concluded that the incident was triggered by a large sell program that led to a "hot-potato" effect, where more than 27,000 futures contracts were bought and sold, with the net effect of only around 200 contracts~\cite{Kirilenko2011}. \\
+\indent
+These prominent examples of software errors in Trading Algorithms highlight an urgent issue with the way these systems are tested. In order to prevent Trading Algorithms from exhibiting such behaviour, there is a need for a strategy of rigorous testing in a realistic environment. Current testing techniques (backtesting on historical data) fail to capture the dynamic nature of markets and hence do not provide an environment for effective flaw identification. \\
+\indent
+In this thesis we investigated the application of Agent-Based Simulation to testing and verification of Trading Algorithms. We demonstrated an Agent-Based Stock Market Simulator and experimentally showed its potential to discover a difference in behaviour between a correctly and incorrectly implemented VWAP Algorithm. Furthermore, as an extension, we aimed to explore discovering a difference in behaviour between two correctly implemented VWAP Algorithms, but ones that trade with different frequency, however concluded that the current implementation of the system is not capable enough to demonstrate such a subtle effect. Nevertheless, the project clearly fulfilled its goals and thus provides a useful methodological advancement over the more established ways of testing Trading Algorithms.
+\end{ebstract}
+\bibliographystyle{plainnat}
+\bibliography{Bibliography}
+
+\end{document}
