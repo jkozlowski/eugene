@@ -5,7 +5,7 @@
 \usepackage{fancyhdr}
 \lstset{language=Java, numbers=left, frame=single}
 
-\title{\textbf{Eugene: Agent-Based Market Simulator for use in Validation of Trading Algorithms}}
+\title{\textbf{Eugene: Agent-Based Market Simulator for use in Validation and System Testing of Trading Algorithms}}
 \author{Jakub Koz\l owski \and Internal Supervisor: Dr. Christopher D. Clack \and External Supervisor: Ian Rose-Miller, UBS}
 
 \date{\today}
@@ -36,6 +36,21 @@
 
 \chapter{Implementation}
 \label{implementation}
+
+\section{Things to draw attention to}
+\begin{itemize}
+\item The principle of defensive programming.
+\item Separation of concerns with extensive use of programming to an interface.
+\item Information hiding with use of private packages (OSGi) that contain implementations;
+\item Hiding implementations behind factories.
+\item Modularised design.
+\item Extensive unit and integration testing.
+\item jade-unit.
+\item mocking.
+\item Careful consideration of threading issues and hence multithreaded design.
+
+\end{itemize}
+
 
 \chapter{Testing and Validation}
 \label{testing}

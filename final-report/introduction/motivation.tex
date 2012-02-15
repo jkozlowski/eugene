@@ -1,36 +1,18 @@
 \section{Motivation}
 
-The design of a Software System gradually evolves over time, as the understanding of the problem domain improves and the business requirements change. In comparison to artefacts in other Engineering Disciplines, the cost of change of a design of a Software System is relatively low and can be controlled by adhering to principles of good design. This propensity of software encourages iterative approach to design; controlled improvements, extensions and revisions of the artefacts move the design from one version to the next. 
+\todo{Add references to all the parenthesis}
 
-Automated Testing of software is essential in order to ensure correct operation over time. and to reduce reliance on manual testing. It helps to prevent the developers from deploying incorrect software and improves release time.
+The design of a software system gradually evolves over time, as the understanding of the problem domain improves and the business requirements change. The cost of change of a design of a software system \todo{Too many ofs} is not trivial, however it is comparably lower than in other Engineering Disciplines and can be controlled by adhering to principles of good design (Design Patterns). This propensity of software encourages iterative approach to design; controlled improvements, extensions and revisions of the artefacts move the system from one version to the next. 
 
-So the argument is as follows:
-\begin{itemize}
-\item Software is not like architecture: software systems are not built once and then maintained; they are usually developed over time, with new features constantly added on top of existing features and existing features reimplemented.
-\item Automated Testing and Validation of a software system is very important, because it gives confidence in the system etc.
-\item Traditional testing techniques help verify whether the system works as the designers think it should work; those apply very well to deterministic systems.
-\item However, such techniques only go so far when applied to non-deterministic systems; such system's behaviour needs to be analysed using statistics to verify their behaviour.
-\item To this end, 
-\end{itemize}
+The key to controlled evolution of a software system is to rely on rigorous testing and validation at all levels of the architecture: from testing individual units of code (Unit Testing), through testing interfaces between components (Integration Testing), to testing a completely integrated software system (System Testing). 
+
+Recent trends in software development practices even encourage the tests of a functionality to be developed first (Test-Driven Development). It can be argued that such systems tend to have low-coupling, due to the necessity of being able to test components in isolation, in arbitrary configurations and with control over the dependencies (Mocking, Dependency Injection).
+
+In order to ensure the correct operation of a software system over time, the different levels of testing need to be fast and automatic, in order to encourage the developers to perform them locally, following every change (Automated Testing, Continuous Integration). Adhering to those principles reduces reliance on manual testing, prevents regression errors in existing functionality (Regression Testing) and improves release time.
 
 
-Ensuring software quality is very important, especially in a commercial setting. 
 
-\begin{itemize}
-\item Allows for easier refactoring.
-\item Gives confidence in the system.
-\item Shortens release time. 
-\end{itemize}
- 
-In order to verify correct operation, software systems are validated using a range of testing techniques. 
-
-\begin{itemize}
-\item Testing individual units of code (Unit Testing).
-\item Testing interfaces between components of a software system (Integration Testing). 
-\item Testing a completely integrated software system (System Testing).
-\end{itemize}
-
-\noindent
+\pagebreak
 In addition, testing is performed in order to achieve an array of objectives.
 \begin{itemize}
 \item Validating behaviour of the functionality under development (Test-Driven Development). 
@@ -44,3 +26,12 @@ On the other hand, testing non-deterministic systems involves verifying that a p
 Trading Algorithms are an example of a non-deterministic system that operates in a non-deterministic environment. Trading Algorithms are designed to respond to the situation on the market and they also expect their actions to have an effect on it.
 
 Difficult as it is, Automated Testing of Trading Algorithms is essential in order to ensure correct order execution and to reduce reliance on manual testing. Automated Testing will prevent the developers from deploying incorrect software and improve Time to Market.
+
+\section{Summary}
+\begin{itemize}
+\item Software is not like architecture: software systems are not built once and then maintained; they are usually developed over time, with new features constantly added on top of existing features and existing features reimplemented.
+\item Automated Testing and Validation of a software system is very important, because it gives confidence in the system etc.
+\item Traditional testing techniques help verify whether the system works as the designers think it should work; those apply very well to deterministic systems.
+\item However, such techniques only go so far when applied to non-deterministic systems; such system's behaviour needs to be analysed using statistics to verify their behaviour.
+\item To this end, 
+\end{itemize}
