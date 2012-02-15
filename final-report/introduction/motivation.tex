@@ -16,13 +16,9 @@ Trading Algorithms are an example of a non-deterministic system that operates in
 
 Traditionally, Trading Algorithms are backtested on historical data by rebuilding the past order flows on the order book. Certain characteristics can be measured (e.g. VWAP of the algorithm) and compared to corresponding benchmarks (e.g. VWAP of the Market) to evaluate whether the algorithm is doing the right thing. This approach can give certain level of confidence as to the correct operation of the trading algorithm, however it nonetheless fails to model the reactions of other market participants.
 
-   
+\todo{This section is based on the intro to K. Boer-Sorban thesis, as well as "The economy needs agent-based modelling" article} In recent years, the Agent-Based Modelling (ABM) approach has been applied to understand the complex phenomena observed in economic and financial systems. An Agent-Based Model is a computer simulation of evolving and autonomous software decision makers (agents) that interact through a set of prescribed rules. Applying ABM models to financial markets offers possibility of studying how behaviour of different configurations of agents affects the overall market dynamics.
 
 \pagebreak
-
-Trading Algorithms respond to messages received from the Stock Exchange (via the Market Data Bus) and send orders to the Stock Exchange (via the Order Management System). They expect the orders to have some influence on the situation on the Stock Exchange.Therefore, in order to setup a testing environment for Trading Algorithms, two systems need to be put in place in order to simulate the Trading System.
-
-Market Behaviour Simulator that can realistically simulate a broad range of market be- haviours (e.g. rising and falling, flash crash, gaming). This project will propose a design of such a Market Simulator using an Agent-Based Approach.
 
 Agent-Based simulation is a powerful technique that has been successfully applied in many business scenarios, including financial simulations. Among the benefits of agent-based mod- elling is emergent phenomena: behaviour resulting from complex interactions of many indi- vidual entities.Therefore, whereas in a real stock market, the current situation is a result of a complex interaction of many market players, it is hypothesised that an interaction of several types of software agents will result in an emergence of realistic market behaviour.
 
