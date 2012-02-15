@@ -2,7 +2,7 @@
 
 \todo{Add references to all the parenthesis}
 
-The design of a software system gradually evolves over time, as the understanding of the problem domain improves and the business requirements change. The cost of change of a design of a software system \todo{Too many ofs} is not trivial, however it is comparably lower than in other Engineering Disciplines and can be controlled by adhering to principles of good design (Design Patterns). This propensity of software encourages iterative approach to design; controlled improvements, extensions and revisions of the artefacts move the system from one version to the next. 
+The design of a software system gradually evolves over time, as the understanding of the problem domain improves and the business requirements change. The cost of change of a design of a software system \todo{Too many ofs} is not trivial, however it is comparably lower than in other Engineering Disciplines and can be controlled by adhering to principles of good design (Design Patterns). This propensity encourages iterative approach to software design; controlled improvements, extensions and revisions of the artefacts move the system from one version to the next. 
 
 The key to controlled evolution of a software system is to rely on rigorous testing and validation at all levels of the architecture: from testing individual units of code (Unit Testing), through testing interfaces between components (Integration Testing), to testing a completely integrated software system (System Testing). 
 
@@ -10,12 +10,21 @@ Recent trends in software development practices even encourage the tests of a fu
 
 In order to ensure the correct operation of a software system over time, all the levels of testing need to be automatic and fast, in order to encourage the developers to perform them locally, following every change (Automated Testing, Continuous Integration). Adhering to those principles reduces reliance on manual testing, prevents regression errors in existing functionality (Regression Testing) and improves release time.
 
-The techniques and objectives described above apply well to deterministic systems; testing comes down to verifying that a set of inputs will produce a particular set of outputs, because the operation of such a system can be approximated with a deterministic-state machine. The difficulty occurs when dealing with non-deterministic systems; testing involves verifying that a particular set of inputs will produce a correct set of outputs with a statistically significant probability.
+These principles apply well to deterministic systems; testing comes down to verifying that a set of inputs will produce a particular set of outputs, because the operation of such a system can be approximated with a deterministic-state machine. The difficulty occurs when dealing with non-deterministic systems; testing involves verifying that a particular set of inputs will produce a correct set of outputs with a statistically significant probability.
 
 Trading Algorithms are an example of a non-deterministic system that operates in a highly non-deterministic environment. Trading Algorithms are designed to respond to the situation on the market and to have a certain expectation as to the effect their actions will have on the market.
 
+Traditionally, Trading Algorithms are backtested on historical data by rebuilding the past order flows on the order book. Certain characteristics can be measured (e.g. VWAP of the algorithm) and compared to corresponding benchmarks (e.g. VWAP of the Market) to evaluate whether the algorithm is doing the right thing. This approach can give certain level of confidence as to the correct operation of the trading algorithm, however it nonetheless fails to model the reactions of other market participants.
+
+   
 
 \pagebreak
+
+Trading Algorithms respond to messages received from the Stock Exchange (via the Market Data Bus) and send orders to the Stock Exchange (via the Order Management System). They expect the orders to have some influence on the situation on the Stock Exchange.Therefore, in order to setup a testing environment for Trading Algorithms, two systems need to be put in place in order to simulate the Trading System.
+
+Market Behaviour Simulator that can realistically simulate a broad range of market be- haviours (e.g. rising and falling, flash crash, gaming). This project will propose a design of such a Market Simulator using an Agent-Based Approach.
+
+Agent-Based simulation is a powerful technique that has been successfully applied in many business scenarios, including financial simulations. Among the benefits of agent-based mod- elling is emergent phenomena: behaviour resulting from complex interactions of many indi- vidual entities.Therefore, whereas in a real stock market, the current situation is a result of a complex interaction of many market players, it is hypothesised that an interaction of several types of software agents will result in an emergence of realistic market behaviour.
 
 \section{Summary}
 \begin{itemize}
@@ -23,5 +32,6 @@ Trading Algorithms are an example of a non-deterministic system that operates in
 \item Automated Testing and Validation of a software system is very important, because it gives confidence in the system etc.
 \item Traditional testing techniques help verify whether the system works as the designers think it should work; those apply very well to deterministic systems.
 \item However, such techniques only go so far when applied to non-deterministic systems; such system's behaviour needs to be analysed using statistics to verify their behaviour.
-\item To this end, 
+\item Trading algos are an example of a non-deterministic system; they operate in a non-deterministic market and expect their actions to have a certain effect on it.
+\item  
 \end{itemize}

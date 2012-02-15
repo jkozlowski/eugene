@@ -3,13 +3,27 @@
 \usepackage{listings}
 \usepackage{todonotes}
 \usepackage{fancyhdr}
-\usepackage[T1]{fontenc}
+\usepackage[utf8]{fontenc}
 \usepackage{babel}
 \usepackage{setspace}
 \lstset{language=Java, numbers=left, frame=single}
 
+%Set margins
+\usepackage[margin=2.75cm,paper=a4paper,tmargin=3cm,bmargin=3.4cm]{geometry}
+
+%Graphics importer
+\usepackage{graphicx}
+
+%Link formatter
+\usepackage{hyperref}
+
+\usepackage{fontspec}
+%\setmainfont{Georgia} 
+\setmonofont[Scale=MatchLowercase]{Menlo}
+
+
 \title{\textbf{Eugene: Agent-Based Market Simulator for use in Validation and System Testing of Trading Algorithms}}
-\author{Jakub Koz\l owski \and Internal Supervisor: Dr. Christopher D. Clack \and External Supervisor: Ian Rose-Miller, UBS}
+\author{Jakub Kozłowski \and Internal Supervisor: Dr. Christopher D. Clack \and External Supervisor: Ian Rose-Miller, UBS}
 
 \date{\today}
 
@@ -22,7 +36,6 @@
 \pagestyle{fancy}
 
 \begin{onehalfspace}
-
 
 \chapter{Introduction}
 \label{introduction}
