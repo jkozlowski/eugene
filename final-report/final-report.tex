@@ -1,8 +1,11 @@
-\documentclass[a4, 11pt]{report}
+\documentclass[a4, 11pt, english]{report}
 \usepackage[utf8]{inputenc}
 \usepackage{listings}
 \usepackage{todonotes}
 \usepackage{fancyhdr}
+\usepackage[T1]{fontenc}
+\usepackage{babel}
+\usepackage{setspace}
 \lstset{language=Java, numbers=left, frame=single}
 
 \title{\textbf{Eugene: Agent-Based Market Simulator for use in Validation and System Testing of Trading Algorithms}}
@@ -17,6 +20,9 @@
 \tableofcontents
 
 \pagestyle{fancy}
+
+\begin{onehalfspace}
+
 
 \chapter{Introduction}
 \label{introduction}
@@ -58,4 +64,5 @@
 \chapter{Conclusion and Further Work}
 \label{conclusion}
 
+\end{onehalfspace}
 \end{document}

@@ -6,26 +6,16 @@ The design of a software system gradually evolves over time, as the understandin
 
 The key to controlled evolution of a software system is to rely on rigorous testing and validation at all levels of the architecture: from testing individual units of code (Unit Testing), through testing interfaces between components (Integration Testing), to testing a completely integrated software system (System Testing). 
 
-Recent trends in software development practices even encourage the tests of a functionality to be developed first (Test-Driven Development). It can be argued that such systems tend to have low-coupling, due to the necessity of being able to test components in isolation, in arbitrary configurations and with control over the dependencies (Mocking, Dependency Injection).
+Recent trends in software development practices even encourage the tests of a functionality to be developed first (Test-Driven Development). It can be argued that such systems tend to have low-coupling, as their design needs to accommodate testing components in isolation, in arbitrary configurations and with control over the dependencies (Mocking, Dependency Injection).
 
-In order to ensure the correct operation of a software system over time, the different levels of testing need to be fast and automatic, in order to encourage the developers to perform them locally, following every change (Automated Testing, Continuous Integration). Adhering to those principles reduces reliance on manual testing, prevents regression errors in existing functionality (Regression Testing) and improves release time.
+In order to ensure the correct operation of a software system over time, all the levels of testing need to be automatic and fast, in order to encourage the developers to perform them locally, following every change (Automated Testing, Continuous Integration). Adhering to those principles reduces reliance on manual testing, prevents regression errors in existing functionality (Regression Testing) and improves release time.
 
+The techniques and objectives described above apply well to deterministic systems; testing comes down to verifying that a set of inputs will produce a particular set of outputs, because the operation of such a system can be approximated with a deterministic-state machine. The difficulty occurs when dealing with non-deterministic systems; testing involves verifying that a particular set of inputs will produce a correct set of outputs with a statistically significant probability.
+
+Trading Algorithms are an example of a non-deterministic system that operates in a highly non-deterministic environment. Trading Algorithms are designed to respond to the situation on the market and to have a certain expectation as to the effect their actions will have on the market.
 
 
 \pagebreak
-In addition, testing is performed in order to achieve an array of objectives.
-\begin{itemize}
-\item Validating behaviour of the functionality under development (Test-Driven Development). 
-\item Discovering regression errors in existing functionality, after changes have been made to the software system (Regression Testing).
-\end{itemize}
-
-The techniques and objectives described in the previous section apply fairly well to testing deterministic systems. Such systems can be approximated into deterministic state-machines and therefore testing comes down to verifying that a set of inputs will produce a particular set of outputs.
-
-On the other hand, testing non-deterministic systems involves verifying that a particular set of inputs will produce a correct set of outputs with a statistically significant probability.
-
-Trading Algorithms are an example of a non-deterministic system that operates in a non-deterministic environment. Trading Algorithms are designed to respond to the situation on the market and they also expect their actions to have an effect on it.
-
-Difficult as it is, Automated Testing of Trading Algorithms is essential in order to ensure correct order execution and to reduce reliance on manual testing. Automated Testing will prevent the developers from deploying incorrect software and improve Time to Market.
 
 \section{Summary}
 \begin{itemize}
