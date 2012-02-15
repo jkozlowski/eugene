@@ -16,13 +16,19 @@ import jade.core.behaviours.Behaviour;
 /**
  * Interface for receiving {@link Message}s sent through and received by {@link Session}. Depending on the
  * simulation, {@link Application} can receive {@link Message}s before receiving {@link Start} message. Nevertheless,
- * {@link Application} should not send any {@link Message}s before receiving {@link Start} message; failre to do so
+ * {@link Application} should not send any {@link Message}s before receiving {@link Start} message; failure to do so
  * may lead to unexpected behaviour.
  *
  * @author Jakub D Kozlowski
  * @since 0.4
  */
 public interface Application {
+
+    /**
+     * Noop {@link Application}.
+     */
+    public static final Application EMTPY_APPLICATION = new ApplicationAdapter() {
+    };
 
     /**
      * Called when {@link Start} message has been received from the Simulation Agent. This method should be used by

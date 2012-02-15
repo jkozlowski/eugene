@@ -4,7 +4,7 @@ import com.google.common.primitives.Doubles;
 import com.google.common.primitives.Longs;
 import eugene.market.book.Order;
 import eugene.market.client.OrderReference;
-import eugene.market.client.Session;
+import eugene.market.client.OrderReferenceListener;
 import eugene.market.ontology.field.ClOrdID;
 import eugene.market.ontology.field.enums.OrdStatus;
 import eugene.market.ontology.field.enums.OrdType;
@@ -25,7 +25,7 @@ import static eugene.market.ontology.field.enums.OrdStatus.PARTIALLY_FILLED;
  */
 public final class OrderReferenceImpl implements OrderReference {
 
-    private final Session session;
+    private final OrderReferenceListener listener;
 
     private final Long creationTime;
 
@@ -50,7 +50,7 @@ public final class OrderReferenceImpl implements OrderReference {
     /**
      * Default constructor.
      *
-     * @param session      {@link Session} that was used to submit this {@link OrderReferenceImpl}.
+     * @param listener     {@link OrderReferenceListener} for this {@link OrderReferenceImpl}.
      * @param clOrdID      {@link ClOrdID} of this {@link OrderReferenceImpl}.
      * @param creationTime new creationTime.
      * @param ordType      new ordType.
@@ -65,11 +65,11 @@ public final class OrderReferenceImpl implements OrderReference {
      *                                  <code><= 0</code>, or if <code>ordType</code> is {@link OrdType#MARKET} and
      *                                  <code>price</code> is <code>!= 0</code>.
      */
-    public OrderReferenceImpl(final Session session, final String clOrdID, final Long creationTime,
+    public OrderReferenceImpl(final OrderReferenceListener listener, final String clOrdID, final Long creationTime,
                               final OrdType ordType, final Side side, final Long orderQty, final Double price)
             throws NullPointerException, IllegalArgumentException {
 
-        checkNotNull(session);
+        checkNotNull(listener);
         checkNotNull(clOrdID);
         checkArgument(!clOrdID.isEmpty());
         checkNotNull(creationTime);
@@ -81,7 +81,7 @@ public final class OrderReferenceImpl implements OrderReference {
         checkArgument((ordType.isLimit() && Doubles.compare(price, Order.NO_PRICE) == 1) ||
                               (ordType.isMarket() && Doubles.compare(price, Order.NO_PRICE) == 0));
 
-        this.session = session;
+        this.listener = listener;
         this.clOrdID = clOrdID;
         this.creationTime = creationTime;
         this.orderQty = orderQty;
@@ -93,6 +93,15 @@ public final class OrderReferenceImpl implements OrderReference {
         this.avgPx = Order.NO_PRICE;
         this.leavesQty = orderQty;
         this.cumQty = Order.NO_QTY;
+    }
+
+    /**
+     * Returns the listener.
+     *
+     * @return the listener.
+     */
+    public OrderReferenceListener getOrderReferenceListener() {
+        return listener;
     }
 
     @Override

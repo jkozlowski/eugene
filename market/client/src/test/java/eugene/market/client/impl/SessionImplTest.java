@@ -5,9 +5,9 @@ import eugene.market.client.Application;
 import eugene.market.client.OrderReference;
 import eugene.market.client.ProxyApplication;
 import eugene.market.client.Session;
-import eugene.market.ontology.MockMessages;
 import eugene.market.ontology.MarketOntology;
 import eugene.market.ontology.Message;
+import eugene.market.ontology.MockMessages;
 import eugene.market.ontology.field.ClOrdID;
 import eugene.market.ontology.field.Symbol;
 import eugene.market.ontology.field.enums.OrdStatus;
@@ -308,7 +308,7 @@ public class SessionImplTest {
         verify(application).fromApp(newOrderSingle, session);
         assertThat(newOrderSingle.getSymbol().getValue(), is(defaultSymbol));
         assertThat(newOrderSingle.getClOrdID().getValue(), is(defaultAgentID + (session.getCurClOrdID() - 1L)));
-        
+
         assertThat(orderReference.getCumQty(), is(0L));
         assertThat(orderReference.getLeavesQty(), is(defaultOrdQty));
         assertThat(orderReference.getOrderQty(), is(defaultOrdQty));
@@ -318,10 +318,10 @@ public class SessionImplTest {
         assertThat(orderReference.getSide(), is(Side.BUY));
         assertThat(orderReference.getAvgPx(), is(Order.NO_PRICE));
         assertThat(orderReference.getClOrdID(), is(defaultAgentID + (session.getCurClOrdID() - 1L)));
-        
+
         final ExecutionReport executionReport = new ExecutionReport();
         executionReport.setClOrdID(new ClOrdID(orderReference.getClOrdID()));
-        assertThat(session.getOrderReferenceApplication().getOrderReference(executionReport),
+        assertThat(session.getOrderReferenceApplication().getOrderReference(new ClOrdID(orderReference.getClOrdID())),
                    sameInstance(orderReference));
     }
 

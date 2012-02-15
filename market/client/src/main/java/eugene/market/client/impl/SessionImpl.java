@@ -4,6 +4,7 @@ import com.google.common.annotations.VisibleForTesting;
 import eugene.market.book.Order;
 import eugene.market.client.Application;
 import eugene.market.client.OrderReference;
+import eugene.market.client.OrderReferenceListener;
 import eugene.market.client.Session;
 import eugene.market.ontology.MarketOntology;
 import eugene.market.ontology.Message;
@@ -139,16 +140,24 @@ public final class SessionImpl implements Session {
         }
     }
 
+    @Override
+    public OrderReference send(final NewOrderSingle newOrderSingle)
+            throws NullPointerException, IllegalArgumentException {
+        return send(newOrderSingle, OrderReferenceListener.EMPTY_LISTENER);
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public OrderReference send(final NewOrderSingle newOrderSingle) throws NullPointerException,
-                                                                           IllegalArgumentException {
+    public OrderReference send(final NewOrderSingle newOrderSingle, final OrderReferenceListener listener)
+            throws NullPointerException, IllegalArgumentException {
         checkNotNull(newOrderSingle);
+        checkNotNull(listener);
         checkArgument(null == newOrderSingle.getSymbol() ||
                               simulation.getSymbol().equals(newOrderSingle.getSymbol().getValue()));
         checkArgument(null == newOrderSingle.getClOrdID());
+
         newOrderSingle.setSymbol(new Symbol(simulation.getSymbol()));
 
         final String clOrdID = getClOrdID();
@@ -157,12 +166,12 @@ public final class SessionImpl implements Session {
 
         application.fromApp(newOrderSingle, this);
 
-        final OrderReferenceImpl ref = new OrderReferenceImpl(this, clOrdID, System.currentTimeMillis(),
+        final OrderReferenceImpl ref = new OrderReferenceImpl(listener, clOrdID, System.currentTimeMillis(),
                                                               OrdType.getOrdType(newOrderSingle),
                                                               Side.getSide(newOrderSingle),
                                                               newOrderSingle.getOrderQty().getValue(),
                                                               null == newOrderSingle.getPrice() ? Order.NO_PRICE :
-                                                              newOrderSingle.getPrice().getValue());
+                                                                      newOrderSingle.getPrice().getValue());
         orderReferenceApplication.addOrderReference(ref);
 
         agent.send(aclRequest(newOrderSingle));

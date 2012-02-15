@@ -5,6 +5,7 @@ import eugene.market.book.Order;
 import eugene.market.client.Application;
 import eugene.market.client.ApplicationAdapter;
 import eugene.market.client.OrderReference;
+import eugene.market.client.OrderReferenceListener;
 import eugene.market.client.Session;
 import eugene.market.ontology.field.ClOrdID;
 import eugene.market.ontology.field.OrderQty;
@@ -45,7 +46,9 @@ import static eugene.market.ontology.Defaults.defaultSymbol;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.sameInstance;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 
@@ -64,6 +67,7 @@ public class NewOrderSingleLimitOrderCancelRequestTest {
 
         final CountDownLatch latch = new CountDownLatch(4);
         final Application application = mock(Application.class);
+        final OrderReferenceListener listener = mock(OrderReferenceListener.class);
         final AtomicReference<OrderReference> orderReference = new AtomicReference<OrderReference>();
 
         final Application proxy = proxy(
@@ -78,7 +82,7 @@ public class NewOrderSingleLimitOrderCancelRequestTest {
                         newOrderSingle.setPrice(new Price(defaultPrice));
                         newOrderSingle.setSide(Side.BUY.field());
 
-                        orderReference.set(session.send(newOrderSingle));
+                        orderReference.set(session.send(newOrderSingle, listener));
 
                         final OrderCancelRequest orderCancel = new OrderCancelRequest();
                         orderCancel.setClOrdID(new ClOrdID(orderReference.get().getClOrdID()));
@@ -106,7 +110,7 @@ public class NewOrderSingleLimitOrderCancelRequestTest {
 
         latch.await(TIMEOUT, TimeUnit.MILLISECONDS);
 
-        final InOrder inOrder = inOrder(application);
+        final InOrder inOrder = inOrder(application, listener);
 
         final ArgumentCaptor<NewOrderSingle> newOrderSingle = ArgumentCaptor.forClass(NewOrderSingle.class);
         inOrder.verify(application).fromApp(newOrderSingle.capture(), any(Session.class));
@@ -117,8 +121,14 @@ public class NewOrderSingleLimitOrderCancelRequestTest {
         assertThat(newOrderSingle.getValue().getSide(), is(Side.BUY.field()));
 
         // NEW ExecutionReport
+        final ArgumentCaptor<ExecutionReport> newExecutionReportListener
+                = ArgumentCaptor.forClass(ExecutionReport.class);
+        inOrder.verify(listener).newEvent(newExecutionReportListener.capture(), eq(orderReference.get()),
+                                          any(Session.class));
+
         final ArgumentCaptor<ExecutionReport> newExecutionReport = ArgumentCaptor.forClass(ExecutionReport.class);
         inOrder.verify(application).toApp(newExecutionReport.capture(), any(Session.class));
+        assertThat(newExecutionReport.getValue(), sameInstance(newExecutionReportListener.getValue()));
         assertThat(newExecutionReport.getValue().getAvgPx().getValue(), is(Order.NO_PRICE));
         assertThat(newExecutionReport.getValue().getClOrdID().getValue(), is(
                 newOrderSingle.getValue().getClOrdID().getValue()));
@@ -142,6 +152,11 @@ public class NewOrderSingleLimitOrderCancelRequestTest {
         assertThat(addOrder.getValue().getSymbol().getValue(), is(defaultSymbol));
 
         // CANCELED ExecutionReport
+        final ArgumentCaptor<ExecutionReport> cancelExecutionReportListener
+                = ArgumentCaptor.forClass(ExecutionReport.class);
+        inOrder.verify(listener).canceledEvent(cancelExecutionReportListener.capture(), eq(orderReference.get()),
+                                               any(Session.class));
+
         final ArgumentCaptor<ExecutionReport> cancelExecutionReport = ArgumentCaptor.forClass(ExecutionReport.class);
         inOrder.verify(application).toApp(cancelExecutionReport.capture(), any(Session.class));
         assertThat(cancelExecutionReport.getValue().getAvgPx().getValue(), is(Order.NO_PRICE));
@@ -162,7 +177,7 @@ public class NewOrderSingleLimitOrderCancelRequestTest {
                 newExecutionReport.getValue().getOrderID().getValue()));
 
         inOrder.verifyNoMoreInteractions();
-        
+
         // Check OrderReference
         assertThat(orderReference.get().getClOrdID(), is(newExecutionReport.getValue().getClOrdID().getValue()));
         assertThat(orderReference.get().getOrdStatus(), is(OrdStatus.CANCELED));

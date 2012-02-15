@@ -72,10 +72,20 @@ public interface Session {
     ACLMessage aclRequest(final Message message) throws RuntimeException;
 
     /**
+     * Calls {@link #send(NewOrderSingle, OrderReferenceListener)} with {@link OrderReferenceListener#EMPTY_LISTENER}.
+     *
+     * @see Session#send(NewOrderSingle, OrderReferenceListener)
+     */
+    OrderReference send(final NewOrderSingle newOrderSingle)
+            throws NullPointerException, IllegalArgumentException, RuntimeException;
+
+    /**
      * Sends this <code>newOrderSingle</code>. {@link Symbol} will be set to the symbol handled by this {@link
      * Session} and a unique {@link ClOrdID} will be generated.
      *
      * @param newOrderSingle {@link NewOrderSingle} to send.
+     * @param listener       {@link OrderReferenceListener} that will receive callbacks when status of {@link
+     *                       OrderReference} changes.
      *
      * @return {@link OrderReference} for this <code>newOrderSingle</code>.
      *
@@ -85,7 +95,7 @@ public interface Session {
      *                                  is not null.
      * @throws RuntimeException         if it was impossible to construct an {@link ACLMessage}.
      */
-    OrderReference send(final NewOrderSingle newOrderSingle)
+    OrderReference send(final NewOrderSingle newOrderSingle, final OrderReferenceListener listener)
             throws NullPointerException, IllegalArgumentException, RuntimeException;
 
     /**

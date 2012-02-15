@@ -5,6 +5,7 @@ import eugene.market.book.Order;
 import eugene.market.client.Application;
 import eugene.market.client.ApplicationAdapter;
 import eugene.market.client.OrderReference;
+import eugene.market.client.OrderReferenceListener;
 import eugene.market.client.Session;
 import eugene.market.ontology.field.OrderQty;
 import eugene.market.ontology.field.enums.ExecType;
@@ -39,7 +40,9 @@ import static eugene.market.ontology.Defaults.defaultSymbol;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.sameInstance;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 
@@ -58,19 +61,21 @@ public class NewOrderSingleMarketNoLiquidityTest {
 
         final CountDownLatch latch = new CountDownLatch(1);
         final Application application = mock(Application.class);
+        final OrderReferenceListener marketListener = mock(OrderReferenceListener.class);
         final AtomicReference<OrderReference> orderReference = new AtomicReference<OrderReference>();
-        final Application proxy = proxy(application,
-            new ApplicationAdapter() {
-                @Override
-                public void onStart(Start start, Agent agent, Session session) {
-                    final NewOrderSingle newOrderSingle = new NewOrderSingle();
-                    newOrderSingle.setOrdType(OrdType.MARKET.field());
-                    newOrderSingle.setOrderQty(new OrderQty(defaultOrdQty));
-                    newOrderSingle.setSide(Side.BUY.field());
+        final Application proxy = proxy(
+                application,
+                new ApplicationAdapter() {
+                    @Override
+                    public void onStart(Start start, Agent agent, Session session) {
+                        final NewOrderSingle newOrderSingle = new NewOrderSingle();
+                        newOrderSingle.setOrdType(OrdType.MARKET.field());
+                        newOrderSingle.setOrderQty(new OrderQty(defaultOrdQty));
+                        newOrderSingle.setSide(Side.BUY.field());
 
-                    orderReference.set(session.send(newOrderSingle));
-                }
-            }, new CountingApplication(latch));
+                        orderReference.set(session.send(newOrderSingle, marketListener));
+                    }
+                }, new CountingApplication(latch));
 
         final Set<Agent> agents = Sets.newHashSet();
         agents.add(new Agent() {
@@ -87,7 +92,7 @@ public class NewOrderSingleMarketNoLiquidityTest {
 
         latch.await(CountingApplication.TIMEOUT, TimeUnit.MILLISECONDS);
 
-        final InOrder inOrder = inOrder(application);
+        final InOrder inOrder = inOrder(application, marketListener);
 
         final ArgumentCaptor<NewOrderSingle> newOrderSingle = ArgumentCaptor.forClass(NewOrderSingle.class);
         inOrder.verify(application).fromApp(newOrderSingle.capture(), any(Session.class));
@@ -96,23 +101,35 @@ public class NewOrderSingleMarketNoLiquidityTest {
         assertThat(newOrderSingle.getValue().getOrdType(), is(OrdType.MARKET.field()));
         assertThat(newOrderSingle.getValue().getSide(), is(Side.BUY.field()));
 
-        final ArgumentCaptor<ExecutionReport> rejectedNewOrderSingle = ArgumentCaptor.forClass(ExecutionReport.class);
-        inOrder.verify(application).toApp(rejectedNewOrderSingle.capture(), any(Session.class));
-        assertThat(rejectedNewOrderSingle.getValue().getAvgPx().getValue(), is(Order.NO_PRICE));
-        assertThat(rejectedNewOrderSingle.getValue().getClOrdID().getValue(), is(
+        // REJECTED ExecutionReport for Market received by market listener
+        final ArgumentCaptor<ExecutionReport> rejectedExecutionReportMarketListener
+                = ArgumentCaptor.forClass(ExecutionReport.class);
+        inOrder.verify(marketListener).rejectedEvent(rejectedExecutionReportMarketListener.capture(),
+                                                     eq(orderReference.get()),
+                                                     any(Session.class));
+
+        // REJECTED ExecutionReport for Market
+        final ArgumentCaptor<ExecutionReport> rejectedMarketExecutionReport
+                = ArgumentCaptor.forClass(ExecutionReport.class);
+        inOrder.verify(application).toApp(rejectedMarketExecutionReport.capture(), any(Session.class));
+        assertThat(rejectedMarketExecutionReport.getValue(), sameInstance(
+                rejectedExecutionReportMarketListener.getValue()));
+        assertThat(rejectedMarketExecutionReport.getValue().getAvgPx().getValue(), is(Order.NO_PRICE));
+        assertThat(rejectedMarketExecutionReport.getValue().getClOrdID().getValue(), is(
                 newOrderSingle.getValue().getClOrdID().getValue()));
-        assertThat(rejectedNewOrderSingle.getValue().getCumQty().getValue(), is(Order.NO_QTY));
-        assertThat(rejectedNewOrderSingle.getValue().getExecType(), is(ExecType.REJECTED.field()));
-        assertThat(rejectedNewOrderSingle.getValue().getLeavesQty().getValue(), is(defaultOrdQty));
-        assertThat(rejectedNewOrderSingle.getValue().getOrdStatus(), is(OrdStatus.REJECTED.field()));
-        assertThat(rejectedNewOrderSingle.getValue().getSide(), is(Side.BUY.field()));
-        assertThat(rejectedNewOrderSingle.getValue().getSymbol().getValue(), is(defaultSymbol));
-        assertThat(rejectedNewOrderSingle.getValue().getLastPx(), nullValue());
-        assertThat(rejectedNewOrderSingle.getValue().getLastQty(), nullValue());
+        assertThat(rejectedMarketExecutionReport.getValue().getCumQty().getValue(), is(Order.NO_QTY));
+        assertThat(rejectedMarketExecutionReport.getValue().getExecType(), is(ExecType.REJECTED.field()));
+        assertThat(rejectedMarketExecutionReport.getValue().getLeavesQty().getValue(), is(defaultOrdQty));
+        assertThat(rejectedMarketExecutionReport.getValue().getOrdStatus(), is(OrdStatus.REJECTED.field()));
+        assertThat(rejectedMarketExecutionReport.getValue().getSide(), is(Side.BUY.field()));
+        assertThat(rejectedMarketExecutionReport.getValue().getSymbol().getValue(), is(defaultSymbol));
+        assertThat(rejectedMarketExecutionReport.getValue().getLastPx(), nullValue());
+        assertThat(rejectedMarketExecutionReport.getValue().getLastQty(), nullValue());
 
         inOrder.verifyNoMoreInteractions();
 
-        assertThat(orderReference.get().getClOrdID(), is(rejectedNewOrderSingle.getValue().getClOrdID().getValue()));
+        assertThat(orderReference.get().getClOrdID(), is(
+                rejectedMarketExecutionReport.getValue().getClOrdID().getValue()));
         assertThat(orderReference.get().getOrdStatus(), is(OrdStatus.REJECTED));
         assertThat(orderReference.get().getAvgPx(), is(Order.NO_PRICE));
         assertThat(orderReference.get().getPrice(), is(Order.NO_PRICE));

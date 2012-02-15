@@ -5,6 +5,7 @@ import eugene.market.book.Order;
 import eugene.market.client.Application;
 import eugene.market.client.ApplicationAdapter;
 import eugene.market.client.OrderReference;
+import eugene.market.client.OrderReferenceListener;
 import eugene.market.client.Session;
 import eugene.market.ontology.field.OrdType;
 import eugene.market.ontology.field.OrderQty;
@@ -43,7 +44,9 @@ import static eugene.market.ontology.Defaults.defaultSymbol;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.sameInstance;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -65,28 +68,33 @@ public class NewOrderSingleMarketPartialFillTest {
         final Application application = mock(Application.class);
         final AtomicReference<OrderReference> limitOrderReference = new AtomicReference<OrderReference>();
         final AtomicReference<OrderReference> marketOrderReference = new AtomicReference<OrderReference>();
+        final OrderReferenceListener limitListener = mock(OrderReferenceListener.class);
+        final OrderReferenceListener marketListener = mock(OrderReferenceListener.class);
         final Application proxy = proxy(application,
-            new ApplicationAdapter() {
-                @Override
-                public void onStart(Start start, Agent agent, Session session) {
+                                        new ApplicationAdapter() {
+                                            @Override
+                                            public void onStart(Start start, Agent agent, Session session) {
 
-                    final NewOrderSingle newOrderSingleLimit = new NewOrderSingle();
-                    newOrderSingleLimit.setOrdType(
-                            eugene.market.ontology.field.enums.OrdType.LIMIT.field());
-                    newOrderSingleLimit.setOrderQty(new OrderQty(defaultOrdQty));
-                    newOrderSingleLimit.setPrice(new Price(defaultPrice));
-                    newOrderSingleLimit.setSide(Side.BUY.field());
+                                                final NewOrderSingle newOrderSingleLimit = new NewOrderSingle();
+                                                newOrderSingleLimit.setOrdType(
+                                                        eugene.market.ontology.field.enums.OrdType.LIMIT.field());
+                                                newOrderSingleLimit.setOrderQty(new OrderQty(defaultOrdQty));
+                                                newOrderSingleLimit.setPrice(new Price(defaultPrice));
+                                                newOrderSingleLimit.setSide(Side.BUY.field());
 
-                    limitOrderReference.set(session.send(newOrderSingleLimit));
+                                                limitOrderReference.set(session.send(newOrderSingleLimit,
+                                                                                     limitListener));
 
-                    final NewOrderSingle newOrderSingleMarket = new NewOrderSingle();
-                    newOrderSingleMarket.setOrdType(eugene.market.ontology.field.enums.OrdType.MARKET.field());
-                    newOrderSingleMarket.setOrderQty(new OrderQty(defaultOrdQty + 1L));
-                    newOrderSingleMarket.setSide(Side.SELL.field());
+                                                final NewOrderSingle newOrderSingleMarket = new NewOrderSingle();
+                                                newOrderSingleMarket.setOrdType(
+                                                        eugene.market.ontology.field.enums.OrdType.MARKET.field());
+                                                newOrderSingleMarket.setOrderQty(new OrderQty(defaultOrdQty + 1L));
+                                                newOrderSingleMarket.setSide(Side.SELL.field());
 
-                    marketOrderReference.set(session.send(newOrderSingleMarket));
-                }
-            }, new CountingApplication(latch));
+                                                marketOrderReference.set(session.send(newOrderSingleMarket,
+                                                                                      marketListener));
+                                            }
+                                        }, new CountingApplication(latch));
 
         final Set<Agent> agents = Sets.newHashSet();
         agents.add(new Agent() {
@@ -103,7 +111,7 @@ public class NewOrderSingleMarketPartialFillTest {
 
         latch.await(CountingApplication.TIMEOUT, TimeUnit.MILLISECONDS);
 
-        final InOrder inOrder = inOrder(application);
+        final InOrder inOrder = inOrder(application, limitListener, marketListener);
 
         // Verify outgoing messages
         final ArgumentCaptor<NewOrderSingle> newOrderSingleCaptor = ArgumentCaptor.forClass(NewOrderSingle.class);
@@ -127,9 +135,16 @@ public class NewOrderSingleMarketPartialFillTest {
 
         // Verify incoming messages
 
+        // NEW ExecutionReport for Limit received by the limit listener
+        final ArgumentCaptor<ExecutionReport> newExecutionReportLimitListener
+                = ArgumentCaptor.forClass(ExecutionReport.class);
+        inOrder.verify(limitListener).newEvent(newExecutionReportLimitListener.capture(), eq(limitOrderReference.get()),
+                                               any(Session.class));
+
         // NEW ExecutionReport for Limit
         final ArgumentCaptor<ExecutionReport> newLimitExecutionReport = ArgumentCaptor.forClass(ExecutionReport.class);
         inOrder.verify(application).toApp(newLimitExecutionReport.capture(), any(Session.class));
+        assertThat(newLimitExecutionReport.getValue(), sameInstance(newExecutionReportLimitListener.getValue()));
         assertThat(newLimitExecutionReport.getValue().getAvgPx().getValue(), is(Order.NO_PRICE));
         assertThat(newLimitExecutionReport.getValue().getClOrdID().getValue(),
                    is(newOrderSingleLimit.getClOrdID().getValue()));
@@ -152,51 +167,76 @@ public class NewOrderSingleMarketPartialFillTest {
         assertThat(addOrder.getValue().getSide(), is(Side.BUY.field()));
         assertThat(addOrder.getValue().getSymbol().getValue(), is(defaultSymbol));
 
-
-        final ArgumentCaptor<ExecutionReport> executionReport = ArgumentCaptor.forClass(ExecutionReport.class);
-        inOrder.verify(application, times(3)).toApp(executionReport.capture(), any(Session.class));
+        // NEW ExecutionReport for Market received by the market listener
+        final ArgumentCaptor<ExecutionReport> newExecutionReportMarketListener
+                = ArgumentCaptor.forClass(ExecutionReport.class);
+        inOrder.verify(marketListener).newEvent(newExecutionReportMarketListener.capture(),
+                                                eq(marketOrderReference.get()),
+                                                any(Session.class));
 
         // NEW ExecutionReport for Market
-        final ExecutionReport newMarketExecutionReport = executionReport.getAllValues().get(0);
-        assertThat(newMarketExecutionReport.getAvgPx().getValue(), is(Order.NO_PRICE));
-        assertThat(newMarketExecutionReport.getClOrdID().getValue(),
+        final ArgumentCaptor<ExecutionReport> newMarketExecutionReport = ArgumentCaptor.forClass(ExecutionReport.class);
+        inOrder.verify(application).toApp(newMarketExecutionReport.capture(), any(Session.class));
+        assertThat(newMarketExecutionReport.getValue(), is(newExecutionReportMarketListener.getValue()));
+        assertThat(newMarketExecutionReport.getValue().getAvgPx().getValue(), is(Order.NO_PRICE));
+        assertThat(newMarketExecutionReport.getValue().getClOrdID().getValue(),
                    is(newOrderSingleMarket.getClOrdID().getValue()));
-        assertThat(newMarketExecutionReport.getCumQty().getValue(), is(Order.NO_QTY));
-        assertThat(newMarketExecutionReport.getExecType(), is(ExecType.NEW.field()));
-        assertThat(newMarketExecutionReport.getLeavesQty().getValue(), is(defaultOrdQty + 1L));
-        assertThat(newMarketExecutionReport.getOrdStatus(), is(OrdStatus.NEW.field()));
-        assertThat(newMarketExecutionReport.getSide(), is(Side.SELL.field()));
-        assertThat(newMarketExecutionReport.getSymbol().getValue(), is(defaultSymbol));
-        assertThat(newMarketExecutionReport.getLastPx(), nullValue());
-        assertThat(newMarketExecutionReport.getLastQty(), nullValue());
+        assertThat(newMarketExecutionReport.getValue().getCumQty().getValue(), is(Order.NO_QTY));
+        assertThat(newMarketExecutionReport.getValue().getExecType(), is(ExecType.NEW.field()));
+        assertThat(newMarketExecutionReport.getValue().getLeavesQty().getValue(), is(defaultOrdQty + 1L));
+        assertThat(newMarketExecutionReport.getValue().getOrdStatus(), is(OrdStatus.NEW.field()));
+        assertThat(newMarketExecutionReport.getValue().getSide(), is(Side.SELL.field()));
+        assertThat(newMarketExecutionReport.getValue().getSymbol().getValue(), is(defaultSymbol));
+        assertThat(newMarketExecutionReport.getValue().getLastPx(), nullValue());
+        assertThat(newMarketExecutionReport.getValue().getLastQty(), nullValue());
+
+        // TRADE ExecutionReport for Market received by the market listener
+        final ArgumentCaptor<ExecutionReport> tradeExecutionReportMarketListener
+                = ArgumentCaptor.forClass(ExecutionReport.class);
+        inOrder.verify(marketListener).tradeEvent(tradeExecutionReportMarketListener.capture(),
+                                                  eq(marketOrderReference.get()),
+                                                  any(Session.class));
 
         // TRADE ExecutionReport for Market
-        final ExecutionReport tradeMarketExecutionReport = executionReport.getAllValues().get(1);
-        assertThat(tradeMarketExecutionReport.getAvgPx().getValue(), is(defaultPrice));
-        assertThat(tradeMarketExecutionReport.getClOrdID().getValue(),
+        final ArgumentCaptor<ExecutionReport> tradeMarketExecutionReport
+                = ArgumentCaptor.forClass(ExecutionReport.class);
+        inOrder.verify(application).toApp(tradeMarketExecutionReport.capture(), any(Session.class));
+        assertThat(tradeMarketExecutionReport.getValue(), sameInstance(tradeExecutionReportMarketListener.getValue()));
+        assertThat(tradeMarketExecutionReport.getValue().getAvgPx().getValue(), is(defaultPrice));
+        assertThat(tradeMarketExecutionReport.getValue().getClOrdID().getValue(),
                    is(newOrderSingleMarket.getClOrdID().getValue()));
-        assertThat(tradeMarketExecutionReport.getCumQty().getValue(), is(defaultOrdQty));
-        assertThat(tradeMarketExecutionReport.getExecType(), is(ExecType.TRADE.field()));
-        assertThat(tradeMarketExecutionReport.getLeavesQty().getValue(), is(1L));
-        assertThat(tradeMarketExecutionReport.getOrdStatus(), is(OrdStatus.PARTIALLY_FILLED.field()));
-        assertThat(tradeMarketExecutionReport.getSide(), is(Side.SELL.field()));
-        assertThat(tradeMarketExecutionReport.getSymbol().getValue(), is(defaultSymbol));
-        assertThat(tradeMarketExecutionReport.getLastPx().getValue(), is(defaultPrice));
-        assertThat(tradeMarketExecutionReport.getLastQty().getValue(), is(defaultOrdQty));
+        assertThat(tradeMarketExecutionReport.getValue().getCumQty().getValue(), is(defaultOrdQty));
+        assertThat(tradeMarketExecutionReport.getValue().getExecType(), is(ExecType.TRADE.field()));
+        assertThat(tradeMarketExecutionReport.getValue().getLeavesQty().getValue(), is(1L));
+        assertThat(tradeMarketExecutionReport.getValue().getOrdStatus(), is(OrdStatus.PARTIALLY_FILLED.field()));
+        assertThat(tradeMarketExecutionReport.getValue().getSide(), is(Side.SELL.field()));
+        assertThat(tradeMarketExecutionReport.getValue().getSymbol().getValue(), is(defaultSymbol));
+        assertThat(tradeMarketExecutionReport.getValue().getLastPx().getValue(), is(defaultPrice));
+        assertThat(tradeMarketExecutionReport.getValue().getLastQty().getValue(), is(defaultOrdQty));
+
+        // TRADE ExecutionReport for Limit received by the limit listener
+        final ArgumentCaptor<ExecutionReport> tradeExecutionReportLimitListener
+                = ArgumentCaptor.forClass(ExecutionReport.class);
+        inOrder.verify(limitListener).tradeEvent(tradeExecutionReportLimitListener.capture(),
+                                                 eq(limitOrderReference.get()),
+                                                 any(Session.class));
 
         // TRADE ExecutionReport for Limit
-        final ExecutionReport tradeLimitExecutionReport = executionReport.getAllValues().get(2);
-        assertThat(tradeLimitExecutionReport.getAvgPx().getValue(), is(defaultPrice));
-        assertThat(tradeLimitExecutionReport.getClOrdID().getValue(),
+        final ArgumentCaptor<ExecutionReport> tradeLimitExecutionReport
+                = ArgumentCaptor.forClass(ExecutionReport.class);
+        inOrder.verify(application).toApp(tradeLimitExecutionReport.capture(), any(Session.class));
+        assertThat(tradeLimitExecutionReport.getValue(), sameInstance(tradeExecutionReportLimitListener.getValue()));
+        assertThat(tradeLimitExecutionReport.getValue().getAvgPx().getValue(), is(defaultPrice));
+        assertThat(tradeLimitExecutionReport.getValue().getClOrdID().getValue(),
                    is(newOrderSingleLimit.getClOrdID().getValue()));
-        assertThat(tradeLimitExecutionReport.getCumQty().getValue(), is(defaultOrdQty));
-        assertThat(tradeLimitExecutionReport.getExecType(), is(ExecType.TRADE.field()));
-        assertThat(tradeLimitExecutionReport.getLeavesQty().getValue(), is(Order.NO_QTY));
-        assertThat(tradeLimitExecutionReport.getOrdStatus(), is(OrdStatus.FILLED.field()));
-        assertThat(tradeLimitExecutionReport.getSide(), is(Side.BUY.field()));
-        assertThat(tradeLimitExecutionReport.getSymbol().getValue(), is(defaultSymbol));
-        assertThat(tradeLimitExecutionReport.getLastPx().getValue(), is(defaultPrice));
-        assertThat(tradeLimitExecutionReport.getLastQty().getValue(), is(defaultOrdQty));
+        assertThat(tradeLimitExecutionReport.getValue().getCumQty().getValue(), is(defaultOrdQty));
+        assertThat(tradeLimitExecutionReport.getValue().getExecType(), is(ExecType.TRADE.field()));
+        assertThat(tradeLimitExecutionReport.getValue().getLeavesQty().getValue(), is(Order.NO_QTY));
+        assertThat(tradeLimitExecutionReport.getValue().getOrdStatus(), is(OrdStatus.FILLED.field()));
+        assertThat(tradeLimitExecutionReport.getValue().getSide(), is(Side.BUY.field()));
+        assertThat(tradeLimitExecutionReport.getValue().getSymbol().getValue(), is(defaultSymbol));
+        assertThat(tradeLimitExecutionReport.getValue().getLastPx().getValue(), is(defaultPrice));
+        assertThat(tradeLimitExecutionReport.getValue().getLastQty().getValue(), is(defaultOrdQty));
 
         // OrderExecuted for Limit
         final ArgumentCaptor<OrderExecuted> orderExecuted = ArgumentCaptor.forClass(OrderExecuted.class);
@@ -208,10 +248,19 @@ public class NewOrderSingleMarketPartialFillTest {
         assertThat(orderExecuted.getValue().getLeavesQty().getValue(), is(Order.NO_QTY));
         assertThat(orderExecuted.getValue().getTradeID().getValue(), is(Long.valueOf(1L).toString()));
 
-        // Cancel ExecutionReport for Market
-        final ArgumentCaptor<ExecutionReport> canceledExecutionReportCaptor = ArgumentCaptor.forClass(ExecutionReport.class);
+        // CANCELED ExecutionReport for Market received by market listener
+        final ArgumentCaptor<ExecutionReport> cancelExecutionReportMarketListener
+                = ArgumentCaptor.forClass(ExecutionReport.class);
+        inOrder.verify(marketListener).canceledEvent(cancelExecutionReportMarketListener.capture(),
+                                                     eq(marketOrderReference.get()),
+                                                     any(Session.class));
+
+        // CANCELED ExecutionReport for Market
+        final ArgumentCaptor<ExecutionReport> canceledExecutionReportCaptor
+                = ArgumentCaptor.forClass(ExecutionReport.class);
         inOrder.verify(application).toApp(canceledExecutionReportCaptor.capture(), any(Session.class));
         final ExecutionReport canceledMarketExecutionReport = canceledExecutionReportCaptor.getValue();
+        assertThat(canceledMarketExecutionReport, sameInstance(cancelExecutionReportMarketListener.getValue()));
         assertThat(canceledMarketExecutionReport.getAvgPx().getValue(), is(defaultPrice));
         assertThat(canceledMarketExecutionReport.getClOrdID().getValue(),
                    is(newOrderSingleMarket.getClOrdID().getValue()));
@@ -237,7 +286,8 @@ public class NewOrderSingleMarketPartialFillTest {
         assertThat(limitOrderReference.get().getLeavesQty(), is(0L));
         assertThat(limitOrderReference.get().getOrdType(), is(eugene.market.ontology.field.enums.OrdType.LIMIT));
 
-        assertThat(marketOrderReference.get().getClOrdID(), is(newMarketExecutionReport.getClOrdID().getValue()));
+        assertThat(marketOrderReference.get().getClOrdID(),
+                   is(newMarketExecutionReport.getValue().getClOrdID().getValue()));
         assertThat(marketOrderReference.get().getOrdStatus(), is(OrdStatus.CANCELED));
         assertThat(marketOrderReference.get().getAvgPx(), is(defaultPrice));
         assertThat(marketOrderReference.get().getPrice(), is(Order.NO_PRICE));

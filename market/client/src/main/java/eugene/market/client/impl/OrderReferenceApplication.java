@@ -4,8 +4,10 @@ import com.google.common.annotations.VisibleForTesting;
 import eugene.market.client.ApplicationAdapter;
 import eugene.market.client.OrderReference;
 import eugene.market.client.Session;
+import eugene.market.ontology.field.ClOrdID;
 import eugene.market.ontology.field.enums.OrdStatus;
 import eugene.market.ontology.message.ExecutionReport;
+import eugene.market.ontology.message.OrderCancelReject;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -44,39 +46,49 @@ public final class OrderReferenceApplication extends ApplicationAdapter {
     @Override
     public void toApp(final ExecutionReport executionReport, final Session session) {
 
+        final OrderReferenceImpl ref = getOrderReference(executionReport.getClOrdID());
+
         switch (OrdStatus.getOrdStatus(executionReport)) {
 
+            case NEW:
+                ref.getOrderReferenceListener().newEvent(executionReport, ref, session);
+                break;
+
             case REJECTED:
-                getOrderReference(executionReport).reject();
+                ref.reject();
+                ref.getOrderReferenceListener().rejectedEvent(executionReport, ref, session);
                 orderReferenceMap.remove(executionReport.getClOrdID().getValue());
                 break;
 
             case CANCELED:
-                getOrderReference(executionReport).cancel();
+                ref.cancel();
+                ref.getOrderReferenceListener().canceledEvent(executionReport, ref, session);
                 orderReferenceMap.remove(executionReport.getClOrdID().getValue());
                 break;
 
             case PARTIALLY_FILLED:
             case FILLED:
-                getOrderReference(executionReport).execute(executionReport.getLastPx().getValue(),
-                                                           executionReport.getLastQty().getValue());
-                if (getOrderReference(executionReport).getOrdStatus().isFilled()) {
+                ref.execute(executionReport.getLastPx().getValue(), executionReport.getLastQty().getValue());
+                ref.getOrderReferenceListener().tradeEvent(executionReport, ref, session);
+                if (ref.getOrdStatus().isFilled()) {
                     orderReferenceMap.remove(executionReport.getClOrdID().getValue());
                 }
                 break;
         }
     }
 
+    @Override
+    public void toApp(final OrderCancelReject orderCancelReject, final Session session) {
+        final OrderReferenceImpl ref = getOrderReference(orderCancelReject.getClOrdID());
+        ref.getOrderReferenceListener().cancelRejectedEvent(orderCancelReject, ref, session);
+    }
+
     @VisibleForTesting
-    public OrderReferenceImpl getOrderReference(final ExecutionReport executionReport) {
+    OrderReferenceImpl getOrderReference(final ClOrdID clOrdID) {
 
-        checkNotNull(executionReport);
-        checkNotNull(executionReport.getClOrdID());
-        checkNotNull(executionReport.getClOrdID().getValue());
+        checkNotNull(clOrdID);
+        checkNotNull(clOrdID.getValue());
 
-        final OrderReferenceImpl orderReference = orderReferenceMap.get(executionReport.getClOrdID().getValue());
-        checkNotNull(orderReference);
-
-        return orderReference;
+        return orderReferenceMap.get(clOrdID.getValue());
     }
 }
