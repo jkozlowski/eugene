@@ -1,4 +1,4 @@
-package eugene.utils;
+package eugene.utils.annotation;
 
 
 @java.lang.annotation.Documented

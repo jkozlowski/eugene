@@ -1,14 +1,17 @@
 package eugene.simulation.agent.impl;
 
+import com.google.common.base.Stopwatch;
 import eugene.simulation.agent.Simulation;
-import eugene.utils.BehaviourResult;
-import eugene.utils.Nullable;
+import eugene.utils.behaviour.BehaviourResult;
+import eugene.utils.annotation.Nullable;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -23,6 +26,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @since 0.6
  */
 public class StartAgentsBehaviour extends OneShotBehaviour {
+
+    private static final String ERROR_MSG = "Failed to Start Agents";
+
+    private final Logger LOG = LoggerFactory.getLogger(StartAgentsBehaviour.class);
 
     private final BehaviourResult<AID> marketAgent;
 
@@ -46,6 +53,7 @@ public class StartAgentsBehaviour extends OneShotBehaviour {
     @Override
     public void action() {
         final Set<String> started = new HashSet<String>();
+        final Stopwatch stopwatch = new Stopwatch().start();
         try {
             int i = 0;
             for (final Agent a : agents) {
@@ -57,9 +65,11 @@ public class StartAgentsBehaviour extends OneShotBehaviour {
                 started.add(controller.getName());
             }
 
+            LOG.info("Starting agents took {}", stopwatch.stop());
             result.success(started);
         }
         catch (StaleProxyException e) {
+            LOG.error(ERROR_MSG, e);
             result.fail(started);
         }
     }

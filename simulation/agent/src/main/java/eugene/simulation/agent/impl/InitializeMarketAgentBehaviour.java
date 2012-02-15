@@ -4,7 +4,7 @@ import eugene.market.esma.MarketAgent;
 import eugene.simulation.ontology.SimulationOntology;
 import eugene.simulation.ontology.Start;
 import eugene.simulation.ontology.Started;
-import eugene.utils.BehaviourResult;
+import eugene.utils.behaviour.BehaviourResult;
 import jade.content.ContentElement;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.OntologyException;
@@ -17,8 +17,8 @@ import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 import jade.wrapper.StaleProxyException;
-
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -29,8 +29,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @since 0.6
  */
 public class InitializeMarketAgentBehaviour extends SequentialBehaviour {
+    
+    private static final String ERROR_MSG = "Could not start the Market Agent";
 
-    private final Logger LOG = Logger.getLogger(InitializeMarketAgentBehaviour.class.getName());
+    private final Logger LOG = LoggerFactory.getLogger(InitializeMarketAgentBehaviour.class);
 
     private final BehaviourResult<AID> result;
 
@@ -78,10 +80,10 @@ public class InitializeMarketAgentBehaviour extends SequentialBehaviour {
                         }
                     }
                     catch (CodecException e) {
-                        LOG.severe(e.toString());
+                        LOG.error(ERROR_MSG, e);
                     }
                     catch (OntologyException e) {
-                        LOG.severe(e.toString());
+                        LOG.error(ERROR_MSG, e);
                     }
                 }
             };
@@ -89,16 +91,16 @@ public class InitializeMarketAgentBehaviour extends SequentialBehaviour {
             addSubBehaviour(sender);
         }
         catch (StaleProxyException e) {
-            LOG.severe(e.toString());
+            LOG.error(ERROR_MSG, e);
         }
         catch (CodecException e) {
-            LOG.severe(e.toString());
+            LOG.error(ERROR_MSG, e);
         }
         catch (OntologyException e) {
-            LOG.severe(e.toString());
+            LOG.error(ERROR_MSG, e);
         }
         catch (ControllerException e) {
-            LOG.severe(e.toString());
+            LOG.error(ERROR_MSG, e);
         }
     }
 

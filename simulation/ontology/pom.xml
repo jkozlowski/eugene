@@ -28,10 +28,21 @@
             <version>${jade.osgi.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.googlecode.guava-osgi</groupId>
+            <artifactId>guava-osgi</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
+        <dependency>
             <groupId>eugene.market</groupId>
             <artifactId>ontology</artifactId>
             <version>${current.version}</version>
             <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>eugene</groupId>
+            <artifactId>utils</artifactId>
+            <version>${current.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -69,9 +80,19 @@
                         <Bundle-Description>${project.description}</Bundle-Description>
                         <Export-Package>${bundle.namespace}
                         </Export-Package>
-                        <Import-Package>jade.content, jade.content.lang, jade.content.lang.sl, jade.content.onto
+                        <Import-Package>com.google.common.base, jade.content, jade.content.lang, jade.content.lang.sl,
+                            jade.content.onto, jade.content.onto.annotations
                         </Import-Package>
                     </instructions>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven.surefire.version}</version>
+                <configuration>
+                    <parallel>methods</parallel>
+                    <threadCount>10</threadCount>
                 </configuration>
             </plugin>
         </plugins>

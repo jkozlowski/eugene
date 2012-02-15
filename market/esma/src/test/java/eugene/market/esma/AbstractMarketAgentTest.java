@@ -25,6 +25,8 @@ import static jade.core.Runtime.instance;
  */
 public abstract class AbstractMarketAgentTest {
 
+    public static final int TIMEOUT = 60000;
+
     public static final String GATEWAY_AGENT = "gateway";
 
     public static final String MARKET_AGENT = "market";
@@ -62,7 +64,7 @@ public abstract class AbstractMarketAgentTest {
         final Event traderEvent = new Event(-1, sendMessage);
         final AgentController traderController = container.getAgent(GATEWAY_AGENT);
         traderController.putO2AObject(traderEvent, AgentController.ASYNC);
-        traderEvent.waitUntilProcessed(10000000);
+        traderEvent.waitUntilProcessed(TIMEOUT);
         return sendMessage.received.get();
     }
 
@@ -71,7 +73,7 @@ public abstract class AbstractMarketAgentTest {
         final Event traderEvent = new Event(-1, behaviour);
         final AgentController traderController = container.getAgent(GATEWAY_AGENT);
         traderController.putO2AObject(traderEvent, AgentController.ASYNC);
-        traderEvent.waitUntilProcessed(10000000);
+        traderEvent.waitUntilProcessed(TIMEOUT);
     }
 
     public static void submitNoWait(final Behaviour behaviour, final AgentContainer container)

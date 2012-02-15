@@ -1,5 +1,6 @@
-package eugene.utils;
+package eugene.utils.behaviour;
 
+import eugene.utils.annotation.Nullable;
 import jade.core.behaviours.Behaviour;
 
 import static com.google.common.base.Preconditions.checkArgument;

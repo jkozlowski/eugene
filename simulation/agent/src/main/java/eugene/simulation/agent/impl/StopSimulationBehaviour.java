@@ -4,7 +4,7 @@ import eugene.market.esma.MarketAgent;
 import eugene.simulation.ontology.SimulationOntology;
 import eugene.simulation.ontology.Stop;
 import eugene.simulation.ontology.Stopped;
-import eugene.utils.BehaviourResult;
+import eugene.utils.behaviour.BehaviourResult;
 import jade.content.ContentElement;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.OntologyException;
@@ -14,6 +14,8 @@ import jade.core.behaviours.SequentialBehaviour;
 import jade.core.behaviours.WakerBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.proto.AchieveREInitiator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Calendar;
 import java.util.Set;
@@ -29,6 +31,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @since 0.6
  */
 public class StopSimulationBehaviour extends SequentialBehaviour {
+
+    private static final String ERROR_MSG = "Failed to stop the simulation";
+
+    private final Logger LOG = LoggerFactory.getLogger(StopSimulationBehaviour.class);
 
     private final BehaviourResult result;
 
@@ -77,14 +83,14 @@ public class StopSimulationBehaviour extends SequentialBehaviour {
                 @Override
                 protected Vector prepareRequests(final ACLMessage request) {
                     final Vector l = new Vector(guids.getObject().size());
-                    final ACLMessage marketClone = (ACLMessage) request.clone();
-                    marketClone.addReceiver(marketAgent.getObject());
-                    l.addElement(marketClone);
+                    final ACLMessage clone = (ACLMessage) request.clone();
+                    clone.addReceiver(marketAgent.getObject());
+
                     for (final String guid : guids.getObject()) {
-                        final ACLMessage clone = (ACLMessage) request.clone();
                         clone.addReceiver(new AID(guid, AID.ISGUID));
-                        l.addElement(clone);
                     }
+
+                    l.addElement(clone);
 
                     return l;
                 }
@@ -119,10 +125,12 @@ public class StopSimulationBehaviour extends SequentialBehaviour {
                         result.success();
                     }
                     catch (CodecException e) {
-                        e.printStackTrace();
+                        LOG.error(ERROR_MSG, e);
+                        result.fail();
                     }
                     catch (OntologyException e) {
-                        e.printStackTrace();
+                        LOG.error(ERROR_MSG, e);
+                        result.fail();
                     }
                 }
 
@@ -140,10 +148,12 @@ public class StopSimulationBehaviour extends SequentialBehaviour {
             addSubBehaviour(sender);
         }
         catch (CodecException e) {
-            e.printStackTrace();
+            LOG.error(ERROR_MSG, e);
+            result.fail();
         }
         catch (OntologyException e) {
-            e.printStackTrace();
+            LOG.error(ERROR_MSG, e);
+            result.fail();
         }
     }
     

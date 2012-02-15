@@ -11,7 +11,7 @@ import eugene.market.ontology.field.enums.ExecType;
 import eugene.market.ontology.field.enums.OrdStatus;
 import eugene.market.ontology.message.ExecutionReport;
 import eugene.market.ontology.message.NewOrderSingle;
-import eugene.utils.BehaviourResult;
+import eugene.utils.behaviour.BehaviourResult;
 import jade.content.ContentElement;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.OntologyException;
@@ -20,6 +20,8 @@ import jade.core.AID;
 import jade.core.behaviours.SequentialBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.proto.AchieveREInitiator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Set;
 
@@ -35,6 +37,10 @@ import static java.util.Collections.synchronizedSet;
  * @since 0.6
  */
 public class BootstrapOrderBookBehaviour extends SequentialBehaviour {
+
+    private static final String ERROR_MSG = "Failed to bootstrap the Order Book";
+
+    private final Logger LOG = LoggerFactory.getLogger(BootstrapOrderBookBehaviour.class);
 
     private final BehaviourResult<Set<ExecutionReport>> result;
 
@@ -120,9 +126,11 @@ public class BootstrapOrderBookBehaviour extends SequentialBehaviour {
 
                         }
                         catch (CodecException e) {
+                            LOG.error(ERROR_MSG, e);
                             result.fail();
                         }
                         catch (OntologyException e) {
+                            LOG.error(ERROR_MSG, e);
                             result.fail();
                         }
                     }
@@ -131,10 +139,12 @@ public class BootstrapOrderBookBehaviour extends SequentialBehaviour {
             }
         }
         catch (CodecException e) {
-            e.printStackTrace();
+            result.fail();
+            LOG.error(ERROR_MSG, e);
         }
         catch (OntologyException e) {
-            e.printStackTrace();
+            result.fail();
+            LOG.error(ERROR_MSG, e);
         }
     }
 

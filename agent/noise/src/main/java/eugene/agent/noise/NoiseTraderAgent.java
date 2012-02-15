@@ -51,7 +51,6 @@ public class NoiseTraderAgent extends Agent {
                                     
                                     @Override
                                     public void onStop(final Stop stop, final Agent agent, final Session session) {
-                                        System.out.println("Stopping " + agent);
                                         if (null != b) {
                                             agent.removeBehaviour(b);
                                         }

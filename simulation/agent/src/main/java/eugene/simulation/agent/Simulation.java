@@ -1,7 +1,7 @@
 package eugene.simulation.agent;
 
 import eugene.market.esma.MarketAgent;
-import eugene.utils.Immutable;
+import eugene.utils.annotation.Immutable;
 import jade.core.AID;
 import jade.core.Agent;
 

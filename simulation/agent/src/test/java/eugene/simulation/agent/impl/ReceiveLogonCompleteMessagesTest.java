@@ -5,7 +5,7 @@ import eugene.market.ontology.MarketOntology;
 import eugene.simulation.agent.Simulation;
 import eugene.simulation.ontology.LogonComplete;
 import eugene.simulation.ontology.SimulationOntology;
-import eugene.utils.BehaviourResult;
+import eugene.utils.behaviour.BehaviourResult;
 import jade.content.onto.basic.Action;
 import jade.core.AID;
 import jade.core.Agent;

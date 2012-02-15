@@ -8,11 +8,14 @@ import eugene.market.ontology.MarketOntology;
 import eugene.market.ontology.Message;
 import eugene.simulation.agent.Simulation;
 import eugene.simulation.ontology.SimulationOntology;
+import eugene.simulation.ontology.Start;
 import eugene.simulation.ontology.Stop;
-import eugene.utils.BehaviourResult;
+import eugene.utils.behaviour.BehaviourResult;
 import jade.core.Agent;
 import jade.core.behaviours.ParallelBehaviour;
 import jade.core.behaviours.SequentialBehaviour;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static eugene.market.client.Applications.proxy;
@@ -31,6 +34,8 @@ public final class SessionInitiator extends SequentialBehaviour {
     private final Simulation simulation;
 
     private final BehaviourResult result = new BehaviourResult();
+    
+    private static final Logger LOG = LoggerFactory.getLogger(SessionInitiator.class);
 
     /**
      * Creates a {@link SessionImpl} that will start a session with the Market Agent for this
@@ -56,8 +61,15 @@ public final class SessionInitiator extends SequentialBehaviour {
         final ParallelBehaviour parallel = new ParallelBehaviour();
 
         final Application proxy = proxy(application, new ApplicationAdapter() {
+            
+            @Override
+            public void onStart(Start start, Agent agent, Session session) {
+                LOG.info("Started: {}", agent.getAID().getLocalName());
+            }
+            
             @Override
             public void onStop(Stop stop, Agent agent, Session session) {
+                LOG.info("Stopped: {}", agent.getAID().getLocalName());
                 SessionInitiator.this.removeSubBehaviour(parallel);
             }
         });

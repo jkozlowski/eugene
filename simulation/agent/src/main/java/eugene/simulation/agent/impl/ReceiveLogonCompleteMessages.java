@@ -1,7 +1,7 @@
 package eugene.simulation.agent.impl;
 
 import eugene.simulation.ontology.LogonComplete;
-import eugene.utils.BehaviourResult;
+import eugene.utils.behaviour.BehaviourResult;
 import jade.content.ContentElement;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.OntologyException;
@@ -9,6 +9,8 @@ import jade.content.onto.basic.Action;
 import jade.core.Agent;
 import jade.core.behaviours.SimpleBehaviour;
 import jade.lang.acl.ACLMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -24,12 +26,16 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class ReceiveLogonCompleteMessages extends SimpleBehaviour {
 
+    private static final String ERROR_MSG = "Failed to receive all LogonComplete messages";
+
+    private final Logger LOG = LoggerFactory.getLogger(ReceiveLogonCompleteMessages.class);
+
     private final BehaviourResult<Set<String>> result = new BehaviourResult<Set<String>>();
 
     private final BehaviourResult<Set<String>> started;
 
     private final Set<String> logonComplete;
-
+    
     public ReceiveLogonCompleteMessages(final BehaviourResult<Set<String>> started) {
         checkNotNull(started);
         this.started = started;
@@ -51,10 +57,10 @@ public class ReceiveLogonCompleteMessages extends SimpleBehaviour {
             }
         }
         catch (CodecException e) {
-            e.printStackTrace();
+            LOG.error(ERROR_MSG, e);
         }
         catch (OntologyException e) {
-            e.printStackTrace();
+            LOG.error(ERROR_MSG, e);
         }
     }
 

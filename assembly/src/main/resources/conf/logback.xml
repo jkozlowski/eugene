@@ -11,7 +11,7 @@
     <!-- Logging just RejectOrderEvents -->
     <appender name="REJECTIONS" class="ch.qos.logback.core.FileAppender">
         <file>rejections.log</file>
-        <filter class="eugene.utils.MarkerFilter">
+        <filter class="eugene.utils.logging.MarkerFilter">
             <marker>REJECTORDER</marker>
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
@@ -24,7 +24,7 @@
     <!-- Logging just ExecutionEvents -->
     <appender name="EXECUTIONS" class="ch.qos.logback.core.FileAppender">
         <file>executions.log</file>
-        <filter class="eugene.utils.MarkerFilter">
+        <filter class="eugene.utils.logging.MarkerFilter">
             <marker>EXECUTION</marker>
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
@@ -34,12 +34,31 @@
         </encoder>
     </appender>
 
+    <!-- Console logging -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--<pattern>[%level] %logger - %msg%n</pattern>-->
+            <pattern>[%level] %d - %msg%n</pattern>
+        </encoder>
+    </appender>
+
     <logger name="eugene.market.esma" level="INFO">
-        <appender-ref ref="MARKETDATA" />
-        <appender-ref ref="EXECUTIONS" />
-        <appender-ref ref="REJECTIONS" />
+        <appender-ref ref="MARKETDATA"/>
+        <appender-ref ref="EXECUTIONS"/>
+        <appender-ref ref="REJECTIONS"/>
     </logger>
 
-    <root level="off"/>
+    <logger name="eugene.market.client" level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
 
+    <logger name="eugene.simulation.agent" level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <logger name="eugene.agent.vwap" level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <root level="OFF"/>
 </configuration>

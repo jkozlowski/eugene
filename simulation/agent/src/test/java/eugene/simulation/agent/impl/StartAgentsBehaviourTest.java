@@ -2,7 +2,7 @@ package eugene.simulation.agent.impl;
 
 import eugene.market.esma.MarketAgent;
 import eugene.simulation.agent.Simulation;
-import eugene.utils.BehaviourResult;
+import eugene.utils.behaviour.BehaviourResult;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.Profile;

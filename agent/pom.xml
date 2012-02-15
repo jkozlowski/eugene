@@ -19,5 +19,6 @@
 
     <modules>
         <module>noise</module>
+        <module>vwap</module>
     </modules>
 </project>

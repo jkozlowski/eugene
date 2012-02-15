@@ -8,7 +8,7 @@ import eugene.market.ontology.field.enums.SessionStatus;
 import eugene.market.ontology.message.Logon;
 import eugene.simulation.ontology.LogonComplete;
 import eugene.simulation.ontology.SimulationOntology;
-import eugene.utils.BehaviourResult;
+import eugene.utils.behaviour.BehaviourResult;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;

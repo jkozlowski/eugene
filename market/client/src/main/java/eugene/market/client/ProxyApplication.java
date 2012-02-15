@@ -20,7 +20,7 @@ public interface ProxyApplication extends Application {
     boolean addApplication(final Application application);
 
     /**
-     * Removes an {@link Application} to this proxy.
+     * Removes an {@link Application} from this proxy.
      *
      * @param application {@link Application} to remove.
      *

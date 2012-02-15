@@ -1,9 +1,10 @@
 package eugene.simulation.agent.impl;
 
+import com.google.common.base.Stopwatch;
 import eugene.simulation.ontology.SimulationOntology;
 import eugene.simulation.ontology.Start;
 import eugene.simulation.ontology.Started;
-import eugene.utils.BehaviourResult;
+import eugene.utils.behaviour.BehaviourResult;
 import jade.content.ContentElement;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.OntologyException;
@@ -12,12 +13,16 @@ import jade.core.AID;
 import jade.core.behaviours.SequentialBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.proto.AchieveREInitiator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Calendar;
 import java.util.Set;
 import java.util.Vector;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.Calendar.getInstance;
 
 /**
  * Sends {@link Start} messages to trader agents.
@@ -27,6 +32,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class StartSimulationBehaviour extends SequentialBehaviour {
 
+    private static final String ERROR_MSG = "Failed to start the simulation";
+
+    private final Logger LOG = LoggerFactory.getLogger(StartSimulationBehaviour.class);
+
+    private final int length;
+
     private final BehaviourResult<Calendar> result;
 
     private final BehaviourResult<Set<String>> guids;
@@ -34,10 +45,13 @@ public class StartSimulationBehaviour extends SequentialBehaviour {
     /**
      * Creates a {@link StartSimulationBehaviour} that will send {@link Start} message to <code>guids</code>.
      *
-     * @param guids {@link AID#ISGUID} of agents to send {@link Start} message to.
+     * @param length length of the simulation in milliseconds.
+     * @param guids  {@link AID#ISGUID} of agents to send {@link Start} message to.
      */
-    public StartSimulationBehaviour(final BehaviourResult<Set<String>> guids) {
+    public StartSimulationBehaviour(final int length, final BehaviourResult<Set<String>> guids) {
+        checkArgument(length > 0);
         checkNotNull(guids);
+        this.length = length;
         this.guids = guids;
         this.result = new BehaviourResult();
     }
@@ -45,7 +59,14 @@ public class StartSimulationBehaviour extends SequentialBehaviour {
     @Override
     public void onStart() {
         try {
-            final Action action = new Action(myAgent.getAID(), new Start());
+            final Stopwatch stopwatch = new Stopwatch().start();
+            
+            final Calendar startCalendar = getInstance();
+            final Calendar stopCalendar = (Calendar) startCalendar.clone();
+            stopCalendar.add(Calendar.MILLISECOND, length);
+
+            final Action action = new Action(myAgent.getAID(), new Start(startCalendar.getTime(),
+                                                                         stopCalendar.getTime()));
             final ACLMessage aclMessage = new ACLMessage(ACLMessage.REQUEST);
             aclMessage.setLanguage(SimulationOntology.LANGUAGE);
             aclMessage.setOntology(SimulationOntology.NAME);
@@ -57,11 +78,11 @@ public class StartSimulationBehaviour extends SequentialBehaviour {
                 @Override
                 protected Vector prepareRequests(final ACLMessage request) {
                     final Vector l = new Vector(guids.getObject().size());
+                    final ACLMessage clone = (ACLMessage) request.clone();
                     for (final String guid : guids.getObject()) {
-                        final ACLMessage clone = (ACLMessage) request.clone();
                         clone.addReceiver(new AID(guid, AID.ISGUID));
-                        l.addElement(clone);
                     }
+                    l.addElement(clone);
 
                     return l;
                 }
@@ -92,13 +113,16 @@ public class StartSimulationBehaviour extends SequentialBehaviour {
                             }
                         }
 
-                        result.success(Calendar.getInstance());
+                        LOG.info("Sending Start messages took {}", stopwatch.stop());
+                        result.success(startCalendar);
                     }
                     catch (CodecException e) {
-                        e.printStackTrace();
+                        LOG.error(ERROR_MSG, e);
+                        result.fail();
                     }
                     catch (OntologyException e) {
-                        e.printStackTrace();
+                        LOG.error(ERROR_MSG, e);
+                        result.fail();
                     }
                 }
 
@@ -106,17 +130,19 @@ public class StartSimulationBehaviour extends SequentialBehaviour {
             addSubBehaviour(sender);
         }
         catch (CodecException e) {
-            e.printStackTrace();
+            LOG.error(ERROR_MSG, e);
+            result.fail();
         }
         catch (OntologyException e) {
-            e.printStackTrace();
+            LOG.error(ERROR_MSG, e);
+            result.fail();
         }
     }
-    
+
     public BehaviourResult<Calendar> getResult() {
         return result;
     }
-    
+
     @Override
     public int onEnd() {
         return result.getResult();

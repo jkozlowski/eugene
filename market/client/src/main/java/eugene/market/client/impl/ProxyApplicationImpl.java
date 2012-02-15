@@ -38,7 +38,7 @@ public final class ProxyApplicationImpl implements ProxyApplication {
      */
     public ProxyApplicationImpl(final Application... applications) {
         checkNotNull(applications);
-        checkArgument(0 != applications.length);
+        checkArgument(applications.length > 0);
         this.applications = new CopyOnWriteArrayList<Application>(applications);
     }
 

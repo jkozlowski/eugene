@@ -2,15 +2,15 @@ package eugene.simulation.ontology;
 
 import eugene.market.ontology.Defaults;
 import jade.content.AgentAction;
-import jade.content.Concept;
 import jade.content.onto.basic.Action;
-import jade.core.AID;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import static eugene.utils.AIDs.getAID;
 
 /**
  * Utility {@link Behaviour} for testing {@link SimulationOntology}.
@@ -34,9 +34,9 @@ public class SenderBehaviour extends OneShotBehaviour {
     public void action() {
         for (AgentAction msg : toSend) {
             try {
-                final Action a = new Action(new AID(Defaults.RECEIVER_AGENT, AID.ISLOCALNAME), msg);
+                final Action a = new Action(getAID(Defaults.RECEIVER_AGENT, myAgent), msg);
                 final ACLMessage aclMessage = new ACLMessage(ACLMessage.REQUEST);
-                aclMessage.addReceiver(new AID(Defaults.RECEIVER_AGENT, AID.ISLOCALNAME));
+                aclMessage.addReceiver(getAID(Defaults.RECEIVER_AGENT, myAgent));
                 aclMessage.setOntology(SimulationOntology.getInstance().getName());
                 aclMessage.setLanguage(SimulationOntology.LANGUAGE);
                 myAgent.getContentManager().fillContent(aclMessage, a);

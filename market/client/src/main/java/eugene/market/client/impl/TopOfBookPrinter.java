@@ -8,6 +8,8 @@ import eugene.market.client.Session;
 import eugene.market.ontology.message.data.AddOrder;
 import eugene.market.ontology.message.data.DeleteOrder;
 import eugene.market.ontology.message.data.OrderExecuted;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static eugene.market.book.Order.NO_PRICE;
@@ -22,9 +24,11 @@ import static eugene.market.ontology.field.enums.Side.SELL;
  */
 public final class TopOfBookPrinter extends ApplicationAdapter {
 
-    public static final String PRINT_FORMAT = "bid: %d @ %f; ask: %d @ %f\n";
+    public static final String PRINT_FORMAT = "%d,%f,%d,%f";
 
     private final OrderBook orderBook;
+
+    private static final Logger LOG = LoggerFactory.getLogger(TopOfBookPrinter.class);
 
     /**
      * Creates a {@link TopOfBookPrinter} that will print this <code>orderBook</code>.
@@ -38,17 +42,17 @@ public final class TopOfBookPrinter extends ApplicationAdapter {
 
     @Override
     public void toApp(final AddOrder addOrder, final Session session) {
-        System.out.print(print());
+        LOG.info(print());
     }
 
     @Override
     public void toApp(final DeleteOrder deleteOrder, final Session session) {
-        System.out.print(print());
+        LOG.info(print());
     }
 
     @Override
     public void toApp(final OrderExecuted orderExecuted, final Session session) {
-        System.out.print(print());
+        LOG.info(print());
     }
 
     @VisibleForTesting

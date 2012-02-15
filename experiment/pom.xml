@@ -60,6 +60,10 @@
         </dependency>
     </dependencies>
 
+    <modules>
+        <module>vwap-no-error</module>
+    </modules>
+
     <build>
         <plugins>
             <plugin>

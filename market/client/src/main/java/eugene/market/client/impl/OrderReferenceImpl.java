@@ -194,4 +194,25 @@ public final class OrderReferenceImpl implements OrderReference {
         this.cumQty = this.cumQty + quantity;
         this.ordStatus = this.leavesQty.equals(Long.valueOf(0L)) ? FILLED : PARTIALLY_FILLED;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("OrderReferenceImpl");
+        sb.append("[creationTime=").append(creationTime);
+        sb.append(", clOrdID='").append(clOrdID).append('\'');
+        sb.append(", side=").append(side);
+        sb.append(", ordType=").append(ordType);
+        sb.append(", price=").append(price);
+        sb.append(", orderQty=").append(orderQty);
+        sb.append(", ordStatus=").append(ordStatus);
+        sb.append(", avgPx=").append(avgPx);
+        sb.append(", leavesQty=").append(leavesQty);
+        sb.append(", cumQty=").append(cumQty);
+        sb.append(']');
+        return sb.toString();
+    }
 }

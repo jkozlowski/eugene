@@ -5,7 +5,7 @@ import eugene.simulation.ontology.SimulationOntology;
 import eugene.simulation.ontology.Started;
 import eugene.simulation.ontology.Stop;
 import eugene.simulation.ontology.Stopped;
-import eugene.utils.BehaviourResult;
+import eugene.utils.behaviour.BehaviourResult;
 import jade.content.ContentElement;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.OntologyException;

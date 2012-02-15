@@ -5,7 +5,7 @@ import eugene.market.esma.MarketAgent;
 import eugene.market.ontology.field.enums.OrdType;
 import eugene.market.ontology.field.enums.Side;
 import eugene.market.ontology.message.ExecutionReport;
-import eugene.utils.BehaviourResult;
+import eugene.utils.behaviour.BehaviourResult;
 import jade.core.AID;
 import jade.core.Profile;
 import jade.imtp.memory.MemoryProfile;

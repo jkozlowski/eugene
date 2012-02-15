@@ -13,6 +13,7 @@ import jade.wrapper.gateway.GatewayAgent;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,7 +22,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 /**
- * Base class for testing {@link SimulationOntology}.
+ * Tests sending messages from {@link SimulationOntology}.
  *
  * @author Jakub D Kozlowski
  * @since 0.2
@@ -43,8 +44,11 @@ public class MessageTest {
     @DataProvider(name = DATA_PROVIDER)
     public AgentAction[][] setupDictionary() {
         final Set<AgentAction[]> messages = new HashSet<AgentAction[]>();
+        final Calendar start = Calendar.getInstance();
+        final Calendar stop = Calendar.getInstance();
+        stop.add(Calendar.MILLISECOND, 1);
         messages.add(new AgentAction[] {new LogonComplete()});
-        messages.add(new AgentAction[] {new Start()});
+        messages.add(new AgentAction[] {new Start(start.getTime(), stop.getTime())});
         messages.add(new AgentAction[] {new Started()});
         messages.add(new AgentAction[] {new Stop()});
         messages.add(new AgentAction[] {new Stopped()});
@@ -52,7 +56,7 @@ public class MessageTest {
     }
 
     @Test(dataProvider = DATA_PROVIDER)
-    public void testSendLogonComplete(final AgentAction message) throws InterruptedException, StaleProxyException,
+    public void testSendMessage(final AgentAction message) throws InterruptedException, StaleProxyException,
                                                                     IllegalAccessException {
 
         final Profile profile = new MemoryProfile();

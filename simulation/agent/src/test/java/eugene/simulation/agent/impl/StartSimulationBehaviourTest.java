@@ -1,10 +1,11 @@
 package eugene.simulation.agent.impl;
 
 import eugene.market.esma.MarketAgent;
+import eugene.simulation.agent.Tests;
 import eugene.simulation.ontology.SimulationOntology;
 import eugene.simulation.ontology.Start;
 import eugene.simulation.ontology.Started;
-import eugene.utils.BehaviourResult;
+import eugene.utils.behaviour.BehaviourResult;
 import jade.content.ContentElement;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.OntologyException;
@@ -41,9 +42,14 @@ import static org.hamcrest.Matchers.notNullValue;
  */
 public class StartSimulationBehaviourTest {
 
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testConstructorZeroLength() {
+        new StartSimulationBehaviour(0, new BehaviourResult<Set<String>>());
+    }
+    
     @Test(expectedExceptions = NullPointerException.class)
     public void testConstructorNullGuids() {
-        new StartSimulationBehaviour(null);
+        new StartSimulationBehaviour(1, null);
     }
 
     @Test
@@ -155,7 +161,8 @@ public class StartSimulationBehaviourTest {
         final StartAgentsBehaviour start = new StartAgentsBehaviour(init.getResult(), defaultSymbol, agents);
         submit(controller, start);
 
-        final StartSimulationBehaviour startSimulation = new StartSimulationBehaviour(start.getResult());
+        final StartSimulationBehaviour startSimulation = new StartSimulationBehaviour(Tests.SIMULATION_LENGTH,
+                                                                                      start.getResult());
         submit(controller, startSimulation);
         latch.await();
         
