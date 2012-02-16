@@ -12,15 +12,26 @@ In order to ensure the correct operation of a software system over time, all the
 
 These principles apply well to deterministic systems; testing comes down to verifying that a set of inputs will produce a particular set of outputs, because the operation of such a system can be approximated with a deterministic-state machine. The difficulty occurs when dealing with non-deterministic systems; testing involves verifying that a particular set of inputs will produce a correct set of outputs with a statistically significant probability.
 
+Since mid-80s, financial markets have been undergoing a phase of extensive automation of the way order flows are handled. First revolution took place with the introduction of electronic markets with an open access to the limit order book, that replaced traditional, open-outcry markets. However, since mid-2000s, a second revolution is in the making: Trading Algorithms have been replacing human traders in the process of negotiating prices and reducing market impact. Those sophisticated real-time systems, designed to replicate certain trading patterns, have a clear advantage over human traders in the amount of information they can take into account, as well as the speed at which they can take positions. \cite{Lenglet}
+
+Although constantly monitored, their actions take an active part in shaping the market dynamics and sometimes can contribute to 'flash crashes': brief periods of extreme market volatility. On May 6, 2010, U.S. stock market has experienced a sudden price drop of 5\%, followed by a rapid recovery, all in the course of about 30 minutes. One subsequent analysis of that particular incident concluded that:
+\begin{quote}
+[$\ldots$] technological innovation is critical for market development. However, as markets change, appropriate safeguards must be implemented to keep pace with trading practices enabled by advances in technology.\cite{Kirilenko2011}
+\end{quote}
+Overall, lack of rigorous testing of Trading Algorithms and other trading systems does not only affect the P\&L  of the owner of the technology, but may also lead to dangerous instability of the market.
+
 Trading Algorithms are an example of a non-deterministic system that operates in a highly non-deterministic environment. Trading Algorithms are designed to respond to the situation on the market and to have a certain expectation as to the effect their actions will have on the market.
 
-Traditionally, Trading Algorithms are backtested on historical data by rebuilding the past order flows on the order book. Certain characteristics can be measured (e.g. VWAP of the algorithm) and compared to corresponding benchmarks (e.g. VWAP of the Market) to evaluate whether the algorithm is doing the right thing. This approach can give certain level of confidence as to the correct operation of the trading algorithm, however it nonetheless fails to model the reactions of other market participants.
+Traditionally, Trading Algorithms are backtested on historical data by rebuilding the past order flows on the order book. Certain characteristics can be measured (e.g. VWAP of the algorithm) and compared to corresponding benchmarks (e.g. VWAP of the Market) to evaluate whether the algorithm is doing the right thing. This approach can give certain level of confidence as to the correct operation of the trading algorithm, however it nonetheless fails to model the reactions of other market participants. \cite{Coggins2006}
 
-\todo{This section is based on the intro to K. Boer-Sorban thesis, as well as "The economy needs agent-based modelling" article} In recent years, the Agent-Based Modelling (ABM) approach has been applied to understand the complex phenomena observed in economic and financial systems. An Agent-Based Model is a computer simulation of evolving and autonomous software decision makers (agents) that interact through a set of prescribed rules. Applying ABM models to financial markets offers possibility of studying how behaviour of different configurations of agents affects the overall market dynamics.
+In recent years, the Agent-Based Modelling (ABM) approach has been applied to understanding the complex phenomena observed in economic and financial systems. Agent-Based Model is a computer simulation of evolving and autonomous software decision makers (agents) that interact through a set of prescribed rules. Applying ABM models to financial markets offers possibility of studying how behaviour of individual agents affects the overall market dynamics. \cite{Sorban2008} \cite{Farmer2009}
+
+
+
 
 \pagebreak
 
-Agent-Based simulation is a powerful technique that has been successfully applied in many business scenarios, including financial simulations. Among the benefits of agent-based mod- elling is emergent phenomena: behaviour resulting from complex interactions of many indi- vidual entities.Therefore, whereas in a real stock market, the current situation is a result of a complex interaction of many market players, it is hypothesised that an interaction of several types of software agents will result in an emergence of realistic market behaviour.
+Agent-Based simulation is a powerful technique that has been successfully applied in many business scenarios, including financial simulations. Among the benefits of agent-based modelling is emergent phenomena: behaviour resulting from complex interactions of many individual entities.Therefore, whereas in a real stock market, the current situation is a result of a complex interaction of many market players, it is hypothesised that an interaction of several types of software agents will result in an emergence of realistic market behaviour.
 
 \section{Summary}
 \begin{itemize}
