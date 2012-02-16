@@ -6,7 +6,7 @@ The design of a software system gradually evolves over time, as the understandin
 
 The key to controlled evolution of a software system is to rely on rigorous testing and validation at all levels of the architecture: from testing individual units of code (Unit Testing), through testing interfaces between components (Integration Testing), to testing a completely integrated software system (System Testing). 
 
-Recent trends in software development practices even encourage the tests of a functionality to be developed first (Test-Driven Development). It can be argued that such systems tend to have low-coupling, as their design needs to accommodate testing components in isolation, in arbitrary configurations and with control over the dependencies (Mocking, Dependency Injection).
+Recent trends in software development practices even encourage the tests of a functionality to be developed first (Test-Driven Development). It can be argued that such systems tend to have low-coupling, as their design needs to enable testing components in isolation, in arbitrary configurations and with control over the dependencies (Mocking, Dependency Injection).
 
 In order to ensure the correct operation of a software system over time, all the levels of testing need to be automatic and fast, in order to encourage the developers to perform them locally, following every change (Automated Testing, Continuous Integration). Adhering to those principles reduces reliance on manual testing, prevents regression errors in existing functionality (Regression Testing) and improves release time.
 
@@ -22,16 +22,11 @@ Overall, lack of rigorous testing of Trading Algorithms and other trading system
 
 Trading Algorithms are an example of a non-deterministic system that operates in a highly non-deterministic environment. Trading Algorithms are designed to respond to the situation on the market and to have a certain expectation as to the effect their actions will have on the market.
 
-Traditionally, Trading Algorithms are backtested on historical data by rebuilding the past order flows on the order book. Certain characteristics can be measured (e.g. VWAP of the algorithm) and compared to corresponding benchmarks (e.g. VWAP of the Market) to evaluate whether the algorithm is doing the right thing. This approach can give certain level of confidence as to the correct operation of the trading algorithm, however it nonetheless fails to model the reactions of other market participants. \cite{Coggins2006}
+Traditionally, Trading Algorithms are backtested on historical data by rebuilding the past order flows on the limit order book. Certain characteristics can be measured (e.g. VWAP of the algorithm) and compared to corresponding benchmarks (e.g. VWAP of the Market) to evaluate whether the algorithm is doing the right thing. This approach can give certain level of confidence as to the correct operation of the trading algorithm, however it nonetheless fails to model the reactions of other market participants to the order flows coming from the algorithm. \cite{Coggins2006}
 
 In recent years, the Agent-Based Modelling (ABM) approach has been applied to understanding the complex phenomena observed in economic and financial systems. Agent-Based Model is a computer simulation of evolving and autonomous software decision makers (agents) that interact through a set of prescribed rules. Applying ABM models to financial markets offers possibility of studying how behaviour of individual agents affects the overall market dynamics. \cite{Sorban2008} \cite{Farmer2009}
 
-
-
-
 \pagebreak
-
-Agent-Based simulation is a powerful technique that has been successfully applied in many business scenarios, including financial simulations. Among the benefits of agent-based modelling is emergent phenomena: behaviour resulting from complex interactions of many individual entities.Therefore, whereas in a real stock market, the current situation is a result of a complex interaction of many market players, it is hypothesised that an interaction of several types of software agents will result in an emergence of realistic market behaviour.
 
 \section{Summary}
 \begin{itemize}
@@ -42,3 +37,4 @@ Agent-Based simulation is a powerful technique that has been successfully applie
 \item Trading algos are an example of a non-deterministic system; they operate in a non-deterministic market and expect their actions to have a certain effect on it.
 \item  
 \end{itemize}
+Agent-Based simulation is a powerful technique that has been successfully applied in many business scenarios, including financial simulations. Among the benefits of agent-based modelling is emergent phenomena: behaviour resulting from complex interactions of many individual entities.Therefore, whereas in a real stock market, the current situation is a result of a complex interaction of many market players, it is hypothesised that an interaction of several types of software agents will result in an emergence of realistic market behaviour.
