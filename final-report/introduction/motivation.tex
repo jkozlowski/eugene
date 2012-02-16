@@ -14,7 +14,7 @@ These principles apply well to deterministic systems; testing comes down to veri
 
 Since mid-80s, financial markets have been undergoing a phase of extensive automation of the way order flows are handled. First revolution took place with the introduction of electronic markets with an open access to the limit order book, that replaced traditional, open-outcry markets. However, since mid-2000s, a second revolution is in the making: Trading Algorithms have been replacing human traders in the process of negotiating prices and reducing market impact. Those sophisticated real-time systems, designed to replicate certain trading patterns, have a clear advantage over human traders in the amount of information they can take into account, as well as the speed at which they can take positions. \cite{Lenglet}
 
-Although constantly monitored, their actions take an active part in shaping the market dynamics and sometimes can contribute to 'flash crashes': brief periods of extreme market volatility. On May 6, 2010, U.S. stock market has experienced a sudden price drop of 5\%, followed by a rapid recovery, all in the course of about 30 minutes. One subsequent analysis of that particular incident concluded that:
+Although Trading Algorithms are constantly monitored, their actions take an active part in shaping the market dynamics and sometimes can contribute to 'flash crashes': brief periods of extreme market volatility. On May 6, 2010, U.S. stock market has experienced a sudden price drop of 5\%, followed by a rapid recovery, all in the course of about 30 minutes. One subsequent analysis of that incident concluded that:
 \begin{quote}
 [$\ldots$] technological innovation is critical for market development. However, as markets change, appropriate safeguards must be implemented to keep pace with trading practices enabled by advances in technology.\cite{Kirilenko2011}
 \end{quote}
@@ -24,17 +24,13 @@ Trading Algorithms are an example of a non-deterministic system that operates in
 
 Traditionally, Trading Algorithms are backtested on historical data by rebuilding the past order flows on the limit order book. Certain characteristics can be measured (e.g. VWAP of the algorithm) and compared to corresponding benchmarks (e.g. VWAP of the Market) to evaluate whether the algorithm is doing the right thing. This approach can give certain level of confidence as to the correct operation of the trading algorithm, however it nonetheless fails to model the reactions of other market participants to the order flows coming from the algorithm. \cite{Coggins2006}
 
-In recent years, the Agent-Based Modelling (ABM) approach has been applied to understanding the complex phenomena observed in economic and financial systems. Agent-Based Model is a computer simulation of evolving and autonomous software decision makers (agents) that interact through a set of prescribed rules. Applying ABM models to financial markets offers possibility of studying how behaviour of individual agents affects the overall market dynamics. \cite{Sorban2008} \cite{Farmer2009}
+In recent years, the Agent-Based Modelling (ABM) approach has been applied to understanding the complex phenomena observed in economic and financial systems. Agent-Based Model is a computer simulation of evolving and autonomous software decision makers (agents) that interact through a set of prescribed rules. Applying ABM models to financial markets offers possibility of studying how behaviour of individual agents affects the overall market dynamics. \cite{Sorban2008}\cite{Farmer2009} Most widely discussed approaches to Agent-Based Artificial Stock Markets simulate discrete time, call markets and employ various techniques in order to implement traders. \cite{Jha2010}
 
-\pagebreak
+\todo{Work on this part it seems like there is too sudden jump back to trading algos.}
+In an attempt to supplement the strategy of backtesting Trading Algorithms on historical data and address the above mentioned shortcomings, in this report we propose \emph{Eugene}: a real-time, continuous trading session Agent-Based Artificial Stock Market for Validation and System Testing of Trading Algorithms. We aim to demonstrate that using simple market participants can be used for discovering a class of logical polarity programming errors and differentiating between Trading Algorithms.
 
-\section{Summary}
-\begin{itemize}
-\item Software is not like architecture: software systems are not built once and then maintained; they are usually developed over time, with new features constantly added on top of existing features and existing features reimplemented.
-\item Automated Testing and Validation of a software system is very important, because it gives confidence in the system etc.
-\item Traditional testing techniques help verify whether the system works as the designers think it should work; those apply very well to deterministic systems.
-\item However, such techniques only go so far when applied to non-deterministic systems; such system's behaviour needs to be analysed using statistics to verify their behaviour.
-\item Trading algos are an example of a non-deterministic system; they operate in a non-deterministic market and expect their actions to have a certain effect on it.
-\item  
-\end{itemize}
-Agent-Based simulation is a powerful technique that has been successfully applied in many business scenarios, including financial simulations. Among the benefits of agent-based modelling is emergent phenomena: behaviour resulting from complex interactions of many individual entities.Therefore, whereas in a real stock market, the current situation is a result of a complex interaction of many market players, it is hypothesised that an interaction of several types of software agents will result in an emergence of realistic market behaviour.
+We will start by formulating the research objectives and null-hypotheses, followed by a discussion of the research methodologies.
+
+
+
+
