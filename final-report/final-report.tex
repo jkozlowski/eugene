@@ -9,7 +9,7 @@
 \lstset{language=Java, numbers=left, frame=single}
 
 %Set margins
-\usepackage[margin=2.75cm,paper=a4paper,tmargin=3cm,bmargin=3.4cm]{geometry}
+%\usepackage[margin=2.75cm,paper=a4paper,tmargin=3cm,bmargin=3.4cm]{geometry}
 
 %Graphics importer
 \usepackage{graphicx}
@@ -17,23 +17,99 @@
 %Link formatter
 \usepackage{hyperref}
 
-\usepackage{fontspec}
-%\setmainfont{Georgia} 
-\setmonofont[Scale=MatchLowercase]{Menlo}
+
+%% ----------------------------------------------------------------
+%\usepackage{fontspec}
+%%\setmainfont{Georgia} 
+%\setmonofont[Scale=MatchLowercase]{Menlo}
+%
+%\setstretch{1.3}  % It is better to have smaller font and larger line spacing than the other way round
+%
+%\pagestyle{fancy}                       % Sets fancy header and footer
+%\fancyfoot{}                            % Delete current footer settings
+%
+%%\renewcommand{\chaptermark}[1]{         % Lower Case Chapter marker style
+%%  \markboth{\chaptername\ \thechapter.\ #1}}{}} %
+%
+%%\renewcommand{\sectionmark}[1]{         % Lower case Section marker style
+%%  \markright{\thesection.\ #1}}         %
+%
+%\fancyhead[LE,RO]{\bfseries\thepage}    % Page number (boldface) in left on even
+%% pages and right on odd pages
+%\fancyhead[RE]{\bfseries\nouppercase{\leftmark}}      % Chapter in the right on even pages
+%\fancyhead[LO]{\bfseries\nouppercase{\rightmark}}     % Section in the left on odd pages
+%
+%\usepackage{setspace}
+%\usepackage{vmargin}
+%% ----------------------------------------------------------------
+
+%% ----------------------------------------------------------------
+% Essential packages
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{graphicx,color}
+\usepackage[left=1.5in, right=1in, top=1in, bottom=1in, includefoot, headheight=13.6pt]{geometry}
+\usepackage[square, comma, numbers, sort&compress]{natbib}
+\usepackage[T1]{fontenc}
+
+% Optional customisation packages
+
+% Set font
+%\usepackage{mathpazo}
+\usepackage{palatino}
+%\usepackage{times}
+
+\usepackage[hang, small, bf, margin=20pt, tableposition=top]{caption} 
+\setlength{\abovecaptionskip}{0pt}
+
+% Page layout
+%\parindent 0pt
+\parskip 0.5ex
+\renewcommand{\baselinestretch}{1.33}
+\numberwithin{equation}{section}
+\renewcommand{\bibname}{References}
+\renewcommand{\contentsname}{Contents}
+%\pagenumbering{roman}
+%\bibliographystyle{unsrtnat}
+
+% Customising headers (optional) - see fancyhdr.pdf
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\rhead{}
+\lhead{\nouppercase{\textsc{\leftmark}}}
+\renewcommand{\headrulewidth}{0pt}
+\makeatletter
+\renewcommand{\chaptermark}[1]{\markboth{\textsc{\@chapapp}\ \thechapter:\ #1}{}}
+\makeatother
+
+% Customising chapter headings (optional) - see sectsty.pdf
+%\usepackage{sectsty}
+%\chapterfont{\large\sc\centering}
+%\chaptertitlefont{\centering}
+%\subsubsectionfont{\centering}
+
+%%-----------------------------------------------------------------------
 
 
-\title{\textbf{Eugene: Agent-Based Market Simulator for use in Validation and System Testing of Trading Algorithms}}
-\author{Jakub Kozłowski \and Internal Supervisor: Dr. Christopher D. Clack \and External Supervisor: Ian Rose-Miller, UBS}
+%\title{\textbf{Eugene: Agent-Based Market Simulator for use in Validation and System Testing of Trading Algorithms}}
+%\author{Jakub Kozłowski \and Internal Supervisor: Dr. Christopher D. Clack \and External Supervisor: Ian Rose-Miller, UBS}
+%
+%\date{\today}
 
-\date{\today}
+\title{
+\huge{\textbf{Eugene: Agent-Based Market Simulator \\for use in Validation and System Testing \\of Trading Algorithms}}\\[1.2cm]
+\Large{Jakub Koz\l{}owski} \\
+\Large{Internal Supervisor: Dr. Christopher D. Clack} \\
+\Large{External Supervisor: Ian Rose-Miller, UBS} \\[1.2cm]
+\Large{Department of Computer Science \\University College London} \\[1cm]
+\Large{April 2011}
+}
+\author{} \date{}
 
 \begin{document}
 
 \maketitle
 
 \tableofcontents
-
-\pagestyle{fancy}
 
 \begin{onehalfspace}
 
