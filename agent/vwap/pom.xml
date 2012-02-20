@@ -7,12 +7,12 @@
     <parent>
         <groupId>eugene.agent</groupId>
         <artifactId>parent</artifactId>
-        <version>0.6-SNAPSHOT</version>
+        <version>0.7-SNAPSHOT</version>
     </parent>
 
     <groupId>eugene.agent</groupId>
     <artifactId>vwap</artifactId>
-    <version>0.6-SNAPSHOT</version>
+    <version>0.7-SNAPSHOT</version>
     <name>${bundle.namespace}</name>
     <description>Implements the VWAP Trader Agent.</description>
     <packaging>bundle</packaging>

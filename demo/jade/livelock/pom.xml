@@ -7,12 +7,12 @@
     <parent>
         <groupId>eugene.demo.jade</groupId>
         <artifactId>parent</artifactId>
-        <version>0.6-SNAPSHOT</version>
+        <version>0.7-SNAPSHOT</version>
     </parent>
 
     <groupId>eugene.demo.jade</groupId>
     <artifactId>livelock</artifactId>
-    <version>0.6-SNAPSHOT</version>
+    <version>0.7-SNAPSHOT</version>
     <name>${bundle.namespace}</name>
     <description>Implements a livelock simulation:
         Two agents require two resources to complete their operation:

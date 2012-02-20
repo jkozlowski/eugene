@@ -7,13 +7,13 @@
     <parent>
         <groupId>eugene.experiment</groupId>
         <artifactId>parent</artifactId>
-        <version>0.6-SNAPSHOT</version>
+        <version>0.7-SNAPSHOT</version>
         <relativePath>../../../experiment/pom.xml</relativePath>
     </parent>
 
     <groupId>eugene.demo.eugene</groupId>
     <artifactId>noise</artifactId>
-    <version>0.6-SNAPSHOT</version>
+    <version>0.7-SNAPSHOT</version>
     <name>${bundle.namespace}</name>
     <description>Starts a simulation with Noise Trader Agents that runs for a period of time.</description>
     <packaging>bundle</packaging>

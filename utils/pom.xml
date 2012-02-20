@@ -7,12 +7,12 @@
     <parent>
         <groupId>eugene</groupId>
         <artifactId>parent</artifactId>
-        <version>0.6-SNAPSHOT</version>
+        <version>0.7-SNAPSHOT</version>
     </parent>
 
     <groupId>eugene</groupId>
     <artifactId>utils</artifactId>
-    <version>0.6-SNAPSHOT</version>
+    <version>0.7-SNAPSHOT</version>
     <name>${bundle.namespace}</name>
     <description>Various utility classes.</description>
     <packaging>bundle</packaging>

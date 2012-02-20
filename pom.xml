@@ -6,7 +6,7 @@
 
     <groupId>eugene</groupId>
     <artifactId>parent</artifactId>
-    <version>0.6-SNAPSHOT</version>
+    <version>0.7-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>${project.groupId}</name>
     <description>Eugene - Agent-Based Market Simulator for System Testing of Trading Algorithms</description>
@@ -73,7 +73,7 @@
     </repositories>
 
     <properties>
-        <current.version>0.6-SNAPSHOT</current.version>
+        <current.version>0.7-SNAPSHOT</current.version>
         <java.version>1.6</java.version>
         <pax.runner.version>1.7.5</pax.runner.version>
         <pax.confman.version>0.2.2</pax.confman.version>

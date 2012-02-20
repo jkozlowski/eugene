@@ -3,6 +3,29 @@
 * Redmine: http://abfm.cs.ucl.ac.uk/redmine/projects/eugene
 * Jenkins: http://abfm.cs.ucl.ac.uk/jenkins/job/eugene
 
+== 2012-02-20: Release v0.7  - Jakub D Kozlowski <mail@jakub-kozlowski.com>
+
+=== Vwap Agent [agent/vwap]
+* Implemented the Vwap agent.
+
+=== Integration
+* Modules can now run inside an OSGi container.
+
+=== Simulation Ontology [simulation/ontology]
+* Added startTime and stopTime to Start message.
+
+=== Simulation Agent [simulation/agent]
+* Sends startTime and stopTime with Start message.
+
+=== Client API [market/client]
+* Implemented OrderReference that is updated by the Session and clients can use to track their orders.
+
+=== Market Agent [market/esma]
+* Added logging to file.
+
+=== Repository improvements
+* Moved all the documentation into a new branch (documentation).
+
 == 2012-02-06: Release v0.6  - Jakub D Kozlowski <mail@jakub-kozlowski.com>
 
 === Order Book [market/book]
