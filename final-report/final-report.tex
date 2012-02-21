@@ -1,9 +1,12 @@
 \documentclass[a4, 11pt, english]{report}
-\usepackage{classicthesis}
+\usepackage{subfig}
+\usepackage[eulerchapternumbers,subfig,beramono,%
+eulermath,pdfspacing, dottedtoc]{classicthesis}
+\usepackage{arsclassica}
 \usepackage[utf8]{inputenc}
 \usepackage{listings}
 \usepackage{todonotes}
-\usepackage{fancyhdr}
+%\usepackage{fancyhdr}
 \usepackage[utf8]{fontenc}
 \usepackage{babel}
 \usepackage{setspace}
@@ -13,7 +16,7 @@
 %\usepackage[margin=2.75cm,paper=a4paper,tmargin=3cm,bmargin=3.4cm]{geometry}
 
 %Graphics importer
-\usepackage{graphicx}
+%\usepackage{graphicx}
 
 %Link formatter
 \usepackage{hyperref}
@@ -21,8 +24,8 @@
 %% ----------------------------------------------------------------
 % Essential packages
 \usepackage{amsmath, amssymb, amsthm}
-\usepackage{graphicx,color}
-\usepackage[left=1.5in, right=1in, top=1in, bottom=1in, includefoot, headheight=13.6pt]{geometry}
+%\usepackage{graphicx,color}
+%\usepackage[left=1.5in, right=1in, top=1in, bottom=1in, includefoot, headheight=13.6pt]{geometry}
 \usepackage[square, comma, numbers, sort&compress]{natbib}
 \usepackage[T1]{fontenc}
 
@@ -58,13 +61,14 @@
 %%-----------------------------------------------------------------------
 
 \title{
-\begin{center}
-\line(1,0){250}
-\end{center}
+%\begin{center}
+%\line(1,0){250}
+%\end{center}
 \huge{\textbf{Eugene: Agent-Based Market Simulator \\for use in Validation and System Testing \\of Trading Algorithms}}
-\begin{center}
-\line(1,0){250}
-\end{center}\\[1.2cm]
+%\begin{center}
+%\line(1,0){250}
+%\end{center}
+\\[1.2cm]
 \Large{Jakub Koz\l{}owski} \\
 \Large{Internal Supervisor: Dr. Christopher D. Clack} \\
 \Large{External Supervisor: Ian Rose-Miller, UBS} \\[1.2cm]
@@ -86,6 +90,7 @@
 %\begin{onehalfspace}
 
 %\pagestyle{fancy}
+%\clearscrheadfoot
 %\rhead{}
 %\lhead{\nouppercase{\textsc{\leftmark}}}
 %\renewcommand{\headrulewidth}{0.5pt}
