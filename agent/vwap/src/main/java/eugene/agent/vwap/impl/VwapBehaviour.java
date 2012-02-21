@@ -33,7 +33,6 @@ import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.Iterators.peekingIterator;
 import static eugene.market.client.Messages.newLimit;
 import static eugene.market.client.OrderReferenceListeners.proxy;
-import static java.math.BigDecimal.valueOf;
 
 /**
  * Implements the VWAP algorithm.
@@ -109,7 +108,8 @@ public final class VwapBehaviour extends FSMBehaviour {
         final OrderReferenceListenerProxy proxy = proxy(vwapStatus);
         LOG.info("Start trading: {}", vwapStatus);
 
-        final long LIMIT_AGE_THRESHOLD = vwapStatus.getBucketSize().divideToIntegralValue(valueOf(2L)).longValue();
+//        final long LIMIT_AGE_THRESHOLD = vwapStatus.getBucketSize().divideToIntegralValue(valueOf(2L)).longValue();
+        final long LIMIT_AGE_THRESHOLD = 3000;
         LOG.info("LIMIT_AGE_THRESHOLD={}", LIMIT_AGE_THRESHOLD);
 
         final PeekingIterator<VwapBucket> bucketIterator = peekingIterator(vwapStatus.getVwapBuckets().iterator());
