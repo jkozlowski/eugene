@@ -1,4 +1,5 @@
 \documentclass[a4, 11pt, english]{report}
+\usepackage{classicthesis}
 \usepackage[utf8]{inputenc}
 \usepackage{listings}
 \usepackage{todonotes}
@@ -32,27 +33,27 @@
 %\usepackage{palatino}
 %\usepackage{times}
 
-\usepackage[hang, small, bf, margin=20pt, tableposition=top]{caption} 
-\setlength{\abovecaptionskip}{0pt}
+%\usepackage[hang, small, bf, margin=20pt, tableposition=top]{caption} 
+%\setlength{\abovecaptionskip}{0pt}
 
 % Page layout
 %\parindent 0pt
-\parskip 0.5ex
-\renewcommand{\baselinestretch}{1.33}
-\numberwithin{equation}{section}
-\renewcommand{\bibname}{References}
-\renewcommand{\contentsname}{Contents}
+%\parskip 0.5ex
+%\renewcommand{\baselinestretch}{1.33}
+%\numberwithin{equation}{section}
+%\renewcommand{\bibname}{References}
+%\renewcommand{\contentsname}{Contents}
 %\pagenumbering{roman}
 
 
 % Customising headers (optional) - see fancyhdr.pdf
-\usepackage{fancyhdr}
+%\usepackage{fancyhdr}
 
 % Customising chapter headings (optional) - see sectsty.pdf
-\usepackage{sectsty}
-\chapterfont{\large\sc}
-\chaptertitlefont{}
-\subsubsectionfont{}
+%\usepackage{sectsty}
+%\chapterfont{\large\sc}
+%\chaptertitlefont{}
+%\subsubsectionfont{}
 
 %%-----------------------------------------------------------------------
 
@@ -77,20 +78,20 @@
 \maketitle
 
 
-\pagestyle{fancy}
-
-\renewcommand{\headrulewidth}{}
+%\pagestyle{fancy}
+%
+%\renewcommand{\headrulewidth}{}
 \tableofcontents
 
-\begin{onehalfspace}
+%\begin{onehalfspace}
 
-\pagestyle{fancy}
-\rhead{}
-\lhead{\nouppercase{\textsc{\leftmark}}}
-\renewcommand{\headrulewidth}{0.5pt}
-\makeatletter
-\renewcommand{\chaptermark}[1]{\markboth{\textsc{\@chapapp}\ \thechapter:\ #1}{}}
-\makeatother
+%\pagestyle{fancy}
+%\rhead{}
+%\lhead{\nouppercase{\textsc{\leftmark}}}
+%\renewcommand{\headrulewidth}{0.5pt}
+%\makeatletter
+%\renewcommand{\chaptermark}[1]{\markboth{\textsc{\@chapapp}\ \thechapter:\ #1}{}}
+%\makeatother
 
 \chapter{Introduction}
 \label{introduction}
@@ -132,15 +133,15 @@
 \chapter{Conclusion and Further Work}
 \label{conclusion}
 
-\end{onehalfspace}
+%\end{onehalfspace}
 
-\begin{singlespace}
-\begin{footnotesize}
-\begin{twocolumn}
+%\begin{singlespace}
+%\begin{footnotesize}
+%\begin{twocolumn}
 \bibliographystyle{ieeetr}
 \bibliography{references}
-\end{twocolumn}
-\end{footnotesize}
-\end{singlespace}
+%\end{twocolumn}
+%\end{footnotesize}
+%\end{singlespace}
 
 \end{document}
