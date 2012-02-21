@@ -14,7 +14,7 @@
 % 1. Configure classicthesis for your needs here, e.g., remove "drafting" below 
 % in order to deactivate the time-stamp on the pages
 % ****************************************************************************************************
-\PassOptionsToPackage{eulerchapternumbers,listings,drafting,
+\PassOptionsToPackage{eulerchapternumbers,listings,drafting,dottedtoc
 				 pdfspacing,floatperchapter,linedheaders,
 				 subfig,beramono,eulermath,parts}{classicthesis}										
 % ********************************************************************
@@ -99,6 +99,8 @@
 %\renewcommand*{\acsfont}[1]{\textssc{#1}} % for MinionPro
 \renewcommand{\bflabel}[1]{{#1}\hfill} % fix the list of acronyms
 % ****************************************************************************************************
+
+
 
 
 % ****************************************************************************************************
@@ -251,6 +253,9 @@
 % Last, but not least...
 % ********************************************************************
 \usepackage{classicthesis} 
+
+% Use arsclassica as well
+\usepackage[dottedtoc]{arsclassica}
 % ****************************************************************************************************
 
 
@@ -276,3 +281,15 @@
 %\usepackage{lmodern} % <-- no osf support :-(
 %\usepackage[urw-garamond]{mathdesign} <-- no osf support :-(
 % ****************************************************************************************************
+
+% ****************************************************************************************************
+% 9. Packages enabled by me
+% ****************************************************************************************************
+\usepackage{listings}
+\usepackage{todonotes}
+\usepackage{fancyhdr}
+\usepackage[utf8]{fontenc}
+\usepackage{babel}
+
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage[T1]{fontenc}

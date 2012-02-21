@@ -1,48 +1,29 @@
 \documentclass[english]{report}
 \input{classicthesis-config}
-\usepackage{arsclassica}
-\usepackage{listings}
-\usepackage{todonotes}
-\usepackage{fancyhdr}
-\usepackage[utf8]{fontenc}
-\usepackage{babel}
-
-\usepackage{amsmath, amssymb, amsthm}
-\usepackage[T1]{fontenc}
-
-\title{
-\huge{\textbf{Eugene: Agent-Based Market Simulator \\for use in Validation and System Testing \\of Trading Algorithms}}
-\\[1.2cm]
-\Large{Jakub Koz\l{}owski} \\
-\Large{Internal Supervisor: Dr. Christopher D. Clack} \\
-\Large{External Supervisor: Ian Rose-Miller, UBS} \\[1.2cm]
-\Large{Department of Computer Science \\University College London} \\[1cm]
-\Large{April 2011}
-}
-\author{} \date{}
 
 \begin{document}
+\pagestyle{plain}
 
-\maketitle
+\include{FrontBackmatter/Titlepage}
+\include{FrontBackmatter/Contents}
 
-\tableofcontents
-
+\pagestyle{scrheadings}
 \chapter{Introduction}
 
-\label{introduction}
-\input{introduction/motivation}
-\input{introduction/null-hypotheses}
-\input{introduction/research-methodology}
-\input{introduction/outline}
+\label{Chapters/introduction}
+\input{Chapters/introduction/motivation}
+\input{Chapters/introduction/null-hypotheses}
+\input{Chapters/introduction/research-methodology}
+\input{Chapters/introduction/outline}
 
 \chapter{Background}
 \label{background}
 
 \chapter{Analysis and Design}
-\label{analysis-and-design}
-\input{analysis-and-design/trading-system-design}
-\input{analysis-and-design/automated-trading-testing-environment}
-\input{analysis-and-design/eugene}
+\label{Chapters/analysis-and-design}
+\input{Chapters/analysis-and-design/trading-system-design}
+\input{Chapters/analysis-and-design/automated-trading-testing-environment}
+\input{Chapters/analysis-and-design/eugene}
 
 \chapter{Implementation}
 \label{implementation}
@@ -74,7 +55,7 @@
 %\begin{footnotesize}
 %\begin{twocolumn}
 \bibliographystyle{ieeetr}
-\bibliography{references}
+\bibliography{Bibliography}
 %\end{twocolumn}
 %\end{footnotesize}
 %\end{singlespace}
