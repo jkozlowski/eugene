@@ -1,73 +1,17 @@
-\documentclass[a4, 11pt, english]{report}
-\usepackage{subfig}
-\usepackage[eulerchapternumbers,subfig,beramono,%
-eulermath,pdfspacing, dottedtoc]{classicthesis}
+\documentclass[english]{report}
+\input{classicthesis-config}
 \usepackage{arsclassica}
-\usepackage[utf8]{inputenc}
 \usepackage{listings}
 \usepackage{todonotes}
-%\usepackage{fancyhdr}
+\usepackage{fancyhdr}
 \usepackage[utf8]{fontenc}
 \usepackage{babel}
-\usepackage{setspace}
-\lstset{language=Java, numbers=left, frame=single}
 
-%Set margins
-%\usepackage[margin=2.75cm,paper=a4paper,tmargin=3cm,bmargin=3.4cm]{geometry}
-
-%Graphics importer
-%\usepackage{graphicx}
-
-%Link formatter
-\usepackage{hyperref}
-
-%% ----------------------------------------------------------------
-% Essential packages
 \usepackage{amsmath, amssymb, amsthm}
-%\usepackage{graphicx,color}
-%\usepackage[left=1.5in, right=1in, top=1in, bottom=1in, includefoot, headheight=13.6pt]{geometry}
-\usepackage[square, comma, numbers, sort&compress]{natbib}
 \usepackage[T1]{fontenc}
 
-% Optional customisation packages
-
-% Set font
-%\usepackage{mathpazo}
-%\usepackage{palatino}
-%\usepackage{times}
-
-%\usepackage[hang, small, bf, margin=20pt, tableposition=top]{caption} 
-%\setlength{\abovecaptionskip}{0pt}
-
-% Page layout
-%\parindent 0pt
-%\parskip 0.5ex
-%\renewcommand{\baselinestretch}{1.33}
-%\numberwithin{equation}{section}
-%\renewcommand{\bibname}{References}
-%\renewcommand{\contentsname}{Contents}
-%\pagenumbering{roman}
-
-
-% Customising headers (optional) - see fancyhdr.pdf
-%\usepackage{fancyhdr}
-
-% Customising chapter headings (optional) - see sectsty.pdf
-%\usepackage{sectsty}
-%\chapterfont{\large\sc}
-%\chaptertitlefont{}
-%\subsubsectionfont{}
-
-%%-----------------------------------------------------------------------
-
 \title{
-%\begin{center}
-%\line(1,0){250}
-%\end{center}
 \huge{\textbf{Eugene: Agent-Based Market Simulator \\for use in Validation and System Testing \\of Trading Algorithms}}
-%\begin{center}
-%\line(1,0){250}
-%\end{center}
 \\[1.2cm]
 \Large{Jakub Koz\l{}owski} \\
 \Large{Internal Supervisor: Dr. Christopher D. Clack} \\
@@ -81,24 +25,10 @@ eulermath,pdfspacing, dottedtoc]{classicthesis}
 
 \maketitle
 
-
-%\pagestyle{fancy}
-%
-%\renewcommand{\headrulewidth}{}
 \tableofcontents
 
-%\begin{onehalfspace}
-
-%\pagestyle{fancy}
-%\clearscrheadfoot
-%\rhead{}
-%\lhead{\nouppercase{\textsc{\leftmark}}}
-%\renewcommand{\headrulewidth}{0.5pt}
-%\makeatletter
-%\renewcommand{\chaptermark}[1]{\markboth{\textsc{\@chapapp}\ \thechapter:\ #1}{}}
-%\makeatother
-
 \chapter{Introduction}
+
 \label{introduction}
 \input{introduction/motivation}
 \input{introduction/null-hypotheses}
