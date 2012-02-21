@@ -42,7 +42,7 @@ public class ExperimentActivator implements BundleActivator {
             valueOf(0.08), valueOf(0.08), valueOf(0.08), valueOf(0.08), valueOf(0.08), valueOf(0.12)
     };
 
-    final Long vwapTargetVolume = 20000L;
+    final Long vwapTargetVolume = 200000L;
 
     private BundleContext ctx;
 

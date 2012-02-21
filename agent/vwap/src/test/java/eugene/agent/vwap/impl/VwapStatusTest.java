@@ -4,6 +4,7 @@ import eugene.agent.vwap.VwapExecution;
 import eugene.market.book.Order;
 import eugene.market.client.OrderReference;
 import eugene.market.client.Session;
+import eugene.market.ontology.field.LastPx;
 import eugene.market.ontology.field.LastQty;
 import eugene.market.ontology.message.ExecutionReport;
 import org.testng.annotations.Test;
@@ -15,6 +16,7 @@ import java.util.SortedSet;
 
 import static eugene.agent.vwap.VwapExecutions.newVwapExecution;
 import static eugene.agent.vwap.impl.VwapStatus.getBucketSize;
+import static eugene.market.ontology.Defaults.defaultLastPx;
 import static eugene.market.ontology.Defaults.defaultOrdQty;
 import static eugene.market.ontology.field.enums.Side.BUY;
 import static java.math.BigDecimal.valueOf;
@@ -119,6 +121,7 @@ public class VwapStatusTest {
         final VwapExecution execution = newVwapExecution(defaultOrdQty, BUY, defaultTargets);
         final ExecutionReport executionReport = new ExecutionReport();
         executionReport.setLastQty(new LastQty(defaultOrdQty + 1L));
+        executionReport.setLastPx(new LastPx(defaultLastPx));
         final VwapStatus vwapStatus = new VwapStatus(deadline, execution);
         vwapStatus.tradeEvent(executionReport, mock(OrderReference.class), mock(Session.class));
     }
@@ -128,6 +131,7 @@ public class VwapStatusTest {
         final VwapExecution execution = newVwapExecution(defaultOrdQty, BUY, BigDecimal.ONE);
         final ExecutionReport executionReport = new ExecutionReport();
         executionReport.setLastQty(new LastQty(defaultOrdQty));
+        executionReport.setLastPx(new LastPx(defaultLastPx));
         final VwapStatus vwapStatus = new VwapStatus(deadline, execution);
         vwapStatus.tradeEvent(executionReport, mock(OrderReference.class), mock(Session.class));
     }
@@ -137,6 +141,7 @@ public class VwapStatusTest {
         final VwapExecution execution = newVwapExecution(defaultOrdQty, BUY, BigDecimal.ONE);
         final ExecutionReport executionReport = new ExecutionReport();
         executionReport.setLastQty(new LastQty(defaultOrdQty - 1L));
+        executionReport.setLastPx(new LastPx(defaultLastPx));
         final VwapStatus vwapStatus = new VwapStatus(deadline, execution);
         vwapStatus.tradeEvent(executionReport, mock(OrderReference.class), mock(Session.class));
     }

@@ -125,10 +125,11 @@ public final class VwapStatus extends OrderReferenceListenerAdapter {
 
         this.cumVolume += executionReport.getLastQty().getValue();
 
-        LOG.info("tradeEvent[clOrdID={}, lastQty={}, cumVolume={}]",
+        LOG.info("tradeEvent[clOrdID={}, lastQty={}, lastPx={}, cumVolume={}]",
                  new Object[]{
                          orderReference.getClOrdID(),
                          executionReport.getLastQty().getValue(),
+                         executionReport.getLastPx().getValue(),
                          this.cumVolume
                  }
         );
