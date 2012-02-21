@@ -197,11 +197,13 @@ public class MarketDataServer extends CyclicBehaviour implements MarketDataEvent
         sendToAll(orderExecuted(limitOrderStatus, execution));
 
         LOG.info(EXECUTION,
-                 "{},{},{},{},{},{},{}",
+                 "{},{},{},{},{},{},{},{},{}",
                  new Object[]{
                          executionEvent.getTime(),
+                         newOrderTuple.getACLMessage().getSender().getLocalName(),
                          newOrderStatus.getOrder().getOrderID(),
                          newOrderStatus.getOrder().getSide(),
+                         limitOrderTuple.getACLMessage().getSender().getLocalName(),
                          limitOrderStatus.getOrder().getOrderID(),
                          limitOrderStatus.getOrder().getSide(),
                          execution.getQuantity(),
