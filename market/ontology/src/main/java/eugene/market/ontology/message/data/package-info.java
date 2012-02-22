@@ -1,4 +1,9 @@
 /**
+ * Copyright 2012 Jakub Dominik Kozlowski <mail@jakub-kozlowski.com>
+ * Distributed under the The MIT License.
+ * (See accompanying file LICENSE.txt)
+ */
+/**
  * Classes that represent messages that Agents can send in order to request Market Data updates and the Market to
  * in order to publish Market Data Updates.
  *

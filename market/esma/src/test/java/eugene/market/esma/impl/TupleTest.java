@@ -1,3 +1,8 @@
+/**
+ * Copyright 2012 Jakub Dominik Kozlowski <mail@jakub-kozlowski.com>
+ * Distributed under the The MIT License.
+ * (See accompanying file LICENSE.txt)
+ */
 package eugene.market.esma.impl;
 
 import eugene.market.esma.impl.Repository.Tuple;

@@ -1,0 +1,3 @@
+Copyright ${year} ${user.name} <${email}>
+Distributed under the The MIT License.
+(See accompanying file LICENSE.txt)

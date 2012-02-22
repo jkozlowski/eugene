@@ -1,3 +1,8 @@
+/**
+ * Copyright 2012 Jakub Dominik Kozlowski <mail@jakub-kozlowski.com>
+ * Distributed under the The MIT License.
+ * (See accompanying file LICENSE.txt)
+ */
 package eugene.market.client;
 
 import eugene.market.ontology.field.enums.ExecType;

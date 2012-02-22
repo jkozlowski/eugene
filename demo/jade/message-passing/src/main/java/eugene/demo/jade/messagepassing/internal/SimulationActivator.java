@@ -1,3 +1,8 @@
+/**
+ * Copyright 2012 Jakub Dominik Kozlowski <mail@jakub-kozlowski.com>
+ * Distributed under the The MIT License.
+ * (See accompanying file LICENSE.txt)
+ */
 package eugene.demo.jade.messagepassing.internal;
 
 import eugene.demo.jade.messagepassing.MessagePassingAgent;
