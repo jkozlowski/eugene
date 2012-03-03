@@ -36,15 +36,15 @@ public class PlaceOrderBehaviour extends TickerBehaviour {
 
     public static final int MIN_SPREAD = 1;
 
-    public static final double DEFAULT_TICK = 1.0D;
+    public static final double DEFAULT_TICK = 0.001D;
 
     public static final double DEFAULT_CURRENT_PRICE = 100.0D;
 
     public static final Integer MAX_SLEEP = 500;
 
-    public static final int MAX_ORDER_QTY = 3000;
+    public static final int MAX_ORDER_QTY = 10;
 
-    public static final int MIN_ORDER_QTY = 1000;
+    public static final int MIN_ORDER_QTY = 4;
 
     private final Random generator;
 

@@ -8,6 +8,8 @@ package eugene.experiment.vwapnoerror.internal;
 import com.google.common.collect.Sets;
 import eugene.agent.noise.NoiseTraderAgent;
 import eugene.agent.vwap.VwapAgent;
+import eugene.market.book.Order;
+import eugene.market.ontology.field.enums.OrdType;
 import eugene.market.ontology.field.enums.Side;
 import eugene.simulation.agent.SimulationAgent;
 import jade.core.Agent;
@@ -20,12 +22,16 @@ import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.HashSet;
 import java.util.Set;
 
 import static eugene.agent.vwap.VwapExecutions.newVwapExecution;
 import static java.math.BigDecimal.valueOf;
-import static java.util.Collections.EMPTY_SET;
 
 /**
  * Starts a simulation with {@link ExperimentActivator#NUMBER_OF_TRADERS} {@link NoiseTraderAgent}s and one {@link
@@ -47,7 +53,7 @@ public class ExperimentActivator implements BundleActivator {
             valueOf(0.08), valueOf(0.08), valueOf(0.08), valueOf(0.08), valueOf(0.08), valueOf(0.12)
     };
 
-    final Long vwapTargetVolume = 200000L;
+    final Long vwapTargetVolume = 1000L;
 
     private BundleContext ctx;
 
@@ -68,6 +74,24 @@ public class ExperimentActivator implements BundleActivator {
     private void startSimulation(final ServiceReference sr) {
 
         try {
+
+            final InputStream in = getClass().getClassLoader().getResourceAsStream("orders.csv");
+            final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+
+            final Set<Order> orders = new HashSet<Order>();
+            String line;
+            while (null != (line = reader.readLine())) {
+                final String[] parts = line.split(",\\s*");
+                assert 3 == parts.length;
+
+                final Double price = BigDecimal.valueOf(Double.valueOf(parts[0]))
+                        .setScale(3, RoundingMode.HALF_UP).doubleValue();
+                final Long ordQty = Long.valueOf(parts[1]);
+                final Side side = Integer.valueOf(parts[2]) == 1 ? Side.SELL : Side.BUY;
+                final Order order = new Order(1L, OrdType.LIMIT, side, ordQty, price);
+                orders.add(order);
+            }
+
             final Set<Agent> agents = Sets.newHashSet();
             for (int i = 0; i < NUMBER_OF_TRADERS; i++) {
                 agents.add(new NoiseTraderAgent());
@@ -76,7 +100,7 @@ public class ExperimentActivator implements BundleActivator {
             agents.add(new VwapAgent(newVwapExecution(vwapTargetVolume, Side.BUY, targets)));
 
             final JadeRuntimeService jade = (JadeRuntimeService) ctx.getService(sr);
-            final SimulationAgent simulationAgent = new SimulationAgent(SYMBOL, LENGTH, EMPTY_SET, agents);
+            final SimulationAgent simulationAgent = new SimulationAgent(SYMBOL, LENGTH, orders, agents);
             final AgentController controller = jade.acceptNewAgent(SimulationAgent.NAME, simulationAgent);
             controller.start();
         }

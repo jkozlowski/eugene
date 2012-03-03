@@ -60,8 +60,9 @@
                         <Bundle-Activator>${bundle.namespace}.internal.ExperimentActivator</Bundle-Activator>
                         <Bundle-Description>${project.description}</Bundle-Description>
                         <Import-Package>com.google.common.collect, eugene.agent.noise, eugene.market.book,
-                            eugene.market.client, eugene.simulation.agent, jade.core, jade.core.behaviours,
-                            jade.osgi.service.agentFactory, jade.osgi.service.runtime, jade.wrapper, org.osgi.framework
+                            eugene.market.client, eugene.market.ontology.field.enums, eugene.simulation.agent,
+                            jade.core, jade.core.behaviours, jade.osgi.service.agentFactory,
+                            jade.osgi.service.runtime, jade.wrapper, org.osgi.framework
                         </Import-Package>
                     </instructions>
                 </configuration>
