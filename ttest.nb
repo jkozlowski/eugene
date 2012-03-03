@@ -1,0 +1,643 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 8.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[     26844,        634]
+NotebookOptionsPosition[     25677,        594]
+NotebookOutlinePosition[     26031,        610]
+CellTagsIndexPosition[     25988,        607]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"ClearAll", "[", 
+   RowBox[{
+   "vwapnoerror", ",", " ", "vwaperror", ",", "vwapnoerrordiff", ",", " ", 
+    "vwaperrordiff"}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"vwapnoerror", "=", 
+    RowBox[{"{", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"100.002", ",", " ", "100.002"}], "}"}], ",", " ", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"100.002", ",", " ", "100.001"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"100.000", ",", " ", "99.999"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"100.000", ",", "100.002"}], "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"100.000", ",", " ", "100.001"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"100.004", ",", " ", "100.003"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"100.002", ",", " ", "100.001"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"100.002", ",", " ", "100.002"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"100.002", ",", " ", "100.001"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"100.000", ",", " ", "100.000"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"100.002", ",", " ", "100.001"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"100.003", ",", " ", "100.002"}], "}"}]}], 
+     "\[IndentingNewLine]", "}"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"vwaperror", " ", "=", " ", 
+    RowBox[{"{", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"100.003", ",", " ", "100.004"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"100.001", ",", " ", "100.002"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"100.002", ",", " ", "100.003"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"100.002", ",", " ", "100.003"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"100.000", ",", " ", "100.001"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"100.002", ",", " ", "100.003"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"99.998", ",", " ", "99.999"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"100.001", ",", " ", "100.003"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"100.004", ",", " ", "100.005"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"100.001", ",", " ", "100.002"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"100.002", ",", " ", "100.003"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"100.003", ",", " ", "100.003"}], "}"}]}], 
+     "\[IndentingNewLine]", "}"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Length", "[", "vwapnoerror", "]"}], "\[Equal]", 
+   RowBox[{"Length", "[", "vwaperror", "]"}]}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{"vwapnoerrordiff", " ", "=", " ", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"#", "[", 
+      RowBox[{"[", "1", "]"}], "]"}], "-", 
+     RowBox[{"#", "[", 
+      RowBox[{"[", "2", "]"}], "]"}]}], "&"}], "/@", 
+   "vwapnoerror"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"vwaperrordiff", " ", "=", " ", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"#", "[", 
+       RowBox[{"[", "1", "]"}], "]"}], "-", 
+      RowBox[{"#", "[", 
+       RowBox[{"[", "2", "]"}], "]"}]}], "&"}], "/@", "vwaperror"}]}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Print", "[", "\"\<Vwap no error test for normality:\>\"", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Print", "[", 
+   RowBox[{"KolmogorovSmirnovTest", "[", 
+    RowBox[{
+    "vwapnoerrordiff", " ", ",", "Automatic", ",", "\"\<TestDataTable\>\""}], 
+    "]"}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Print", "[", 
+    RowBox[{"KolmogorovSmirnovTest", "[", 
+     RowBox[{
+     "vwapnoerrordiff", " ", ",", "Automatic", ",", 
+      "\"\<TestConclusion\>\""}], "]"}], "]"}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Print", "[", "\"\<Vwap error test for normality:\>\"", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Print", "[", 
+   RowBox[{"KolmogorovSmirnovTest", "[", 
+    RowBox[{
+    "vwaperrordiff", " ", ",", "Automatic", ",", "\"\<TestDataTable\>\""}], 
+    "]"}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Print", "[", 
+    RowBox[{"KolmogorovSmirnovTest", "[", 
+     RowBox[{
+     "vwaperrordiff", " ", ",", "Automatic", ",", "\"\<TestConclusion\>\""}], 
+     "]"}], "]"}], ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Length", "[", "vwapnoerrordiff", "]"}], "\[Equal]", 
+   RowBox[{"Length", "[", "vwaperrordiff", "]"}]}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Print", "[", 
+   RowBox[{"MannWhitneyTest", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"vwapnoerrordiff", ",", " ", "vwaperrordiff"}], "}"}], ",", 
+     "Automatic", ",", "\"\<TestDataTable\>\""}], "]"}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Print", "[", 
+   RowBox[{"MannWhitneyTest", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"vwapnoerrordiff", ",", " ", "vwaperrordiff"}], "}"}], ",", 
+     "Automatic", ",", "\"\<TestConclusion\>\""}], "]"}], "]"}], 
+  ";"}]}], "Input",
+ CellChangeTimes->{{3.539790765916649*^9, 3.539791297283359*^9}, {
+  3.539791354908762*^9, 3.539791417167955*^9}, {3.53979145972542*^9, 
+  3.539791586544425*^9}, {3.539791636946889*^9, 3.539791639121315*^9}, {
+  3.53979168595236*^9, 3.5397917319905033`*^9}, {3.539791770651393*^9, 
+  3.539791787413125*^9}, {3.539791839074695*^9, 3.53979183942544*^9}, {
+  3.539792078577084*^9, 3.539792146603544*^9}, {3.539792218657617*^9, 
+  3.5397922195201406`*^9}, {3.539792540206846*^9, 3.5397925590005693`*^9}}],
+
+Cell[BoxData["True"], "Output",
+ CellChangeTimes->{
+  3.539791298111438*^9, {3.539791484759549*^9, 3.539791493961905*^9}, {
+   3.5397915257814007`*^9, 3.539791546046495*^9}, 3.539791587496107*^9, 
+   3.539791640451612*^9, 3.539791787812478*^9, 3.539791839878914*^9, 
+   3.539792080265312*^9, {3.5397921194520807`*^9, 3.5397921480448923`*^9}, 
+   3.539792220631792*^9, 3.5397925604125347`*^9}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+  "0.`", ",", "0.000999999999990564`", ",", "0.0010000000000047748`", ",", 
+   RowBox[{"-", "0.001999999999995339`"}], ",", 
+   RowBox[{"-", "0.0010000000000047748`"}], ",", "0.0010000000000047748`", 
+   ",", "0.000999999999990564`", ",", "0.`", ",", "0.000999999999990564`", 
+   ",", "0.`", ",", "0.000999999999990564`", ",", "0.0010000000000047748`"}], 
+  "}"}]], "Output",
+ CellChangeTimes->{
+  3.539791298111438*^9, {3.539791484759549*^9, 3.539791493961905*^9}, {
+   3.5397915257814007`*^9, 3.539791546046495*^9}, 3.539791587496107*^9, 
+   3.539791640451612*^9, 3.539791787812478*^9, 3.539791839878914*^9, 
+   3.539792080265312*^9, {3.5397921194520807`*^9, 3.5397921480448923`*^9}, 
+   3.539792220631792*^9, 3.539792560414133*^9}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"-", "0.0010000000000047748`"}], ",", 
+   RowBox[{"-", "0.000999999999990564`"}], ",", 
+   RowBox[{"-", "0.0010000000000047748`"}], ",", 
+   RowBox[{"-", "0.0010000000000047748`"}], ",", 
+   RowBox[{"-", "0.0010000000000047748`"}], ",", 
+   RowBox[{"-", "0.0010000000000047748`"}], ",", 
+   RowBox[{"-", "0.000999999999990564`"}], ",", 
+   RowBox[{"-", "0.001999999999995339`"}], ",", 
+   RowBox[{"-", "0.000999999999990564`"}], ",", 
+   RowBox[{"-", "0.000999999999990564`"}], ",", 
+   RowBox[{"-", "0.0010000000000047748`"}], ",", "0.`"}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.539791298111438*^9, {3.539791484759549*^9, 3.539791493961905*^9}, {
+   3.5397915257814007`*^9, 3.539791546046495*^9}, 3.539791587496107*^9, 
+   3.539791640451612*^9, 3.539791787812478*^9, 3.539791839878914*^9, 
+   3.539792080265312*^9, {3.5397921194520807`*^9, 3.5397921480448923`*^9}, 
+   3.539792220631792*^9, 3.5397925604155073`*^9}],
+
+Cell[BoxData["\<\"Vwap no error test for normality:\"\>"], "Print",
+ CellChangeTimes->{{3.539791484860838*^9, 3.539791493966848*^9}, {
+   3.5397915258383017`*^9, 3.539791546049782*^9}, 3.53979158750108*^9, 
+   3.539791640634325*^9, 3.5397917878140993`*^9, 3.539791839880307*^9, 
+   3.5397920802670317`*^9, {3.539792119453676*^9, 3.5397921480466213`*^9}, 
+   3.539792220636118*^9, 3.539792560416954*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"KolmogorovSmirnovTest", "::", "ties"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Ties exist in the data and will be ignored for the \
+\[NoBreak]\\!\\(\\\"KolmogorovSmirnov\\\"\\)\[NoBreak] test, which assumes \
+unique values. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/KolmogorovSmirnovTest\\\", ButtonNote -> \
+\\\"KolmogorovSmirnovTest::ties\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{{3.5397914848585157`*^9, 3.539791493964985*^9}, {
+   3.539791525835412*^9, 3.539791546048024*^9}, 3.539791587498852*^9, 
+   3.539791640517384*^9, 3.53979178781524*^9, 3.539791839881261*^9, 
+   3.539792080268291*^9, {3.539792119454774*^9, 3.5397921480477943`*^9}, 
+   3.5397922206372547`*^9, 3.539792560418168*^9}],
+
+Cell[BoxData[
+ StyleBox[
+  TagBox[GridBox[{
+     {"\<\"\"\>", "\<\"Statistic\"\>", "\<\"P\[Hyphen]Value\"\>"},
+     {"\<\"Kolmogorov\[Hyphen]Smirnov\"\>", "0.34358327223780777`", 
+      "0.000770921717832915`"}
+    },
+    AutoDelete->False,
+    GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Automatic}}},
+    GridBoxDividers->{
+     "ColumnsIndexed" -> {2 -> GrayLevel[0.7]}, 
+      "RowsIndexed" -> {2 -> GrayLevel[0.7]}},
+    GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+    GridBoxSpacings->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+   "Grid"], "DialogStyle",
+  StripOnInput->False]], "Print",
+ CellChangeTimes->{{3.539791484860838*^9, 3.539791493966848*^9}, {
+   3.5397915258383017`*^9, 3.539791546049782*^9}, 3.53979158750108*^9, 
+   3.539791640634325*^9, 3.5397917878140993`*^9, 3.539791839880307*^9, 
+   3.5397920802670317`*^9, {3.539792119453676*^9, 3.5397921480466213`*^9}, 
+   3.539792220636118*^9, 3.539792560420108*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"KolmogorovSmirnovTest", "::", "ties"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Ties exist in the data and will be ignored for the \
+\[NoBreak]\\!\\(\\\"KolmogorovSmirnov\\\"\\)\[NoBreak] test, which assumes \
+unique values. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/KolmogorovSmirnovTest\\\", ButtonNote -> \
+\\\"KolmogorovSmirnovTest::ties\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{{3.5397914848585157`*^9, 3.539791493964985*^9}, {
+   3.539791525835412*^9, 3.539791546048024*^9}, 3.539791587498852*^9, 
+   3.539791640517384*^9, 3.53979178781524*^9, 3.539791839881261*^9, 
+   3.539792080268291*^9, {3.539792119454774*^9, 3.5397921480477943`*^9}, 
+   3.5397922206372547`*^9, 3.5397925604215813`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Intersection", "::", "normal"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Nonatomic expression expected at position \
+\[NoBreak]\\!\\(2\\)\[NoBreak] in \
+\[NoBreak]\\!\\(\\(\\({\\\"KolmogorovSmirnov\\\", \\\"Kuiper\\\", \
+\\\"Lilliefors\\\", \\\"WatsonUSquare\\\"}\\)\\) \[Intersection] \
+\\\"KolmogorovSmirnov\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\
+\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/normal\\\", ButtonNote -> \
+\\\"Intersection::normal\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{{3.5397914848585157`*^9, 3.539791493964985*^9}, {
+   3.539791525835412*^9, 3.539791546048024*^9}, 3.539791587498852*^9, 
+   3.539791640517384*^9, 3.53979178781524*^9, 3.539791839881261*^9, 
+   3.539792080268291*^9, {3.539792119454774*^9, 3.5397921480477943`*^9}, 
+   3.5397922206372547`*^9, 3.539792560422926*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \
+\[NoBreak]\\!\\({Statistics`GoodnessOfFitTestingDump`i, \
+\\(\\(\\(\\({\\\"KolmogorovSmirnov\\\", \\\"Kuiper\\\", \\\"Lilliefors\\\", \
+\\\"WatsonUSquare\\\"}\\)\\) \[Intersection] \\\"KolmogorovSmirnov\\\"\\)\\)}\
+\\)\[NoBreak] does not have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\
+\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{{3.5397914848585157`*^9, 3.539791493964985*^9}, {
+   3.539791525835412*^9, 3.539791546048024*^9}, 3.539791587498852*^9, 
+   3.539791640517384*^9, 3.53979178781524*^9, 3.539791839881261*^9, 
+   3.539792080268291*^9, {3.539792119454774*^9, 3.5397921480477943`*^9}, 
+   3.5397922206372547`*^9, 3.539792560424395*^9}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ TemplateBox[{
+  "\"The null hypothesis that \"",
+   TemplateBox[{"\"the data is distributed according to the \"", 
+     RowBox[{"NormalDistribution", "[", 
+       RowBox[{"\[FormalX]", ",", "\[FormalY]"}], "]"}], "\" \""}, "Row", 
+    DisplayFunction -> (
+     RowBox[{#, "\[InvisibleSpace]", #2, "\[InvisibleSpace]", #3}]& ), 
+    InterpretationFunction -> (RowBox[{"Row", "[", 
+       RowBox[{"{", 
+         RowBox[{#, ",", #2, ",", #3}], "}"}], "]"}]& )],
+   "\"is rejected at the \"",
+   TemplateBox[{"5.`", "\" percent level \""}, "Row", 
+    DisplayFunction -> (RowBox[{#, "\[InvisibleSpace]", #2}]& ), 
+    InterpretationFunction -> (RowBox[{"Row", "[", 
+       RowBox[{"{", 
+         RowBox[{#, ",", #2}], "}"}], "]"}]& )],
+   TemplateBox[{
+    "\"based on the \"", "\"Kolmogorov\[Hyphen]Smirnov\"", "\" test.\""}, 
+    "Row", DisplayFunction -> (
+     RowBox[{#, "\[InvisibleSpace]", #2, "\[InvisibleSpace]", #3}]& ), 
+    InterpretationFunction -> (RowBox[{"Row", "[", 
+       RowBox[{"{", 
+         RowBox[{#, ",", #2, ",", #3}], "}"}], "]"}]& )]},
+  "Row",
+  DisplayFunction->(
+   RowBox[{#, "\[InvisibleSpace]", #2, "\[InvisibleSpace]", #3, 
+     "\[InvisibleSpace]", #4, "\[InvisibleSpace]", #5}]& ),
+  InterpretationFunction->(RowBox[{"Row", "[", 
+     RowBox[{"{", 
+       RowBox[{#, ",", #2, ",", #3, ",", #4, ",", #5}], "}"}], 
+     "]"}]& )]], "Print",
+ CellChangeTimes->{{3.539791484860838*^9, 3.539791493966848*^9}, {
+   3.5397915258383017`*^9, 3.539791546049782*^9}, 3.53979158750108*^9, 
+   3.539791640634325*^9, 3.5397917878140993`*^9, 3.539791839880307*^9, 
+   3.5397920802670317`*^9, {3.539792119453676*^9, 3.5397921480466213`*^9}, 
+   3.539792220636118*^9, 3.5397925604259377`*^9}],
+
+Cell[BoxData["\<\"Vwap error test for normality:\"\>"], "Print",
+ CellChangeTimes->{{3.539791484860838*^9, 3.539791493966848*^9}, {
+   3.5397915258383017`*^9, 3.539791546049782*^9}, 3.53979158750108*^9, 
+   3.539791640634325*^9, 3.5397917878140993`*^9, 3.539791839880307*^9, 
+   3.5397920802670317`*^9, {3.539792119453676*^9, 3.5397921480466213`*^9}, 
+   3.539792220636118*^9, 3.5397925604279423`*^9}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"KolmogorovSmirnovTest", "::", "ties"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Ties exist in the data and will be ignored for the \
+\[NoBreak]\\!\\(\\\"KolmogorovSmirnov\\\"\\)\[NoBreak] test, which assumes \
+unique values. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/KolmogorovSmirnovTest\\\", ButtonNote -> \
+\\\"KolmogorovSmirnovTest::ties\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{{3.5397914848585157`*^9, 3.539791493964985*^9}, {
+   3.539791525835412*^9, 3.539791546048024*^9}, 3.539791587498852*^9, 
+   3.539791640517384*^9, 3.53979178781524*^9, 3.539791839881261*^9, 
+   3.539792080268291*^9, {3.539792119454774*^9, 3.5397921480477943`*^9}, 
+   3.5397922206372547`*^9, 3.539792560429412*^9}],
+
+Cell[BoxData[
+ StyleBox[
+  TagBox[GridBox[{
+     {"\<\"\"\>", "\<\"Statistic\"\>", "\<\"P\[Hyphen]Value\"\>"},
+     {"\<\"Kolmogorov\[Hyphen]Smirnov\"\>", "0.4166666666608804`", 
+      "5.547825877469308`*^-6"}
+    },
+    AutoDelete->False,
+    GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Automatic}}},
+    GridBoxDividers->{
+     "ColumnsIndexed" -> {2 -> GrayLevel[0.7]}, 
+      "RowsIndexed" -> {2 -> GrayLevel[0.7]}},
+    GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+    GridBoxSpacings->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+   "Grid"], "DialogStyle",
+  StripOnInput->False]], "Print",
+ CellChangeTimes->{{3.539791484860838*^9, 3.539791493966848*^9}, {
+   3.5397915258383017`*^9, 3.539791546049782*^9}, 3.53979158750108*^9, 
+   3.539791640634325*^9, 3.5397917878140993`*^9, 3.539791839880307*^9, 
+   3.5397920802670317`*^9, {3.539792119453676*^9, 3.5397921480466213`*^9}, 
+   3.539792220636118*^9, 3.539792560431275*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"KolmogorovSmirnovTest", "::", "ties"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Ties exist in the data and will be ignored for the \
+\[NoBreak]\\!\\(\\\"KolmogorovSmirnov\\\"\\)\[NoBreak] test, which assumes \
+unique values. \\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", \
+ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/KolmogorovSmirnovTest\\\", ButtonNote -> \
+\\\"KolmogorovSmirnovTest::ties\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{{3.5397914848585157`*^9, 3.539791493964985*^9}, {
+   3.539791525835412*^9, 3.539791546048024*^9}, 3.539791587498852*^9, 
+   3.539791640517384*^9, 3.53979178781524*^9, 3.539791839881261*^9, 
+   3.539792080268291*^9, {3.539792119454774*^9, 3.5397921480477943`*^9}, 
+   3.5397922206372547`*^9, 3.5397925604324217`*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Intersection", "::", "normal"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Nonatomic expression expected at position \
+\[NoBreak]\\!\\(2\\)\[NoBreak] in \
+\[NoBreak]\\!\\(\\(\\({\\\"KolmogorovSmirnov\\\", \\\"Kuiper\\\", \
+\\\"Lilliefors\\\", \\\"WatsonUSquare\\\"}\\)\\) \[Intersection] \
+\\\"KolmogorovSmirnov\\\"\\)\[NoBreak]. \\!\\(\\*ButtonBox[\\\"\
+\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/normal\\\", ButtonNote -> \
+\\\"Intersection::normal\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{{3.5397914848585157`*^9, 3.539791493964985*^9}, {
+   3.539791525835412*^9, 3.539791546048024*^9}, 3.539791587498852*^9, 
+   3.539791640517384*^9, 3.53979178781524*^9, 3.539791839881261*^9, 
+   3.539792080268291*^9, {3.539792119454774*^9, 3.5397921480477943`*^9}, 
+   3.5397922206372547`*^9, 3.539792560433589*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Table", "::", "iterb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Iterator \
+\[NoBreak]\\!\\({Statistics`GoodnessOfFitTestingDump`i, \
+\\(\\(\\(\\({\\\"KolmogorovSmirnov\\\", \\\"Kuiper\\\", \\\"Lilliefors\\\", \
+\\\"WatsonUSquare\\\"}\\)\\) \[Intersection] \\\"KolmogorovSmirnov\\\"\\)\\)}\
+\\)\[NoBreak] does not have appropriate bounds. \\!\\(\\*ButtonBox[\\\"\
+\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/General/iterb\\\", ButtonNote -> \
+\\\"Table::iterb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{{3.5397914848585157`*^9, 3.539791493964985*^9}, {
+   3.539791525835412*^9, 3.539791546048024*^9}, 3.539791587498852*^9, 
+   3.539791640517384*^9, 3.53979178781524*^9, 3.539791839881261*^9, 
+   3.539792080268291*^9, {3.539792119454774*^9, 3.5397921480477943`*^9}, 
+   3.5397922206372547`*^9, 3.539792560434823*^9}],
+
+Cell[BoxData[
+ TemplateBox[{
+  "\"The null hypothesis that \"",
+   TemplateBox[{"\"the data is distributed according to the \"", 
+     RowBox[{"NormalDistribution", "[", 
+       RowBox[{"\[FormalX]", ",", "\[FormalY]"}], "]"}], "\" \""}, "Row", 
+    DisplayFunction -> (
+     RowBox[{#, "\[InvisibleSpace]", #2, "\[InvisibleSpace]", #3}]& ), 
+    InterpretationFunction -> (RowBox[{"Row", "[", 
+       RowBox[{"{", 
+         RowBox[{#, ",", #2, ",", #3}], "}"}], "]"}]& )],
+   "\"is rejected at the \"",
+   TemplateBox[{"5.`", "\" percent level \""}, "Row", 
+    DisplayFunction -> (RowBox[{#, "\[InvisibleSpace]", #2}]& ), 
+    InterpretationFunction -> (RowBox[{"Row", "[", 
+       RowBox[{"{", 
+         RowBox[{#, ",", #2}], "}"}], "]"}]& )],
+   TemplateBox[{
+    "\"based on the \"", "\"Kolmogorov\[Hyphen]Smirnov\"", "\" test.\""}, 
+    "Row", DisplayFunction -> (
+     RowBox[{#, "\[InvisibleSpace]", #2, "\[InvisibleSpace]", #3}]& ), 
+    InterpretationFunction -> (RowBox[{"Row", "[", 
+       RowBox[{"{", 
+         RowBox[{#, ",", #2, ",", #3}], "}"}], "]"}]& )]},
+  "Row",
+  DisplayFunction->(
+   RowBox[{#, "\[InvisibleSpace]", #2, "\[InvisibleSpace]", #3, 
+     "\[InvisibleSpace]", #4, "\[InvisibleSpace]", #5}]& ),
+  InterpretationFunction->(RowBox[{"Row", "[", 
+     RowBox[{"{", 
+       RowBox[{#, ",", #2, ",", #3, ",", #4, ",", #5}], "}"}], 
+     "]"}]& )]], "Print",
+ CellChangeTimes->{{3.539791484860838*^9, 3.539791493966848*^9}, {
+   3.5397915258383017`*^9, 3.539791546049782*^9}, 3.53979158750108*^9, 
+   3.539791640634325*^9, 3.5397917878140993`*^9, 3.539791839880307*^9, 
+   3.5397920802670317`*^9, {3.539792119453676*^9, 3.5397921480466213`*^9}, 
+   3.539792220636118*^9, 3.539792560436236*^9}],
+
+Cell[BoxData["True"], "Output",
+ CellChangeTimes->{
+  3.539791298111438*^9, {3.539791484759549*^9, 3.539791493961905*^9}, {
+   3.5397915257814007`*^9, 3.539791546046495*^9}, 3.539791587496107*^9, 
+   3.539791640451612*^9, 3.539791787812478*^9, 3.539791839878914*^9, 
+   3.539792080265312*^9, {3.5397921194520807`*^9, 3.5397921480448923`*^9}, 
+   3.539792220631792*^9, 3.539792560438037*^9}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ StyleBox[
+  TagBox[GridBox[{
+     {"\<\"\"\>", "\<\"Statistic\"\>", "\<\"P\[Hyphen]Value\"\>"},
+     {"\<\"Mann\[Hyphen]Whitney\"\>", "123.`", "0.0031126356560444266`"}
+    },
+    AutoDelete->False,
+    GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Automatic}}},
+    GridBoxDividers->{
+     "ColumnsIndexed" -> {2 -> GrayLevel[0.7]}, 
+      "RowsIndexed" -> {2 -> GrayLevel[0.7]}},
+    GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+    GridBoxSpacings->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+   "Grid"], "DialogStyle",
+  StripOnInput->False]], "Print",
+ CellChangeTimes->{{3.539791484860838*^9, 3.539791493966848*^9}, {
+   3.5397915258383017`*^9, 3.539791546049782*^9}, 3.53979158750108*^9, 
+   3.539791640634325*^9, 3.5397917878140993`*^9, 3.539791839880307*^9, 
+   3.5397920802670317`*^9, {3.539792119453676*^9, 3.5397921480466213`*^9}, 
+   3.539792220636118*^9, 3.539792560479766*^9}],
+
+Cell[BoxData[
+ TemplateBox[{
+  "\"The null hypothesis that \"",
+   TemplateBox[{
+    "\"the \"", "\"median\"", "\" difference is \"", "0", "\" \""}, "Row", 
+    DisplayFunction -> (
+     RowBox[{#, "\[InvisibleSpace]", #2, "\[InvisibleSpace]", #3, 
+       "\[InvisibleSpace]", #4, "\[InvisibleSpace]", #5}]& ), 
+    InterpretationFunction -> (RowBox[{"Row", "[", 
+       RowBox[{"{", 
+         RowBox[{#, ",", #2, ",", #3, ",", #4, ",", #5}], "}"}], "]"}]& )],
+   "\"is rejected at the \"",
+   TemplateBox[{"5.`", "\" percent level \""}, "Row", 
+    DisplayFunction -> (RowBox[{#, "\[InvisibleSpace]", #2}]& ), 
+    InterpretationFunction -> (RowBox[{"Row", "[", 
+       RowBox[{"{", 
+         RowBox[{#, ",", #2}], "}"}], "]"}]& )],
+   TemplateBox[{
+    "\"based on the \"", "\"Mann\[Hyphen]Whitney\"", "\" test.\""}, "Row", 
+    DisplayFunction -> (
+     RowBox[{#, "\[InvisibleSpace]", #2, "\[InvisibleSpace]", #3}]& ), 
+    InterpretationFunction -> (RowBox[{"Row", "[", 
+       RowBox[{"{", 
+         RowBox[{#, ",", #2, ",", #3}], "}"}], "]"}]& )]},
+  "Row",
+  DisplayFunction->(
+   RowBox[{#, "\[InvisibleSpace]", #2, "\[InvisibleSpace]", #3, 
+     "\[InvisibleSpace]", #4, "\[InvisibleSpace]", #5}]& ),
+  InterpretationFunction->(RowBox[{"Row", "[", 
+     RowBox[{"{", 
+       RowBox[{#, ",", #2, ",", #3, ",", #4, ",", #5}], "}"}], 
+     "]"}]& )]], "Print",
+ CellChangeTimes->{{3.539791484860838*^9, 3.539791493966848*^9}, {
+   3.5397915258383017`*^9, 3.539791546049782*^9}, 3.53979158750108*^9, 
+   3.539791640634325*^9, 3.5397917878140993`*^9, 3.539791839880307*^9, 
+   3.5397920802670317`*^9, {3.539792119453676*^9, 3.5397921480466213`*^9}, 
+   3.539792220636118*^9, 3.539792560481175*^9}]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1920, 951},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+FrontEndVersion->"8.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (October 5, \
+2011)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[579, 22, 6417, 173, 733, "Input"],
+Cell[6999, 197, 392, 6, 27, "Output"],
+Cell[7394, 205, 774, 14, 27, "Output"],
+Cell[8171, 221, 971, 19, 27, "Output"],
+Cell[9145, 242, 402, 5, 20, "Print"],
+Cell[9550, 249, 844, 15, 23, "Message"],
+Cell[10397, 266, 980, 20, 38, "Print"],
+Cell[11380, 288, 846, 15, 23, "Message"],
+Cell[12229, 305, 941, 17, 23, "Message"],
+Cell[13173, 324, 943, 17, 23, "Message"],
+Cell[CellGroupData[{
+Cell[14141, 345, 1723, 36, 29, "Print"],
+Cell[15867, 383, 401, 5, 20, "Print"]
+}, Open  ]],
+Cell[16283, 391, 844, 15, 23, "Message"],
+Cell[17130, 408, 980, 20, 40, "Print"],
+Cell[18113, 430, 846, 15, 23, "Message"],
+Cell[18962, 447, 941, 17, 23, "Message"],
+Cell[19906, 466, 943, 17, 23, "Message"],
+Cell[20852, 485, 1721, 36, 29, "Print"],
+Cell[22576, 523, 390, 6, 27, "Output"],
+Cell[CellGroupData[{
+Cell[22991, 533, 953, 19, 38, "Print"],
+Cell[23947, 554, 1702, 36, 20, "Print"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
