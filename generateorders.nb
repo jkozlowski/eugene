@@ -1,0 +1,282 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 8.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[     10656,        273]
+NotebookOptionsPosition[     10183,        251]
+NotebookOutlinePosition[     10536,        267]
+CellTagsIndexPosition[     10493,        264]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"ClearAll", "[", 
+    RowBox[{
+    "startAsk", ",", " ", "startBid", ",", "tick", ",", " ", "noOfOrders", 
+     " ", ",", "generateOrder", ",", " ", "orders", ",", " ", "cumVol"}], 
+    "]"}], ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"tick", " ", "=", " ", "0.001"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"startAsk", " ", "=", " ", "100"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"startBid", " ", "=", " ", 
+   RowBox[{"startAsk", "-", "tick"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"noOfOrders", " ", "=", " ", "100"}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"generateOrder", "[", 
+     RowBox[{"startBid_", ",", "startAsk_", ",", " ", "tick_"}], " ", "]"}], 
+    " ", ":=", " ", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+       "side", ",", " ", "size", ",", " ", "ticks", ",", " ", "price"}], 
+       "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"side", " ", "=", " ", 
+        RowBox[{"RandomVariate", "[", 
+         RowBox[{"BernoulliDistribution", "[", "0.5", "]"}], "]"}]}], ";", 
+       " ", 
+       RowBox[{"(*", 
+        RowBox[{
+         RowBox[{"0", "-", "bid"}], ",", " ", 
+         RowBox[{"1", "-", "ask"}]}], "*)"}], "\[IndentingNewLine]", 
+       RowBox[{"ticks", "=", 
+        RowBox[{"RandomVariate", "[", 
+         RowBox[{"PowerDistribution", "[", 
+          RowBox[{"100", ",", "0.3"}], "]"}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"size", " ", "=", " ", 
+        RowBox[{"Round", "[", 
+         RowBox[{"RandomVariate", "[", 
+          RowBox[{"LogNormalDistribution", "[", 
+           RowBox[{
+            RowBox[{"4.5", "*", 
+             RowBox[{"(", 
+              RowBox[{"1", "-", "ticks"}], ")"}]}], ",", "0.3"}], "]"}], " ", 
+          "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"price", " ", "=", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{"side", " ", "\[Equal]", " ", "1"}], ",", " ", 
+          RowBox[{"startAsk", "+", "ticks"}], " ", ",", 
+          RowBox[{"startBid", "-", "ticks"}]}], "]"}]}], ";", " ", 
+       "\[IndentingNewLine]", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"Round", "[", 
+          RowBox[{"price", ",", "tick"}], "]"}], ",", "size", ",", " ", 
+         "side"}], "}"}]}]}], "\[IndentingNewLine]", "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"orders", " ", "=", 
+   RowBox[{"Sort", "[", " ", 
+    RowBox[{
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{"generateOrder", "[", 
+        RowBox[{"startBid", ",", " ", "startAsk", ",", " ", "0.001"}], "]"}], 
+       ",", " ", 
+       RowBox[{"{", "noOfOrders", " ", "}"}]}], "]"}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"#", "[", 
+        RowBox[{"[", "1", "]"}], "]"}], ">", 
+       RowBox[{"#2", "[", 
+        RowBox[{"[", "1", "]"}], "]"}]}], "&"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"cumVol", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"#", "[", 
+         RowBox[{"[", "1", "]"}], "]"}], "[", 
+        RowBox[{"[", "1", "]"}], "]"}], ",", 
+       RowBox[{"Total", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"#", "[", 
+           RowBox[{"[", "2", "]"}], "]"}], "&"}], "/@", "#"}], "]"}]}], "}"}],
+      "&"}], "/@", 
+    RowBox[{"GatherBy", "[", 
+     RowBox[{"orders", ",", 
+      RowBox[{
+       RowBox[{"#", "[", 
+        RowBox[{"[", "1", "]"}], "]"}], "&"}]}], "]"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Print", "[", 
+   RowBox[{"\"\<Total ask vol:\>\"", "<>", 
+    RowBox[{"ToString", "[", 
+     RowBox[{"Total", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"#", "[", 
+         RowBox[{"[", "2", "]"}], "]"}], "&"}], "/@", 
+       RowBox[{"Select", "[", 
+        RowBox[{"orders", ",", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"#", "[", 
+            RowBox[{"[", "3", "]"}], "]"}], "\[Equal]", "1"}], "&"}]}], 
+        "]"}]}], "]"}], "]"}]}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Print", "[", 
+   RowBox[{"\"\<Total bid vol:\>\"", "<>", 
+    RowBox[{"ToString", "[", 
+     RowBox[{"Total", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"#", "[", 
+         RowBox[{"[", "2", "]"}], "]"}], "&"}], "/@", 
+       RowBox[{"Select", "[", 
+        RowBox[{"orders", ",", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"#", "[", 
+            RowBox[{"[", "3", "]"}], "]"}], "\[Equal]", "0"}], "&"}]}], 
+        "]"}]}], "]"}], "]"}]}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Print", "[", 
+   RowBox[{"Show", "[", 
+    RowBox[{"ListLinePlot", "[", "cumVol", "]"}], "]"}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Export", "[", 
+   RowBox[{
+   "\"\</Users/jakubkozlowski/Desktop/orders.csv\>\"", ",", "orders"}], "]"}],
+   ";"}]}], "Input",
+ CellChangeTimes->{{3.539708985378986*^9, 3.539709012014481*^9}, {
+   3.539709109794911*^9, 3.5397091553949823`*^9}, {3.539709192388173*^9, 
+   3.5397092206609697`*^9}, {3.539709272857943*^9, 3.539709274782708*^9}, {
+   3.5397093130581703`*^9, 3.539709320695786*^9}, {3.539709358338628*^9, 
+   3.539709385324053*^9}, 3.539709433134203*^9, {3.539709502751114*^9, 
+   3.539709555320932*^9}, {3.5397095997314587`*^9, 3.53970962657094*^9}, {
+   3.5397096640539722`*^9, 3.5397096679557247`*^9}, {3.539709735387864*^9, 
+   3.53970974501239*^9}, {3.5397110303014936`*^9, 3.539711053675557*^9}, {
+   3.5397111366530523`*^9, 3.539711157333067*^9}, {3.539711244890059*^9, 
+   3.539711250744705*^9}, {3.539711528530326*^9, 3.539711557921941*^9}, {
+   3.539711752634091*^9, 3.539711903384033*^9}, {3.539711943894579*^9, 
+   3.539711967527136*^9}, {3.539712011721987*^9, 3.539712029321121*^9}, 
+   3.539712147421082*^9, {3.539712227286827*^9, 3.5397123974387503`*^9}, {
+   3.539712457386485*^9, 3.539712460053112*^9}, {3.53971251276091*^9, 
+   3.539712572683272*^9}, {3.539712604467993*^9, 3.539712641723946*^9}, {
+   3.53971271871618*^9, 3.5397128872685843`*^9}, {3.5397155893449087`*^9, 
+   3.539715625187221*^9}, {3.539715655886292*^9, 3.539715784929323*^9}, {
+   3.5397163043230543`*^9, 3.539716314105115*^9}, {3.539716359740472*^9, 
+   3.5397164242556343`*^9}, {3.539716483056346*^9, 3.539716531799129*^9}, {
+   3.539716565969125*^9, 3.539716618616313*^9}, {3.5397166589062853`*^9, 
+   3.539716693129879*^9}, {3.539716794328616*^9, 3.539716879416226*^9}, {
+   3.539717042450077*^9, 3.539717068480549*^9}, {3.539717121466748*^9, 
+   3.5397171669085197`*^9}, {3.5397175105073767`*^9, 
+   3.5397175221888237`*^9}, {3.539717641424672*^9, 3.539717755840222*^9}, {
+   3.53971779356175*^9, 3.539717832073029*^9}, {3.539717876348033*^9, 
+   3.539717877208325*^9}, {3.539717913856064*^9, 3.539718115010689*^9}, {
+   3.5397181761491537`*^9, 3.5397181929177113`*^9}, {3.539718225132452*^9, 
+   3.5397182886951523`*^9}, {3.53971831994739*^9, 3.539718325848214*^9}, {
+   3.539718562000312*^9, 3.5397185889974947`*^9}, {3.539718631465468*^9, 
+   3.5397186552509537`*^9}, {3.539718694669463*^9, 3.539718714935165*^9}, {
+   3.5397187458829193`*^9, 3.539718748244485*^9}, {3.539718791119554*^9, 
+   3.539718812221693*^9}, {3.5397188674179153`*^9, 3.5397188975625477`*^9}, 
+   3.539719033223867*^9, {3.539719071969028*^9, 3.539719103808207*^9}, {
+   3.5397191563920097`*^9, 3.5397192067869873`*^9}, 3.5397192865901337`*^9, {
+   3.539719316805492*^9, 3.539719356201913*^9}, {3.539719499065319*^9, 
+   3.5397195655818357`*^9}, {3.539719619374421*^9, 3.539719626513811*^9}, {
+   3.539722084009327*^9, 3.539722141923164*^9}, {3.539722186237728*^9, 
+   3.5397222068218927`*^9}, {3.5397222931488113`*^9, 3.539722345914712*^9}, {
+   3.5397223813630667`*^9, 3.5397224371803427`*^9}, {3.539722474727085*^9, 
+   3.539722710223596*^9}, {3.539722747066415*^9, 3.539722747462134*^9}, {
+   3.5397227819224443`*^9, 3.5397228452076283`*^9}, {3.539722933303935*^9, 
+   3.539722964175983*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["\<\"Total ask vol:4467\"\>"], "Print",
+ CellChangeTimes->{{3.5397225404879923`*^9, 3.539722561088266*^9}, 
+   3.539722623290868*^9, {3.5397226940590343`*^9, 3.53972280973085*^9}, {
+   3.539722845962247*^9, 3.53972297713284*^9}}],
+
+Cell[BoxData["\<\"Total bid vol:4509\"\>"], "Print",
+ CellChangeTimes->{{3.5397225404879923`*^9, 3.539722561088266*^9}, 
+   3.539722623290868*^9, {3.5397226940590343`*^9, 3.53972280973085*^9}, {
+   3.539722845962247*^9, 3.5397229771349792`*^9}}],
+
+Cell[BoxData[
+ GraphicsBox[{{}, {}, 
+   {Hue[0.67, 0.6, 0.6], LineBox[CompressedData["
+1:eJxTTMoPSmViYGAQBmIQXZ+1p2QyQ6QDAwgk5Dj0Ts8TaobxHYId5hxR2FAE
+4ze4O6z6eMk3CcY/EO5w3Nu80xHGL2hxuFrxUs0Qxg8odHi8dPYRBRhfo9Xh
+E1C7AIz/oQZCw/gV8xz4dDfNff8/AmrffAfZqBTr+zC+RZuDdrvYzXNw+XwH
+yy0nyvbB+TEOHg+rRNbB+AJ1DmEgA+HykQ5A0/x7YXyFbIfijIlva+Dyng6N
+U527c2D8DUUOEw591YiB8RcUOAAAQYdZjg==
+     "]]}},
+  AspectRatio->NCache[GoldenRatio^(-1), 0.6180339887498948],
+  Axes->True,
+  AxesOrigin->{99.99000000000001, 0},
+  PlotRange->{{99.99000000000001, 100.009}, {0., 2016.}},
+  PlotRangeClipping->True,
+  PlotRangePadding->{
+    Scaled[0.02], 
+    Scaled[0.02]}]], "Print",
+ CellChangeTimes->{{3.5397225404879923`*^9, 3.539722561088266*^9}, 
+   3.539722623290868*^9, {3.5397226940590343`*^9, 3.53972280973085*^9}, {
+   3.539722845962247*^9, 3.539722977140459*^9}}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[BoxData["\[IndentingNewLine]"], "Input",
+ CellChangeTimes->{3.539712780651299*^9}]
+},
+WindowSize->{960, 951},
+WindowMargins->{{Automatic, 0}, {Automatic, 0}},
+FrontEndVersion->"8.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (October 5, \
+2011)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[579, 22, 8127, 189, 328, "Input"],
+Cell[CellGroupData[{
+Cell[8731, 215, 242, 3, 20, "Print"],
+Cell[8976, 220, 245, 3, 20, "Print"],
+Cell[9224, 225, 841, 19, 231, "Print"]
+}, Open  ]]
+}, Open  ]],
+Cell[10092, 248, 87, 1, 43, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)
