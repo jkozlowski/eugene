@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[     10656,        273]
-NotebookOptionsPosition[     10183,        251]
-NotebookOutlinePosition[     10536,        267]
-CellTagsIndexPosition[     10493,        264]
+NotebookDataLength[     10756,        274]
+NotebookOptionsPosition[     10283,        252]
+NotebookOutlinePosition[     10636,        268]
+CellTagsIndexPosition[     10593,        265]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -37,7 +37,7 @@ Cell[BoxData[{
    RowBox[{"startAsk", "-", "tick"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
-   RowBox[{"noOfOrders", " ", "=", " ", "100"}], ";"}], 
+   RowBox[{"noOfOrders", " ", "=", " ", "1000"}], ";"}], 
   "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
@@ -69,11 +69,8 @@ Cell[BoxData[{
         RowBox[{"Round", "[", 
          RowBox[{"RandomVariate", "[", 
           RowBox[{"LogNormalDistribution", "[", 
-           RowBox[{
-            RowBox[{"4.5", "*", 
-             RowBox[{"(", 
-              RowBox[{"1", "-", "ticks"}], ")"}]}], ",", "0.3"}], "]"}], " ", 
-          "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+           RowBox[{"1", ",", "0.3"}], "]"}], " ", "]"}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
        RowBox[{"price", " ", "=", 
         RowBox[{"If", "[", 
          RowBox[{
@@ -209,40 +206,44 @@ Cell[BoxData[{
    3.5397223813630667`*^9, 3.5397224371803427`*^9}, {3.539722474727085*^9, 
    3.539722710223596*^9}, {3.539722747066415*^9, 3.539722747462134*^9}, {
    3.5397227819224443`*^9, 3.5397228452076283`*^9}, {3.539722933303935*^9, 
-   3.539722964175983*^9}}],
+   3.539722964175983*^9}, {3.5397231721938057`*^9, 3.539723225181851*^9}}],
 
 Cell[CellGroupData[{
 
-Cell[BoxData["\<\"Total ask vol:4467\"\>"], "Print",
+Cell[BoxData["\<\"Total ask vol:1394\"\>"], "Print",
  CellChangeTimes->{{3.5397225404879923`*^9, 3.539722561088266*^9}, 
    3.539722623290868*^9, {3.5397226940590343`*^9, 3.53972280973085*^9}, {
-   3.539722845962247*^9, 3.53972297713284*^9}}],
+   3.539722845962247*^9, 3.53972297713284*^9}, {3.539723172852683*^9, 
+   3.539723228829527*^9}}],
 
-Cell[BoxData["\<\"Total bid vol:4509\"\>"], "Print",
+Cell[BoxData["\<\"Total bid vol:1440\"\>"], "Print",
  CellChangeTimes->{{3.5397225404879923`*^9, 3.539722561088266*^9}, 
    3.539722623290868*^9, {3.5397226940590343`*^9, 3.53972280973085*^9}, {
-   3.539722845962247*^9, 3.5397229771349792`*^9}}],
+   3.539722845962247*^9, 3.53972297713284*^9}, {3.539723172852683*^9, 
+   3.539723228831208*^9}}],
 
 Cell[BoxData[
  GraphicsBox[{{}, {}, 
    {Hue[0.67, 0.6, 0.6], LineBox[CompressedData["
-1:eJxTTMoPSmViYGAQBmIQXZ+1p2QyQ6QDAwgk5Dj0Ts8TaobxHYId5hxR2FAE
-4ze4O6z6eMk3CcY/EO5w3Nu80xHGL2hxuFrxUs0Qxg8odHi8dPYRBRhfo9Xh
-E1C7AIz/oQZCw/gV8xz4dDfNff8/AmrffAfZqBTr+zC+RZuDdrvYzXNw+XwH
-yy0nyvbB+TEOHg+rRNbB+AJ1DmEgA+HykQ5A0/x7YXyFbIfijIlva+Dyng6N
-U527c2D8DUUOEw591YiB8RcUOAAAQYdZjg==
+1:eJxTTMoPSmViYGAQA2IQXWjLdX0xQ6QDAxg4OdRn7SmZDOdbOfROzxNqhvP9
+HOYcUdhQBOM3eDqs+njJNwkuH+KwQ671dSCM7xDscNzbvNMRLh/pcLXipZoh
+nB/u8Hjp7CMKcPPiHT4BjROAy+fA9YGpgAYHPt1Nc9//j4DwZzQ4yEalWN+H
+8Q/kOmi3i908B+MrJDtYbjlRtg/OT3DweFglsg7GdwhyCAMZCOM3+DkATfPv
+hfODHIozJr6tgfEZ3B0apzp358DtC3CYcOirRgxc3tVh3vvlx7zhfCsHAD3w
+YQc=
      "]]}},
   AspectRatio->NCache[GoldenRatio^(-1), 0.6180339887498948],
   Axes->True,
   AxesOrigin->{99.99000000000001, 0},
-  PlotRange->{{99.99000000000001, 100.009}, {0., 2016.}},
+  PlotRange->{{99.989, 100.01}, {0., 531.}},
   PlotRangeClipping->True,
   PlotRangePadding->{
     Scaled[0.02], 
     Scaled[0.02]}]], "Print",
  CellChangeTimes->{{3.5397225404879923`*^9, 3.539722561088266*^9}, 
    3.539722623290868*^9, {3.5397226940590343`*^9, 3.53972280973085*^9}, {
-   3.539722845962247*^9, 3.539722977140459*^9}}]
+   3.539722845962247*^9, 3.53972297713284*^9}, {3.539723172852683*^9, 
+   3.539723228837064*^9}}]
 }, Open  ]]
 }, Open  ]],
 
@@ -267,14 +268,14 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[579, 22, 8127, 189, 328, "Input"],
+Cell[579, 22, 8065, 186, 328, "Input"],
 Cell[CellGroupData[{
-Cell[8731, 215, 242, 3, 20, "Print"],
-Cell[8976, 220, 245, 3, 20, "Print"],
-Cell[9224, 225, 841, 19, 231, "Print"]
+Cell[8669, 212, 292, 4, 20, "Print"],
+Cell[8964, 218, 292, 4, 20, "Print"],
+Cell[9259, 224, 906, 21, 235, "Print"]
 }, Open  ]]
 }, Open  ]],
-Cell[10092, 248, 87, 1, 43, "Input"]
+Cell[10192, 249, 87, 1, 43, "Input"]
 }
 ]
 *)
