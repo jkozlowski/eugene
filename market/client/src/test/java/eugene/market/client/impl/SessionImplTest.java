@@ -38,6 +38,7 @@ import org.testng.IObjectFactory;
 import org.testng.annotations.ObjectFactory;
 import org.testng.annotations.Test;
 
+import java.util.Comparator;
 import java.util.Iterator;
 
 import static eugene.market.ontology.Defaults.defaultClOrdID;
@@ -90,6 +91,9 @@ public class SessionImplTest {
         assertThat(session.getApplication(), is(ProxyApplication.class));
         assertThat(session.getOrderReferenceApplication(), notNullValue());
         assertThat(session.getSimulation(), sameInstance(simulation));
+        assertThat(session.getOrderReferences().isEmpty(), is(true));
+        assertThat((Comparator<OrderReference>) session.getOrderReferences().comparator(),
+                   sameInstance(OrderReferenceComparator.getInstance()));
     }
 
     @Test(expectedExceptions = NullPointerException.class)

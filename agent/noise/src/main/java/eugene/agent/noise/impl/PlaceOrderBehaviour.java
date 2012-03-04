@@ -52,6 +52,12 @@ public class PlaceOrderBehaviour extends TickerBehaviour {
     private final OrderBook orderBook;
 
     private final Session session;
+    
+    private enum Decision {
+        CANCEL,
+        MARKET,
+        LIMIT
+    }
 
     private enum Strategy {
 

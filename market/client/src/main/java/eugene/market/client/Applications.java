@@ -17,7 +17,18 @@ import eugene.market.ontology.Message;
  * @author Jakub D Kozlowski
  * @since 0.5
  */
-public abstract class Applications {
+public final class Applications {
+
+    private static final String ERROR_MSG = "This class should not be instantiated";
+
+    /**
+     * This class should not be instantiated.
+     *
+     * @throws UnsupportedOperationException this class should not be instantiated.
+     */
+    public Applications() {
+        throw new UnsupportedOperationException(ERROR_MSG);
+    }
 
     /**
      * Gets a default {@link ProxyApplication} implementation.

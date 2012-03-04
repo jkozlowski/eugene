@@ -19,6 +19,8 @@ import jade.content.onto.basic.Action;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 
+import java.util.SortedSet;
+
 /**
  * {@link Session} is a communication channel between the Agents and {@link MarketAgent}.
  *
@@ -50,6 +52,13 @@ public interface Session {
      * @return the application.
      */
     Application getApplication();
+
+    /**
+     * Gets currently active orders.
+     *
+     * @return set of active orders sorted in chronological order.
+     */
+    SortedSet<OrderReference> getOrderReferences();
 
     /**
      * Gets the <code>type</code> message from this <code>aclMessage</code> <code>:content</code> slot.

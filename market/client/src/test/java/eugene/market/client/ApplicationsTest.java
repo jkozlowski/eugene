@@ -26,6 +26,11 @@ import static org.mockito.Mockito.mock;
  */
 public class ApplicationsTest {
 
+    @Test(expectedExceptions = UnsupportedOperationException.class)
+    public void testConstructor() {
+        new Applications();
+    }
+
     @Test
     public void testProxy() {
         assertThat(proxy(mock(Application.class)), is(ProxyApplicationImpl.class));

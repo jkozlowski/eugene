@@ -29,6 +29,7 @@ import jade.content.onto.basic.Action;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 
+import java.util.SortedSet;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -90,6 +91,14 @@ public final class SessionImpl implements Session {
     @Override
     public Application getApplication() {
         return application;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SortedSet<OrderReference> getOrderReferences() {
+        return orderReferenceApplication.getOrderReferences();
     }
 
     /**
@@ -200,7 +209,7 @@ public final class SessionImpl implements Session {
     }
 
     @VisibleForTesting
-    public Long getCurClOrdID() {
+    Long getCurClOrdID() {
         return curClOrdID.get();
     }
 

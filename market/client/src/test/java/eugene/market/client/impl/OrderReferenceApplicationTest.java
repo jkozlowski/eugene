@@ -5,6 +5,7 @@
  */
 package eugene.market.client.impl;
 
+import eugene.market.client.OrderReference;
 import eugene.market.client.OrderReferenceListener;
 import eugene.market.client.Session;
 import eugene.market.ontology.field.ClOrdID;
@@ -16,6 +17,9 @@ import eugene.market.ontology.field.enums.Side;
 import eugene.market.ontology.message.ExecutionReport;
 import eugene.market.ontology.message.OrderCancelReject;
 import org.testng.annotations.Test;
+
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import static eugene.market.client.OrderReferenceListener.EMPTY_LISTENER;
 import static eugene.market.ontology.Defaults.defaultClOrdID;
@@ -141,7 +145,7 @@ public class OrderReferenceApplicationTest {
         executionReport.setClOrdID(new ClOrdID(defaultClOrdID));
         executionReport.setOrdStatus(OrdStatus.PARTIALLY_FILLED.field());
         executionReport.setLastPx(new LastPx(defaultPrice));
-        executionReport.setLastQty(new LastQty(defaultOrdQty-1L));
+        executionReport.setLastQty(new LastQty(defaultOrdQty - 1L));
 
         final Session session = mock(Session.class);
 
@@ -226,5 +230,25 @@ public class OrderReferenceApplicationTest {
 
         verify(listener).cancelRejectedEvent(orderCancelReject, orderReference, session);
         verifyNoMoreInteractions(listener);
+    }
+
+    @Test
+    public void testGetOrderReferences() {
+        final OrderReferenceImpl o1 = new OrderReferenceImpl(OrderReferenceListener.EMPTY_LISTENER,
+                                                             defaultClOrdID, 2L, OrdType.LIMIT,
+                                                             Side.BUY, defaultOrdQty, defaultPrice);
+        final OrderReferenceImpl o2 = new OrderReferenceImpl(OrderReferenceListener.EMPTY_LISTENER,
+                                                             defaultClOrdID + "1", 1L, OrdType.LIMIT,
+                                                             Side.BUY, defaultOrdQty, defaultPrice);
+
+        final SortedSet<OrderReference> expected = new TreeSet<OrderReference>(OrderReferenceComparator.getInstance());
+        expected.add(o1);
+        expected.add(o2);
+
+        final OrderReferenceApplication app = new OrderReferenceApplication();
+        app.addOrderReference(o1);
+        app.addOrderReference(o2);
+        
+        assertThat(app.getOrderReferences(), is(expected));
     }
 }

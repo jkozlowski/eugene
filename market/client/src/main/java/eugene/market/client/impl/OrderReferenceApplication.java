@@ -14,6 +14,8 @@ import eugene.market.ontology.field.enums.OrdStatus;
 import eugene.market.ontology.message.ExecutionReport;
 import eugene.market.ontology.message.OrderCancelReject;
 
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -86,6 +88,17 @@ public final class OrderReferenceApplication extends ApplicationAdapter {
     public void toApp(final OrderCancelReject orderCancelReject, final Session session) {
         final OrderReferenceImpl ref = getOrderReference(orderCancelReject.getClOrdID());
         ref.getOrderReferenceListener().cancelRejectedEvent(orderCancelReject, ref, session);
+    }
+
+    /**
+     * Gets working orders.
+     *
+     * @return set of working orders sorted chronologically.
+     */
+    public SortedSet<OrderReference> getOrderReferences() {
+        final SortedSet<OrderReference> orders = new TreeSet<OrderReference>(OrderReferenceComparator.getInstance());
+        orders.addAll(orderReferenceMap.values());
+        return orders;
     }
 
     @VisibleForTesting
