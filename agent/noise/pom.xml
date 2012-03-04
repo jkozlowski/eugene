@@ -22,7 +22,6 @@
     </properties>
 
     <dependencies>
-
         <dependency>
             <groupId>eugene.market</groupId>
             <artifactId>ontology</artifactId>
@@ -38,6 +37,16 @@
             <artifactId>guava-osgi</artifactId>
             <version>${guava.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-math3</artifactId>
+            <version>${commons.math.version}</version>
+        </dependency>
+        <!--<dependency>-->
+        <!--<groupId>colt</groupId>-->
+        <!--<artifactId>colt</artifactId>-->
+        <!--<version>1.2.0</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>eugene</groupId>
             <artifactId>jade-unit</artifactId>
@@ -104,7 +113,7 @@
                             eugene.market.ontology.field.enums, eugene.market.client, eugene.market.ontology,
                             jade.content, jade.content.lang, jade.content.lang.sl, jade.content.onto,
                             jade.content.lang.leap, eugene.market.esma, eugene.simulation.agent,
-                            eugene.simulation.ontology
+                            eugene.simulation.ontology, org.apache.commons.math3.distribution
                         </Import-Package>
                     </instructions>
                 </configuration>

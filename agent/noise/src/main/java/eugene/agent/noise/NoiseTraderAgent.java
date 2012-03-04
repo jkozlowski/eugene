@@ -6,9 +6,9 @@
 package eugene.agent.noise;
 
 import eugene.agent.noise.impl.PlaceOrderBehaviour;
-import eugene.market.book.OrderBook;
 import eugene.market.client.ApplicationAdapter;
 import eugene.market.client.Session;
+import eugene.market.client.TopOfBookApplication;
 import eugene.simulation.agent.Simulation;
 import eugene.simulation.ontology.Start;
 import eugene.simulation.ontology.Stop;
@@ -17,9 +17,8 @@ import jade.core.behaviours.Behaviour;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static eugene.market.book.OrderBooks.defaultOrderBook;
-import static eugene.market.client.Applications.orderBookApplication;
 import static eugene.market.client.Applications.proxy;
+import static eugene.market.client.Applications.topOfBookApplication;
 import static eugene.market.client.Sessions.initiate;
 
 /**
@@ -39,18 +38,18 @@ public class NoiseTraderAgent extends Agent {
 
         final Simulation simulation = (Simulation) getArguments()[0];
 
-        final OrderBook orderBook = defaultOrderBook();
+        final TopOfBookApplication topOfBook = topOfBookApplication(simulation.getSymbol());
         addBehaviour(
                 initiate(
                         proxy(
-                                orderBookApplication(orderBook),
+                                topOfBook,
                                 new ApplicationAdapter() {
                                     
                                     private Behaviour b = null;
                                     
                                     @Override
                                     public void onStart(final Start start, final Agent agent, final Session session) {
-                                        b = new PlaceOrderBehaviour(orderBook, session);
+                                        b = new PlaceOrderBehaviour(topOfBook, session);
                                         agent.addBehaviour(b);
                                     }
                                     

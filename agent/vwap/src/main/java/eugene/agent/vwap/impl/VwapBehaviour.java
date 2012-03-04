@@ -13,13 +13,11 @@ import eugene.market.client.OrderReference;
 import eugene.market.client.OrderReferenceListenerAdapter;
 import eugene.market.client.OrderReferenceListenerProxy;
 import eugene.market.client.Session;
-import eugene.market.ontology.field.ClOrdID;
 import eugene.market.ontology.field.OrderQty;
 import eugene.market.ontology.field.enums.OrdType;
 import eugene.market.ontology.message.ExecutionReport;
 import eugene.market.ontology.message.NewOrderSingle;
 import eugene.market.ontology.message.OrderCancelReject;
-import eugene.market.ontology.message.OrderCancelRequest;
 import eugene.utils.behaviour.CyclicFinishableBehaviour;
 import eugene.utils.behaviour.FinishableBehaviour;
 import eugene.utils.behaviour.OneShotFinishableBehaviour;
@@ -36,6 +34,7 @@ import java.util.Calendar;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.Iterators.peekingIterator;
+import static eugene.market.client.Messages.cancelRequest;
 import static eugene.market.client.Messages.newLimit;
 import static eugene.market.client.OrderReferenceListeners.proxy;
 
@@ -241,7 +240,7 @@ public final class VwapBehaviour extends FSMBehaviour {
             public void action(final FinishableBehaviour b, final Agent agent) {
                 checkState(null == currentOrder);
 
-                final Order topOfBook = orderBook.peek(vwapExecution.getSide());
+                final Order topOfBook = orderBook.peek(vwapExecution.getSide().getOpposite());
 
                 if (null == topOfBook) {
                     b.finish(GOTO_DECISION_STATE);
@@ -282,10 +281,7 @@ public final class VwapBehaviour extends FSMBehaviour {
 
                 checkNotNull(currentOrder);
                 checkState(currentOrder.getOrdType().isLimit());
-                final OrderCancelRequest cancelRequest = new OrderCancelRequest();
-                cancelRequest.setClOrdID(new ClOrdID(currentOrder.getClOrdID()));
-                cancelRequest.setOrderQty(new OrderQty(currentOrder.getOrderQty()));
-                cancelRequest.setSide(currentOrder.getSide().field());
+
 
                 proxy.addListener(new OrderReferenceListenerAdapter() {
 
@@ -307,7 +303,7 @@ public final class VwapBehaviour extends FSMBehaviour {
                     }
                 });
 
-                session.send(cancelRequest);
+                session.send(cancelRequest(currentOrder));
                 LOG.info("Cancelling: {}", currentOrder);
             }
         }), CANCEL_LIMIT_STATE);

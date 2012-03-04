@@ -10,7 +10,9 @@ import eugene.market.client.impl.OrderBookApplication;
 import eugene.market.client.impl.ProxyApplicationImpl;
 import eugene.market.client.impl.TopOfBookApplicationImpl;
 import eugene.market.client.impl.TopOfBookPrinter;
+import eugene.market.ontology.Defaults;
 import eugene.simulation.agent.Symbol;
+import eugene.simulation.agent.Symbols;
 import org.testng.annotations.Test;
 
 import static eugene.market.client.Applications.orderBookApplication;
@@ -29,6 +31,10 @@ import static org.mockito.Mockito.mock;
  */
 public class ApplicationsTest {
 
+    private static final Symbol defaultSymbol = Symbols.getSymbol(Defaults.defaultSymbol, Defaults.defaultTickSize,
+                                                                  Defaults.defaultPrice);
+
+
     @Test(expectedExceptions = UnsupportedOperationException.class)
     public void testConstructor() {
         new Applications();
@@ -43,14 +49,14 @@ public class ApplicationsTest {
     public void testOrderBookApplication() {
         assertThat(orderBookApplication(mock(OrderBook.class)), is(OrderBookApplication.class));
     }
-    
+
     @Test
     public void testTopOfBookPrinterApplication() {
         assertThat(topOfBookPrinterApplication(mock(OrderBook.class)), is(TopOfBookPrinter.class));
     }
-    
+
     @Test
     public void testTopOfBook() {
-        assertThat(topOfBookApplication(mock(Symbol.class)), is(TopOfBookApplicationImpl.class));
+        assertThat(topOfBookApplication(defaultSymbol), is(TopOfBookApplicationImpl.class));
     }
 }

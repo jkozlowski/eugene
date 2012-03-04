@@ -66,6 +66,13 @@
             </releases>
         </repository>
         <repository>
+            <id>Apache Snapshots</id>
+            <url>http://repository.apache.org/content/groups/snapshots/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+        <repository>
             <id>project.local</id>
             <name>project</name>
             <url>file://.repo</url>
@@ -102,13 +109,14 @@
         <junit.version>4.10</junit.version>
         <testng.version>6.3</testng.version>
         <google.findbugs.version>1.3.9</google.findbugs.version>
-        <guava.version>10.0.0</guava.version>
+        <guava.version>11.0.1</guava.version>
         <hamcrest.version>1.1</hamcrest.version>
         <mockito.version>1.9.0-rc1</mockito.version>
         <easymock.version>3.0</easymock.version>
         <powermock.version>1.4.10</powermock.version>
         <quickfix.version>1.3.1</quickfix.version>
         <slf4j.version>1.6.3</slf4j.version>
+        <commons.math.version>3.0-SNAPSHOT</commons.math.version>
         <maven.compiler.version>2.3.2</maven.compiler.version>
         <maven.clean.version>2.4.1</maven.clean.version>
         <maven.assembly.version>2.2.1</maven.assembly.version>

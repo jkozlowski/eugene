@@ -56,18 +56,15 @@ public final class PriceImpl implements Price {
      * {@inheritDoc}
      */
     @Override
-    public BigDecimal nextPrice(final long ticks) {
-        checkArgument(ticks > 0);
-        return side.isBuy() ? add(ticks) : subtract(ticks);
+    public BigDecimal nextPrice(final BigDecimal priceMove) {
+        checkArgument(priceMove.compareTo(BigDecimal.ZERO) > 0);
+        return side.isBuy() ? add(priceMove) : subtract(priceMove);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public BigDecimal prevPrice(final long ticks) {
-        checkArgument(ticks > 0);
-        return side.isSell() ? add(ticks) : subtract(ticks);
+    public BigDecimal prevPrice(BigDecimal priceMove) {
+        checkArgument(priceMove.compareTo(BigDecimal.ZERO) > 0);
+        return side.isBuy() ? subtract(priceMove) : add(priceMove);
     }
 
     /**
@@ -79,28 +76,26 @@ public final class PriceImpl implements Price {
     }
 
     /**
-     * Helper function to add <code>ticks</code> to current price.
+     * Helper function to add {@code priceMove} to the current price.
      *
-     * @param ticks number of ticks to add.
+     * @param priceMove how much to move the price.
      *
-     * @return <code>price + ticks * tickSize</code>.
+     * @return {@code price + priceMove} rounded to a tick with {@link RoundingMode#HALF_UP}.
      */
-    private BigDecimal add(final long ticks) {
+    public BigDecimal add(final BigDecimal priceMove) {
         final BigDecimal tickSize = symbol.getTickSize();
-        return price.add(tickSize.multiply(BigDecimal.valueOf(ticks)))
-                .setScale(tickSize.scale(), RoundingMode.HALF_UP);
+        return price.add(priceMove).setScale(tickSize.scale(), RoundingMode.HALF_UP);
     }
 
     /**
-     * Helper function to subtract <code>ticks</code> from current price.
+     * Helper function to subtract {@code priceMove} from the current price.
      *
-     * @param ticks number of ticks to subtract.
+     * @param priceMove how much to move the price.
      *
-     * @return <code>price - ticks * tickSize</code>.
+     * @return {@code price - priceMove} rounded to a tick with {@link RoundingMode#HALF_UP}.
      */
-    private BigDecimal subtract(final long ticks) {
+    public BigDecimal subtract(final BigDecimal priceMove) {
         final BigDecimal tickSize = symbol.getTickSize();
-        return price.subtract(tickSize.multiply(BigDecimal.valueOf(ticks)))
-                .setScale(tickSize.scale(), RoundingMode.HALF_UP);
+        return price.subtract(priceMove).setScale(tickSize.scale(), RoundingMode.HALF_UP);
     }
 }

@@ -7,24 +7,34 @@ package eugene.agent.noise.impl;
 
 import com.google.common.annotations.VisibleForTesting;
 import eugene.market.book.OrderBook;
+import eugene.market.client.OrderReference;
 import eugene.market.client.Session;
+import eugene.market.client.TopOfBookApplication;
+import eugene.market.client.TopOfBookApplication.ReturnDefaultPrice;
 import eugene.market.ontology.field.OrderQty;
-import eugene.market.ontology.field.Price;
 import eugene.market.ontology.field.enums.OrdType;
 import eugene.market.ontology.field.enums.Side;
-import eugene.market.ontology.message.NewOrderSingle;
 import eugene.simulation.agent.Symbol;
 import jade.core.behaviours.TickerBehaviour;
+import org.apache.commons.math3.distribution.ExponentialDistribution;
+import org.apache.commons.math3.distribution.LogNormalDistribution;
+import org.apache.commons.math3.distribution.RealDistribution;
+import org.apache.commons.math3.distribution.UniformRealDistribution;
 
 import java.math.BigDecimal;
 import java.util.Random;
+import java.util.SortedSet;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static eugene.market.client.Messages.cancelRequest;
+import static eugene.market.client.Messages.newLimit;
+import static eugene.market.client.Messages.newMarket;
+import static eugene.market.client.TopOfBookApplication.ReturnDefaultPrice.YES;
 
 /**
- * Places either {@link Strategy#AGGRESSIVE}, {@link Strategy#MID} or {@link Strategy#PASSIVE} order for a random
- * {@link OrderQty} (between {@link PlaceOrderBehaviour#MIN_ORDER_QTY} and {@link PlaceOrderBehaviour#MAX_ORDER_QTY})
- * and to a random {@link Side}, and then sleeps for a random period of time.
+ * Places either {@link Decision#MARKET}, {@link Decision#CANCEL} or {@link Decision#LIMIT_IN_SPREAD} or {@link
+ * Decision#LIMIT_OUT_OF_SPREAD} order for a random {@link OrderQty} (between  to a random {@link Side},
+ * and then sleeps for a random period of time.
  *
  * If there is no price on the {@link OrderBook}, {@link Symbol#getDefaultPrice()} will be used as current price.
  *
@@ -33,157 +43,171 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class PlaceOrderBehaviour extends TickerBehaviour {
 
-    public static final int MAX_SPREAD = 10;
+    public static final double MARKET_PROB = 0.15D;
 
-    public static final int MIN_SPREAD = 1;
+    public static final double CANCEL_PROB = MARKET_PROB + 0.50D;
 
-    public static final Integer MAX_SLEEP = 500;
+    public static final double LIMIT_IN_SPREAD_PROB = 0.35D;
 
-    public static final int MAX_ORDER_QTY = 10;
-
-    public static final int MIN_ORDER_QTY = 4;
+    public static final Integer MAX_SLEEP = 3000;
 
     private final Random generator;
 
-    private final OrderBook orderBook;
+    private final TopOfBookApplication topOfBook;
 
     private final Session session;
 
     private enum Decision {
         CANCEL,
         MARKET,
-        LIMIT
+        LIMIT_IN_SPREAD,
+        LIMIT_OUT_OF_SPREAD
     }
 
-    private enum Strategy {
+    private final RealDistribution decision = new UniformRealDistribution();
 
-        /**
-         * Sends a {@link OrdType#MARKET}.
-         */
-        AGGRESSIVE,
+    private final RealDistribution ordSize = new LogNormalDistribution(4.5, 0.8);
 
-        /**
-         * Sends a {@link OrdType#LIMIT} order with a price that is one tick better than the the current best price.
-         */
-        MID,
+    private final RealDistribution inSpreadPrice = new UniformRealDistribution();
 
-        /**
-         * Sends a {@link OrdType#LIMIT} order a random number ticks away from the current best price.
-         */
-        PASSIVE
-    }
+    private final RealDistribution outOfSpreadPrice = new ExponentialDistribution(0.3D);
 
     /**
      * Constructs a {@link PlaceOrderBehaviour} that will create an instance of {@link Random},
-     * check this <code>orderBook</code> for the current price and use this <code>session</code> to send orders.
+     * check this <code>topOfBook</code> for the current price and use this <code>session</code> to send orders.
      *
-     * @param orderBook {@link OrderBook} to check for the current price.
+     * @param topOfBook {@link TopOfBookApplication} to check for the current price.
      * @param session   {@link Session} to use to send orders.
      */
-    public PlaceOrderBehaviour(final OrderBook orderBook, final Session session) {
-        this(new Random(), orderBook, session);
+    public PlaceOrderBehaviour(final TopOfBookApplication topOfBook, final Session session) {
+        this(new Random(), topOfBook, session);
     }
 
     /**
      * Constructs a {@link PlaceOrderBehaviour} that will use this <code>generator</code> to make decisions,
-     * check this <code>orderBook</code> for the current price and use this <code>session</code> to send orders.
+     * check this <code>topOfBook</code> for the current price and use this <code>session</code> to send orders.
      *
      * @param generator {@link Random} to use.
-     * @param orderBook {@link OrderBook} to check for the current price.
+     * @param topOfBook {@link TopOfBookApplication} to check for the current price.
      * @param session   {@link Session} to use to send orders.
      */
-    public PlaceOrderBehaviour(final Random generator, final OrderBook orderBook, final Session session) {
+    public PlaceOrderBehaviour(final Random generator, final TopOfBookApplication topOfBook, final Session session) {
         super(null, generator.nextInt(MAX_SLEEP) + 1);
         checkNotNull(generator);
-        checkNotNull(orderBook);
+        checkNotNull(topOfBook);
         checkNotNull(session);
         this.generator = generator;
-        this.orderBook = orderBook;
+        this.topOfBook = topOfBook;
         this.session = session;
     }
 
     @Override
     @VisibleForTesting
     public void onTick() {
-        final Strategy strategy = getStrategy();
         final Side side = (0 == generator.nextInt(2)) ? Side.BUY : Side.SELL;
-        final Long orderQty = getOrderQty();
         final int sleep = generator.nextInt(MAX_SLEEP) + 1;
 
-        session.send(newOrderSingle(strategy, side, orderQty));
+        switch (getDecision()) {
+
+            case MARKET:
+                market(side);
+                break;
+
+            case CANCEL:
+                cancel();
+                break;
+
+            case LIMIT_IN_SPREAD:
+                limitInSpread(side);
+                break;
+
+            case LIMIT_OUT_OF_SPREAD:
+                limitOutOfSpread(side);
+                break;
+        }
 
         super.reset(sleep);
     }
 
     /**
-     * Gets a random {@link Strategy}.
-     *
-     * @return random {@link Strategy}.
+     * Cancels the oldest working order.
      */
-    private Strategy getStrategy() {
-        final int random = generator.nextInt(3);
-        return 0 == random ? Strategy.AGGRESSIVE : (1 == random ? Strategy.MID : Strategy.PASSIVE);
+    private void cancel() {
+        final SortedSet<OrderReference> orders = session.getOrderReferences();
+        if (!orders.isEmpty()) {
+            session.send(cancelRequest(orders.first()));
+        }
     }
 
     /**
-     * Gets a random orderQty between {@link PlaceOrderBehaviour#MIN_ORDER_QTY} and {@link
-     * PlaceOrderBehaviour#MAX_ORDER_QTY}.
+     * Sends a {@link OrdType#MARKET} order for quantity matching the quantity on the {@link Side#getOpposite()} side
+     * of the order book.
      *
-     * @return random orderQty.
+     * @param side side of the order.
      */
-    private Long getOrderQty() {
-        final int additive = generator.nextInt(MAX_ORDER_QTY - MIN_ORDER_QTY);
-        return Long.valueOf(MIN_ORDER_QTY + additive);
-    }
+    private void market(final Side side) {
 
-    /**
-     * Gets a {@link NewOrderSingle} that will create an order for this <code>strategy</code>,
-     * <code>side</code> and <code>orderQty</code>.
-     *
-     * @param strategy type of order to send.
-     * @param side     {@link Side} of the order.
-     * @param orderQty quantity of the order.
-     *
-     * @return {@link NewOrderSingle} that will create an order for these parameters.
-     */
-    private NewOrderSingle newOrderSingle(final Strategy strategy, final Side side, Long orderQty) {
-
-        final NewOrderSingle newOrderSingle = new NewOrderSingle();
-        newOrderSingle.setOrderQty(new OrderQty(orderQty));
-        newOrderSingle.setSide(side.field());
-        newOrderSingle.setOrdType(OrdType.LIMIT.field());
-
-        final BigDecimal defaultPrice = session.getSimulation().getSymbol().getDefaultPrice();
-        final BigDecimal tickSize = session.getSimulation().getSymbol().getTickSize();
-
-        final BigDecimal curPrice = orderBook.isEmpty(side) ? defaultPrice : orderBook.peek(side).getPrice();
-
-        switch (strategy) {
-
-            case AGGRESSIVE:
-                newOrderSingle.setOrdType(OrdType.MARKET.field());
-                break;
-
-            case MID:
-                if (side.isBuy()) {
-                    newOrderSingle.setPrice(new Price(curPrice.add(tickSize)));
-                }
-                else {
-                    newOrderSingle.setPrice(new Price(curPrice.subtract(tickSize)));
-                }
-                break;
-
-            case PASSIVE:
-                final BigDecimal additive = BigDecimal.valueOf(generator.nextInt(MAX_SPREAD - MIN_SPREAD));
-                if (side.isBuy()) {
-                    newOrderSingle.setPrice(new Price(curPrice.subtract(additive.multiply(tickSize))));
-                }
-                else {
-                    newOrderSingle.setPrice(new Price(curPrice.add(additive.multiply(tickSize))));
-                }
-                break;
+        if (topOfBook.getOrderBook().isEmpty(side.getOpposite())) {
+            return;
         }
 
-        return newOrderSingle;
+        session.send(newMarket(side, topOfBook.getOrderBook().peek(side.getOpposite()).getOrderQty()));
+    }
+
+    /**
+     * Sends a {@link OrdType#LIMIT} order between best ask and best bid.
+     *
+     * @param side side of the order.
+     */
+    private void limitInSpread(final Side side) {
+
+        final Long ordQty = Double.valueOf(ordSize.sample()).longValue();
+
+        if (!topOfBook.hasBothSides()) {
+            session.send(newLimit(topOfBook.getLastPrice(side, YES), ordQty));
+            return;
+        }
+
+        final BigDecimal spread = topOfBook.getSpread();
+        final BigDecimal additive = BigDecimal.valueOf(inSpreadPrice.sample()).multiply(spread);
+        final BigDecimal price = topOfBook.getLastPrice(Side.BUY, ReturnDefaultPrice.NO).nextPrice(additive);
+        session.send(newLimit(side, price, ordQty));
+    }
+
+    /**
+     * Sends a {@link OrdType#LIMIT} order away from the current best price on this {@code side}.
+     *
+     * @param side side of the limit order.
+     */
+    private void limitOutOfSpread(final Side side) {
+
+        final Long ordQty = Double.valueOf(ordSize.sample()).longValue();
+
+        final BigDecimal priceMove = BigDecimal.valueOf(outOfSpreadPrice.sample());
+        final BigDecimal price = topOfBook.getLastPrice(side, YES).prevPrice(priceMove);
+
+        session.send(newLimit(side, price, ordQty));
+    }
+
+    private Decision getDecision() {
+
+        final double choice = decision.sample();
+
+        if (choice < MARKET_PROB) {
+            return Decision.MARKET;
+        }
+        else if (choice < CANCEL_PROB) {
+            return Decision.CANCEL;
+        }
+        else {
+
+            final double limitType = decision.sample();
+            if (limitType < LIMIT_IN_SPREAD_PROB) {
+                return Decision.LIMIT_IN_SPREAD;
+            }
+            else {
+                return Decision.LIMIT_OUT_OF_SPREAD;
+            }
+        }
     }
 }

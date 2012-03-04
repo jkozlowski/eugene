@@ -8,6 +8,8 @@ package eugene.market.client;
 
 import org.testng.annotations.Test;
 
+import java.math.BigDecimal;
+
 import static eugene.market.client.TopOfBookApplication.NO_PRICE;
 
 /**
@@ -30,11 +32,11 @@ public class TopOfBookApplicationTest {
 
     @Test(expectedExceptions = UnsupportedOperationException.class)
     public void testNextPrice() {
-        NO_PRICE.nextPrice(1);
+        NO_PRICE.nextPrice(BigDecimal.ONE);
     }
 
     @Test(expectedExceptions = UnsupportedOperationException.class)
     public void testPrevPrice() {
-        NO_PRICE.prevPrice(1);
+        NO_PRICE.prevPrice(BigDecimal.ONE);
     }
 }

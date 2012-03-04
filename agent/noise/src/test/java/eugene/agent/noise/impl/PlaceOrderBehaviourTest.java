@@ -5,8 +5,8 @@
  */
 package eugene.agent.noise.impl;
 
-import eugene.market.book.OrderBook;
 import eugene.market.client.Session;
+import eugene.market.client.TopOfBookApplication;
 import org.testng.annotations.Test;
 
 import static org.mockito.Mockito.mock;
@@ -26,6 +26,6 @@ public class PlaceOrderBehaviourTest {
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testConstructorNullSession() {
-        new PlaceOrderBehaviour(mock(OrderBook.class), null);
+        new PlaceOrderBehaviour(mock(TopOfBookApplication.class), null);
     }
 }

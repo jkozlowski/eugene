@@ -8,8 +8,10 @@ package eugene.market.client;
 
 import eugene.market.book.OrderBook;
 import eugene.market.ontology.field.enums.Side;
+import eugene.simulation.agent.Symbol;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * Tracks the prices at the top of the book.
@@ -29,12 +31,12 @@ public interface TopOfBookApplication extends Application {
         }
 
         @Override
-        public BigDecimal nextPrice(long ticks) throws IllegalArgumentException {
+        public BigDecimal nextPrice(BigDecimal priceMove) {
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public BigDecimal prevPrice(long ticks) throws IllegalArgumentException {
+        public BigDecimal prevPrice(BigDecimal priceMove) {
             throw new UnsupportedOperationException();
         }
 
@@ -43,6 +45,14 @@ public interface TopOfBookApplication extends Application {
             throw new UnsupportedOperationException();
         }
     };
+
+    /**
+     * Indicates whether {@link Symbol#getDefaultPrice()} should be returned if this {@link TopOfBookApplication} has
+     * not observed any prices yet.
+     */
+    public enum ReturnDefaultPrice {
+        YES, NO
+    }
 
     /**
      * Represents the current price at a side of the {@link OrderBook}.
@@ -57,32 +67,30 @@ public interface TopOfBookApplication extends Application {
         Side getSide();
 
         /**
-         * Gets the price that is <code>ticks</code> better then the {@link #getPrice()}. If this {@link Price}
-         * represents an bid price, then this method returns <code>{@link #getPrice()} + ticks * tickSize</code>.
+         * Gets the price that is {@code priceMove} better than this {@link Price}. If this {@link Price}
+         * represents an bid price, then this method returns <code>{@link #getPrice()} + priceMove</code>.
          * Similarly, if this {@link Price} represents an ask price, this method returns <code>{@link #getPrice()} -
-         * ticks * tickSize</code>.
+         * priceMove</code>. The resulting price (not the {@code priceMove}) is rounded to the next tick using {@link
+         * RoundingMode#HALF_UP}.
          *
-         * @param ticks number of ticks.
+         * @param priceMove how much to move the price.
          *
-         * @return a price better than the best price.
-         *
-         * @throws IllegalArgumentException if <code>ticks</code> is less than 1.
+         * @return a price better than this {@link Price}.
          */
-        BigDecimal nextPrice(final long ticks) throws IllegalArgumentException;
+        BigDecimal nextPrice(final BigDecimal priceMove);
 
         /**
-         * Gets the price that is <code>ticks</code> worse than the {@link #getPrice()}. If this {@link Price}
-         * represents an bid price, then this method returns <code>{@link #getPrice()} - ticks * tickSize</code>.
+         * Gets the price that is {@code priceMove} worse than this {@link Price}. If this {@link Price}
+         * represents an bid price, then this method returns <code>{@link #getPrice()} - priceMove</code>.
          * Similarly, if this {@link Price} represents an ask price, this method returns <code>{@link #getPrice()} +
-         * ticks * tickSize</code>.
+         * priceMove</code>. The resulting price (not the {@code priceMove}) is rounded to the next tick using {@link
+         * RoundingMode#HALF_UP}.
          *
-         * @param ticks number of ticks.
+         * @param priceMove how much to move the price.
          *
-         * @return a price worse than the best price.
-         *
-         * @throws IllegalArgumentException if <code>ticks</code> is less than 1.
+         * @return a price worse than this {@link Price}.
          */
-        BigDecimal prevPrice(final long ticks) throws IllegalArgumentException;
+        BigDecimal prevPrice(final BigDecimal priceMove);
 
         /**
          * Gets the current price.
@@ -93,15 +101,55 @@ public interface TopOfBookApplication extends Application {
     }
 
     /**
+     * Utility method for calling <code>getLastPrice(side, ReturnDefaultPrice.YES)</code>.
+     *
+     * @see #getLastPrice(Side, ReturnDefaultPrice)
+     */
+    Price getLastPrice(final Side side) throws NullPointerException;
+
+    /**
      * Gets the price at the top of the {@link OrderBook} on this <code>side</code>. If there is no liquidity at this
      * <code>side</code>, the latest previous price seen is returned. If this {@link TopOfBookApplication} did not
-     * observe any prices yet, this method will return {@link #NO_PRICE}.
+     * observe any prices yet, this method will either return {@link #NO_PRICE} or {@link Symbol#getDefaultPrice()},
+     * depending on <code>returnDefaultPrice</code>.
      *
-     * @param side side to inspect.
+     * @param side               side to inspect.
+     * @param returnDefaultPrice whether to return the {@link Symbol#getDefaultPrice()} if no prices have
+     *                           been observed yet.
      *
-     * @return price at the top of the {@link OrderBook}.
+     * @return appropriate price.
      *
-     * @throws NullPointerException  if <code>side</code> is empty.
+     * @throws NullPointerException if either parameter is null.
      */
-    Price getPrice(final Side side) throws NullPointerException;
+    Price getLastPrice(final Side side, final ReturnDefaultPrice returnDefaultPrice) throws NullPointerException;
+
+    /**
+     * @see OrderBook#isEmpty(Side)
+     */
+    boolean isEmpty(final Side side);
+
+    /**
+     * Checks if the book is not empty on both sides.
+     *
+     * @return <code>true</code> is book has at least one order on both sides, <code>false</code> otherwise.
+     */
+    boolean hasBothSides();
+
+    /**
+     * Gets the difference between the current bid and ask prices. More specifically,
+     * this method returns <code>getLastPrice(Side.SELL, ReturnDefaultPrice.NO) - getLastPrice(Side.BUY,
+     * ReturnDefaultPrice.NO)</code>.
+     *
+     * @return the spread.
+     *
+     * @throws IllegalStateException if {@link #hasBothSides()} returns <code>false</code>.
+     */
+    BigDecimal getSpread();
+
+    /**
+     * Gets the {@link OrderBook} that this {@link TopOfBookApplication} updates.
+     *
+     * @return updated {@link OrderBook}
+     */
+    OrderBook getOrderBook();
 }

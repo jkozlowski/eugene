@@ -25,9 +25,13 @@ import eugene.simulation.ontology.Start;
 import eugene.simulation.ontology.Stop;
 import jade.core.Agent;
 
+import java.math.BigDecimal;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static eugene.market.book.OrderBooks.defaultOrderBook;
+import static eugene.market.book.OrderBooks.readOnlyOrderBook;
+import static eugene.market.client.TopOfBookApplication.ReturnDefaultPrice.YES;
 
 /**
  * Default implementation of {@link TopOfBookApplication}.
@@ -37,11 +41,15 @@ import static eugene.market.book.OrderBooks.defaultOrderBook;
  */
 public class TopOfBookApplicationImpl implements TopOfBookApplication {
 
+    private final Price SELL_DEFAULT_PRICE;
+
+    private final Price BUY_DEFAULT_PRICE;
+
     private final Application application;
 
     private final OrderBook orderBook;
 
-    private Session session;
+    private Symbol symbol;
 
     private Price buyPrice;
 
@@ -56,9 +64,11 @@ public class TopOfBookApplicationImpl implements TopOfBookApplication {
         checkNotNull(symbol);
         this.orderBook = defaultOrderBook();
         this.application = Applications.orderBookApplication(this.orderBook);
-        this.session = null;
+        this.symbol = symbol;
         this.buyPrice = NO_PRICE;
         this.sellPrice = NO_PRICE;
+        this.SELL_DEFAULT_PRICE = new PriceImpl(symbol.getDefaultPrice(), Side.SELL, symbol);
+        this.BUY_DEFAULT_PRICE = new PriceImpl(symbol.getDefaultPrice(), Side.BUY, symbol);
     }
 
     /**
@@ -75,24 +85,78 @@ public class TopOfBookApplicationImpl implements TopOfBookApplication {
         checkNotNull(application);
         this.orderBook = orderBook;
         this.application = application;
-        this.session = null;
+        this.symbol = symbol;
         this.buyPrice = NO_PRICE;
         this.sellPrice = NO_PRICE;
+        this.SELL_DEFAULT_PRICE = new PriceImpl(symbol.getDefaultPrice(), Side.SELL, symbol);
+        this.BUY_DEFAULT_PRICE = new PriceImpl(symbol.getDefaultPrice(), Side.BUY, symbol);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Price getPrice(final Side side) {
+    public Price getLastPrice(final Side side) {
+        return getLastPrice(side, ReturnDefaultPrice.NO);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Price getLastPrice(final Side side, final ReturnDefaultPrice returnDefaultPrice)
+            throws NullPointerException {
         checkNotNull(side);
-        return side.isBuy() ? buyPrice : sellPrice;
+        checkNotNull(returnDefaultPrice);
+        if (side.isBuy()) {
+            return NO_PRICE.equals(buyPrice) ?
+                    (YES.equals(returnDefaultPrice) ? BUY_DEFAULT_PRICE : NO_PRICE) :
+                    buyPrice;
+        }
+        else {
+            return NO_PRICE.equals(sellPrice) ?
+                    (YES.equals(returnDefaultPrice) ? SELL_DEFAULT_PRICE : NO_PRICE) :
+                    sellPrice;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isEmpty(final Side side) {
+        return orderBook.isEmpty(side);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean hasBothSides() {
+        return !orderBook.isEmpty(Side.BUY) && !orderBook.isEmpty(Side.SELL);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public BigDecimal getSpread() {
+        checkState(hasBothSides());
+        final int scale = symbol.getTickSize().scale();
+        final BigDecimal spread = orderBook.peek(Side.SELL).getPrice().subtract(orderBook.peek(Side.BUY).getPrice());
+        return spread.setScale(scale, BigDecimal.ROUND_HALF_DOWN);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public OrderBook getOrderBook() {
+        return readOnlyOrderBook(orderBook);
     }
 
     @Override
     public void onStart(final Start start, final Agent agent, final Session session) {
-        checkState(null == this.session);
-        this.session = session;
         application.onStart(start, agent, session);
         updatePrices();
     }
@@ -151,27 +215,22 @@ public class TopOfBookApplicationImpl implements TopOfBookApplication {
     @VisibleForTesting
     void updatePrices() {
 
-        checkState(null != this.session);
-
         if (!orderBook.isEmpty(Side.BUY)) {
             if (buyPrice.equals(NO_PRICE)) {
                 this.buyPrice = new PriceImpl(orderBook.peek(Side.BUY).getPrice(), Side.BUY,
-                                              session.getSimulation().getSymbol());
+                                              symbol);
             }
             else if (!buyPrice.getPrice().equals(orderBook.peek(Side.BUY).getPrice())) {
-                this.buyPrice = new PriceImpl(orderBook.peek(Side.BUY).getPrice(), Side.BUY,
-                                              session.getSimulation().getSymbol());
+                this.buyPrice = new PriceImpl(orderBook.peek(Side.BUY).getPrice(), Side.BUY, symbol);
             }
         }
 
         if (!orderBook.isEmpty(Side.SELL)) {
             if (sellPrice.equals(NO_PRICE)) {
-                this.sellPrice = new PriceImpl(orderBook.peek(Side.SELL).getPrice(), Side.SELL,
-                                               session.getSimulation().getSymbol());
+                this.sellPrice = new PriceImpl(orderBook.peek(Side.SELL).getPrice(), Side.SELL, symbol);
             }
             else if (!sellPrice.getPrice().equals(orderBook.peek(Side.SELL).getPrice())) {
-                this.sellPrice = new PriceImpl(orderBook.peek(Side.SELL).getPrice(), Side.SELL,
-                                               session.getSimulation().getSymbol());
+                this.sellPrice = new PriceImpl(orderBook.peek(Side.SELL).getPrice(), Side.SELL, symbol);
             }
         }
     }

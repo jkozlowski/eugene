@@ -9,7 +9,6 @@ import com.google.common.collect.Sets;
 import eugene.agent.noise.NoiseTraderAgent;
 import eugene.agent.vwap.VwapAgent;
 import eugene.market.book.Order;
-import eugene.market.ontology.field.enums.OrdType;
 import eugene.market.ontology.field.enums.Side;
 import eugene.simulation.agent.SimulationAgent;
 import eugene.simulation.agent.Symbol;
@@ -28,7 +27,6 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -44,7 +42,7 @@ import static java.math.BigDecimal.valueOf;
  */
 public class ExperimentActivator implements BundleActivator {
 
-    private static final int NUMBER_OF_TRADERS = 5;
+    private static final int NUMBER_OF_TRADERS = 20;
 
     private static final BigDecimal tickSize = new BigDecimal("0.001").setScale(3);
             
@@ -59,7 +57,7 @@ public class ExperimentActivator implements BundleActivator {
             valueOf(0.08), valueOf(0.08), valueOf(0.08), valueOf(0.08), valueOf(0.08), valueOf(0.12)
     };
 
-    final Long vwapTargetVolume = 2000L;
+    final Long vwapTargetVolume = 8000L;
 
     private BundleContext ctx;
 
@@ -85,17 +83,17 @@ public class ExperimentActivator implements BundleActivator {
             final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
             final Set<Order> orders = new HashSet<Order>();
-            String line;
-            while (null != (line = reader.readLine())) {
-                final String[] parts = line.split(",\\s*");
-                assert 3 == parts.length;
-
-                final BigDecimal price = new BigDecimal(parts[0]).setScale(3, RoundingMode.HALF_UP);
-                final Long ordQty = Long.valueOf(parts[1]);
-                final Side side = Integer.valueOf(parts[2]) == 1 ? Side.SELL : Side.BUY;
-                final Order order = new Order(1L, OrdType.LIMIT, side, ordQty, price);
-                orders.add(order);
-            }
+//            String line;
+//            while (null != (line = reader.readLine())) {
+//                final String[] parts = line.split(",\\s*");
+//                assert 3 == parts.length;
+//
+//                final BigDecimal price = new BigDecimal(parts[0]).setScale(3, RoundingMode.HALF_UP);
+//                final Long ordQty = Long.valueOf(parts[1]);
+//                final Side side = Integer.valueOf(parts[2]) == 1 ? Side.SELL : Side.BUY;
+//                final Order order = new Order(1L, OrdType.LIMIT, side, ordQty, price);
+//                orders.add(order);
+//            }
 
             final Set<Agent> agents = Sets.newHashSet();
             for (int i = 0; i < NUMBER_OF_TRADERS; i++) {
