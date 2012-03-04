@@ -57,6 +57,10 @@ public class ReceiverBehaviour extends SimpleBehaviour {
             received.add(order);
         }
         catch (Exception e) {
+            e.printStackTrace();
+            if (null != e.getCause()) {
+                e.getCause().printStackTrace();
+            }
             failed.add(msg);
         }
     }

@@ -10,6 +10,8 @@ import eugene.market.book.OrderStatus;
 import eugene.market.ontology.field.enums.OrdType;
 import org.testng.annotations.Test;
 
+import java.math.BigDecimal;
+
 import static eugene.market.book.MockOrders.buy;
 import static eugene.market.book.MockOrders.ordType;
 import static eugene.market.book.MockOrders.order;
@@ -30,7 +32,7 @@ public class ExecutionTest {
 
     private static final OrderStatus SELL_ORDER_STATUS = new OrderStatus(order(sell()));
 
-    private static final Double price = Order.NO_PRICE + 1.0D;
+    private static final BigDecimal price = Order.NO_PRICE.add(BigDecimal.ONE);
 
     private static final Long quantity = Order.NO_QTY + 1L;
 

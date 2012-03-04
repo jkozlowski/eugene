@@ -9,6 +9,8 @@ import eugene.market.ontology.Defaults;
 import eugene.market.ontology.field.enums.OrdType;
 import eugene.market.ontology.field.enums.Side;
 
+import java.math.BigDecimal;
+
 import static eugene.market.ontology.Defaults.curOrderID;
 import static eugene.market.ontology.Defaults.defaultOrdQty;
 import static eugene.market.ontology.Defaults.defaultPrice;
@@ -109,7 +111,7 @@ public final class MockOrders {
      *
      * @return mocked {@link Order}.
      */
-    public static Order limitPrice(final Order order, final Double price) {
+    public static Order limitPrice(final Order order, final BigDecimal price) {
         return when(ordType(order, LIMIT).getPrice()).thenReturn(price).getMock();
     }
 
@@ -122,7 +124,7 @@ public final class MockOrders {
      *
      * @return mocked {@link Order}.
      */
-    public static Order limitOrdQtyPrice(final Order order, final Long orderQty, final Double price) {
+    public static Order limitOrdQtyPrice(final Order order, final Long orderQty, final BigDecimal price) {
         final Order mock = when(ordType(order, LIMIT).getPrice()).thenReturn(price).getMock();
         return when(mock.getOrderQty()).thenReturn(orderQty).getMock();
     }
@@ -137,7 +139,7 @@ public final class MockOrders {
      * @return mocked {@link Order}.
      */
     public static Order limitConstPriceEntryTime(final Order order, final Long entryTime) {
-        return when(limitPrice(order, 100.0D).getEntryTime()).thenReturn(entryTime).getMock();
+        return when(limitPrice(order, Defaults.defaultPrice).getEntryTime()).thenReturn(entryTime).getMock();
     }
 
     /**

@@ -24,6 +24,8 @@ import eugene.market.ontology.message.data.OrderExecuted;
 import org.mockito.ArgumentCaptor;
 import org.testng.annotations.Test;
 
+import java.math.BigDecimal;
+
 import static eugene.market.ontology.Defaults.defaultOrdQty;
 import static eugene.market.ontology.Defaults.defaultOrderID;
 import static eugene.market.ontology.Defaults.defaultPrice;
@@ -155,7 +157,7 @@ public class OrderBookApplicationTest {
         final AddOrder addOrder2 = new AddOrder();
         addOrder2.setOrderID(new OrderID(defaultOrderID + "1"));
         addOrder2.setOrderQty(new OrderQty(defaultOrdQty));
-        addOrder2.setPrice(new Price(defaultPrice + 1L));
+        addOrder2.setPrice(new Price(defaultPrice.add(BigDecimal.ONE)));
         addOrder2.setSide(Side.BUY.field());
 
         application.toApp(addOrder2, mock(Session.class));

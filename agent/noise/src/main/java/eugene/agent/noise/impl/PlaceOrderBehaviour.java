@@ -15,6 +15,7 @@ import eugene.market.ontology.field.enums.Side;
 import eugene.market.ontology.message.NewOrderSingle;
 import jade.core.behaviours.TickerBehaviour;
 
+import java.math.BigDecimal;
 import java.util.Random;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -36,9 +37,9 @@ public class PlaceOrderBehaviour extends TickerBehaviour {
 
     public static final int MIN_SPREAD = 1;
 
-    public static final double DEFAULT_TICK = 0.001D;
+    public static final BigDecimal DEFAULT_TICK = new BigDecimal("0.001");
 
-    public static final double DEFAULT_CURRENT_PRICE = 100.0D;
+    public static final BigDecimal DEFAULT_CURRENT_PRICE = new BigDecimal("100.0");
 
     public static final Integer MAX_SLEEP = 500;
 
@@ -150,7 +151,7 @@ public class PlaceOrderBehaviour extends TickerBehaviour {
         newOrderSingle.setSide(side.field());
         newOrderSingle.setOrdType(OrdType.LIMIT.field());
 
-        final double curPrice = orderBook.isEmpty(side) ? DEFAULT_CURRENT_PRICE : orderBook.peek(side).getPrice();
+        final BigDecimal curPrice = orderBook.isEmpty(side) ? DEFAULT_CURRENT_PRICE : orderBook.peek(side).getPrice();
 
         switch (strategy) {
 
@@ -160,20 +161,20 @@ public class PlaceOrderBehaviour extends TickerBehaviour {
 
             case MID:
                 if (side.isBuy()) {
-                    newOrderSingle.setPrice(new Price(curPrice + DEFAULT_TICK));
+                    newOrderSingle.setPrice(new Price(curPrice.add(DEFAULT_TICK)));
                 }
                 else {
-                    newOrderSingle.setPrice(new Price(curPrice - DEFAULT_TICK));
+                    newOrderSingle.setPrice(new Price(curPrice.subtract(DEFAULT_TICK)));
                 }
                 break;
 
             case PASSIVE:
-                final int additive = generator.nextInt(MAX_SPREAD - MIN_SPREAD);
+                final BigDecimal additive = BigDecimal.valueOf(generator.nextInt(MAX_SPREAD - MIN_SPREAD));
                 if (side.isBuy()) {
-                    newOrderSingle.setPrice(new Price(curPrice - additive * DEFAULT_TICK));
+                    newOrderSingle.setPrice(new Price(curPrice.subtract(additive.multiply(DEFAULT_TICK))));
                 }
                 else {
-                    newOrderSingle.setPrice(new Price(curPrice + additive * DEFAULT_TICK));
+                    newOrderSingle.setPrice(new Price(curPrice.add(additive.multiply(DEFAULT_TICK))));
                 }
                 break;
         }

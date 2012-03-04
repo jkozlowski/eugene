@@ -9,9 +9,10 @@ import com.google.common.primitives.Longs;
 import eugene.market.book.Order;
 import eugene.market.book.OrderStatus;
 
+import java.math.BigDecimal;
+
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.primitives.Doubles.compare;
 
 /**
  * Summary of execution of two {@link Order}s.
@@ -25,7 +26,7 @@ public class Execution {
 
     private final OrderStatus limitOrderStatus;
 
-    private final Double price;
+    private final BigDecimal price;
 
     private final Long quantity;
 
@@ -44,7 +45,7 @@ public class Execution {
     public Execution(final Long execID,
                      final OrderStatus newOrderStatus,
                      final OrderStatus limitOrderStatus,
-                     final Double price,
+                     final BigDecimal price,
                      final Long quantity) {
 
         checkNotNull(execID);
@@ -53,7 +54,7 @@ public class Execution {
         checkArgument(limitOrderStatus.getOrder().getOrdType().isLimit());
         checkArgument(newOrderStatus.getOrder().getSide().getOpposite().equals(limitOrderStatus.getOrder().getSide()));
         checkNotNull(price);
-        checkArgument(compare(price, Order.NO_PRICE) > 0);
+        checkArgument(price.compareTo(Order.NO_PRICE) > 0);
         checkNotNull(quantity);
         checkArgument(Longs.compare(quantity, Order.NO_QTY) > 0);
 
@@ -96,7 +97,7 @@ public class Execution {
      *
      * @return the price.
      */
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 

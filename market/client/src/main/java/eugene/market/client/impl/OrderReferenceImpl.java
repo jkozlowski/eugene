@@ -5,7 +5,6 @@
  */
 package eugene.market.client.impl;
 
-import com.google.common.primitives.Doubles;
 import com.google.common.primitives.Longs;
 import eugene.market.book.Order;
 import eugene.market.client.OrderReference;
@@ -14,6 +13,9 @@ import eugene.market.ontology.field.ClOrdID;
 import eugene.market.ontology.field.enums.OrdStatus;
 import eugene.market.ontology.field.enums.OrdType;
 import eugene.market.ontology.field.enums.Side;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -40,13 +42,13 @@ public final class OrderReferenceImpl implements OrderReference {
 
     private final OrdType ordType;
 
-    private final Double price;
+    private final BigDecimal price;
 
     private final Long orderQty;
 
     private OrdStatus ordStatus;
 
-    private Double avgPx;
+    private BigDecimal avgPx;
 
     private Long leavesQty;
 
@@ -71,7 +73,7 @@ public final class OrderReferenceImpl implements OrderReference {
      *                                  <code>price</code> is <code>!= 0</code>.
      */
     public OrderReferenceImpl(final OrderReferenceListener listener, final String clOrdID, final Long creationTime,
-                              final OrdType ordType, final Side side, final Long orderQty, final Double price)
+                              final OrdType ordType, final Side side, final Long orderQty, final BigDecimal price)
             throws NullPointerException, IllegalArgumentException {
 
         checkNotNull(listener);
@@ -83,8 +85,8 @@ public final class OrderReferenceImpl implements OrderReference {
         checkNotNull(orderQty);
         checkArgument(compare(orderQty, Order.NO_QTY) == 1);
         checkNotNull(price);
-        checkArgument((ordType.isLimit() && Doubles.compare(price, Order.NO_PRICE) == 1) ||
-                              (ordType.isMarket() && Doubles.compare(price, Order.NO_PRICE) == 0));
+        checkArgument((ordType.isLimit() && price.compareTo(Order.NO_PRICE) == 1) ||
+                              (ordType.isMarket() && price.compareTo(Order.NO_PRICE) == 0));
 
         this.listener = listener;
         this.clOrdID = clOrdID;
@@ -130,7 +132,7 @@ public final class OrderReferenceImpl implements OrderReference {
     }
 
     @Override
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return this.price;
     }
 
@@ -145,7 +147,7 @@ public final class OrderReferenceImpl implements OrderReference {
     }
 
     @Override
-    public synchronized Double getAvgPx() {
+    public synchronized BigDecimal getAvgPx() {
         return this.avgPx;
     }
 
@@ -186,15 +188,19 @@ public final class OrderReferenceImpl implements OrderReference {
      * @param price    price to execute at.
      * @param quantity quantity to execute
      */
-    public synchronized void execute(final Double price, final Long quantity) {
+    public synchronized void execute(final BigDecimal price, final Long quantity) {
         checkNotNull(price);
-        checkArgument(Doubles.compare(price, Order.NO_PRICE) == 1);
+        checkArgument(price.compareTo(Order.NO_PRICE) == 1);
         checkNotNull(quantity);
         checkArgument(Longs.compare(quantity, Order.NO_QTY) == 1);
         checkArgument(Longs.compare(quantity, this.leavesQty) <= 0);
         checkState(this.ordStatus.isNew() || this.ordStatus.isPartiallyFilled());
 
-        this.avgPx = ((quantity * price) + (this.avgPx * cumQty)) / (quantity + this.cumQty);
+        final BigDecimal quantityPrice = price.multiply(BigDecimal.valueOf(quantity));
+        final BigDecimal avgPxCumQty = this.avgPx.multiply(BigDecimal.valueOf(this.cumQty));
+        final BigDecimal quantityCumQty = BigDecimal.valueOf(quantity).add(BigDecimal.valueOf(this.cumQty));
+
+        this.avgPx = quantityPrice.add(avgPxCumQty).divide(quantityCumQty, RoundingMode.HALF_UP);
         this.leavesQty = this.leavesQty - quantity;
         this.cumQty = this.cumQty + quantity;
         this.ordStatus = this.leavesQty.equals(Long.valueOf(0L)) ? FILLED : PARTIALLY_FILLED;

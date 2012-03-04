@@ -67,7 +67,7 @@ public class MessageTest {
 
     @Test
     public void testSendMessages() throws InterruptedException, ControllerException,
-                                                        IllegalAccessException {
+                                          IllegalAccessException {
 
         final AgentContainer container = getContainer();
 
@@ -92,6 +92,7 @@ public class MessageTest {
         receiverEvent.waitUntilProcessed();
 
         assertThat(receiverBehaviour.failed.isEmpty(), is(true));
+
         assertThat(receiverBehaviour.received, is(toSend));
 
         container.kill();

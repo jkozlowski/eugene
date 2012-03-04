@@ -5,9 +5,10 @@
  */
 package eugene.market.book;
 
-import com.google.common.primitives.Doubles;
 import eugene.market.ontology.field.enums.OrdType;
 import eugene.market.ontology.field.enums.Side;
+
+import java.math.BigDecimal;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -41,7 +42,7 @@ public class Order implements Comparable<Order> {
     /**
      * Indicates that there is no price.
      */
-    public static final Double NO_PRICE = Double.valueOf(0.0D);
+    public static final BigDecimal NO_PRICE = BigDecimal.ZERO;
 
     /**
      * Indicates that there is no quantity.
@@ -58,17 +59,17 @@ public class Order implements Comparable<Order> {
 
     private final Long orderQty;
 
-    private final Double price;
+    private final BigDecimal price;
 
     private final int hashCode;
 
     /**
      * Constructs an {@link Order} with {@link System#nanoTime()} <code>entryTime</code>.
      *
-     * @see {@link Order#Order(Long, Long, OrdType, Side, Long, Double)}.
+     * @see {@link Order#Order(Long, Long, OrdType, Side, Long, BigDecimal)}.
      */
     public Order(final Long orderID, final OrdType ordType, final Side side,
-                 final Long orderQty, final Double price) {
+                 final Long orderQty, final BigDecimal price) {
         this(orderID, System.nanoTime(), ordType, side, orderQty, price);
     }
 
@@ -89,7 +90,7 @@ public class Order implements Comparable<Order> {
      *                                  <code>price</code> is <code>!= 0</code>.
      */
     public Order(final Long orderID, final Long entryTime, final OrdType ordType,
-                 final Side side, final Long orderQty, final Double price)
+                 final Side side, final Long orderQty, final BigDecimal price)
             throws NullPointerException, IllegalArgumentException {
 
         checkNotNull(orderID);
@@ -99,8 +100,8 @@ public class Order implements Comparable<Order> {
         checkNotNull(orderQty);
         checkArgument(compare(orderQty, NO_QTY) == 1);
         checkNotNull(price);
-        checkArgument((ordType.isLimit() && Doubles.compare(price, NO_PRICE) == 1) ||
-                              (ordType.isMarket() && Doubles.compare(price, NO_PRICE) == 0));
+        checkArgument((ordType.isLimit() && price.compareTo(NO_PRICE) == 1) ||
+                              (ordType.isMarket() && price.compareTo(NO_PRICE) == 0));
 
         this.orderID = orderID;
         this.entryTime = entryTime;
@@ -159,7 +160,7 @@ public class Order implements Comparable<Order> {
      *
      * @return the price or {@link Order#NO_PRICE} if the order is of type {@link OrdType#MARKET}.
      */
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
@@ -222,12 +223,12 @@ public class Order implements Comparable<Order> {
         }
 
         // LIMIT < LIMIT, if o1.price < o2.price
-        if (price < o2.price) {
+        if (price.compareTo(o2.price) < 0) {
             return side.isBuy() ? AFTER : BEFORE;
         }
 
         // LIMIT > LIMIT, if o1.price > o2.price
-        if (price > o2.price) {
+        if (price.compareTo(o2.price) > 0) {
             return side.isBuy() ? BEFORE : AFTER;
         }
 

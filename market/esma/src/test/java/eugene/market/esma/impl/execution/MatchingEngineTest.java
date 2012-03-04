@@ -11,6 +11,8 @@ import eugene.market.esma.impl.execution.MatchingEngine.MatchingResult;
 import eugene.market.ontology.field.enums.OrdType;
 import org.testng.annotations.Test;
 
+import java.math.BigDecimal;
+
 import static eugene.market.book.MockOrders.buy;
 import static eugene.market.book.MockOrders.limitPrice;
 import static eugene.market.book.MockOrders.ordType;
@@ -93,7 +95,7 @@ public class MatchingEngineTest {
 
     @Test
     public void testMatchLimitLimitBuyCross() {
-        final Order buy = order(limitPrice(buy(), defaultPrice + 1.0D));
+        final Order buy = order(limitPrice(buy(), defaultPrice.add(BigDecimal.ONE)));
         final Order sell = order(limitPrice(sell(), defaultPrice));
         assertThat(match(buy, sell), is(equalTo(defaultMatchingResult)));
     }
@@ -101,7 +103,7 @@ public class MatchingEngineTest {
     @Test
     public void testMatchLimitLimitNoCross() {
         final Order buy = order(limitPrice(buy(), defaultPrice));
-        final Order sell = order(limitPrice(sell(), defaultPrice + 1.0D));
+        final Order sell = order(limitPrice(sell(), defaultPrice.add(BigDecimal.ONE)));
         assertThat(match(buy, sell), is(equalTo(MatchingResult.NO_MATCH)));
     }
 

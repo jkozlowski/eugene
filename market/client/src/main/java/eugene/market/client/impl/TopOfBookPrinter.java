@@ -16,6 +16,8 @@ import eugene.market.ontology.message.data.OrderExecuted;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.math.BigDecimal;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 import static eugene.market.book.Order.NO_PRICE;
 import static eugene.market.ontology.field.enums.Side.BUY;
@@ -62,8 +64,8 @@ public final class TopOfBookPrinter extends ApplicationAdapter {
 
     @VisibleForTesting
     public String print() {
-        final double topBuy = orderBook.isEmpty(BUY) ? NO_PRICE : orderBook.peek(BUY).getPrice();
-        final double topAsk = orderBook.isEmpty(SELL) ? NO_PRICE : orderBook.peek(SELL).getPrice();
+        final BigDecimal topBuy = orderBook.isEmpty(BUY) ? NO_PRICE : orderBook.peek(BUY).getPrice();
+        final BigDecimal topAsk = orderBook.isEmpty(SELL) ? NO_PRICE : orderBook.peek(SELL).getPrice();
 
         long bidDepth = 0L;
         if (!orderBook.isEmpty(BUY)) {

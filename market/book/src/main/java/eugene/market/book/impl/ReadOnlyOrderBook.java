@@ -10,6 +10,7 @@ import eugene.market.book.OrderBook;
 import eugene.market.book.OrderStatus;
 import eugene.market.ontology.field.enums.Side;
 
+import java.math.BigDecimal;
 import java.util.SortedSet;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -63,7 +64,7 @@ public final class ReadOnlyOrderBook implements OrderBook {
      * @throws UnsupportedOperationException this {@link OrderBook} is read-only.
      */
     @Override
-    public OrderStatus execute(Side side, Long orderQty, Double price) throws NullPointerException,
+    public OrderStatus execute(Side side, Long orderQty, BigDecimal price) throws NullPointerException,
                                                                               IllegalArgumentException,
                                                                               UnsupportedOperationException {
         throw new UnsupportedOperationException(ERROR_MESSAGE);

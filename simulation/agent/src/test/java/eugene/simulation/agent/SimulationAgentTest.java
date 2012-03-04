@@ -29,6 +29,7 @@ import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
 import org.testng.annotations.Test;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -89,8 +90,10 @@ public class SimulationAgentTest {
 
         final Set<Order> orders = newHashSet();
         for (int i = 1; i < 11; i++) {
-            orders.add(new Order(1L, OrdType.LIMIT, Side.BUY, defaultOrdQty, defaultPrice - i));
-            orders.add(new Order(1L, OrdType.LIMIT, Side.SELL, defaultOrdQty, defaultPrice + i));
+            orders.add(new Order(1L, OrdType.LIMIT, Side.BUY, defaultOrdQty, 
+                                 defaultPrice.subtract(BigDecimal.valueOf(i))));
+            orders.add(new Order(1L, OrdType.LIMIT, Side.SELL, defaultOrdQty,
+                                 defaultPrice.add(BigDecimal.valueOf(i))));
         }
 
 

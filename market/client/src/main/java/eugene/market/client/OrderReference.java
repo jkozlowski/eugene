@@ -10,6 +10,8 @@ import eugene.market.ontology.field.enums.OrdStatus;
 import eugene.market.ontology.field.enums.OrdType;
 import eugene.market.ontology.field.enums.Side;
 
+import java.math.BigDecimal;
+
 /**
  * Reference to an order submitted in a {@link Session} that can be used to cancel the order and check execution
  * status. {@link OrderReference} is updated by the {@link Session} until it is filled or cancelled.
@@ -59,7 +61,7 @@ public interface OrderReference {
      *
      * @return the price or {@link Order#NO_PRICE} if the order is of type {@link OrdType#MARKET}.
      */
-    Double getPrice();
+    BigDecimal getPrice();
 
     /**
      * Gets the orderQty.
@@ -73,7 +75,7 @@ public interface OrderReference {
      *
      * @return the avgPx.
      */
-    Double getAvgPx();
+    BigDecimal getAvgPx();
 
     /**
      * Gets the leavesQty.

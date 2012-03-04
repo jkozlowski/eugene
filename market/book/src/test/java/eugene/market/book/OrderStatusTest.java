@@ -8,6 +8,8 @@ package eugene.market.book;
 import eugene.market.ontology.field.enums.OrdStatus;
 import org.testng.annotations.Test;
 
+import java.math.BigDecimal;
+
 import static eugene.market.book.MockOrders.order;
 import static eugene.market.book.MockOrders.orderQty;
 import static eugene.market.book.MockOrders.sell;
@@ -63,7 +65,9 @@ public class OrderStatusTest {
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testConstructorAvgPxLessThanNoPrice() {
-        new OrderStatus(orderQty(sell(), defaultOrdQty), Order.NO_PRICE - 1, defaultOrdQty, Order.NO_QTY, OrdStatus.NEW);
+        new OrderStatus(orderQty(sell(), defaultOrdQty), Order.NO_PRICE.subtract(BigDecimal.ONE), defaultOrdQty,
+                        Order.NO_QTY,
+                        OrdStatus.NEW);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -73,7 +77,8 @@ public class OrderStatusTest {
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testConstructorLeavesQtyGreaterThanOrderQty() {
-        new OrderStatus(orderQty(sell(), defaultOrdQty), Order.NO_PRICE, defaultOrdQty + 1, Order.NO_QTY, OrdStatus.NEW);
+        new OrderStatus(orderQty(sell(), defaultOrdQty), Order.NO_PRICE, defaultOrdQty + 1, Order.NO_QTY,
+                        OrdStatus.NEW);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -83,19 +88,21 @@ public class OrderStatusTest {
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testConstructorCumQtyGreaterThanOrderQty() {
-        new OrderStatus(orderQty(sell(), defaultOrdQty), Order.NO_PRICE, Order.NO_QTY, defaultOrdQty + 1, OrdStatus.NEW);
+        new OrderStatus(orderQty(sell(), defaultOrdQty), Order.NO_PRICE, Order.NO_QTY, defaultOrdQty + 1,
+                        OrdStatus.NEW);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testConstructorOrderQtyNotEqualToCumQtyPlusLeavesQty() {
         new OrderStatus(orderQty(sell(), defaultOrdQty), Order.NO_PRICE, 1L, defaultOrdQty, OrdStatus.NEW);
     }
-    
+
     @Test
     public void testReject() {
         final Order order = orderQty(sell(), defaultOrdQty);
-        final OrderStatus orderStatus = new OrderStatus(order, Order.NO_PRICE, defaultOrdQty, Order.NO_QTY, OrdStatus.NEW);
-        
+        final OrderStatus orderStatus = new OrderStatus(order, Order.NO_PRICE, defaultOrdQty, Order.NO_QTY,
+                                                        OrdStatus.NEW);
+
         final OrderStatus rejected = orderStatus.reject();
         assertThat(rejected.getOrdStatus(), is(OrdStatus.REJECTED));
         assertThat(rejected.getAvgPx(), is(orderStatus.getAvgPx()));
@@ -103,11 +110,12 @@ public class OrderStatusTest {
         assertThat(rejected.getLeavesQty(), is(orderStatus.getLeavesQty()));
         assertThat(rejected.getOrder(), sameInstance(order));
     }
-    
+
     @Test
     public void testCancel() {
         final Order order = orderQty(sell(), defaultOrdQty);
-        final OrderStatus orderStatus = new OrderStatus(order, Order.NO_PRICE, defaultOrdQty, Order.NO_QTY, OrdStatus.NEW);
+        final OrderStatus orderStatus = new OrderStatus(order, Order.NO_PRICE, defaultOrdQty, Order.NO_QTY,
+                                                        OrdStatus.NEW);
 
         final OrderStatus cancelled = orderStatus.cancel();
         assertThat(cancelled.getOrdStatus(), is(OrdStatus.CANCELED));
@@ -120,7 +128,8 @@ public class OrderStatusTest {
     @Test(expectedExceptions = NullPointerException.class)
     public void testExecuteNullPrice() {
         final Order order = orderQty(sell(), defaultOrdQty);
-        final OrderStatus orderStatus = new OrderStatus(order, Order.NO_PRICE, defaultOrdQty, Order.NO_QTY, OrdStatus.NEW);
+        final OrderStatus orderStatus = new OrderStatus(order, Order.NO_PRICE, defaultOrdQty, Order.NO_QTY,
+                                                        OrdStatus.NEW);
 
         orderStatus.execute(null, defaultOrdQty);
     }
@@ -128,7 +137,8 @@ public class OrderStatusTest {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testExecuteNoPrice() {
         final Order order = orderQty(sell(), defaultOrdQty);
-        final OrderStatus orderStatus = new OrderStatus(order, Order.NO_PRICE, defaultOrdQty, Order.NO_QTY, OrdStatus.NEW);
+        final OrderStatus orderStatus = new OrderStatus(order, Order.NO_PRICE, defaultOrdQty, Order.NO_QTY,
+                                                        OrdStatus.NEW);
 
         orderStatus.execute(Order.NO_PRICE, defaultOrdQty);
     }
@@ -137,7 +147,8 @@ public class OrderStatusTest {
     @Test(expectedExceptions = NullPointerException.class)
     public void testExecuteNullQuantity() {
         final Order order = orderQty(sell(), defaultOrdQty);
-        final OrderStatus orderStatus = new OrderStatus(order, Order.NO_PRICE, defaultOrdQty, Order.NO_QTY, OrdStatus.NEW);
+        final OrderStatus orderStatus = new OrderStatus(order, Order.NO_PRICE, defaultOrdQty, Order.NO_QTY,
+                                                        OrdStatus.NEW);
 
         orderStatus.execute(defaultPrice, null);
     }
@@ -145,7 +156,8 @@ public class OrderStatusTest {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testExecuteNoQuantity() {
         final Order order = orderQty(sell(), defaultOrdQty);
-        final OrderStatus orderStatus = new OrderStatus(order, Order.NO_PRICE, defaultOrdQty, Order.NO_QTY, OrdStatus.NEW);
+        final OrderStatus orderStatus = new OrderStatus(order, Order.NO_PRICE, defaultOrdQty, Order.NO_QTY,
+                                                        OrdStatus.NEW);
 
         orderStatus.execute(defaultPrice, Order.NO_QTY);
     }
@@ -153,7 +165,8 @@ public class OrderStatusTest {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testExecuteQuantityGreaterThanLeavesQty() {
         final Order order = orderQty(sell(), defaultOrdQty);
-        final OrderStatus orderStatus = new OrderStatus(order, Order.NO_PRICE, defaultOrdQty, Order.NO_QTY, OrdStatus.NEW);
+        final OrderStatus orderStatus = new OrderStatus(order, Order.NO_PRICE, defaultOrdQty, Order.NO_QTY,
+                                                        OrdStatus.NEW);
 
         orderStatus.execute(defaultPrice, defaultOrdQty + 1L);
     }
@@ -161,7 +174,8 @@ public class OrderStatusTest {
     @Test
     public void testExecute() {
         final Order order = order(orderQty(sell(), defaultOrdQty));
-        final OrderStatus orderStatus = new OrderStatus(order, defaultPrice, defaultOrdQty, Order.NO_QTY, OrdStatus.NEW);
+        final OrderStatus orderStatus = new OrderStatus(order, defaultPrice, defaultOrdQty, Order.NO_QTY,
+                                                        OrdStatus.NEW);
 
         final OrderStatus actual = orderStatus.execute(defaultPrice, defaultOrdQty - 1L);
 

@@ -15,6 +15,7 @@ import eugene.market.esma.impl.execution.data.MarketDataEngine;
 import eugene.market.ontology.field.OrderID;
 import eugene.market.ontology.field.enums.OrdType;
 
+import java.math.BigDecimal;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -109,7 +110,7 @@ public class ExecutionEngine {
                 break;
             }
 
-            final Double execPrice = matchingResult.getPrice();
+            final BigDecimal execPrice = matchingResult.getPrice();
 
             final Long execQty = Longs.min(newOrderStatus.getLeavesQty(),
                                            orderBook.getOrderStatus(limitOrder).getLeavesQty());

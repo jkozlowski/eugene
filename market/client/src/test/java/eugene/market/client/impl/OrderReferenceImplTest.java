@@ -85,7 +85,7 @@ public class OrderReferenceImplTest {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testConstructorLimitNoPrice() {
         new OrderReferenceImpl(EMPTY_LISTENER, defaultClOrdID, System.currentTimeMillis(), OrdType.LIMIT, Side.BUY,
-                               defaultOrdQty, 0.0D);
+                               defaultOrdQty, Order.NO_PRICE);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)

@@ -21,6 +21,8 @@ import eugene.market.ontology.field.SessionStatus;
 import eugene.market.ontology.field.Side;
 import eugene.market.ontology.field.Symbol;
 import eugene.market.ontology.field.TradeID;
+import eugene.market.ontology.internal.ExtendedSchema;
+import eugene.market.ontology.internal.LEAPCodec;
 import eugene.market.ontology.message.ExecutionReport;
 import eugene.market.ontology.message.Logon;
 import eugene.market.ontology.message.NewOrderSingle;
@@ -29,11 +31,15 @@ import eugene.market.ontology.message.OrderCancelRequest;
 import eugene.market.ontology.message.data.AddOrder;
 import eugene.market.ontology.message.data.DeleteOrder;
 import eugene.market.ontology.message.data.OrderExecuted;
+import jade.content.abs.AbsExtendedPrimitive;
+import jade.content.abs.AbsObject;
 import jade.content.lang.Codec;
-import jade.content.lang.leap.LEAPCodec;
 import jade.content.onto.BeanOntology;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
+import jade.content.onto.UngroundedException;
+
+import java.math.BigDecimal;
 
 /**
  * Defines the Market Ontology used to send messages between Agents and the Market.
@@ -65,6 +71,7 @@ public final class MarketOntology extends BeanOntology {
         super(NAME);
 
         try {
+            add(new ExtendedSchema(BigDecimal.class), BigDecimal.class);
             add(AvgPx.class, false);
             add(ClOrdID.class, false);
             add(CumQty.class, false);
@@ -97,12 +104,37 @@ public final class MarketOntology extends BeanOntology {
         }
     }
 
+    protected Object toObject(AbsObject abs, String lcType, Ontology referenceOnto)
+            throws UngroundedException, OntologyException {
+        if (abs == null) {
+            return null;
+        }
+
+        // PRIMITIVE
+        if (abs.getAbsType() == AbsExtendedPrimitive.ABS_EXTENDED_PRIMITIVE || abs instanceof AbsExtendedPrimitive) {
+            return ((AbsExtendedPrimitive) abs).get();
+        }
+
+        return super.toObject(abs, lcType, referenceOnto);
+    }
+
+    protected AbsObject fromObject(Object obj, Ontology referenceOnto) throws OntologyException {
+        if (obj == null) {
+            return null;
+        }
+
+        if (obj instanceof BigDecimal) {
+            return AbsExtendedPrimitive.wrap(obj);
+        }
+        return super.fromObject(obj, referenceOnto);
+    }
 
     /**
      * Gets an instance of a {@link Codec} that should be used with {@link MarketOntology}.
      *
      * @return instance of {@link Codec}.
      */
+
     public static Codec getCodec() {
         return new LEAPCodec();
     }

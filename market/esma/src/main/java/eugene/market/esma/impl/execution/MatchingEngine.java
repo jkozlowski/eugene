@@ -9,6 +9,8 @@ import eugene.market.book.Order;
 import eugene.market.ontology.field.enums.OrdType;
 import eugene.market.ontology.field.enums.Side;
 
+import java.math.BigDecimal;
+
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
@@ -90,9 +92,9 @@ public class MatchingEngine {
 
         private final Match match;
 
-        private final Double price;
+        private final BigDecimal price;
 
-        public MatchingResult(final Match match, final Double price) {
+        public MatchingResult(final Match match, final BigDecimal price) {
             checkNotNull(match);
             checkNotNull(price);
             this.price = price;
@@ -116,7 +118,7 @@ public class MatchingEngine {
          *
          * @throws IllegalStateException if called on {@link MatchingResult} with {@link Match#NO}.
          */
-        public Double getPrice() throws IllegalStateException {
+        public BigDecimal getPrice() throws IllegalStateException {
             checkState(match.isMatch());
             return price;
         }
@@ -138,7 +140,7 @@ public class MatchingEngine {
             if (match != that.match) {
                 return false;
             }
-            if (price != null ? !price.equals(that.price) : that.price != null) {
+            if (price != null ? price.compareTo(that.price) != 0 : that.price != null) {
                 return false;
             }
 

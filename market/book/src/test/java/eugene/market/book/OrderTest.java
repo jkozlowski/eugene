@@ -9,6 +9,8 @@ import eugene.market.ontology.field.enums.OrdType;
 import eugene.market.ontology.field.enums.Side;
 import org.testng.annotations.Test;
 
+import java.math.BigDecimal;
+
 import static eugene.market.book.MockOrders.buy;
 import static eugene.market.book.MockOrders.limitConstPriceEntryTime;
 import static eugene.market.book.MockOrders.limitPrice;
@@ -151,18 +153,18 @@ public class OrderTest {
 
     @Test
     public void testLimitToLimitFirstOrderLowerPrice() {
-        assertThat(compare(order(limitPrice(buy(), 100.0D)),
-                           order(limitPrice(buy(), 100.1D))), is(AFTER));
-        assertThat(compare(order(limitPrice(sell(), 100.0D)),
-                           order(limitPrice(sell(), 100.1D))), is(BEFORE));
+        assertThat(compare(order(limitPrice(buy(), defaultPrice)),
+                           order(limitPrice(buy(), new BigDecimal("100.1")))), is(AFTER));
+        assertThat(compare(order(limitPrice(sell(), defaultPrice)),
+                           order(limitPrice(sell(), new BigDecimal("100.1")))), is(BEFORE));
     }
 
     @Test
     public void testLimitToLimitFirstOrderHigherPrice() {
-        assertThat(compare(order(limitPrice(buy(), 100.1D)),
-                           order(limitPrice(buy(), 100.0D))), is(BEFORE));
-        assertThat(compare(order(limitPrice(sell(), 100.1D)),
-                           order(limitPrice(sell(), 100.0D))), is(AFTER));
+        assertThat(compare(order(limitPrice(buy(), new BigDecimal("100.1"))),
+                           order(limitPrice(buy(), defaultPrice))), is(BEFORE));
+        assertThat(compare(order(limitPrice(sell(), new BigDecimal("100.1"))),
+                           order(limitPrice(sell(), defaultPrice))), is(AFTER));
     }
 
     @Test

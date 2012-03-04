@@ -5,9 +5,11 @@
  */
 package eugene.market.book;
 
-import com.google.common.primitives.Doubles;
 import com.google.common.primitives.Longs;
 import eugene.market.ontology.field.enums.OrdStatus;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -24,7 +26,7 @@ public class OrderStatus {
 
     private final Order order;
 
-    private final Double avgPx;
+    private final BigDecimal avgPx;
 
     private final Long leavesQty;
 
@@ -48,11 +50,11 @@ public class OrderStatus {
      * @param cumQty    executed quantity.
      */
     // TODO: check the ordStatus consistency.
-    public OrderStatus(final Order order, final Double avgPx,
+    public OrderStatus(final Order order, final BigDecimal avgPx,
                        final Long leavesQty, final Long cumQty, final OrdStatus ordStatus) {
         checkNotNull(order);
         checkNotNull(avgPx);
-        checkArgument(compare(avgPx, Order.NO_PRICE) >= 0);
+        checkArgument(avgPx.compareTo(Order.NO_PRICE) >= 0);
         checkNotNull(leavesQty);
         checkArgument(compare(leavesQty, Order.NO_QTY) >= 0);
         checkArgument(compare(leavesQty, order.getOrderQty()) <= 0);
@@ -83,7 +85,7 @@ public class OrderStatus {
      *
      * @return the avgPx.
      */
-    public Double getAvgPx() {
+    public BigDecimal getAvgPx() {
         return avgPx;
     }
 
@@ -159,14 +161,18 @@ public class OrderStatus {
      * @return status of execution.
      */
     // TODO: check if the status is executable.
-    public OrderStatus execute(final Double price, final Long quantity) {
+    public OrderStatus execute(final BigDecimal price, final Long quantity) {
         checkNotNull(price);
-        checkArgument(Doubles.compare(price, Order.NO_PRICE) == 1);
+        checkArgument(price.compareTo(Order.NO_PRICE) == 1);
         checkNotNull(quantity);
         checkArgument(Longs.compare(quantity, Order.NO_QTY) == 1);
         checkArgument(Longs.compare(quantity, this.leavesQty) <= 0);
 
-        final Double newAvgPx = ((quantity * price) + (this.avgPx * cumQty)) / (quantity + this.cumQty);
+        final BigDecimal quantityPrice = price.multiply(BigDecimal.valueOf(quantity));
+        final BigDecimal avgPxCumQty = this.avgPx.multiply(BigDecimal.valueOf(this.cumQty));
+        final BigDecimal quantityCumQty = BigDecimal.valueOf(quantity).add(BigDecimal.valueOf(this.cumQty));
+
+        final BigDecimal newAvgPx = quantityPrice.add(avgPxCumQty).divide(quantityCumQty, RoundingMode.HALF_UP);
         final Long newLeavesQty = this.leavesQty - quantity;
         final Long newCumQty = this.cumQty + quantity;
         final OrdStatus newOrdStatus = newLeavesQty.equals(Long.valueOf(0L)) ? FILLED : PARTIALLY_FILLED;

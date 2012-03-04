@@ -9,6 +9,7 @@ import eugene.market.ontology.field.enums.OrdStatus;
 import eugene.market.ontology.field.enums.OrdType;
 import eugene.market.ontology.field.enums.Side;
 
+import java.math.BigDecimal;
 import java.util.SortedSet;
 
 /**
@@ -63,7 +64,7 @@ public interface OrderBook {
      *                                  or <code>orderQty > {@link OrderStatus#getLeavesQty()}</code>
      *                                  or the {@link OrderBook} is empty on this <code>side</code>.
      */
-    OrderStatus execute(final Side side, final Long orderQty, final Double price) throws NullPointerException,
+    OrderStatus execute(final Side side, final Long orderQty, final BigDecimal price) throws NullPointerException,
                                                                                          IllegalArgumentException;
 
     /**

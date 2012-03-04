@@ -9,6 +9,8 @@ import eugene.market.ontology.Field;
 import jade.content.onto.annotations.Element;
 import jade.content.onto.annotations.SuppressSlot;
 
+import java.math.BigDecimal;
+
 /**
  * Price of execution.
  *
@@ -16,7 +18,7 @@ import jade.content.onto.annotations.SuppressSlot;
  * @since 0.3
  */
 @Element(name = LastPx.TAG)
-public final class LastPx extends Field<Double> {
+public final class LastPx extends Field<BigDecimal> {
 
     public static final String TAG = "31";
 
@@ -31,7 +33,7 @@ public final class LastPx extends Field<Double> {
     /**
      * {@inheritDoc}
      */
-    public LastPx(Double value) {
+    public LastPx(BigDecimal value) {
         super(value);
     }
 
@@ -48,5 +50,23 @@ public final class LastPx extends Field<Double> {
     @SuppressSlot
     public Boolean isEnumField() {
         return Boolean.FALSE;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object o) {
+
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        final LastPx field = (LastPx) o;
+        return (getValue() != null ? getValue().compareTo(field.getValue()) == 0 : field.getValue() == null);
     }
 }

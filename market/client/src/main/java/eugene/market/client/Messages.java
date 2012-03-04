@@ -13,6 +13,8 @@ import eugene.market.ontology.field.enums.OrdType;
 import eugene.market.ontology.field.enums.Side;
 import eugene.market.ontology.message.NewOrderSingle;
 
+import java.math.BigDecimal;
+
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -48,7 +50,7 @@ public final class Messages {
      * @throws IllegalArgumentException if <code>price</code> is {@link Order#NO_PRICE}.
      * @throws IllegalArgumentException if <code>ordQty</code> is {@link Order#NO_QTY}.
      */
-    public static NewOrderSingle newLimit(final Side side, final Double price, final Long ordQty) {
+    public static NewOrderSingle newLimit(final Side side, final BigDecimal price, final Long ordQty) {
 
         checkNotNull(side);
         checkNotNull(price);

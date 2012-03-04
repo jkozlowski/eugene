@@ -18,6 +18,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.testng.annotations.Test;
 
+import java.math.BigDecimal;
+
 import static eugene.market.book.MockOrders.buy;
 import static eugene.market.book.MockOrders.limitOrdQtyPrice;
 import static eugene.market.book.MockOrders.ordType;
@@ -97,7 +99,7 @@ public class ExecutionEngineTest {
     @Test
     public void testExecuteLimitOrderValidNoMatch() {
 
-        final Order buy = order(limitOrdQtyPrice(buy(), defaultOrdQty, defaultPrice - 1L));
+        final Order buy = order(limitOrdQtyPrice(buy(), defaultOrdQty, defaultPrice.subtract(BigDecimal.ONE)));
         final Order newSellOrder = order(limitOrdQtyPrice(sell(), defaultOrdQty, defaultPrice));
 
         final ExecutionEngine executionEngine = getExecutionEngine(buy);

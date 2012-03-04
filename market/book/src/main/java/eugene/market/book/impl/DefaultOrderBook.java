@@ -5,13 +5,13 @@
  */
 package eugene.market.book.impl;
 
-import com.google.common.primitives.Doubles;
 import com.google.common.primitives.Longs;
 import eugene.market.book.Order;
 import eugene.market.book.OrderBook;
 import eugene.market.book.OrderStatus;
 import eugene.market.ontology.field.enums.Side;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -69,13 +69,13 @@ public class DefaultOrderBook implements OrderBook {
      * {@inheritDoc}
      */
     @Override
-    public OrderStatus execute(final Side side, final Long orderQty, final Double price) {
+    public OrderStatus execute(final Side side, final Long orderQty, final BigDecimal price) {
 
         checkNotNull(side);
         checkNotNull(orderQty);
         checkNotNull(price);
 
-        checkArgument(Doubles.compare(price, Order.NO_PRICE) == 1);
+        checkArgument(price.compareTo(Order.NO_PRICE) == 1);
         checkArgument(Longs.compare(orderQty, Order.NO_QTY) == 1);
 
         checkState(!getQueue(side).isEmpty());

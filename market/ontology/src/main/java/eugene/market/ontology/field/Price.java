@@ -9,6 +9,8 @@ import eugene.market.ontology.Field;
 import jade.content.onto.annotations.Element;
 import jade.content.onto.annotations.SuppressSlot;
 
+import java.math.BigDecimal;
+
 /**
  * Price per unit of quantity.
  *
@@ -16,7 +18,7 @@ import jade.content.onto.annotations.SuppressSlot;
  * @since 0.2
  */
 @Element(name = Price.TAG)
-public final class Price extends Field<Double> {
+public final class Price extends Field<BigDecimal> {
 
     public static final String TAG = "44";
 
@@ -31,7 +33,7 @@ public final class Price extends Field<Double> {
     /**
      * {@inheritDoc}
      */
-    public Price(Double value) {
+    public Price(BigDecimal value) {
         super(value);
     }
 
@@ -51,5 +53,23 @@ public final class Price extends Field<Double> {
     @SuppressSlot
     public Boolean isEnumField() {
         return Boolean.FALSE;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object o) {
+
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        final Price field = (Price) o;
+        return (getValue() != null ? getValue().compareTo(field.getValue()) == 0 : field.getValue() == null);
     }
 }

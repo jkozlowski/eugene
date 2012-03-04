@@ -81,8 +81,7 @@ public class ExperimentActivator implements BundleActivator {
                 final String[] parts = line.split(",\\s*");
                 assert 3 == parts.length;
 
-                final Double price = BigDecimal.valueOf(Double.valueOf(parts[0]))
-                                               .setScale(3, RoundingMode.HALF_UP).doubleValue();
+                final BigDecimal price = new BigDecimal(parts[0]).setScale(3, RoundingMode.HALF_UP);
                 final Long ordQty = Long.valueOf(parts[1]);
                 final Side side = Integer.valueOf(parts[2]) == 1 ? Side.SELL : Side.BUY;
                 final Order order = new Order(1L, OrdType.LIMIT, side, ordQty, price);
