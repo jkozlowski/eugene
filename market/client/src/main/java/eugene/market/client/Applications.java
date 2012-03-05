@@ -8,8 +8,10 @@ package eugene.market.client;
 import eugene.market.book.OrderBook;
 import eugene.market.client.impl.OrderBookApplication;
 import eugene.market.client.impl.ProxyApplicationImpl;
+import eugene.market.client.impl.TopOfBookApplicationImpl;
 import eugene.market.client.impl.TopOfBookPrinter;
 import eugene.market.ontology.Message;
+import eugene.simulation.agent.Symbol;
 
 /**
  * Factory methods for creating {@link Application}s.
@@ -41,7 +43,7 @@ public final class Applications {
      * @throws IllegalArgumentException if <code>applications</code> is empty.
      */
     public static ProxyApplication proxy(final Application... applications) throws NullPointerException,
-                                                                        IllegalArgumentException {
+                                                                                   IllegalArgumentException {
         return new ProxyApplicationImpl(applications);
     }
 
@@ -69,5 +71,18 @@ public final class Applications {
      */
     public static Application topOfBookPrinterApplication(final OrderBook orderBook) throws NullPointerException {
         return new TopOfBookPrinter(orderBook);
+    }
+
+    /**
+     * Gets a default {@link TopOfBookApplication} implementation.
+     *
+     * @param symbol symbol to use.
+     *
+     * @return default {@link TopOfBookApplication} implementation.
+     *
+     * @throws NullPointerException if <code>symbol</code> is null.
+     */
+    public static TopOfBookApplication topOfBookApplication(final Symbol symbol) throws NullPointerException {
+        return new TopOfBookApplicationImpl(symbol);
     }
 }

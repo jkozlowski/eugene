@@ -21,6 +21,11 @@ import static org.powermock.api.mockito.PowerMockito.mock;
  * @since 0.5
  */
 public class SessionsTest {
+    
+    @Test(expectedExceptions = UnsupportedOperationException.class)
+    public void testConstructor() {
+        new Sessions();
+    }
 
     @Test
     public void testInitiateCoverage() {

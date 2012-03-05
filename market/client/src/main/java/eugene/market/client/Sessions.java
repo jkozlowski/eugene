@@ -19,7 +19,18 @@ import jade.core.behaviours.Behaviour;
  * @author Jakub D Kozlowski
  * @since 0.5
  */
-public abstract class Sessions {
+public final class Sessions {
+
+    private static final String ERROR_MSG = "This class should not be instantiated";
+
+    /**
+     * This class should not be instantiated.
+     *
+     * @throws UnsupportedOperationException this class should not be instantiated.
+     */
+    public Sessions() throws UnsupportedOperationException {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Gets a {@link Behaviour} that will initiate a {@link Session} for this <code>simulation</code> and
