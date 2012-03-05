@@ -1,0 +1,216 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 8.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[      7975,        207]
+NotebookOptionsPosition[      7648,        190]
+NotebookOutlinePosition[      8003,        206]
+CellTagsIndexPosition[      7960,        203]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"ClearAll", "[", "graph", "]"}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"graph", "[", "path_String", "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+       "executionTimestamp", ",", " ", "initiatingTrader", ",", " ", 
+        "restingTrader", ",", "side", ",", "executionPrice", ",", " ", 
+        "executionVolume", ",", " ", "executionsData", ",", " ", "start", ",",
+         " ", "stop", ",", "executions", ",", "executionPricesTimestamps", 
+        ",", " ", "executionPrices", ",", "executionVolumesTimestamps", ",", 
+        " ", "executionVolumes", ",", "executionVolumeTimesPrice", ",", 
+        "executionsAlgo", ",", "executionsAlgoVolumes", ",", 
+        "executionsAlgoVolumeTimesPrice", ",", "executionVolumesBucketed", 
+        ",", " ", "executionAverageVolumesByBucket", ",", 
+        "executionPricesLine", ",", " ", "newOrderTimestamp", ",", " ", 
+        "newOrderPrice", ",", " ", "newOrderVolume", ",", " ", 
+        "newOrdersData", ",", "newOrders", ",", "newOrdersPrices", ",", 
+        "executionBidsTimestamps", ",", "executionAsksTimestamps", ",", 
+        "executionVolumesTotal"}], "}"}], ",", "\[IndentingNewLine]", 
+      "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"executionTimestamp", " ", "=", " ", 
+        RowBox[{
+         RowBox[{"#", "[", 
+          RowBox[{"[", "1", "]"}], "]"}], "&"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"initiatingTrader", "=", 
+        RowBox[{
+         RowBox[{"#", "[", 
+          RowBox[{"[", "2", "]"}], "]"}], "&"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"restingTrader", "=", 
+        RowBox[{
+         RowBox[{"#", "[", 
+          RowBox[{"[", "5", "]"}], "]"}], "&"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"side", " ", "=", 
+        RowBox[{
+         RowBox[{"#", "[", 
+          RowBox[{"[", "7", "]"}], "]"}], "&"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"executionPrice", " ", "=", " ", 
+        RowBox[{
+         RowBox[{"#", "[", 
+          RowBox[{"[", "9", "]"}], "]"}], "&"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"executionVolume", " ", "=", " ", 
+        RowBox[{
+         RowBox[{"#", "[", 
+          RowBox[{"[", "8", "]"}], "]"}], "&"}]}], ";", "\[IndentingNewLine]",
+        "\[IndentingNewLine]", 
+       RowBox[{"executionsData", " ", "=", " ", 
+        RowBox[{"Import", "[", 
+         RowBox[{"path", "<>", " ", "\"\<executions.log\>\""}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"start", " ", "=", " ", 
+        RowBox[{"Min", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"executionTimestamp", "[", "#", "]"}], "&"}], "/@", 
+          "executionsData"}], "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"stop", " ", "=", " ", 
+        RowBox[{"Max", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"executionTimestamp", "[", "#", "]"}], "&"}], "/@", 
+          "executionsData"}], "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"executions", " ", "=", " ", 
+        RowBox[{"Sort", "[", 
+         RowBox[{"executionsData", ",", " ", 
+          RowBox[{
+           RowBox[{"OrderedQ", "[", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"executionTimestamp", "[", "#", "]"}], ",", 
+              RowBox[{"executionTimestamp", "[", "#2", "]"}]}], "}"}], "]"}], 
+           "&"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"executionPricesTimestamps", " ", "=", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"{", " ", 
+           RowBox[{
+            RowBox[{"executionTimestamp", "[", "#", "]"}], ",", " ", 
+            RowBox[{"executionPrice", "[", "#", "]"}]}], "}"}], "&"}], "/@", 
+         "executions"}]}], ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+       
+       RowBox[{"executionPricesLine", " ", "=", " ", 
+        RowBox[{"Fit", "[", 
+         RowBox[{"executionPricesTimestamps", ",", " ", 
+          RowBox[{"{", 
+           RowBox[{"1", ",", "x"}], "}"}], ",", " ", "x"}], "]"}]}], ";", 
+       "\[IndentingNewLine]", "\[IndentingNewLine]", 
+       RowBox[{"executionBidsTimestamps", " ", "=", " ", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"{", " ", 
+           RowBox[{
+            RowBox[{"executionTimestamp", "[", "#", "]"}], ",", " ", 
+            RowBox[{"executionPrice", "[", "#", "]"}]}], "}"}], "&"}], "/@", 
+         RowBox[{"Select", "[", 
+          RowBox[{"executions", ",", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"side", "[", "#", "]"}], "\[Equal]", "\"\<BUY\>\""}], 
+            "&"}]}], "]"}]}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"executionAsksTimestamps", " ", "=", " ", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"{", " ", 
+           RowBox[{
+            RowBox[{"executionTimestamp", "[", "#", "]"}], ",", " ", 
+            RowBox[{"executionPrice", "[", "#", "]"}]}], "}"}], "&"}], "/@", 
+         RowBox[{"Select", "[", 
+          RowBox[{"executions", ",", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"side", "[", "#", "]"}], "\[Equal]", "\"\<SELL\>\""}], 
+            "&"}]}], "]"}]}]}], ";", "\[IndentingNewLine]", 
+       "\[IndentingNewLine]", 
+       RowBox[{"Return", "[", 
+        RowBox[{"Graphics", "[", 
+         RowBox[{
+          RowBox[{"ListLinePlot", "[", 
+           RowBox[{"executionPricesTimestamps", ",", " ", 
+            RowBox[{"PlotStyle", "\[Rule]", "Red"}]}], "]"}], ",", " ", 
+          RowBox[{"Plot", "[", 
+           RowBox[{"executionPricesLine", ",", " ", 
+            RowBox[{"{", 
+             RowBox[{"x", ",", " ", "start", ",", " ", "stop"}], "}"}], ",", 
+            " ", 
+            RowBox[{"PlotStyle", "\[Rule]", "Green"}]}], "]"}], ",", " ", 
+          RowBox[{
+          "PlotLabel", "\[Rule]", 
+           "\"\<Execution Prices with a trend line\>\""}]}], "]"}], "]"}], 
+       ";"}]}], "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{"Return", "[", 
+        RowBox[{"Graphics", "[", 
+         RowBox[{"ListLinePlot", "[", 
+          RowBox[{"executionAsksTimestamps", ",", " ", 
+           RowBox[{"PlotStyle", "\[Rule]", "Green"}]}], "]"}], "]"}], "]"}], 
+       ";"}], "*)"}], "\[IndentingNewLine]", "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{"Dynamic", "[", 
+  RowBox[{"Refresh", "[", 
+   RowBox[{
+    RowBox[{
+    "graph", "[", 
+     "\"\</Users/jakubkozlowski/Programming/intellij/eugene/demo/eugene/noise/\
+runner/\>\"", "]"}], ",", 
+    RowBox[{"UpdateInterval", "\[Rule]", "2"}]}], "]"}], 
+  "]"}], "\[IndentingNewLine]"}], "Input",
+ CellChangeTimes->{{3.539952014494246*^9, 3.539952020345891*^9}}],
+
+Cell[BoxData[
+ DynamicBox[ToBoxes[
+   Refresh[
+    $CellContext`graph[
+    "/Users/jakubkozlowski/Programming/intellij/eugene/demo/eugene/noise/\
+runner/"], UpdateInterval -> 2], StandardForm],
+  ImageSizeCache->{588., {3., 8.}}]], "Output",
+ CellChangeTimes->{3.53995187231968*^9, 3.539952021875268*^9}]
+}, Open  ]]
+},
+WindowSize->{740, 851},
+WindowMargins->{{20, Automatic}, {Automatic, 44}},
+FrontEndVersion->"8.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (October 5, \
+2011)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[579, 22, 6746, 156, 688, "Input"],
+Cell[7328, 180, 304, 7, 27, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
