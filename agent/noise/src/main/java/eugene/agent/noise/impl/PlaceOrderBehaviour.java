@@ -13,6 +13,7 @@ import eugene.market.ontology.field.Price;
 import eugene.market.ontology.field.enums.OrdType;
 import eugene.market.ontology.field.enums.Side;
 import eugene.market.ontology.message.NewOrderSingle;
+import eugene.simulation.agent.Symbol;
 import jade.core.behaviours.TickerBehaviour;
 
 import java.math.BigDecimal;
@@ -25,8 +26,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * {@link OrderQty} (between {@link PlaceOrderBehaviour#MIN_ORDER_QTY} and {@link PlaceOrderBehaviour#MAX_ORDER_QTY})
  * and to a random {@link Side}, and then sleeps for a random period of time.
  *
- * If there is no price on the {@link OrderBook}, {@link PlaceOrderBehaviour#DEFAULT_CURRENT_PRICE} will be used as
- * current price.
+ * If there is no price on the {@link OrderBook}, {@link Symbol#getDefaultPrice()} will be used as current price.
  *
  * @author Jakub D Kozlowski
  * @since 0.5
@@ -36,10 +36,6 @@ public class PlaceOrderBehaviour extends TickerBehaviour {
     public static final int MAX_SPREAD = 10;
 
     public static final int MIN_SPREAD = 1;
-
-    public static final BigDecimal DEFAULT_TICK = new BigDecimal("0.001");
-
-    public static final BigDecimal DEFAULT_CURRENT_PRICE = new BigDecimal("100.0");
 
     public static final Integer MAX_SLEEP = 500;
 
@@ -52,7 +48,7 @@ public class PlaceOrderBehaviour extends TickerBehaviour {
     private final OrderBook orderBook;
 
     private final Session session;
-    
+
     private enum Decision {
         CANCEL,
         MARKET,
@@ -157,7 +153,10 @@ public class PlaceOrderBehaviour extends TickerBehaviour {
         newOrderSingle.setSide(side.field());
         newOrderSingle.setOrdType(OrdType.LIMIT.field());
 
-        final BigDecimal curPrice = orderBook.isEmpty(side) ? DEFAULT_CURRENT_PRICE : orderBook.peek(side).getPrice();
+        final BigDecimal defaultPrice = session.getSimulation().getSymbol().getDefaultPrice();
+        final BigDecimal tickSize = session.getSimulation().getSymbol().getTickSize();
+
+        final BigDecimal curPrice = orderBook.isEmpty(side) ? defaultPrice : orderBook.peek(side).getPrice();
 
         switch (strategy) {
 
@@ -167,20 +166,20 @@ public class PlaceOrderBehaviour extends TickerBehaviour {
 
             case MID:
                 if (side.isBuy()) {
-                    newOrderSingle.setPrice(new Price(curPrice.add(DEFAULT_TICK)));
+                    newOrderSingle.setPrice(new Price(curPrice.add(tickSize)));
                 }
                 else {
-                    newOrderSingle.setPrice(new Price(curPrice.subtract(DEFAULT_TICK)));
+                    newOrderSingle.setPrice(new Price(curPrice.subtract(tickSize)));
                 }
                 break;
 
             case PASSIVE:
                 final BigDecimal additive = BigDecimal.valueOf(generator.nextInt(MAX_SPREAD - MIN_SPREAD));
                 if (side.isBuy()) {
-                    newOrderSingle.setPrice(new Price(curPrice.subtract(additive.multiply(DEFAULT_TICK))));
+                    newOrderSingle.setPrice(new Price(curPrice.subtract(additive.multiply(tickSize))));
                 }
                 else {
-                    newOrderSingle.setPrice(new Price(curPrice.add(additive.multiply(DEFAULT_TICK))));
+                    newOrderSingle.setPrice(new Price(curPrice.add(additive.multiply(tickSize))));
                 }
                 break;
         }

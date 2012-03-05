@@ -6,9 +6,9 @@
 package eugene.simulation.agent.impl;
 
 import eugene.simulation.agent.Simulation;
+import eugene.simulation.agent.Symbol;
 import jade.core.AID;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -23,13 +23,12 @@ public final class SimulationImpl implements Simulation {
 
     private final AID marketAgent;
 
-    private final String symbol;
+    private final Symbol symbol;
 
-    public SimulationImpl(final AID simulationAgent, final AID marketAgent, final String symbol) {
+    public SimulationImpl(final AID simulationAgent, final AID marketAgent, final Symbol symbol) {
         checkNotNull(simulationAgent);
         checkNotNull(marketAgent);
         checkNotNull(symbol);
-        checkArgument(!symbol.isEmpty());
         this.simulationAgent = simulationAgent;
         this.marketAgent = marketAgent;
         this.symbol = symbol;
@@ -55,7 +54,7 @@ public final class SimulationImpl implements Simulation {
      * {@inheritDoc}
      */
     @Override
-    public String getSymbol() {
+    public Symbol getSymbol() {
         return symbol;
     }
 }

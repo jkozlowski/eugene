@@ -17,6 +17,8 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class Defaults {
 
+    public static final BigDecimal defaultTickSize = new BigDecimal("0.001").setScale(3);
+
     public static final AtomicLong curOrderID = new AtomicLong(1L);
 
     public static final String SENDER_AGENT = "sender";

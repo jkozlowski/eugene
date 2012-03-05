@@ -13,6 +13,8 @@ import eugene.market.ontology.field.enums.OrdType;
 import eugene.market.ontology.field.enums.Side;
 import eugene.simulation.agent.Simulation;
 import eugene.simulation.agent.SimulationAgent;
+import eugene.simulation.agent.Symbol;
+import eugene.simulation.agent.Symbols;
 import jade.core.Agent;
 import jade.osgi.service.agentFactory.AgentFactoryService;
 import jade.osgi.service.runtime.JadeRuntimeService;
@@ -48,7 +50,11 @@ public class ExperimentActivator implements BundleActivator {
 
     private static final int NUMBER_OF_TRADERS = 5;
 
-    private static final String SYMBOL = "VOD.L";
+    private static final BigDecimal tickSize = new BigDecimal("0.001").setScale(3);
+
+    private static final BigDecimal defaultPrice = new BigDecimal("100.000").setScale(3);
+
+    private static final Symbol symbol = Symbols.getSymbol("VOD.L", tickSize, defaultPrice);
 
     private static final int LENGTH = 10 * 60 * 1000;
 
@@ -104,7 +110,7 @@ public class ExperimentActivator implements BundleActivator {
             });
 
             final JadeRuntimeService jade = (JadeRuntimeService) ctx.getService(sr);
-            final SimulationAgent simulationAgent = new SimulationAgent(SYMBOL, LENGTH, orders, agents);
+            final SimulationAgent simulationAgent = new SimulationAgent(symbol, LENGTH, orders, agents);
             final AgentController controller = jade.acceptNewAgent(SimulationAgent.NAME, simulationAgent);
             controller.start();
         }

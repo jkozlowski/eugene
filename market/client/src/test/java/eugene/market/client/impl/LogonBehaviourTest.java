@@ -31,7 +31,10 @@ import java.util.concurrent.TimeUnit;
 import static eugene.market.esma.AbstractMarketAgentTest.MARKET_AGENT;
 import static eugene.market.esma.AbstractMarketAgentTest.getContainer;
 import static eugene.market.esma.AbstractMarketAgentTest.submit;
+import static eugene.market.ontology.Defaults.defaultPrice;
 import static eugene.market.ontology.Defaults.defaultSymbol;
+import static eugene.market.ontology.Defaults.defaultTickSize;
+import static eugene.simulation.agent.Symbols.getSymbol;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
@@ -106,7 +109,7 @@ public class LogonBehaviourTest {
         final Simulation simulation = mock(Simulation.class);
         when(simulation.getSimulationAgent()).thenReturn(new AID(SimulationAgent.NAME.concat("@" + containerName),
                                                                  AID.ISGUID));
-        when(simulation.getSymbol()).thenReturn(defaultSymbol);
+        when(simulation.getSymbol()).thenReturn(getSymbol(defaultSymbol, defaultTickSize, defaultPrice));
         when(simulation.getMarketAgent()).thenReturn(new AID(MARKET_AGENT.concat("@" + containerName),
                                                              AID.ISGUID));
         final Application application = mock(Application.class);

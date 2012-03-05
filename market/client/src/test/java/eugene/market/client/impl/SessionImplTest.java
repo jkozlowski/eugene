@@ -45,6 +45,8 @@ import static eugene.market.ontology.Defaults.defaultClOrdID;
 import static eugene.market.ontology.Defaults.defaultOrdQty;
 import static eugene.market.ontology.Defaults.defaultPrice;
 import static eugene.market.ontology.Defaults.defaultSymbol;
+import static eugene.market.ontology.Defaults.defaultTickSize;
+import static eugene.simulation.agent.Symbols.getSymbol;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -269,7 +271,8 @@ public class SessionImplTest {
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testSendNewOrderSingleIllegalSymbol() {
-        final Simulation simulation = when(mock(Simulation.class).getSymbol()).thenReturn(defaultSymbol).getMock();
+        final eugene.simulation.agent.Symbol symbol = getSymbol(defaultSymbol, defaultTickSize, defaultPrice);
+        final Simulation simulation = when(mock(Simulation.class).getSymbol()).thenReturn(symbol).getMock();
         final Session session = new SessionImpl(simulation, mock(Agent.class), mock(Application.class));
         final NewOrderSingle newOrderSingle = new NewOrderSingle();
         newOrderSingle.setSymbol(new Symbol("BARC.L"));
@@ -278,7 +281,8 @@ public class SessionImplTest {
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testSendNewOrderSingleNullValueOfSymbol() {
-        final Simulation simulation = when(mock(Simulation.class).getSymbol()).thenReturn(defaultSymbol).getMock();
+        final eugene.simulation.agent.Symbol symbol = getSymbol(defaultSymbol, defaultTickSize, defaultPrice);
+        final Simulation simulation = when(mock(Simulation.class).getSymbol()).thenReturn(symbol).getMock();
         final Session session = new SessionImpl(simulation, mock(Agent.class), mock(Application.class));
         final NewOrderSingle newOrderSingle = new NewOrderSingle();
         newOrderSingle.setSymbol(new Symbol(null));
@@ -298,7 +302,7 @@ public class SessionImplTest {
         final AID to = mock(AID.class);
         final Simulation simulation = mock(Simulation.class);
         when(simulation.getMarketAgent()).thenReturn(to);
-        when(simulation.getSymbol()).thenReturn(defaultSymbol);
+        when(simulation.getSymbol()).thenReturn(getSymbol(defaultSymbol, defaultTickSize, defaultPrice));
         final AID id = mock(AID.class);
         when(id.getLocalName()).thenReturn(defaultAgentID);
         final Agent agent = mock(Agent.class);
@@ -342,16 +346,44 @@ public class SessionImplTest {
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testSendOrderCancelRequestIllegalSymbol() {
-        final Simulation simulation = when(mock(Simulation.class).getSymbol()).thenReturn(defaultSymbol).getMock();
+        final eugene.simulation.agent.Symbol symbol = getSymbol(defaultSymbol, defaultTickSize, defaultPrice);
+        final Simulation simulation = when(mock(Simulation.class).getSymbol()).thenReturn(symbol).getMock();
         final Session session = new SessionImpl(simulation, mock(Agent.class), mock(Application.class));
         final OrderCancelRequest orderCancelRequest = new OrderCancelRequest();
         orderCancelRequest.setSymbol(new Symbol("BARC.L"));
         session.send(orderCancelRequest);
     }
 
+    @Test
+    public void testOrderCancelRequestLegalSymbol() throws CodecException, OntologyException {
+        final AID to = mock(AID.class);
+        final Simulation simulation = mock(Simulation.class);
+        final eugene.simulation.agent.Symbol symbol = getSymbol(defaultSymbol, defaultTickSize, defaultPrice);
+        when(simulation.getMarketAgent()).thenReturn(to);
+        when(simulation.getSymbol()).thenReturn(symbol);
+        final AID id = mock(AID.class);
+        when(id.getName()).thenReturn(defaultAgentID);
+        final Agent agent = mock(Agent.class);
+        when(agent.getAID()).thenReturn(id);
+        final ContentManager contentManager = mock(ContentManager.class);
+        final Application application = mock(Application.class);
+        final SessionImpl session = new SessionImpl(simulation, agent, application);
+        when(agent.getContentManager()).thenReturn(contentManager);
+
+        final OrderCancelRequest orderCancelRequest = new OrderCancelRequest();
+        orderCancelRequest.setSymbol(new Symbol(defaultSymbol));
+        session.send(orderCancelRequest);
+
+        verify(agent).getContentManager();
+        verify(agent).send(Mockito.any(ACLMessage.class));
+        verify(application).fromApp(orderCancelRequest, session);
+        assertThat(orderCancelRequest.getSymbol().getValue(), is(defaultSymbol));
+    }
+
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testSendOrderCancelRequestNullValueOfSymbol() {
-        final Simulation simulation = when(mock(Simulation.class).getSymbol()).thenReturn(defaultSymbol).getMock();
+        final eugene.simulation.agent.Symbol symbol = getSymbol(defaultSymbol, defaultTickSize, defaultPrice);
+        final Simulation simulation = when(mock(Simulation.class).getSymbol()).thenReturn(symbol).getMock();
         final Session session = new SessionImpl(simulation, mock(Agent.class), mock(Application.class));
         final OrderCancelRequest orderCancelRequest = new OrderCancelRequest();
         orderCancelRequest.setSymbol(new Symbol(null));
@@ -362,8 +394,9 @@ public class SessionImplTest {
     public void testOrderCancelRequest() throws CodecException, OntologyException {
         final AID to = mock(AID.class);
         final Simulation simulation = mock(Simulation.class);
+        final eugene.simulation.agent.Symbol symbol = getSymbol(defaultSymbol, defaultTickSize, defaultPrice);
         when(simulation.getMarketAgent()).thenReturn(to);
-        when(simulation.getSymbol()).thenReturn(defaultSymbol);
+        when(simulation.getSymbol()).thenReturn(symbol);
         final AID id = mock(AID.class);
         when(id.getName()).thenReturn(defaultAgentID);
         final Agent agent = mock(Agent.class);

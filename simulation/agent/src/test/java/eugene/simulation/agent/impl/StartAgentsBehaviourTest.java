@@ -7,6 +7,8 @@ package eugene.simulation.agent.impl;
 
 import eugene.market.esma.MarketAgent;
 import eugene.simulation.agent.Simulation;
+import eugene.simulation.agent.Symbol;
+import eugene.simulation.agent.Symbols;
 import eugene.utils.behaviour.BehaviourResult;
 import jade.core.AID;
 import jade.core.Agent;
@@ -24,7 +26,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
+import static eugene.market.ontology.Defaults.defaultPrice;
 import static eugene.market.ontology.Defaults.defaultSymbol;
+import static eugene.market.ontology.Defaults.defaultTickSize;
 import static eugene.simulation.agent.Tests.SIMULATION_AGENT;
 import static eugene.simulation.agent.Tests.initAgent;
 import static eugene.simulation.agent.Tests.submit;
@@ -32,6 +36,8 @@ import static jade.core.Runtime.instance;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.sameInstance;
+import static org.mockito.Mockito.mock;
 
 /**
  * Tests {@link StartAgentsBehaviour}.
@@ -43,7 +49,7 @@ public class StartAgentsBehaviourTest {
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testConstructorNullMarketAgent() {
-        new StartAgentsBehaviour(null, defaultSymbol, Collections.singleton(new Agent()));
+        new StartAgentsBehaviour(null, mock(Symbol.class), Collections.singleton(new Agent()));
     }
 
     @Test(expectedExceptions = NullPointerException.class)
@@ -51,19 +57,14 @@ public class StartAgentsBehaviourTest {
         new StartAgentsBehaviour(new BehaviourResult<AID>(), null, Collections.singleton(new Agent()));
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testConstructorEmptySymbol() {
-        new StartAgentsBehaviour(new BehaviourResult<AID>(), "", Collections.singleton(new Agent()));
-    }
-
     @Test(expectedExceptions = NullPointerException.class)
     public void testConstructorNullAgents() {
-        new StartAgentsBehaviour(new BehaviourResult<AID>(), defaultSymbol, null);
+        new StartAgentsBehaviour(new BehaviourResult<AID>(), mock(Symbol.class), null);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testConstructorEmptyAgents() {
-        new StartAgentsBehaviour(new BehaviourResult<AID>(), defaultSymbol, Collections.EMPTY_SET);
+        new StartAgentsBehaviour(new BehaviourResult<AID>(), mock(Symbol.class), Collections.EMPTY_SET);
     }
 
     @Test
@@ -109,7 +110,8 @@ public class StartAgentsBehaviourTest {
         a2.addBehaviour(b2);
         agents.add(a2);
 
-        final StartAgentsBehaviour start = new StartAgentsBehaviour(init.getResult(), defaultSymbol, agents);
+        final Symbol symbol = Symbols.getSymbol(defaultSymbol, defaultTickSize, defaultPrice);
+        final StartAgentsBehaviour start = new StartAgentsBehaviour(init.getResult(), symbol, agents);
         submit(controller, start);
         latch.await();
 
@@ -120,13 +122,15 @@ public class StartAgentsBehaviourTest {
         }
 
         assertThat(b1Result.isSuccess(), is(true));
-        assertThat(b1Result.getObject().getMarketAgent().getLocalName(), is(init.getResult().getObject().getLocalName()));
+        assertThat(b1Result.getObject().getMarketAgent().getLocalName(), is(
+                init.getResult().getObject().getLocalName()));
         assertThat(b1Result.getObject().getSimulationAgent().getLocalName(), is(SIMULATION_AGENT));
-        assertThat(b1Result.getObject().getSymbol(), is(defaultSymbol));
+        assertThat(b1Result.getObject().getSymbol(), sameInstance(symbol));
         assertThat(b2Result.isSuccess(), is(true));
-        assertThat(b2Result.getObject().getMarketAgent().getLocalName(), is(init.getResult().getObject().getLocalName()));
+        assertThat(b2Result.getObject().getMarketAgent().getLocalName(), is(
+                init.getResult().getObject().getLocalName()));
         assertThat(b2Result.getObject().getSimulationAgent().getLocalName(), is(SIMULATION_AGENT));
-        assertThat(b2Result.getObject().getSymbol(), is(defaultSymbol));
+        assertThat(b2Result.getObject().getSymbol(), sameInstance(symbol));
 
         container.kill();
     }

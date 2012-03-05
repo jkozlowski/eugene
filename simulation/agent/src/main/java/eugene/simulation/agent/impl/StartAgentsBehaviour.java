@@ -7,8 +7,9 @@ package eugene.simulation.agent.impl;
 
 import com.google.common.base.Stopwatch;
 import eugene.simulation.agent.Simulation;
-import eugene.utils.behaviour.BehaviourResult;
+import eugene.simulation.agent.Symbol;
 import eugene.utils.annotation.Nullable;
+import eugene.utils.behaviour.BehaviourResult;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.OneShotBehaviour;
@@ -38,16 +39,15 @@ public class StartAgentsBehaviour extends OneShotBehaviour {
 
     private final BehaviourResult<AID> marketAgent;
 
-    private final String symbol;
+    private final Symbol symbol;
 
     private final Set<Agent> agents;
 
     private final BehaviourResult<Set<String>> result = new BehaviourResult<Set<String>>();
 
-    public StartAgentsBehaviour(final BehaviourResult<AID> marketAgent, final String symbol, final Set<Agent> agents) {
+    public StartAgentsBehaviour(final BehaviourResult<AID> marketAgent, final Symbol symbol, final Set<Agent> agents) {
         checkNotNull(marketAgent);
         checkNotNull(symbol);
-        checkArgument(!symbol.isEmpty());
         checkNotNull(agents);
         checkArgument(!agents.isEmpty());
         this.marketAgent = marketAgent;

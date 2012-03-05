@@ -11,7 +11,7 @@ import jade.core.AID;
 import jade.core.Agent;
 
 /**
- * Parameters of the simulation, passed from the {@link SimulationAgent} to Trader Agents and Market Agent. {@link
+ * Parameters of the simulation, passed from the {@link SimulationAgent} to Trader Agents. {@link
  * Simulation} instance can be retrieved using {@link Agent#getArguments()}.
  *
  * @author Jakub D Kozlowski
@@ -37,7 +37,7 @@ public interface Simulation {
     /**
      * Gets the symbol for this {@link Simulation}.
      *
-     * @return the symbol for this {@link Simulation}.
+     * @return the symbol.
      */
-    String getSymbol();
+    Symbol getSymbol();
 }

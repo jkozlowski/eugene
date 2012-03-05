@@ -6,6 +6,8 @@
 package eugene.simulation.agent.impl;
 
 import eugene.market.esma.MarketAgent;
+import eugene.simulation.agent.Symbol;
+import eugene.simulation.agent.Symbols;
 import eugene.simulation.ontology.SimulationOntology;
 import eugene.simulation.ontology.Started;
 import eugene.simulation.ontology.Stop;
@@ -33,7 +35,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
+import static eugene.market.ontology.Defaults.defaultPrice;
 import static eugene.market.ontology.Defaults.defaultSymbol;
+import static eugene.market.ontology.Defaults.defaultTickSize;
 import static eugene.simulation.agent.Tests.SIMULATION_LENGTH;
 import static eugene.simulation.agent.Tests.initAgent;
 import static eugene.simulation.agent.Tests.submit;
@@ -180,9 +184,10 @@ public class StopSimulationBehaviourTest {
         a2.addBehaviour(b2);
         agents.add(a2);
 
-        final StartAgentsBehaviour start = new StartAgentsBehaviour(init.getResult(), defaultSymbol, agents);
+        final Symbol symbol = Symbols.getSymbol(defaultSymbol, defaultTickSize, defaultPrice);
+        final StartAgentsBehaviour start = new StartAgentsBehaviour(init.getResult(), symbol, agents);
         submit(controller, start);
-        
+
         final BehaviourResult<Calendar> startSimulation = new BehaviourResult<Calendar>();
         startSimulation.success(Calendar.getInstance());
 

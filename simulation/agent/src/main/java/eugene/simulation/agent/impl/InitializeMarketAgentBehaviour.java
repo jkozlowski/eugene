@@ -62,7 +62,7 @@ public class InitializeMarketAgentBehaviour extends SequentialBehaviour {
             final AgentController controller = container.acceptNewAgent(marketName, marketAgent);
             controller.start();
 
-            final AID marketAID = new AID(marketName, AID.ISLOCALNAME);
+            final AID marketAID = new AID(controller.getName(), AID.ISGUID);
             final Action action = new Action(new AID(marketName, AID.ISLOCALNAME), new Start());
             final ACLMessage aclMessage = new ACLMessage(ACLMessage.REQUEST);
             aclMessage.addReceiver(marketAID);

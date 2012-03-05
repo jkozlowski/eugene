@@ -40,9 +40,11 @@ import static com.google.common.collect.Sets.newHashSet;
 import static eugene.market.ontology.Defaults.defaultOrdQty;
 import static eugene.market.ontology.Defaults.defaultPrice;
 import static eugene.market.ontology.Defaults.defaultSymbol;
+import static eugene.market.ontology.Defaults.defaultTickSize;
 import static eugene.simulation.agent.Tests.SIMULATION_AGENT;
 import static eugene.simulation.agent.Tests.SIMULATION_LENGTH;
 import static jade.core.Runtime.instance;
+import static org.mockito.Mockito.mock;
 
 /**
  * Tests {@link SimulationAgent}.
@@ -59,27 +61,26 @@ public class SimulationAgentTest {
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testConstructorInvalidLength() {
-        new SimulationAgent(defaultSymbol, 0, new TreeSet<Order>(), Collections.singleton(new Agent()));
-    }
-
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testConstructorEmptySymbol() {
-        new SimulationAgent("", SIMULATION_LENGTH, new TreeSet<Order>(), Collections.singleton(new Agent()));
+        new SimulationAgent(mock(Symbol.class), 0, new TreeSet<Order>(),
+                            Collections.singleton(new Agent()));
     }
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testConstructorNullInitialOrders() {
-        new SimulationAgent(defaultSymbol, SIMULATION_LENGTH, null, Collections.singleton(new Agent()));
+        new SimulationAgent(mock(Symbol.class), SIMULATION_LENGTH, null,
+                            Collections.singleton(new Agent()));
     }
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testConstructorNullAgents() {
-        new SimulationAgent(defaultSymbol, SIMULATION_LENGTH, new TreeSet<Order>(), null);
+        new SimulationAgent(mock(Symbol.class), SIMULATION_LENGTH,
+                            new TreeSet<Order>(), null);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testConstructorEmptyAgents() {
-        new SimulationAgent(defaultSymbol, SIMULATION_LENGTH, new TreeSet<Order>(), new TreeSet<Agent>());
+        new SimulationAgent(mock(Symbol.class), SIMULATION_LENGTH, new TreeSet<Order>(),
+                            new TreeSet<Agent>());
     }
 
     @Test
@@ -90,7 +91,7 @@ public class SimulationAgentTest {
 
         final Set<Order> orders = newHashSet();
         for (int i = 1; i < 11; i++) {
-            orders.add(new Order(1L, OrdType.LIMIT, Side.BUY, defaultOrdQty, 
+            orders.add(new Order(1L, OrdType.LIMIT, Side.BUY, defaultOrdQty,
                                  defaultPrice.subtract(BigDecimal.valueOf(i))));
             orders.add(new Order(1L, OrdType.LIMIT, Side.SELL, defaultOrdQty,
                                  defaultPrice.add(BigDecimal.valueOf(i))));
@@ -102,14 +103,15 @@ public class SimulationAgentTest {
         agents.add(getTestAgent(latch));
         agents.add(getTestAgent(latch));
 
-        final SimulationAgent simulationAgent = new SimulationAgent(defaultSymbol, SIMULATION_LENGTH, orders, agents);
+        final Symbol symbol = Symbols.getSymbol(defaultSymbol, defaultTickSize, defaultPrice);
+        final SimulationAgent simulationAgent = new SimulationAgent(symbol, SIMULATION_LENGTH, orders, agents);
         final AgentController controller = container.acceptNewAgent(SIMULATION_AGENT, simulationAgent);
         controller.start();
         latch.await();
 
         container.kill();
     }
-    
+
     private Agent getTestAgent(final CountDownLatch latch) {
         return new Agent() {
             @Override

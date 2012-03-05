@@ -21,7 +21,10 @@ import org.testng.annotations.Test;
 import java.util.Iterator;
 
 import static eugene.market.esma.AbstractMarketAgentTest.MARKET_AGENT;
+import static eugene.market.ontology.Defaults.defaultPrice;
 import static eugene.market.ontology.Defaults.defaultSymbol;
+import static eugene.market.ontology.Defaults.defaultTickSize;
+import static eugene.simulation.agent.Symbols.getSymbol;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.powermock.api.mockito.PowerMockito.mock;
@@ -53,7 +56,7 @@ public class SessionInitiatorTest {
         when(agent.getContentManager()).thenReturn(mock(ContentManager.class));
 
         final Simulation simulation = mock(Simulation.class);
-        when(simulation.getSymbol()).thenReturn(defaultSymbol);
+        when(simulation.getSymbol()).thenReturn(getSymbol(defaultSymbol, defaultTickSize, defaultPrice));
         when(simulation.getMarketAgent()).thenReturn(new AID(MARKET_AGENT, AID.ISGUID));
         final SessionInitiator initiator = new SessionInitiator(mock(Application.class), simulation);
         initiator.setAgent(agent);

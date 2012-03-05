@@ -41,7 +41,7 @@ public class SimulationAgent extends Agent {
 
     public static final String NAME = "simulation-agent";
 
-    private final String symbol;
+    private final Symbol symbol;
 
     private final int length;
 
@@ -58,9 +58,8 @@ public class SimulationAgent extends Agent {
      * @param initialOrders orders to initialize the simulation with.
      * @param agents        {@link Agent}s to start.
      */
-    public SimulationAgent(final String symbol, int length, final Set<Order> initialOrders, final Set<Agent> agents) {
+    public SimulationAgent(final Symbol symbol, int length, final Set<Order> initialOrders, final Set<Agent> agents) {
         checkNotNull(symbol);
-        checkArgument(!symbol.isEmpty());
         checkArgument(length > 0);
         checkNotNull(initialOrders);
         checkNotNull(agents);
@@ -82,7 +81,8 @@ public class SimulationAgent extends Agent {
 
         final SequentialBehaviour initSequence = new SequentialBehaviour();
 
-        final InitializeMarketAgentBehaviour initMarket = new InitializeMarketAgentBehaviour(new MarketAgent(symbol));
+        final InitializeMarketAgentBehaviour initMarket
+                = new InitializeMarketAgentBehaviour(new MarketAgent(symbol.getName()));
         final StartAgentsBehaviour startAgents = new StartAgentsBehaviour(initMarket.getResult(), symbol, agents);
         final ReceiveLogonCompleteMessages receiveLogon = new ReceiveLogonCompleteMessages(startAgents.getResult());
         final StartSimulationBehaviour startSimulation = new StartSimulationBehaviour(length, startAgents.getResult());
@@ -96,7 +96,7 @@ public class SimulationAgent extends Agent {
 
         if (!initialOrders.isEmpty()) {
             final BootstrapOrderBookBehaviour bootstrap = new BootstrapOrderBookBehaviour(initMarket.getResult(),
-                                                                                          symbol,
+                                                                                          symbol.getName(),
                                                                                           initialOrders);
             initSequence.addSubBehaviour(bootstrap);
         }

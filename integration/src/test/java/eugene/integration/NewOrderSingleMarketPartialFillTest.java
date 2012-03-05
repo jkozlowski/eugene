@@ -24,6 +24,8 @@ import eugene.market.ontology.message.data.AddOrder;
 import eugene.market.ontology.message.data.OrderExecuted;
 import eugene.simulation.agent.Simulation;
 import eugene.simulation.agent.SimulationAgent;
+import eugene.simulation.agent.Symbol;
+import eugene.simulation.agent.Symbols;
 import eugene.simulation.ontology.Start;
 import jade.core.Agent;
 import jade.wrapper.AgentContainer;
@@ -46,6 +48,7 @@ import static eugene.market.esma.AbstractMarketAgentTest.getNakedContainer;
 import static eugene.market.ontology.Defaults.defaultOrdQty;
 import static eugene.market.ontology.Defaults.defaultPrice;
 import static eugene.market.ontology.Defaults.defaultSymbol;
+import static eugene.market.ontology.Defaults.defaultTickSize;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
@@ -110,7 +113,8 @@ public class NewOrderSingleMarketPartialFillTest {
             }
         });
 
-        final SimulationAgent simulation = new SimulationAgent(defaultSymbol, TIMEOUT, Collections.EMPTY_SET, agents);
+        final Symbol symbol = Symbols.getSymbol(defaultSymbol, defaultTickSize, defaultPrice);
+        final SimulationAgent simulation = new SimulationAgent(symbol, TIMEOUT, Collections.EMPTY_SET, agents);
         final AgentController simulationController = container.acceptNewAgent(SimulationAgent.NAME, simulation);
         simulationController.start();
 

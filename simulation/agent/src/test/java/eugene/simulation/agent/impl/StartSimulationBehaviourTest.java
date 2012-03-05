@@ -6,6 +6,8 @@
 package eugene.simulation.agent.impl;
 
 import eugene.market.esma.MarketAgent;
+import eugene.simulation.agent.Symbol;
+import eugene.simulation.agent.Symbols;
 import eugene.simulation.agent.Tests;
 import eugene.simulation.ontology.SimulationOntology;
 import eugene.simulation.ontology.Start;
@@ -31,7 +33,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
+import static eugene.market.ontology.Defaults.defaultPrice;
 import static eugene.market.ontology.Defaults.defaultSymbol;
+import static eugene.market.ontology.Defaults.defaultTickSize;
 import static eugene.simulation.agent.Tests.initAgent;
 import static eugene.simulation.agent.Tests.submit;
 import static jade.core.Runtime.instance;
@@ -51,7 +55,7 @@ public class StartSimulationBehaviourTest {
     public void testConstructorZeroLength() {
         new StartSimulationBehaviour(0, new BehaviourResult<Set<String>>());
     }
-    
+
     @Test(expectedExceptions = NullPointerException.class)
     public void testConstructorNullGuids() {
         new StartSimulationBehaviour(1, null);
@@ -80,7 +84,7 @@ public class StartSimulationBehaviourTest {
                 myAgent.getContentManager().registerLanguage(SimulationOntology.getCodec());
                 myAgent.getContentManager().registerOntology(SimulationOntology.getInstance());
             }
-            
+
             @Override
             public void action() {
                 try {
@@ -163,14 +167,15 @@ public class StartSimulationBehaviourTest {
         a2.addBehaviour(b2);
         agents.add(a2);
 
-        final StartAgentsBehaviour start = new StartAgentsBehaviour(init.getResult(), defaultSymbol, agents);
+        final Symbol symbol = Symbols.getSymbol(defaultSymbol, defaultTickSize, defaultPrice);
+        final StartAgentsBehaviour start = new StartAgentsBehaviour(init.getResult(), symbol, agents);
         submit(controller, start);
 
         final StartSimulationBehaviour startSimulation = new StartSimulationBehaviour(Tests.SIMULATION_LENGTH,
                                                                                       start.getResult());
         submit(controller, startSimulation);
         latch.await();
-        
+
         assertThat(startSimulation.onEnd(), is(BehaviourResult.SUCCESS));
         container.kill();
     }

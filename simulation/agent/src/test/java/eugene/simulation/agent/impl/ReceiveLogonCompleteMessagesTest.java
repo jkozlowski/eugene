@@ -8,6 +8,8 @@ package eugene.simulation.agent.impl;
 import eugene.market.esma.MarketAgent;
 import eugene.market.ontology.MarketOntology;
 import eugene.simulation.agent.Simulation;
+import eugene.simulation.agent.Symbol;
+import eugene.simulation.agent.Symbols;
 import eugene.simulation.ontology.LogonComplete;
 import eugene.simulation.ontology.SimulationOntology;
 import eugene.utils.behaviour.BehaviourResult;
@@ -27,7 +29,9 @@ import org.testng.annotations.Test;
 import java.util.HashSet;
 import java.util.Set;
 
+import static eugene.market.ontology.Defaults.defaultPrice;
 import static eugene.market.ontology.Defaults.defaultSymbol;
+import static eugene.market.ontology.Defaults.defaultTickSize;
 import static eugene.simulation.agent.Tests.initAgent;
 import static eugene.simulation.agent.Tests.submit;
 import static jade.core.Runtime.instance;
@@ -128,7 +132,8 @@ public class ReceiveLogonCompleteMessagesTest {
         };
         agents.add(a2);
 
-        final StartAgentsBehaviour start = new StartAgentsBehaviour(init.getResult(), defaultSymbol, agents);
+        final Symbol symbol = Symbols.getSymbol(defaultSymbol, defaultTickSize, defaultPrice);
+        final StartAgentsBehaviour start = new StartAgentsBehaviour(init.getResult(), symbol, agents);
         submit(controller, start);
 
         final ReceiveLogonCompleteMessages receive = new ReceiveLogonCompleteMessages(start.getResult());

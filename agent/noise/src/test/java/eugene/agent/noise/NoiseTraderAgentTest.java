@@ -17,6 +17,7 @@ import eugene.market.ontology.message.data.AddOrder;
 import eugene.market.ontology.message.data.DeleteOrder;
 import eugene.market.ontology.message.data.OrderExecuted;
 import eugene.simulation.agent.Simulation;
+import eugene.simulation.agent.Symbol;
 import jade.core.Agent;
 import jade.core.Profile;
 import jade.core.behaviours.Behaviour;
@@ -31,7 +32,10 @@ import org.testng.annotations.Test;
 
 import static eugene.market.client.Applications.orderBookApplication;
 import static eugene.market.client.Applications.proxy;
+import static eugene.market.ontology.Defaults.defaultPrice;
 import static eugene.market.ontology.Defaults.defaultSymbol;
+import static eugene.market.ontology.Defaults.defaultTickSize;
+import static eugene.simulation.agent.Symbols.getSymbol;
 import static jade.core.Runtime.instance;
 import static org.mockito.Mockito.mock;
 import static org.powermock.api.mockito.PowerMockito.when;
@@ -73,7 +77,8 @@ public class NoiseTraderAgentTest {
         for (int i = 0; i < 150; i++) {
             final NoiseTraderAgent noiseTraderAgent = new NoiseTraderAgent();
             final Simulation simulation = mock(Simulation.class);
-            when(simulation.getSymbol()).thenReturn(defaultSymbol);
+            final Symbol symbol = getSymbol(defaultSymbol, defaultTickSize, defaultPrice);
+            when(simulation.getSymbol()).thenReturn(symbol);
             noiseTraderAgent.setArguments(new Object[] {simulation});
             final AgentController traderAgentController = agentContainer.acceptNewAgent("noise-trader" + i,
                                                                                         noiseTraderAgent);
@@ -90,7 +95,8 @@ public class NoiseTraderAgentTest {
             final int myI = i;
             final OrderBook orderBook = OrderBooks.defaultOrderBook();
             final Simulation simulation = mock(Simulation.class);
-            when(simulation.getSymbol()).thenReturn(defaultSymbol);
+            final Symbol symbol = getSymbol(defaultSymbol, defaultTickSize, defaultPrice);
+            when(simulation.getSymbol()).thenReturn(symbol);
             final Behaviour behaviour = Sessions.initiate(proxy(orderBookApplication(orderBook),
                 new ApplicationAdapter() {
                     @Override

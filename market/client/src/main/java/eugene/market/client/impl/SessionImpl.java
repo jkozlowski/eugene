@@ -169,10 +169,10 @@ public final class SessionImpl implements Session {
         checkNotNull(newOrderSingle);
         checkNotNull(listener);
         checkArgument(null == newOrderSingle.getSymbol() ||
-                              simulation.getSymbol().equals(newOrderSingle.getSymbol().getValue()));
+                              simulation.getSymbol().getName().equals(newOrderSingle.getSymbol().getValue()));
         checkArgument(null == newOrderSingle.getClOrdID());
 
-        newOrderSingle.setSymbol(new Symbol(simulation.getSymbol()));
+        newOrderSingle.setSymbol(new Symbol(simulation.getSymbol().getName()));
 
         final String clOrdID = getClOrdID();
 
@@ -197,8 +197,8 @@ public final class SessionImpl implements Session {
     public void send(OrderCancelRequest orderCancelRequest) throws NullPointerException, IllegalArgumentException {
         checkNotNull(orderCancelRequest);
         checkArgument(null == orderCancelRequest.getSymbol() ||
-                              simulation.getSymbol().equals(orderCancelRequest.getSymbol().getValue()));
-        orderCancelRequest.setSymbol(new Symbol(simulation.getSymbol()));
+                              simulation.getSymbol().getName().equals(orderCancelRequest.getSymbol().getValue()));
+        orderCancelRequest.setSymbol(new Symbol(simulation.getSymbol().getName()));
         application.fromApp(orderCancelRequest, this);
         agent.send(aclRequest(orderCancelRequest));
     }

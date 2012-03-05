@@ -55,7 +55,7 @@ public final class LogonBehaviour extends SequentialBehaviour {
     @Override
     public void onStart() {
         final Logon logon = new Logon();
-        logon.setSymbol(new Symbol(session.getSimulation().getSymbol()));
+        logon.setSymbol(new Symbol(session.getSimulation().getSymbol().getName()));
         final ACLMessage logonRequest = session.aclRequest(logon);
         addSubBehaviour(new AchieveREInitiator(myAgent, logonRequest) {
             @Override
