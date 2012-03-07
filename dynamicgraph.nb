@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[      7975,        207]
-NotebookOptionsPosition[      7648,        190]
-NotebookOutlinePosition[      8003,        206]
-CellTagsIndexPosition[      7960,        203]
+NotebookDataLength[      8666,        221]
+NotebookOptionsPosition[      8338,        204]
+NotebookOutlinePosition[      8692,        220]
+CellTagsIndexPosition[      8649,        217]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -142,54 +142,68 @@ Cell[BoxData[{
              RowBox[{"side", "[", "#", "]"}], "\[Equal]", "\"\<SELL\>\""}], 
             "&"}]}], "]"}]}]}], ";", "\[IndentingNewLine]", 
        "\[IndentingNewLine]", 
-       RowBox[{"Return", "[", 
-        RowBox[{"Graphics", "[", 
-         RowBox[{
-          RowBox[{"ListLinePlot", "[", 
-           RowBox[{"executionPricesTimestamps", ",", " ", 
-            RowBox[{"PlotStyle", "\[Rule]", "Red"}]}], "]"}], ",", " ", 
-          RowBox[{"Plot", "[", 
-           RowBox[{"executionPricesLine", ",", " ", 
-            RowBox[{"{", 
-             RowBox[{"x", ",", " ", "start", ",", " ", "stop"}], "}"}], ",", 
-            " ", 
-            RowBox[{"PlotStyle", "\[Rule]", "Green"}]}], "]"}], ",", " ", 
-          RowBox[{
-          "PlotLabel", "\[Rule]", 
-           "\"\<Execution Prices with a trend line\>\""}]}], "]"}], "]"}], 
-       ";"}]}], "\[IndentingNewLine]", 
-     RowBox[{"(*", 
-      RowBox[{
+       RowBox[{"(*", 
+        RowBox[{
+         RowBox[{"Return", "[", 
+          RowBox[{"Graphics", "[", 
+           RowBox[{
+            RowBox[{"ListLinePlot", "[", 
+             RowBox[{"executionPricesTimestamps", ",", " ", 
+              RowBox[{"PlotStyle", "\[Rule]", "Red"}]}], "]"}], ",", " ", 
+            RowBox[{"Plot", "[", 
+             RowBox[{"executionPricesLine", ",", " ", 
+              RowBox[{"{", 
+               RowBox[{"x", ",", " ", "start", ",", " ", "stop"}], "}"}], ",",
+               " ", 
+              RowBox[{"PlotStyle", "\[Rule]", "Green"}]}], "]"}], ",", " ", 
+            RowBox[{
+            "PlotLabel", "\[Rule]", 
+             "\"\<Execution Prices with a trend line\>\""}]}], "]"}], "]"}], 
+         ";"}], "*)"}], "\[IndentingNewLine]", 
        RowBox[{"Return", "[", 
         RowBox[{"Graphics", "[", 
          RowBox[{"ListLinePlot", "[", 
-          RowBox[{"executionAsksTimestamps", ",", " ", 
-           RowBox[{"PlotStyle", "\[Rule]", "Green"}]}], "]"}], "]"}], "]"}], 
-       ";"}], "*)"}], "\[IndentingNewLine]", "]"}]}], ";"}], 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+            "executionBidsTimestamps", ",", "executionAsksTimestamps"}], 
+            "}"}], ",", " ", 
+           RowBox[{"PlotStyle", "\[Rule]", 
+            RowBox[{"{", 
+             RowBox[{"Red", ",", " ", "Green"}], "}"}]}]}], "]"}], "]"}], 
+        "]"}], ";"}]}], "\[IndentingNewLine]", "]"}]}], ";"}], 
   "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{"Dynamic", "[", 
   RowBox[{"Refresh", "[", 
    RowBox[{
     RowBox[{
     "graph", "[", 
-     "\"\</Users/jakubkozlowski/Programming/intellij/eugene/demo/eugene/noise/\
-runner/\>\"", "]"}], ",", 
+     "\"\</Users/jakubkozlowski/Programming/intellij/eugene/experiment/vwap-\
+no-error/runner/\>\"", "]"}], ",", 
     RowBox[{"UpdateInterval", "\[Rule]", "2"}]}], "]"}], 
   "]"}], "\[IndentingNewLine]"}], "Input",
- CellChangeTimes->{{3.539952014494246*^9, 3.539952020345891*^9}}],
+ CellChangeTimes->{{3.539952014494246*^9, 3.539952020345891*^9}, {
+  3.540044967724806*^9, 3.540045001151843*^9}, {3.5400450445916977`*^9, 
+  3.540045048889413*^9}, {3.540045089579852*^9, 3.540045098560384*^9}, {
+  3.5400455387462797`*^9, 3.540045555482976*^9}, {3.540045804320773*^9, 
+  3.540045826969455*^9}}],
 
 Cell[BoxData[
  DynamicBox[ToBoxes[
    Refresh[
     $CellContext`graph[
-    "/Users/jakubkozlowski/Programming/intellij/eugene/demo/eugene/noise/\
-runner/"], UpdateInterval -> 2], StandardForm],
-  ImageSizeCache->{588., {3., 8.}}]], "Output",
- CellChangeTimes->{3.53995187231968*^9, 3.539952021875268*^9}]
+    "/Users/jakubkozlowski/Programming/intellij/eugene/experiment/vwap-no-\
+error/runner/"], UpdateInterval -> 2], StandardForm],
+  ImageSizeCache->{360., {107., 111.}}]], "Output",
+ CellChangeTimes->{
+  3.5399875334720182`*^9, 3.540044698183076*^9, {3.54004500330219*^9, 
+   3.540045017268422*^9}, 3.540045049576812*^9, 3.5400450995122023`*^9, {
+   3.54004554777518*^9, 3.5400455561417933`*^9}, {3.540045813186501*^9, 
+   3.540045827366544*^9}}]
 }, Open  ]]
 },
-WindowSize->{740, 851},
-WindowMargins->{{20, Automatic}, {Automatic, 44}},
+WindowSize->{1920, 951},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
 FrontEndVersion->"8.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (October 5, \
 2011)",
 StyleDefinitions->"Default.nb"
@@ -206,8 +220,8 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[579, 22, 6746, 156, 688, "Input"],
-Cell[7328, 180, 304, 7, 27, "Output"]
+Cell[579, 22, 7223, 166, 463, "Input"],
+Cell[7805, 190, 517, 11, 233, "Output"]
 }, Open  ]]
 }
 ]
