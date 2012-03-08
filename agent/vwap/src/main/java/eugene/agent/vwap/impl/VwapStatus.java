@@ -29,6 +29,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.Iterators.peekingIterator;
 import static com.google.common.collect.Sets.newTreeSet;
+import static eugene.market.client.OrderReference.NO_ORDER;
 import static java.math.BigDecimal.ZERO;
 import static java.math.BigDecimal.valueOf;
 import static java.util.Collections.unmodifiableSet;
@@ -43,6 +44,8 @@ public final class VwapStatus extends OrderReferenceListenerAdapter {
 
     private static final Logger LOG = LoggerFactory.getLogger(VwapStatus.class);
 
+    private static final SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss:SSS");
+
     /**
      * Precision of computation.
      */
@@ -55,12 +58,12 @@ public final class VwapStatus extends OrderReferenceListenerAdapter {
     private final BigDecimal bucketSize;
 
     private final Set<VwapBucket> buckets;
-    
+
     private final PeekingIterator<VwapBucket> currentBucket;
 
     private Long cumVolume;
 
-    private static final SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss:SSS");
+    private OrderReference currentOrder;
 
     /**
      * Default constructor.
@@ -79,6 +82,7 @@ public final class VwapStatus extends OrderReferenceListenerAdapter {
         this.buckets = unmodifiableSet(getBuckets(now, deadline, vwapExecution));
         this.currentBucket = peekingIterator(this.buckets.iterator());
         this.cumVolume = 0L;
+        this.currentOrder = NO_ORDER;
     }
 
     /**
@@ -118,12 +122,49 @@ public final class VwapStatus extends OrderReferenceListenerAdapter {
     }
 
     /**
+     * Checks if there is a working order.
+     *
+     * @return <code>true</code> if there is a working order, <code>false</code> otherwise.
+     */
+    public boolean hasOrder() {
+        return !NO_ORDER.equals(currentOrder);
+    }
+
+    /**
+     * Gets the current working order or {@link OrderReference#NO_ORDER} if there is no order working.
+     *
+     * @return current order or {@link OrderReference#NO_ORDER}.
+     */
+    public OrderReference getCurrentOrder() {
+        return currentOrder;
+    }
+
+    /**
+     * Gets the current bucket.
+     *
+     * @return the current bucket.
+     */
+    public PeekingIterator<VwapBucket> getCurrentBucket() {
+        return currentBucket;
+    }
+
+    /**
+     * Updates the currentOrder reference.
+     */
+    @Override
+    public void createdEvent(final OrderReference orderReference) {
+        checkState(NO_ORDER.equals(currentOrder));
+        this.currentOrder = orderReference;
+    }
+
+    /**
      * Updates the cumVolume.
      */
     @Override
     public void tradeEvent(final ExecutionReport executionReport, final OrderReference orderReference,
                            final Session session) {
 
+        checkState(orderReference.equals(currentOrder));
         checkNotNull(executionReport.getLastQty());
         checkNotNull(executionReport.getLastQty().getValue());
         checkArgument(executionReport.getLastQty().getValue().compareTo(Order.NO_QTY) > 0);
@@ -141,15 +182,33 @@ public final class VwapStatus extends OrderReferenceListenerAdapter {
 
         checkState(cumVolume.compareTo(vwapExecution.getQuantity()) <= 0);
 
+        if (orderReference.getOrdStatus().isFilled()) {
+            this.currentOrder = NO_ORDER;
+        }
+
         if (currentBucket.peek().getCumVolume().compareTo(cumVolume) == 0) {
             LOG.info("Traded allocated volume: {}", cumVolume);
         }
+    }
 
-        final Calendar now = Calendar.getInstance();
-        if (now.getTime().after(currentBucket.peek().getDeadline()) &&
-            currentBucket.hasNext()) {
-            currentBucket.next();
-        }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void canceledEvent(final ExecutionReport executionReport, final OrderReference orderReference,
+                              final Session session) {
+        checkState(orderReference.equals(currentOrder));
+        this.currentOrder = NO_ORDER;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void rejectedEvent(final ExecutionReport executionReport, final OrderReference orderReference,
+                              final Session session) {
+        checkState(orderReference.equals(currentOrder));
+        this.currentOrder = NO_ORDER;
     }
 
     /**

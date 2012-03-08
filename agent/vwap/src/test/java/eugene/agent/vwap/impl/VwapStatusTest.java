@@ -11,6 +11,7 @@ import eugene.market.client.OrderReference;
 import eugene.market.client.Session;
 import eugene.market.ontology.field.LastPx;
 import eugene.market.ontology.field.LastQty;
+import eugene.market.ontology.field.enums.OrdStatus;
 import eugene.market.ontology.message.ExecutionReport;
 import org.testng.annotations.Test;
 
@@ -21,6 +22,7 @@ import java.util.SortedSet;
 
 import static eugene.agent.vwap.VwapExecutions.newVwapExecution;
 import static eugene.agent.vwap.impl.VwapStatus.getBucketSize;
+import static eugene.market.client.OrderReference.NO_ORDER;
 import static eugene.market.ontology.Defaults.defaultLastPx;
 import static eugene.market.ontology.Defaults.defaultOrdQty;
 import static eugene.market.ontology.field.enums.Side.BUY;
@@ -30,6 +32,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Tests {@link VwapStatus}.
@@ -94,12 +97,34 @@ public class VwapStatusTest {
         assertThat(vwapStatus.getBucketSize(), notNullValue());
     }
     
+    @Test
+    public void testHasOrderNoOrder() {
+        final VwapExecution execution = newVwapExecution(defaultOrdQty, BUY, defaultTargets);
+        final VwapStatus vwapStatus = new VwapStatus(deadline, execution);
+        assertThat(vwapStatus.getCurrentOrder(), sameInstance(NO_ORDER));
+        assertThat(vwapStatus.hasOrder(), is(false));
+    }
+
+    @Test
+    public void testHasOrderHasOrder() {
+        final VwapExecution execution = newVwapExecution(defaultOrdQty, BUY, defaultTargets);
+        final VwapStatus vwapStatus = new VwapStatus(deadline, execution);
+        final OrderReference curOrder = mock(OrderReference.class);
+
+        vwapStatus.createdEvent(curOrder);
+        assertThat(vwapStatus.getCurrentOrder(), sameInstance(curOrder));
+        assertThat(vwapStatus.hasOrder(), is(true));
+    }
+    
     @Test(expectedExceptions = NullPointerException.class)
     public void testTradeEventNullLastQty() {
         final VwapExecution execution = newVwapExecution(defaultOrdQty, BUY, defaultTargets);
         final ExecutionReport executionReport = new ExecutionReport();
         final VwapStatus vwapStatus = new VwapStatus(deadline, execution);
-        vwapStatus.tradeEvent(executionReport, mock(OrderReference.class), mock(Session.class));
+        final OrderReference curOrder = mock(OrderReference.class);
+
+        vwapStatus.createdEvent(curOrder);
+        vwapStatus.tradeEvent(executionReport, curOrder, mock(Session.class));
     }
 
     @Test(expectedExceptions = NullPointerException.class)
@@ -108,9 +133,22 @@ public class VwapStatusTest {
         final ExecutionReport executionReport = new ExecutionReport();
         executionReport.setLastQty(new LastQty(null));
         final VwapStatus vwapStatus = new VwapStatus(deadline, execution);
-        vwapStatus.tradeEvent(executionReport, mock(OrderReference.class), mock(Session.class));
+        final OrderReference curOrder = mock(OrderReference.class);
+
+        vwapStatus.createdEvent(curOrder);
+        vwapStatus.tradeEvent(executionReport, curOrder, mock(Session.class));
     }
 
+    @Test(expectedExceptions = IllegalStateException.class)
+    public void testTradeEventUnknownOrderReference() {
+        final VwapExecution execution = newVwapExecution(defaultOrdQty, BUY, defaultTargets);
+        final ExecutionReport executionReport = new ExecutionReport();
+        executionReport.setLastQty(new LastQty(null));
+        final VwapStatus vwapStatus = new VwapStatus(deadline, execution);
+        
+        vwapStatus.createdEvent(mock(OrderReference.class));
+        vwapStatus.tradeEvent(executionReport, mock(OrderReference.class), mock(Session.class));
+    }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testTradeEventLastQtyValueZero() {
@@ -118,7 +156,11 @@ public class VwapStatusTest {
         final ExecutionReport executionReport = new ExecutionReport();
         executionReport.setLastQty(new LastQty(Order.NO_QTY));
         final VwapStatus vwapStatus = new VwapStatus(deadline, execution);
-        vwapStatus.tradeEvent(executionReport, mock(OrderReference.class), mock(Session.class));
+        final OrderReference curOrder = mock(OrderReference.class);
+        when(curOrder.getOrdStatus()).thenReturn(OrdStatus.PARTIALLY_FILLED);
+
+        vwapStatus.createdEvent(curOrder);
+        vwapStatus.tradeEvent(executionReport, curOrder, mock(Session.class));
     }
 
     @Test(expectedExceptions = IllegalStateException.class)
@@ -128,7 +170,11 @@ public class VwapStatusTest {
         executionReport.setLastQty(new LastQty(defaultOrdQty + 1L));
         executionReport.setLastPx(new LastPx(defaultLastPx));
         final VwapStatus vwapStatus = new VwapStatus(deadline, execution);
-        vwapStatus.tradeEvent(executionReport, mock(OrderReference.class), mock(Session.class));
+        final OrderReference curOrder = mock(OrderReference.class);
+        when(curOrder.getOrdStatus()).thenReturn(OrdStatus.PARTIALLY_FILLED);
+
+        vwapStatus.createdEvent(curOrder);
+        vwapStatus.tradeEvent(executionReport, curOrder, mock(Session.class));
     }
 
     @Test
@@ -138,7 +184,14 @@ public class VwapStatusTest {
         executionReport.setLastQty(new LastQty(defaultOrdQty));
         executionReport.setLastPx(new LastPx(defaultLastPx));
         final VwapStatus vwapStatus = new VwapStatus(deadline, execution);
-        vwapStatus.tradeEvent(executionReport, mock(OrderReference.class), mock(Session.class));
+
+        final OrderReference curOrder = mock(OrderReference.class);
+        when(curOrder.getOrdStatus()).thenReturn(OrdStatus.FILLED);
+
+        vwapStatus.createdEvent(curOrder);
+        vwapStatus.tradeEvent(executionReport, curOrder, mock(Session.class));
+
+        assertThat(vwapStatus.getCurrentOrder(), sameInstance(NO_ORDER));
     }
 
     @Test
@@ -148,7 +201,30 @@ public class VwapStatusTest {
         executionReport.setLastQty(new LastQty(defaultOrdQty - 1L));
         executionReport.setLastPx(new LastPx(defaultLastPx));
         final VwapStatus vwapStatus = new VwapStatus(deadline, execution);
-        vwapStatus.tradeEvent(executionReport, mock(OrderReference.class), mock(Session.class));
+        final OrderReference curOrder = mock(OrderReference.class);
+        when(curOrder.getOrdStatus()).thenReturn(OrdStatus.PARTIALLY_FILLED);
+        
+        vwapStatus.createdEvent(curOrder);
+        vwapStatus.tradeEvent(executionReport, curOrder, mock(Session.class));
+
+        assertThat(vwapStatus.getCurrentOrder(), sameInstance(curOrder));
+    }
+
+    @Test
+    public void testTradeEventFilledOrder() {
+        final VwapExecution execution = newVwapExecution(defaultOrdQty, BUY, BigDecimal.ONE);
+        final ExecutionReport executionReport = new ExecutionReport();
+        executionReport.setLastQty(new LastQty(defaultOrdQty));
+        executionReport.setLastPx(new LastPx(defaultLastPx));
+        final VwapStatus vwapStatus = new VwapStatus(deadline, execution);
+
+        final OrderReference curOrder = mock(OrderReference.class);
+        when(curOrder.getOrdStatus()).thenReturn(OrdStatus.FILLED);
+
+        vwapStatus.createdEvent(curOrder);
+        vwapStatus.tradeEvent(executionReport, curOrder, mock(Session.class));
+
+        assertThat(vwapStatus.getCurrentOrder(), sameInstance(NO_ORDER));
     }
     
     @Test(expectedExceptions = NullPointerException.class)

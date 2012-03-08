@@ -13,7 +13,7 @@ import jade.core.Agent;
  * @author Jakub D Kozlowski
  * @since 0.7
  */
-public interface Task {
+public interface Task<K extends FinishableBehaviour> {
 
     /**
      * Performs the action.
@@ -21,5 +21,5 @@ public interface Task {
      * @param finishableBehaviour parent {@link FinishableBehaviour}.
      * @param agent               {@link Agent} executing <code>parent</code>.
      */
-    void action(final FinishableBehaviour finishableBehaviour, final Agent agent);
+    void action(final K finishableBehaviour, final Agent agent);
 }

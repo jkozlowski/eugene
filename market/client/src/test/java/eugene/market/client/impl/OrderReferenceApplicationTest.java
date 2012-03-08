@@ -21,7 +21,6 @@ import org.testng.annotations.Test;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import static eugene.market.client.OrderReferenceListener.EMPTY_LISTENER;
 import static eugene.market.ontology.Defaults.defaultClOrdID;
 import static eugene.market.ontology.Defaults.defaultOrdQty;
 import static eugene.market.ontology.Defaults.defaultPrice;
@@ -48,11 +47,13 @@ public class OrderReferenceApplicationTest {
 
     @Test
     public void testAddOrderReferenceGetOrderReference() {
+        final OrderReferenceListener l = mock(OrderReferenceListener.class);
         final OrderReferenceApplication application = new OrderReferenceApplication();
-        final OrderReferenceImpl orderReference = new OrderReferenceImpl(EMPTY_LISTENER, defaultClOrdID, 123L,
+        final OrderReferenceImpl orderReference = new OrderReferenceImpl(l, defaultClOrdID, 123L,
                                                                          OrdType.LIMIT, Side.BUY, defaultOrdQty,
                                                                          defaultPrice);
         application.addOrderReference(orderReference);
+        verify(l).createdEvent(orderReference);
 
         final ExecutionReport executionReport = new ExecutionReport();
         executionReport.setClOrdID(new ClOrdID(defaultClOrdID));
@@ -104,6 +105,7 @@ public class OrderReferenceApplicationTest {
         assertThat(orderReference.getOrdStatus().isRejected(), is(true));
         assertThat(application.getOrderReference(new ClOrdID(defaultClOrdID)), nullValue());
 
+        verify(listener).createdEvent(orderReference);
         verify(listener).rejectedEvent(executionReport, orderReference, session);
         verifyNoMoreInteractions(listener);
     }
@@ -128,6 +130,7 @@ public class OrderReferenceApplicationTest {
         assertThat(orderReference.getOrdStatus().isNew(), is(true));
         assertThat(application.getOrderReference(new ClOrdID(defaultClOrdID)), sameInstance(orderReference));
 
+        verify(listener).createdEvent(orderReference);
         verify(listener).newEvent(executionReport, orderReference, session);
         verifyNoMoreInteractions(listener);
     }
@@ -154,6 +157,7 @@ public class OrderReferenceApplicationTest {
         assertThat(orderReference.getOrdStatus().isPartiallyFilled(), is(true));
         assertThat(application.getOrderReference(new ClOrdID(defaultClOrdID)), sameInstance(orderReference));
 
+        verify(listener).createdEvent(orderReference);
         verify(listener).tradeEvent(executionReport, orderReference, session);
         verifyNoMoreInteractions(listener);
     }
@@ -180,6 +184,7 @@ public class OrderReferenceApplicationTest {
         assertThat(orderReference.getOrdStatus().isFilled(), is(true));
         assertThat(application.getOrderReference(new ClOrdID(defaultClOrdID)), nullValue());
 
+        verify(listener).createdEvent(orderReference);
         verify(listener).tradeEvent(executionReport, orderReference, session);
         verifyNoMoreInteractions(listener);
     }
@@ -204,6 +209,7 @@ public class OrderReferenceApplicationTest {
         assertThat(orderReference.getOrdStatus().isCanceled(), is(true));
         assertThat(application.getOrderReference(new ClOrdID(defaultClOrdID)), nullValue());
 
+        verify(listener).createdEvent(orderReference);
         verify(listener).canceledEvent(executionReport, orderReference, session);
         verifyNoMoreInteractions(listener);
     }
@@ -228,6 +234,7 @@ public class OrderReferenceApplicationTest {
         assertThat(orderReference.getOrdStatus().isNew(), is(true));
         assertThat(application.getOrderReference(new ClOrdID(defaultClOrdID)), sameInstance(orderReference));
 
+        verify(listener).createdEvent(orderReference);
         verify(listener).cancelRejectedEvent(orderCancelReject, orderReference, session);
         verifyNoMoreInteractions(listener);
     }

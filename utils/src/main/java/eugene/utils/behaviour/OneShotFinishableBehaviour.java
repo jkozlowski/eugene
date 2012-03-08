@@ -27,7 +27,7 @@ public final class OneShotFinishableBehaviour extends FinishableBehaviour {
      *
      * @param task {@link Task} to perform.
      */
-    public OneShotFinishableBehaviour(final Task task) {
+    public OneShotFinishableBehaviour(final Task<OneShotFinishableBehaviour> task) {
         super(task);
     }
 

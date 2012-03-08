@@ -40,6 +40,20 @@ public class OrderReferenceListenerProxyImplTest {
     }
 
     @Test
+    public void testCreatedEvent() {
+        final OrderReferenceListener listener1 = mock(OrderReferenceListener.class);
+        final OrderReferenceListener listener2 = mock(OrderReferenceListener.class);
+        final OrderReference ref = mock(OrderReference.class);
+        final OrderReferenceListener proxy = proxy(listener1, listener2);
+
+        proxy.createdEvent(ref);
+
+        verify(listener1).createdEvent(ref);
+        verify(listener2).createdEvent(ref);
+        verifyNoMoreInteractions(listener1, listener2);
+    }
+
+    @Test
     public void testNewEvent() {
         final OrderReferenceListener listener1 = mock(OrderReferenceListener.class);
         final OrderReferenceListener listener2 = mock(OrderReferenceListener.class);

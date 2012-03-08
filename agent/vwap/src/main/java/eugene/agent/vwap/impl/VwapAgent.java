@@ -3,13 +3,15 @@
  * Distributed under the The MIT License.
  * (See accompanying file LICENSE.txt)
  */
-package eugene.agent.vwap;
+package eugene.agent.vwap.impl;
 
-import eugene.agent.vwap.impl.VwapBehaviour;
-import eugene.market.book.OrderBook;
+import eugene.agent.vwap.VwapExecution;
+import eugene.agent.vwap.impl.state.State;
 import eugene.market.client.ApplicationAdapter;
+import eugene.market.client.Applications;
 import eugene.market.client.ProxyApplication;
 import eugene.market.client.Session;
+import eugene.market.client.TopOfBookApplication;
 import eugene.simulation.agent.Simulation;
 import eugene.simulation.ontology.Start;
 import eugene.simulation.ontology.Stop;
@@ -20,8 +22,6 @@ import java.util.Calendar;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static eugene.market.book.OrderBooks.defaultOrderBook;
-import static eugene.market.client.Applications.orderBookApplication;
 import static eugene.market.client.Applications.proxy;
 import static eugene.market.client.Sessions.initiate;
 
@@ -36,17 +36,22 @@ import static eugene.market.client.Sessions.initiate;
 public class VwapAgent extends Agent {
 
     private final VwapExecution vwapExecution;
+    
+    private final State sendLimitState;
 
     /**
      * Default constructor.
      *
-     * @param vwapExecution configuration of the {@link VwapAgent}.
+     * @param vwapExecution  configuration of the {@link VwapAgent}.
+     * @param sendLimitState {@link State} that will be used by {@link VwapBehaviour} to send limit orders.
      *
-     * @throws NullPointerException if <code>vwapExecution</code> is null.
+     * @throws NullPointerException if any parameter is null.
      */
-    public VwapAgent(final VwapExecution vwapExecution) {
+    public VwapAgent(final VwapExecution vwapExecution, final State sendLimitState) {
         checkNotNull(vwapExecution);
+        checkNotNull(sendLimitState);
         this.vwapExecution = vwapExecution;
+        this.sendLimitState = sendLimitState;
     }
 
     @Override
@@ -57,8 +62,8 @@ public class VwapAgent extends Agent {
 
         final Simulation simulation = (Simulation) getArguments()[0];
 
-        final OrderBook orderBook = defaultOrderBook();
-        final ProxyApplication proxy = proxy(orderBookApplication(orderBook));
+        final TopOfBookApplication topOfBook = Applications.topOfBookApplication(simulation.getSymbol());
+        final ProxyApplication proxy = proxy(topOfBook);
         proxy.addApplication(new ApplicationAdapter() {
 
             private Behaviour b = null;
@@ -67,7 +72,7 @@ public class VwapAgent extends Agent {
             public void onStart(final Start start, final Agent agent, final Session session) {
                 final Calendar deadline = Calendar.getInstance();
                 deadline.setTime(start.getStopTime());
-                b = new VwapBehaviour(deadline, vwapExecution, orderBook, session);
+                b = new VwapBehaviour(deadline, vwapExecution, sendLimitState, topOfBook, session);
                 addBehaviour(b);
             }
 

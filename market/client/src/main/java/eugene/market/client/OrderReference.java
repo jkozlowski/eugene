@@ -22,6 +22,63 @@ import java.math.BigDecimal;
 public interface OrderReference {
 
     /**
+     * Indicates a non order.
+     *
+     */
+    public static final OrderReference NO_ORDER = new OrderReference() {
+
+        @Override
+        public String getClOrdID() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public Long getCreationTime() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public OrdStatus getOrdStatus() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public Side getSide() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public OrdType getOrdType() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public BigDecimal getPrice() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public Long getOrderQty() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public BigDecimal getAvgPx() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public Long getLeavesQty() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public Long getCumQty() {
+            throw new UnsupportedOperationException();
+        }
+    };
+
+    /**
      * Gets the clOrdID.
      *
      * @return the clOrdID.

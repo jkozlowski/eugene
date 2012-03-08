@@ -8,6 +8,7 @@ package eugene.market.client.impl;
 import com.google.common.annotations.VisibleForTesting;
 import eugene.market.client.ApplicationAdapter;
 import eugene.market.client.OrderReference;
+import eugene.market.client.OrderReferenceListener;
 import eugene.market.client.Session;
 import eugene.market.ontology.field.ClOrdID;
 import eugene.market.ontology.field.enums.OrdStatus;
@@ -39,7 +40,8 @@ public final class OrderReferenceApplication extends ApplicationAdapter {
     }
 
     /**
-     * Add this <code>orderReference</code> to be tracked.
+     * Adds this <code>orderReference</code> to be tracked and calls {@link OrderReferenceListener#createdEvent
+     * (OrderReference)} on the {@link OrderReferenceImpl#getOrderReferenceListener()}
      *
      * @param orderReference {@link OrderReferenceImpl} to add.
      *
@@ -47,6 +49,7 @@ public final class OrderReferenceApplication extends ApplicationAdapter {
      */
     public void addOrderReference(final OrderReferenceImpl orderReference) throws NullPointerException {
         checkNotNull(orderReference);
+        orderReference.getOrderReferenceListener().createdEvent(orderReference);
         orderReferenceMap.putIfAbsent(orderReference.getClOrdID(), orderReference);
     }
 

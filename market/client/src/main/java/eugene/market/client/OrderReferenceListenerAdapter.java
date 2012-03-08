@@ -20,6 +20,13 @@ public abstract class OrderReferenceListenerAdapter implements OrderReferenceLis
      * {@inheritDoc}
      */
     @Override
+    public void createdEvent(final OrderReference orderReference) {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void newEvent(final ExecutionReport executionReport, final OrderReference orderReference,
                          final Session session) {
     }

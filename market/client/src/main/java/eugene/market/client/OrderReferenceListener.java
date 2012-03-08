@@ -26,6 +26,13 @@ public interface OrderReferenceListener {
     };
 
     /**
+     * Indicates that the <code>orderReference</code> has been created and sent to the Market Agent.
+     *
+     * @param orderReference new order.
+     */
+    void createdEvent(final OrderReference orderReference);
+
+    /**
      * Indicates that an {@link ExecType#NEW} event has been received.
      *
      * @param executionReport original message.

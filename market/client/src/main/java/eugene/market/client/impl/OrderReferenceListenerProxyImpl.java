@@ -40,6 +40,17 @@ public final class OrderReferenceListenerProxyImpl implements OrderReferenceList
     }
 
     @Override
+    public void createdEvent(final OrderReference orderReference) {
+        forAll(new Function<OrderReferenceListener, Void>() {
+            @Override
+            public Void apply(final OrderReferenceListener listener) {
+                listener.createdEvent(orderReference);
+                return null;
+            }
+        });
+    }
+
+    @Override
     public void newEvent(final ExecutionReport executionReport, final OrderReference orderReference,
                          final Session session) {
         forAll(new Function<OrderReferenceListener, Void>() {

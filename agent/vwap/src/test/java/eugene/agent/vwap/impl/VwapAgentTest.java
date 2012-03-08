@@ -3,9 +3,13 @@
  * Distributed under the The MIT License.
  * (See accompanying file LICENSE.txt)
  */
-package eugene.agent.vwap;
+package eugene.agent.vwap.impl;
 
+import eugene.agent.vwap.VwapExecution;
+import eugene.agent.vwap.impl.state.State;
 import org.testng.annotations.Test;
+
+import static org.mockito.Mockito.mock;
 
 /**
  * Tests {@link VwapAgent}.
@@ -17,6 +21,11 @@ public class VwapAgentTest {
     
     @Test(expectedExceptions = NullPointerException.class)
     public void testConstructorNullVwapExecution() {
-        new VwapAgent(null);
+        new VwapAgent(null, mock(State.class));
+    }
+    
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testConstructorNullSendLimitState() {
+        new VwapAgent(mock(VwapExecution.class), null);
     }
 }

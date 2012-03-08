@@ -3,7 +3,7 @@
  * Distributed under the The MIT License.
  * (See accompanying file LICENSE.txt)
  */
-package eugene.experiment.vwapnoerror.internal;
+package eugene.experiment.vwaperror.internal;
 
 import com.google.common.collect.Sets;
 import eugene.agent.noise.NoiseTraderAgent;
@@ -46,11 +46,11 @@ public class ExperimentActivator implements BundleActivator {
     private static final int NUMBER_OF_TRADERS = 20;
 
     private static final BigDecimal tickSize = new BigDecimal("0.001").setScale(3);
-            
+
     private static final BigDecimal defaultPrice = new BigDecimal("100.000").setScale(3);
-    
+
     private static final Symbol symbol = Symbols.getSymbol("VOD.L", tickSize, defaultPrice);
-    
+
     private static final int LENGTH = 6 * 60 * 1000;
 
     final BigDecimal[] targets = new BigDecimal[]{
@@ -101,7 +101,7 @@ public class ExperimentActivator implements BundleActivator {
                 agents.add(new NoiseTraderAgent());
             }
 
-            agents.add(VwapAgents.vwapNoError(newVwapExecution(vwapTargetVolume, Side.BUY, targets)));
+            agents.add(VwapAgents.vwapError(newVwapExecution(vwapTargetVolume, Side.BUY, targets)));
 
             final JadeRuntimeService jade = (JadeRuntimeService) ctx.getService(sr);
             final SimulationAgent simulationAgent = new SimulationAgent(symbol, LENGTH, orders, agents);
