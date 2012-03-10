@@ -231,6 +231,15 @@
 					\renewcommand*{\equationautorefname}{Gleichung}%        
 					\renewcommand*{\itemautorefname}{Punkt}%
 				}%	
+		\addto\extrasbritish{%
+					\renewcommand*{\figureautorefname}{Figure}%
+					\renewcommand*{\tableautorefname}{Table}%
+					\renewcommand*{\partautorefname}{Part}%
+					\renewcommand*{\chapterautorefname}{Chapter}%
+					\renewcommand*{\sectionautorefname}{Section}%
+					\renewcommand*{\subsectionautorefname}{Section}%
+					\renewcommand*{\subsubsectionautorefname}{Section}% 	
+				}%
 			% Fix to getting autorefs for subfigures right (thanks to Belinda Vogt for changing the definition)
 			\providecommand{\subfigureautorefname}{\figureautorefname}%  			
     }{\relax}
