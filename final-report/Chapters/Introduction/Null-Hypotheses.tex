@@ -1,1 +1,20 @@
 \section{Research Objective and Null Hypotheses}
+
+\subsection{Research Objective}
+We focus in this thesis on testing Trading Algorithms using Agent-Based Simulation and try to demonstrate that the results obtained from the simulations can be used to automatically detect simple programming errors using statistical analysis. 
+
+In order to demonstrate the efficacy of this approach, we will study an implementation of a VWAP algorithm that will trade in a Simulated Stock Market that consists of Noise Traders. Given this VWAP algorithm implementation, a logical polarity error will be introduced into the implementation, which will cause the algorithm to always cross the spread, by checking the wrong side of the limit order book for a price when sending a limit order. We hypothesise that by performing statistical analysis on the distribution of errors between VWAPs achieved by both algorithms and those of the overall market, it will be possible to detect the error with high level of confidence.
+
+\subsection{Null Hypothesis 1}
+\begin{quote}
+Given a correct implementation of a VWAP Algorithm, if a logical polarity error is introduced that causes the algorithm to always check the wrong price when sending a limit order, there will be no effect on the distribution of errors from the target VWAP.
+\end{quote}
+
+\subsection{Null Hypothesis 2}
+\begin{quote}
+Given 2 correct implementations of a VWAP Algorithm, one that divides the trading duration into 12 equal time intervals and the second that divides the trading duration into 24 equal time intervals, there will be no effect on the distribution of errors from the target VWAP.
+\end{quote}
+
+
+
+
