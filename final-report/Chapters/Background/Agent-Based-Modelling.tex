@@ -12,13 +12,17 @@ Agent-Based Models that attempt to explain economic processes are branded as Age
 \subsection{An overview of Agent-Based Artificial Stock Markets}
 
 \subsubsection*{SantaFe ASM~\citep{Lebaron2002, Lebaron99}}
-The Santa Fe Artificial Stock Market is a discrete time Artificial Stock Market that consists a central computational market and a number of intelligent agent. Agents make decision by attempting to forecast the future returns on the stock using genetic programming and therefore decide between investing in stock or leaving their money in the bank, which pays a fixed interest rate.
+The Santa Fe Artificial Stock Market (SFI ASM) is a discrete time artificial stock market that consists a central computational market and a number of intelligent agent. Agents make decision by attempting to forecast the future returns on the stock using genetic programming and therefore decide between investing in stock or leaving their money in the bank, which pays a fixed interest rate.
 
 The simulated market consists of $N$ agents, usually $50-100$, that interact with the market. The stock has the price $p(t)$ per share at time $t$, where $p(t)$ is set endogenously to clear the market (\textit{call market}). The stock pays a dividend $d(t+1)$ at the end of time $t$, according to a stochastic process, independent of the market and agents' actions. The money left in the bank pays constant rate of return of $r$ per period. The information available to agents consists of the price, the dividend, total number of bids/asks at each past period, plus some additional variables. 
 
 By using genetic programming, agents can explore a wide range of possible forecasting rules and they have the flexibility to use or disregard certain pieces of avaiable information. The market was able to generate the key stylised facts: weak forecastability, volatility persistence, and higher expected returns.~\cite{Lebaron99}. 
 
-\subsubsection{Genoa ASM~\citep{}}
+\subsubsection{Genoa ASM~\citep{Raberto2001}}
+Similarly to SFI ASM, The Genoa Artificial Stock market (GASM) is an agent-based artificial financial market in which heterogeneous agents exchange cash and stock from an initial fixed endowment of cash and shares. The total amount of cash and shares is constant throughout the duration of the simulation. The price formation process is set at the intersection of the demand and supply curves (\textit{call market}). At each time step, agents place random buy or sell orders, subject to available resources and clustering and for prices that depend on historical volatility.
+
+The market was able to reproduce key stylised facts, i.e. fat tails and volatility clustering, however failed to reproduce others, e.g. the volatility exhibited an exponential decay, as opposed to power law decay.
+
 
 
 
