@@ -23,6 +23,9 @@ Similarly to SFI ASM, The Genoa Artificial Stock market (GASM) is an agent-based
 
 The market was able to reproduce key stylised facts, i.e. fat tails and volatility clustering, however failed to reproduce others, e.g. the volatility exhibited an exponential decay, as opposed to power law decay.
 
+\subsubsection{Other relevant work}
+The ASMs surveyed thus far evolve in discrete time intervals, i.e. at each time period $t$, some fraction of traders submit orders to the market, the orders are cleared, the new market price is announced, the agents update their positions and a new time period $t+1$ starts. This style of simulation is well placed when dealing with call markets, however fails to realistically reflect the nature of continuous trading sessions, that evolves in a highly asynchronous manner thanks to limit order book mechanism.  
+
 
 
 
