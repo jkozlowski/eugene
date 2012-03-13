@@ -54,7 +54,7 @@ public final class SendLimitBestPriceCorrectSide implements State {
         }
 
         final Long ordQty = vwapStatus.getCurrentBucket().peek().getCumVolume() - vwapStatus.getCumVolume();
-        final NewOrderSingle newOrderSingle = newLimit(topOfBook.getLastPrice(side, NO), ordQty);
+        final NewOrderSingle newOrderSingle = newLimit(topOfBook.getLastPrice(side, NO).get(), ordQty);
 
         proxy.addListener(new FinishListener(b, proxy));
 

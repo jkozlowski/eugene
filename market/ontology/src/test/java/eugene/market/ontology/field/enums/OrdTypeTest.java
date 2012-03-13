@@ -8,6 +8,8 @@ package eugene.market.ontology.field.enums;
 import eugene.market.ontology.message.NewOrderSingle;
 import org.testng.annotations.Test;
 
+import static eugene.market.ontology.field.enums.OrdType.limit;
+import static eugene.market.ontology.field.enums.OrdType.market;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -25,6 +27,16 @@ public class OrdTypeTest {
                                                                                               .OrdType.LIMIT)));
         assertThat(OrdType.MARKET.field(), is(new eugene.market.ontology.field.OrdType(eugene.market.ontology.field
                                                                                                .OrdType.MARKET)));
+    }
+    
+    @Test
+    public void testLimit() {
+        assertThat(limit(), is(OrdType.LIMIT));
+    }
+    
+    @Test
+    public void testMarket() {
+        assertThat(market(), is(OrdType.MARKET));
     }
     
     @Test

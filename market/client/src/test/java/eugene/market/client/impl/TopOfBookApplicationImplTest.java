@@ -6,6 +6,7 @@
 
 package eugene.market.client.impl;
 
+import com.google.common.base.Optional;
 import eugene.market.book.Order;
 import eugene.market.book.OrderBook;
 import eugene.market.client.Application;
@@ -35,7 +36,6 @@ import static eugene.market.book.MockOrders.buy;
 import static eugene.market.book.MockOrders.limitPrice;
 import static eugene.market.book.MockOrders.order;
 import static eugene.market.book.MockOrders.sell;
-import static eugene.market.client.TopOfBookApplication.NO_PRICE;
 import static eugene.market.client.TopOfBookApplication.ReturnDefaultPrice.YES;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -66,8 +66,8 @@ public class TopOfBookApplicationImplTest {
     public void testConstructor() {
         
         final TopOfBookApplication app = new TopOfBookApplicationImpl(defaultSymbol);
-        assertThat(app.getLastPrice(Side.SELL), is(NO_PRICE));
-        assertThat(app.getLastPrice(Side.BUY), is(NO_PRICE));
+        assertThat(app.getLastPrice(Side.SELL).isPresent(), is(false));
+        assertThat(app.getLastPrice(Side.BUY).isPresent(), is(false));
     }
 
     @Test
@@ -240,9 +240,9 @@ public class TopOfBookApplicationImplTest {
         final OrderBook orderBook = mock(OrderBook.class);
         when(orderBook.isEmpty(Side.SELL)).thenReturn(true);
         when(orderBook.isEmpty(Side.BUY)).thenReturn(false);
-        when(orderBook.peek(Side.BUY)).thenReturn(order);
+        when(orderBook.peek(Side.BUY)).thenReturn(Optional.of(order));
         final TopOfBookApplication app = getApp(orderBook, mock(Application.class), defaultSymbol);
-        assertThat(app.getLastPrice(Side.SELL), is(NO_PRICE));
+        assertThat(app.getLastPrice(Side.SELL).isPresent(), is(false));
     }
 
     @Test
@@ -251,9 +251,9 @@ public class TopOfBookApplicationImplTest {
         final OrderBook orderBook = mock(OrderBook.class);
         when(orderBook.isEmpty(Side.BUY)).thenReturn(true);
         when(orderBook.isEmpty(Side.SELL)).thenReturn(false);
-        when(orderBook.peek(Side.SELL)).thenReturn(order);
+        when(orderBook.peek(Side.SELL)).thenReturn(Optional.of(order));
         final TopOfBookApplication app = getApp(orderBook, mock(Application.class), defaultSymbol);
-        assertThat(app.getLastPrice(Side.BUY), is(NO_PRICE));
+        assertThat(app.getLastPrice(Side.BUY).isPresent(), is(false));
     }
 
     @Test
@@ -262,10 +262,10 @@ public class TopOfBookApplicationImplTest {
         final OrderBook orderBook = mock(OrderBook.class);
         when(orderBook.isEmpty(Side.SELL)).thenReturn(true);
         when(orderBook.isEmpty(Side.BUY)).thenReturn(false);
-        when(orderBook.peek(Side.BUY)).thenReturn(order);
+        when(orderBook.peek(Side.BUY)).thenReturn(Optional.of(order));
         final TopOfBookApplication app = getApp(orderBook, mock(Application.class), defaultSymbol);
-        assertThat(app.getLastPrice(Side.SELL, YES).getPrice(), is(defaultSymbol.getDefaultPrice()));
-        assertThat(app.getLastPrice(Side.SELL, YES).getSide(), is(Side.SELL));
+        assertThat(app.getLastPrice(Side.SELL, YES).get().getPrice(), is(defaultSymbol.getDefaultPrice()));
+        assertThat(app.getLastPrice(Side.SELL, YES).get().getSide(), is(Side.SELL));
     }
 
     @Test
@@ -274,10 +274,10 @@ public class TopOfBookApplicationImplTest {
         final OrderBook orderBook = mock(OrderBook.class);
         when(orderBook.isEmpty(Side.BUY)).thenReturn(true);
         when(orderBook.isEmpty(Side.SELL)).thenReturn(false);
-        when(orderBook.peek(Side.SELL)).thenReturn(order);
+        when(orderBook.peek(Side.SELL)).thenReturn(Optional.of(order));
         final TopOfBookApplication app = getApp(orderBook, mock(Application.class), defaultSymbol);
-        assertThat(app.getLastPrice(Side.BUY, YES).getPrice(), is(defaultSymbol.getDefaultPrice()));
-        assertThat(app.getLastPrice(Side.BUY, YES).getSide(), is(Side.BUY));
+        assertThat(app.getLastPrice(Side.BUY, YES).get().getPrice(), is(defaultSymbol.getDefaultPrice()));
+        assertThat(app.getLastPrice(Side.BUY, YES).get().getSide(), is(Side.BUY));
     }
 
     @Test
@@ -287,23 +287,23 @@ public class TopOfBookApplicationImplTest {
         final OrderBook orderBook = mock(OrderBook.class);
         when(orderBook.isEmpty(Side.BUY)).thenReturn(true).thenReturn(false);
         when(orderBook.isEmpty(Side.SELL)).thenReturn(false);
-        when(orderBook.peek(Side.BUY)).thenReturn(buy);
-        when(orderBook.peek(Side.SELL)).thenReturn(sell);
+        when(orderBook.peek(Side.BUY)).thenReturn(Optional.of(buy));
+        when(orderBook.peek(Side.SELL)).thenReturn(Optional.of(sell));
         final TopOfBookApplicationImpl app = getApp(orderBook, mock(Application.class), defaultSymbol);
 
-        assertThat(app.getLastPrice(Side.BUY), is(NO_PRICE));
-        assertThat(app.getLastPrice(Side.SELL).getPrice(), is(BigDecimal.ONE));
-        assertThat(app.getLastPrice(Side.SELL).getSide(), is(Side.SELL));
-        assertThat(app.getLastPrice(Side.SELL), is(PriceImpl.class));
+        assertThat(app.getLastPrice(Side.BUY).isPresent(), is(false));
+        assertThat(app.getLastPrice(Side.SELL).get().getPrice(), is(BigDecimal.ONE));
+        assertThat(app.getLastPrice(Side.SELL).get().getSide(), is(Side.SELL));
+        assertThat(app.getLastPrice(Side.SELL).get(), is(PriceImpl.class));
 
-        final Price sellPrice = app.getLastPrice(Side.SELL);
+        final Optional<Price> sellPrice = app.getLastPrice(Side.SELL);
 
         app.updatePrices();
 
         assertThat(app.getLastPrice(Side.SELL), sameInstance(sellPrice));
-        assertThat(app.getLastPrice(Side.BUY).getPrice(), is(buy.getPrice()));
-        assertThat(app.getLastPrice(Side.BUY).getSide(), is(Side.BUY));
-        assertThat(app.getLastPrice(Side.BUY), is(PriceImpl.class));
+        assertThat(app.getLastPrice(Side.BUY).get().getPrice(), is(buy.getPrice()));
+        assertThat(app.getLastPrice(Side.BUY).get().getSide(), is(Side.BUY));
+        assertThat(app.getLastPrice(Side.BUY).get(), is(PriceImpl.class));
     }
     
     @Test
@@ -314,25 +314,25 @@ public class TopOfBookApplicationImplTest {
         final OrderBook orderBook = mock(OrderBook.class);
         when(orderBook.isEmpty(Side.BUY)).thenReturn(false);
         when(orderBook.isEmpty(Side.SELL)).thenReturn(false);
-        when(orderBook.peek(Side.BUY)).thenReturn(buy1).thenReturn(buy2);
-        when(orderBook.peek(Side.SELL)).thenReturn(sell);
+        when(orderBook.peek(Side.BUY)).thenReturn(Optional.of(buy1)).thenReturn(Optional.of(buy2));
+        when(orderBook.peek(Side.SELL)).thenReturn(Optional.of(sell));
         final TopOfBookApplicationImpl app = getApp(orderBook, mock(Application.class), defaultSymbol);
 
-        assertThat(app.getLastPrice(Side.BUY).getPrice(), is(buy1.getPrice()));
-        assertThat(app.getLastPrice(Side.BUY).getSide(), is(Side.BUY));
-        assertThat(app.getLastPrice(Side.BUY), is(PriceImpl.class));
-        assertThat(app.getLastPrice(Side.SELL).getPrice(), is(BigDecimal.ONE));
-        assertThat(app.getLastPrice(Side.SELL).getSide(), is(Side.SELL));
-        assertThat(app.getLastPrice(Side.SELL), is(PriceImpl.class));
+        assertThat(app.getLastPrice(Side.BUY).get().getPrice(), is(buy1.getPrice()));
+        assertThat(app.getLastPrice(Side.BUY).get().getSide(), is(Side.BUY));
+        assertThat(app.getLastPrice(Side.BUY).get(), is(PriceImpl.class));
+        assertThat(app.getLastPrice(Side.SELL).get().getPrice(), is(BigDecimal.ONE));
+        assertThat(app.getLastPrice(Side.SELL).get().getSide(), is(Side.SELL));
+        assertThat(app.getLastPrice(Side.SELL).get(), is(PriceImpl.class));
 
-        final Price sellPrice = app.getLastPrice(Side.SELL);
+        final Optional<Price> sellPrice = app.getLastPrice(Side.SELL);
 
         app.updatePrices();
 
         assertThat(app.getLastPrice(Side.SELL), sameInstance(sellPrice));
-        assertThat(app.getLastPrice(Side.BUY).getPrice(), is(buy2.getPrice()));
-        assertThat(app.getLastPrice(Side.BUY).getSide(), is(Side.BUY));
-        assertThat(app.getLastPrice(Side.BUY), is(PriceImpl.class));
+        assertThat(app.getLastPrice(Side.BUY).get().getPrice(), is(buy2.getPrice()));
+        assertThat(app.getLastPrice(Side.BUY).get().getSide(), is(Side.BUY));
+        assertThat(app.getLastPrice(Side.BUY).get(), is(PriceImpl.class));
     }
 
     @Test
@@ -342,23 +342,23 @@ public class TopOfBookApplicationImplTest {
         final OrderBook orderBook = mock(OrderBook.class);
         when(orderBook.isEmpty(Side.BUY)).thenReturn(false).thenReturn(false);
         when(orderBook.isEmpty(Side.SELL)).thenReturn(true).thenReturn(false);
-        when(orderBook.peek(Side.BUY)).thenReturn(buy);
-        when(orderBook.peek(Side.SELL)).thenReturn(sell);
+        when(orderBook.peek(Side.BUY)).thenReturn(Optional.of(buy));
+        when(orderBook.peek(Side.SELL)).thenReturn(Optional.of(sell));
         final TopOfBookApplicationImpl app = getApp(orderBook, mock(Application.class), defaultSymbol);
 
-        assertThat(app.getLastPrice(Side.SELL), is(NO_PRICE));
-        assertThat(app.getLastPrice(Side.BUY).getPrice(), is(BigDecimal.ONE));
-        assertThat(app.getLastPrice(Side.BUY).getSide(), is(Side.BUY));
-        assertThat(app.getLastPrice(Side.BUY), is(PriceImpl.class));
+        assertThat(app.getLastPrice(Side.SELL).isPresent(), is(false));
+        assertThat(app.getLastPrice(Side.BUY).get().getPrice(), is(BigDecimal.ONE));
+        assertThat(app.getLastPrice(Side.BUY).get().getSide(), is(Side.BUY));
+        assertThat(app.getLastPrice(Side.BUY).get(), is(PriceImpl.class));
 
-        final Price buyPrice = app.getLastPrice(Side.BUY);
+        final Optional<Price> buyPrice = app.getLastPrice(Side.BUY);
 
         app.updatePrices();
 
         assertThat(app.getLastPrice(Side.BUY), sameInstance(buyPrice));
-        assertThat(app.getLastPrice(Side.SELL).getPrice(), is(sell.getPrice()));
-        assertThat(app.getLastPrice(Side.SELL).getSide(), is(Side.SELL));
-        assertThat(app.getLastPrice(Side.SELL), is(PriceImpl.class));
+        assertThat(app.getLastPrice(Side.SELL).get().getPrice(), is(sell.getPrice()));
+        assertThat(app.getLastPrice(Side.SELL).get().getSide(), is(Side.SELL));
+        assertThat(app.getLastPrice(Side.SELL).get(), is(PriceImpl.class));
     }
 
     @Test
@@ -370,25 +370,25 @@ public class TopOfBookApplicationImplTest {
         final OrderBook orderBook = mock(OrderBook.class);
         when(orderBook.isEmpty(Side.BUY)).thenReturn(false);
         when(orderBook.isEmpty(Side.SELL)).thenReturn(false);
-        when(orderBook.peek(Side.BUY)).thenReturn(buy1);
-        when(orderBook.peek(Side.SELL)).thenReturn(sell1).thenReturn(sell2);
+        when(orderBook.peek(Side.BUY)).thenReturn(Optional.of(buy1));
+        when(orderBook.peek(Side.SELL)).thenReturn(Optional.of(sell1)).thenReturn(Optional.of(sell2));
         final TopOfBookApplicationImpl app = getApp(orderBook, mock(Application.class), defaultSymbol);
 
-        assertThat(app.getLastPrice(Side.BUY).getPrice(), is(buy1.getPrice()));
-        assertThat(app.getLastPrice(Side.BUY).getSide(), is(Side.BUY));
-        assertThat(app.getLastPrice(Side.BUY), is(PriceImpl.class));
-        assertThat(app.getLastPrice(Side.SELL).getPrice(), is(sell1.getPrice()));
-        assertThat(app.getLastPrice(Side.SELL).getSide(), is(Side.SELL));
-        assertThat(app.getLastPrice(Side.SELL), is(PriceImpl.class));
+        assertThat(app.getLastPrice(Side.BUY).get().getPrice(), is(buy1.getPrice()));
+        assertThat(app.getLastPrice(Side.BUY).get().getSide(), is(Side.BUY));
+        assertThat(app.getLastPrice(Side.BUY).get(), is(PriceImpl.class));
+        assertThat(app.getLastPrice(Side.SELL).get().getPrice(), is(sell1.getPrice()));
+        assertThat(app.getLastPrice(Side.SELL).get().getSide(), is(Side.SELL));
+        assertThat(app.getLastPrice(Side.SELL).get(), is(PriceImpl.class));
 
-        final Price buyPrice = app.getLastPrice(Side.BUY);
+        final Optional<Price> buyPrice = app.getLastPrice(Side.BUY);
 
         app.updatePrices();
 
         assertThat(app.getLastPrice(Side.BUY), sameInstance(buyPrice));
-        assertThat(app.getLastPrice(Side.SELL).getPrice(), is(sell2.getPrice()));
-        assertThat(app.getLastPrice(Side.SELL).getSide(), is(Side.SELL));
-        assertThat(app.getLastPrice(Side.SELL), is(PriceImpl.class));
+        assertThat(app.getLastPrice(Side.SELL).get().getPrice(), is(sell2.getPrice()));
+        assertThat(app.getLastPrice(Side.SELL).get().getSide(), is(Side.SELL));
+        assertThat(app.getLastPrice(Side.SELL).get(), is(PriceImpl.class));
     }
     
     @Test
@@ -456,8 +456,8 @@ public class TopOfBookApplicationImplTest {
         final Order buy = order(limitPrice(buy(), new BigDecimal("99.999")));
         final OrderBook orderBook = mock(OrderBook.class);
         when(orderBook.isEmpty(Mockito.any(Side.class))).thenReturn(false);
-        when(orderBook.peek(Side.BUY)).thenReturn(buy);
-        when(orderBook.peek(Side.SELL)).thenReturn(sell);
+        when(orderBook.peek(Side.BUY)).thenReturn(Optional.of(buy));
+        when(orderBook.peek(Side.SELL)).thenReturn(Optional.of(sell));
         final TopOfBookApplicationImpl app = getApp(orderBook, mock(Application.class), defaultSymbol);
         
         final BigDecimal expected = new BigDecimal("0.001");

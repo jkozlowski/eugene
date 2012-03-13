@@ -5,6 +5,7 @@
  */
 package eugene.market.book.impl;
 
+import com.google.common.base.Optional;
 import com.google.common.primitives.Longs;
 import eugene.market.book.Order;
 import eugene.market.book.OrderBook;
@@ -78,33 +79,38 @@ public class DefaultOrderBook implements OrderBook {
         checkArgument(price.compareTo(Order.NO_PRICE) == 1);
         checkArgument(Longs.compare(orderQty, Order.NO_QTY) == 1);
 
-        checkState(!getQueue(side).isEmpty());
+        final Optional<Order> order = peek(side);
+        checkState(order.isPresent());
 
-        final Order order = peek(side);
+        final Optional<OrderStatus> oldOrderStatus = getOrderStatus(order.get());
+        checkState(oldOrderStatus.isPresent());
 
-        final OrderStatus newOrderStatus = getOrderStatus(order).execute(price, orderQty);
+        final OrderStatus newOrderStatus = oldOrderStatus.get().execute(price, orderQty);
 
         if (newOrderStatus.isFilled()) {
             final Order removedOrder = getQueue(side).poll();
-            checkState(order.equals(removedOrder));
-            orderStatusMap.remove(order);
+            checkState(order.get().equals(removedOrder));
+            orderStatusMap.remove(order.get());
         }
         else {
-            orderStatusMap.put(order, newOrderStatus);
+            orderStatusMap.put(order.get(), newOrderStatus);
         }
 
         return newOrderStatus;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public OrderStatus cancel(final Order order) {
+    public Optional<OrderStatus> cancel(final Order order) {
         checkNotNull(order);
         getQueue(order.getSide()).remove(order);
         final OrderStatus orderStatus = orderStatusMap.remove(order);
         if (null != orderStatus) {
-            return orderStatus.cancel();
+            return Optional.of(orderStatus.cancel());
         }
-        return null;
+        return Optional.absent();
     }
 
     /**
@@ -129,17 +135,17 @@ public class DefaultOrderBook implements OrderBook {
      * {@inheritDoc}
      */
     @Override
-    public Order peek(final Side side) {
+    public Optional<Order> peek(final Side side) {
         checkNotNull(side);
-        return getQueue(side).peek();
+        return Optional.fromNullable(getQueue(side).peek());
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public OrderStatus getOrderStatus(final Order order) {
-        return orderStatusMap.get(order);
+    public Optional<OrderStatus> getOrderStatus(final Order order) {
+        return Optional.fromNullable(orderStatusMap.get(order));
     }
 
     /**

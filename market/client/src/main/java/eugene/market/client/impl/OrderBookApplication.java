@@ -96,7 +96,7 @@ public final class OrderBookApplication extends ApplicationAdapter {
         final Order order = orderMap.get(orderExecuted.getOrderID().getValue());
 
         checkNotNull(order);
-        checkState(order.equals(orderBook.peek(order.getSide())));
+        checkState(order.equals(orderBook.peek(order.getSide()).get()));
 
         final OrderStatus orderStatus = orderBook.execute(order.getSide(), orderExecuted.getLastQty().getValue(),
                                                           orderExecuted.getLastPx().getValue());

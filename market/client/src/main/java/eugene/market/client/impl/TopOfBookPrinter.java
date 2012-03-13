@@ -64,8 +64,8 @@ public final class TopOfBookPrinter extends ApplicationAdapter {
 
     @VisibleForTesting
     public String print() {
-        final BigDecimal topBuy = orderBook.isEmpty(BUY) ? NO_PRICE : orderBook.peek(BUY).getPrice();
-        final BigDecimal topAsk = orderBook.isEmpty(SELL) ? NO_PRICE : orderBook.peek(SELL).getPrice();
+        final BigDecimal topBuy = orderBook.isEmpty(BUY) ? NO_PRICE : orderBook.peek(BUY).get().getPrice();
+        final BigDecimal topAsk = orderBook.isEmpty(SELL) ? NO_PRICE : orderBook.peek(SELL).get().getPrice();
 
         long bidDepth = 0L;
         if (!orderBook.isEmpty(BUY)) {

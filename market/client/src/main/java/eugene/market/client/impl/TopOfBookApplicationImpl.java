@@ -7,6 +7,7 @@
 package eugene.market.client.impl;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Optional;
 import eugene.market.book.OrderBook;
 import eugene.market.client.Application;
 import eugene.market.client.Applications;
@@ -27,6 +28,7 @@ import jade.core.Agent;
 
 import java.math.BigDecimal;
 
+import static com.google.common.base.Optional.of;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static eugene.market.book.OrderBooks.defaultOrderBook;
@@ -41,9 +43,9 @@ import static eugene.market.client.TopOfBookApplication.ReturnDefaultPrice.YES;
  */
 public class TopOfBookApplicationImpl implements TopOfBookApplication {
 
-    private final Price SELL_DEFAULT_PRICE;
+    private final Optional<Price> SELL_DEFAULT_PRICE;
 
-    private final Price BUY_DEFAULT_PRICE;
+    private final Optional<Price> BUY_DEFAULT_PRICE;
 
     private final Application application;
 
@@ -51,9 +53,9 @@ public class TopOfBookApplicationImpl implements TopOfBookApplication {
 
     private Symbol symbol;
 
-    private Price buyPrice;
+    private Optional<Price> buyPrice;
 
-    private Price sellPrice;
+    private Optional<Price> sellPrice;
 
     /**
      * Default constructor.
@@ -61,14 +63,13 @@ public class TopOfBookApplicationImpl implements TopOfBookApplication {
      * @param symbol symbol to use.
      */
     public TopOfBookApplicationImpl(final Symbol symbol) {
-        checkNotNull(symbol);
+        this.symbol = checkNotNull(symbol);
         this.orderBook = defaultOrderBook();
         this.application = Applications.orderBookApplication(this.orderBook);
-        this.symbol = symbol;
-        this.buyPrice = NO_PRICE;
-        this.sellPrice = NO_PRICE;
-        this.SELL_DEFAULT_PRICE = new PriceImpl(symbol.getDefaultPrice(), Side.SELL, symbol);
-        this.BUY_DEFAULT_PRICE = new PriceImpl(symbol.getDefaultPrice(), Side.BUY, symbol);
+        this.buyPrice = Optional.absent();
+        this.sellPrice = Optional.absent();
+        this.SELL_DEFAULT_PRICE = Optional.<Price>of(new PriceImpl(symbol.getDefaultPrice(), Side.SELL, symbol));
+        this.BUY_DEFAULT_PRICE = Optional.<Price>of(new PriceImpl(symbol.getDefaultPrice(), Side.BUY, symbol));
     }
 
     /**
@@ -80,23 +81,20 @@ public class TopOfBookApplicationImpl implements TopOfBookApplication {
      */
     @VisibleForTesting
     public TopOfBookApplicationImpl(final Symbol symbol, final OrderBook orderBook, final Application application) {
-        checkNotNull(symbol);
-        checkNotNull(orderBook);
-        checkNotNull(application);
-        this.orderBook = orderBook;
-        this.application = application;
-        this.symbol = symbol;
-        this.buyPrice = NO_PRICE;
-        this.sellPrice = NO_PRICE;
-        this.SELL_DEFAULT_PRICE = new PriceImpl(symbol.getDefaultPrice(), Side.SELL, symbol);
-        this.BUY_DEFAULT_PRICE = new PriceImpl(symbol.getDefaultPrice(), Side.BUY, symbol);
+        this.orderBook = checkNotNull(orderBook);
+        this.application = checkNotNull(application);
+        this.symbol = checkNotNull(symbol);
+        this.buyPrice = Optional.absent();
+        this.sellPrice = Optional.absent();
+        this.SELL_DEFAULT_PRICE = Optional.<Price>of(new PriceImpl(symbol.getDefaultPrice(), Side.SELL, symbol));
+        this.BUY_DEFAULT_PRICE = Optional.<Price>of(new PriceImpl(symbol.getDefaultPrice(), Side.BUY, symbol));
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Price getLastPrice(final Side side) {
+    public Optional<Price> getLastPrice(final Side side) {
         return getLastPrice(side, ReturnDefaultPrice.NO);
     }
 
@@ -104,18 +102,18 @@ public class TopOfBookApplicationImpl implements TopOfBookApplication {
      * {@inheritDoc}
      */
     @Override
-    public Price getLastPrice(final Side side, final ReturnDefaultPrice returnDefaultPrice)
+    public Optional<Price> getLastPrice(final Side side, final ReturnDefaultPrice returnDefaultPrice)
             throws NullPointerException {
         checkNotNull(side);
         checkNotNull(returnDefaultPrice);
         if (side.isBuy()) {
-            return NO_PRICE.equals(buyPrice) ?
-                    (YES.equals(returnDefaultPrice) ? BUY_DEFAULT_PRICE : NO_PRICE) :
+            return !buyPrice.isPresent() ?
+                    (returnDefaultPrice.isYes() ? BUY_DEFAULT_PRICE : buyPrice) :
                     buyPrice;
         }
         else {
-            return NO_PRICE.equals(sellPrice) ?
-                    (YES.equals(returnDefaultPrice) ? SELL_DEFAULT_PRICE : NO_PRICE) :
+            return !sellPrice.isPresent() ?
+                    (YES.equals(returnDefaultPrice) ? SELL_DEFAULT_PRICE : sellPrice) :
                     sellPrice;
         }
     }
@@ -143,7 +141,8 @@ public class TopOfBookApplicationImpl implements TopOfBookApplication {
     public BigDecimal getSpread() {
         checkState(hasBothSides());
         final int scale = symbol.getTickSize().scale();
-        final BigDecimal spread = orderBook.peek(Side.SELL).getPrice().subtract(orderBook.peek(Side.BUY).getPrice());
+        final BigDecimal spread = orderBook.peek(Side.SELL).get().getPrice()
+                                                                 .subtract(orderBook.peek(Side.BUY).get().getPrice());
         return spread.setScale(scale, BigDecimal.ROUND_HALF_DOWN);
     }
 
@@ -216,21 +215,24 @@ public class TopOfBookApplicationImpl implements TopOfBookApplication {
     void updatePrices() {
 
         if (!orderBook.isEmpty(Side.BUY)) {
-            if (buyPrice.equals(NO_PRICE)) {
-                this.buyPrice = new PriceImpl(orderBook.peek(Side.BUY).getPrice(), Side.BUY,
-                                              symbol);
+            if (!buyPrice.isPresent()) {
+                final Price newPrice = new PriceImpl(orderBook.peek(Side.BUY).get().getPrice(), Side.BUY, symbol);
+                this.buyPrice = of(newPrice);
             }
-            else if (!buyPrice.getPrice().equals(orderBook.peek(Side.BUY).getPrice())) {
-                this.buyPrice = new PriceImpl(orderBook.peek(Side.BUY).getPrice(), Side.BUY, symbol);
+            else if (!buyPrice.get().getPrice().equals(orderBook.peek(Side.BUY).get().getPrice())) {
+                final Price newPrice = new PriceImpl(orderBook.peek(Side.BUY).get().getPrice(), Side.BUY, symbol);
+                this.buyPrice = of(newPrice);
             }
         }
 
         if (!orderBook.isEmpty(Side.SELL)) {
-            if (sellPrice.equals(NO_PRICE)) {
-                this.sellPrice = new PriceImpl(orderBook.peek(Side.SELL).getPrice(), Side.SELL, symbol);
+            if (!sellPrice.isPresent()) {
+                final Price newPrice = new PriceImpl(orderBook.peek(Side.SELL).get().getPrice(), Side.SELL, symbol);
+                this.sellPrice = of(newPrice);
             }
-            else if (!sellPrice.getPrice().equals(orderBook.peek(Side.SELL).getPrice())) {
-                this.sellPrice = new PriceImpl(orderBook.peek(Side.SELL).getPrice(), Side.SELL, symbol);
+            else if (!sellPrice.get().getPrice().equals(orderBook.peek(Side.SELL).get().getPrice())) {
+                final Price newPrice = new PriceImpl(orderBook.peek(Side.SELL).get().getPrice(), Side.SELL, symbol);
+                this.sellPrice = of(newPrice);
             }
         }
     }

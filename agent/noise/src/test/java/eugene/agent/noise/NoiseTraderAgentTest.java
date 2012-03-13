@@ -105,10 +105,10 @@ public class NoiseTraderAgentTest {
                                            ", time=" + System.currentTimeMillis() + 
                                            "buySize=" + orderBook.size(Side.BUY) + 
                                            "buyPrice=" + (orderBook.isEmpty(Side.BUY) ? "NO-PRICE" : orderBook.peek
-                                (Side.BUY).getPrice()) +
+                                (Side.BUY).get().getPrice()) +
                                            "sellSize=" + orderBook.size(Side.SELL) +
                                            "sellPrice=" + (orderBook.isEmpty(Side.SELL) ? "NO-PRICE" : orderBook.peek
-                                (Side.SELL).getPrice()));
+                                (Side.SELL).get().getPrice()));
                     }
 
                     @Override
@@ -117,10 +117,10 @@ public class NoiseTraderAgentTest {
                                                    ", time=" + System.currentTimeMillis() +
                                                    "buySize=" + orderBook.size(Side.BUY) +
                                                    "buyPrice=" + (orderBook.isEmpty(Side.BUY) ? "NO-PRICE" : orderBook.peek
-                                (Side.BUY).getPrice()) +
+                                (Side.BUY).get().getPrice()) +
                                                    "sellSize=" + orderBook.size(Side.SELL) +
                                                    "sellPrice=" + (orderBook.isEmpty(Side.SELL) ? "NO-PRICE" : orderBook.peek
-                                (Side.SELL).getPrice()));
+                                (Side.SELL).get().getPrice()));
                     }
 
                     @Override
@@ -129,10 +129,10 @@ public class NoiseTraderAgentTest {
                                                    ", time=" + System.currentTimeMillis() +
                                                    "buySize=" + orderBook.size(Side.BUY) +
                                                    "buyPrice=" + (orderBook.isEmpty(Side.BUY) ? "NO-PRICE" : orderBook.peek
-                                (Side.BUY).getPrice()) +
+                                (Side.BUY).get().getPrice()) +
                                                    "sellSize=" + orderBook.size(Side.SELL) +
                                                    "sellPrice=" + (orderBook.isEmpty(Side.SELL) ? "NO-PRICE" : orderBook.peek
-                                (Side.SELL).getPrice()));
+                                (Side.SELL).get().getPrice()));
                     }
             }), simulation);
 

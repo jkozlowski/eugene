@@ -30,7 +30,6 @@ import static eugene.market.ontology.Defaults.defaultOrdQty;
 import static eugene.market.ontology.Defaults.defaultPrice;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -116,11 +115,11 @@ public class ExecutionEngineTest {
         assertThat(newOrderStatus.isEmpty(), is(true));
         assertThat(newOrderStatus.getOrdStatus(), is(OrdStatus.NEW));
         assertThat(orderBook.isEmpty(Side.SELL), is(false));
-        assertThat(orderBook.peek(Side.SELL), sameInstance(newSellOrder));
-        assertThat(orderBook.getOrderStatus(newSellOrder), sameInstance(newOrderStatus));
+        assertThat(orderBook.peek(Side.SELL).get(), sameInstance(newSellOrder));
+        assertThat(orderBook.getOrderStatus(newSellOrder).get(), sameInstance(newOrderStatus));
         assertThat(orderBook.size(Side.SELL), is(1));
         assertThat(orderBook.isEmpty(Side.BUY), is(false));
-        assertThat(orderBook.peek(Side.BUY), sameInstance(buy));
+        assertThat(orderBook.peek(Side.BUY).get(), sameInstance(buy));
         assertThat(orderBook.size(Side.BUY), is(1));
     }
     
@@ -169,7 +168,7 @@ public class ExecutionEngineTest {
 
         final ArgumentCaptor<OrderStatus> newOrderStatusCaptor = ArgumentCaptor.forClass(OrderStatus.class);
 
-        assertThat(orderStatus, sameInstance(executionEngine.getOrderBook().getOrderStatus(order)));
+        assertThat(orderStatus, sameInstance(executionEngine.getOrderBook().getOrderStatus(order).get()));
         verify(executionEngine.getMarketDataEngine()).newOrder(newOrderStatusCaptor.capture());
         verify(executionEngine.getMarketDataEngine()).addOrder(orderStatus);
         verifyNoMoreInteractions(executionEngine.getMarketDataEngine());
@@ -203,7 +202,7 @@ public class ExecutionEngineTest {
 
         assertThat(orderStatusArgumentCaptor.getValue().isEmpty(), is(true));
         assertThat(orderBook.isEmpty(Side.SELL), is(false));
-        assertThat(orderBook.peek(Side.SELL), sameInstance(sell));
+        assertThat(orderBook.peek(Side.SELL).get(), sameInstance(sell));
         assertThat(orderBook.size(Side.SELL), is(1));
         assertThat(orderBook.isEmpty(Side.BUY), is(true));
     }
@@ -231,7 +230,7 @@ public class ExecutionEngineTest {
         assertThat(orderStatusArgumentCaptor.getValue().isEmpty(), is(true));
 
         assertThat(orderBook.isEmpty(Side.BUY), is(false));
-        assertThat(orderBook.peek(Side.BUY), sameInstance(buy));
+        assertThat(orderBook.peek(Side.BUY).get(), sameInstance(buy));
         assertThat(orderBook.size(Side.BUY), is(1));
         assertThat(orderBook.isEmpty(Side.SELL), is(true));
     }
@@ -271,7 +270,7 @@ public class ExecutionEngineTest {
         assertThat(tradeReport.getValue().getLimitOrderStatus().getLeavesQty(), is(1L));
 
         assertThat(orderBook.isEmpty(Side.BUY), is(false));
-        assertThat(orderBook.peek(Side.BUY), sameInstance(buy));
+        assertThat(orderBook.peek(Side.BUY).get(), sameInstance(buy));
         assertThat(orderBook.isEmpty(Side.SELL), is(true));
     }
 
@@ -283,7 +282,7 @@ public class ExecutionEngineTest {
 
     @Test
     public void testCancelOrderDoesNotExist() {
-        assertThat(getExecutionEngine().cancel(order(buy())), nullValue());
+        assertThat(getExecutionEngine().cancel(order(buy())).isPresent(), is(false));
     }
 
     @Test
@@ -294,7 +293,7 @@ public class ExecutionEngineTest {
         final OrderBook orderBook = executionEngine.getOrderBook();
         final OrderStatus orderStatus = orderBook.insert(order);
 
-        final OrderStatus orderCanceledStatus = executionEngine.cancel(order);
+        final OrderStatus orderCanceledStatus = executionEngine.cancel(order).get();
         assertThat(orderCanceledStatus.getOrdStatus(), is(OrdStatus.CANCELED));
         assertThat(orderCanceledStatus.getOrder(), sameInstance(order));
         assertThat(orderCanceledStatus.getLeavesQty(), is(orderStatus.getLeavesQty()));

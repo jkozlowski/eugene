@@ -5,6 +5,7 @@
  */
 package eugene.market.book;
 
+import com.google.common.base.Optional;
 import eugene.market.ontology.field.enums.OrdStatus;
 import eugene.market.ontology.field.enums.OrdType;
 import eugene.market.ontology.field.enums.Side;
@@ -65,19 +66,19 @@ public interface OrderBook {
      *                                  or the {@link OrderBook} is empty on this <code>side</code>.
      */
     OrderStatus execute(final Side side, final Long orderQty, final BigDecimal price) throws NullPointerException,
-                                                                                         IllegalArgumentException;
+                                                                                             IllegalArgumentException;
 
     /**
      * Cancels this <code>order</code>.
      *
      * @param order {@link Order} to cancel.
      *
-     * @return {@link OrderStatus} of cancelled {@link Order} with {@link OrdStatus#CANCELED} or <code>null</code> if
-     *         <code>order</code> does not exist.
+     * @return {@link OrderStatus} of cancelled {@link Order} with {@link OrdStatus#CANCELED} or {@link
+     *         Optional#absent()} if {@code order} does not exist.
      *
      * @throws NullPointerException if <code>order</code> is null.
      */
-    OrderStatus cancel(final Order order) throws NullPointerException;
+    Optional<OrderStatus> cancel(final Order order) throws NullPointerException;
 
     /**
      * Gets the size of the book on this <code>side</code>.
@@ -98,23 +99,24 @@ public interface OrderBook {
     boolean isEmpty(final Side side);
 
     /**
-     * Gets the first {@link Order} on this <code>side</code>.
+     * Gets the first {@link Order} on this {@code side}.
      *
      * @param side side of {@link Order} to get.
      *
-     * @return first {@link Order} on this <code>side</code>.
+     * @return first {@link Order} on this {@code side} or {@link Optional#absent()} if the book is empty on this
+     *         {@code side}.
      */
-    Order peek(final Side side);
+    Optional<Order> peek(final Side side);
 
     /**
-     * Gets the {@link OrderStatus} for this <code>order</code>.
+     * Gets the {@link OrderStatus} for this {@code order}.
      *
      * @param order {@link Order} to return the {@link OrderStatus} for.
      *
-     * @return the {@link OrderStatus} for this <code>order</code> or null if this {@link Order} is not in
-     *         this {@link OrderBook}.
+     * @return the {@link OrderStatus} for this {@code order} or {@link Optional#absent()} if this {@link Order} is not
+     *         in this {@link OrderBook}.
      */
-    OrderStatus getOrderStatus(final Order order);
+    Optional<OrderStatus> getOrderStatus(final Order order);
 
     /**
      * Gets a {@link SortedSet} of {@link Side#BUY} orders.

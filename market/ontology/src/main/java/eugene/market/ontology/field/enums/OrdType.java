@@ -45,6 +45,24 @@ public enum OrdType {
     }
 
     /**
+     * Gets the {@link #LIMIT} value.
+     * 
+     * @return the {@link #LIMIT} value.
+     */
+    public static OrdType limit() {
+        return LIMIT;
+    }
+
+    /**
+     * Gets the {@link #MARKET} value.
+     *
+     * @return the {@link #MARKET} value.
+     */
+    public static OrdType market() {
+        return MARKET;
+    }
+
+    /**
      * Gets {@link OrdType} for this <code>newOrderSingle</code>.
      *
      * @param newOrderSingle order to get {@link OrdType} for.

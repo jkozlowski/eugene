@@ -27,7 +27,6 @@ import static org.hamcrest.Matchers.hasToString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isIn;
 import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.sameInstance;
 
 /**
@@ -44,11 +43,11 @@ public class DefaultOrderBookTest {
 
         assertThat(orderBook.isEmpty(Side.SELL), is(true));
         assertThat(orderBook.size(Side.SELL), is(0));
-        assertThat(orderBook.peek(Side.SELL), nullValue());
+        assertThat(orderBook.peek(Side.SELL).isPresent(), is(false));
 
         assertThat(orderBook.isEmpty(Side.BUY), is(true));
         assertThat(orderBook.size(Side.BUY), is(0));
-        assertThat(orderBook.peek(Side.BUY), nullValue());
+        assertThat(orderBook.peek(Side.BUY).isPresent(), is(Boolean.FALSE));
     }
 
     @Test(expectedExceptions = NullPointerException.class)
@@ -83,13 +82,13 @@ public class DefaultOrderBookTest {
 
         assertThat(orderBook.isEmpty(Side.SELL), is(true));
         assertThat(orderBook.size(Side.SELL), is(0));
-        assertThat(orderBook.peek(Side.SELL), nullValue());
+        assertThat(orderBook.peek(Side.SELL).isPresent(), is(Boolean.FALSE));
         assertThat(orderBook.isEmpty(Side.BUY), is(false));
 
         assertThat(orderBook.size(Side.BUY), is(1));
-        assertThat(orderBook.peek(Side.BUY), is(buy));
+        assertThat(orderBook.peek(Side.BUY).get(), is(buy));
         assertThat(buy, isIn(orderBook.getBuyOrders()));
-        assertThat(orderStatus, sameInstance(orderBook.getOrderStatus(buy)));
+        assertThat(orderStatus, sameInstance(orderBook.getOrderStatus(buy).get()));
         assertThat(orderStatus.isEmpty(), is(true));
     }
 
@@ -101,13 +100,13 @@ public class DefaultOrderBookTest {
 
         assertThat(orderBook.isEmpty(Side.BUY), is(true));
         assertThat(orderBook.size(Side.BUY), is(0));
-        assertThat(orderBook.peek(Side.BUY), nullValue());
+        assertThat(orderBook.peek(Side.BUY).isPresent(), is(false));
 
         assertThat(orderBook.isEmpty(Side.SELL), is(false));
         assertThat(orderBook.size(Side.SELL), is(1));
-        assertThat(orderBook.peek(Side.SELL), is(sell));
+        assertThat(orderBook.peek(Side.SELL).get(), is(sell));
         assertThat(sell, isIn(orderBook.getSellOrders()));
-        assertThat(orderStatus, sameInstance(orderBook.getOrderStatus(sell)));
+        assertThat(orderStatus, sameInstance(orderBook.getOrderStatus(sell).get()));
         assertThat(orderStatus.isEmpty(), is(true));
     }
 
@@ -181,8 +180,8 @@ public class DefaultOrderBookTest {
         assertThat(orderStatus.isEmpty(), is(false));
         assertThat(orderBook.isEmpty(Side.BUY), is(false));
         assertThat(orderBook.isEmpty(Side.SELL), is(false));
-        assertThat(orderBook.getOrderStatus(buy), sameInstance(orderStatus));
-        assertThat(orderBook.getOrderStatus(sell), sameInstance(sellOrderStatus));
+        assertThat(orderBook.getOrderStatus(buy).get(), sameInstance(orderStatus));
+        assertThat(orderBook.getOrderStatus(sell).get(), sameInstance(sellOrderStatus));
     }
 
     @Test
@@ -203,8 +202,8 @@ public class DefaultOrderBookTest {
         assertThat(orderStatus.isEmpty(), is(false));
         assertThat(orderBook.isEmpty(Side.BUY), is(true));
         assertThat(orderBook.isEmpty(Side.SELL), is(false));
-        assertThat(orderBook.getOrderStatus(buy), nullValue());
-        assertThat(orderBook.getOrderStatus(sell), sameInstance(sellOrderStatus));
+        assertThat(orderBook.getOrderStatus(buy).isPresent(), is(false));
+        assertThat(orderBook.getOrderStatus(sell).get(), sameInstance(sellOrderStatus));
     }
 
     @Test(expectedExceptions = NullPointerException.class)
@@ -217,8 +216,7 @@ public class DefaultOrderBookTest {
     public void testCancelOrderNotInOrderBook() {
         final OrderBook orderBook = new DefaultOrderBook();
         final Order order = order(buy());
-        final OrderStatus orderStatus = orderBook.cancel(order);
-        assertThat(orderStatus, nullValue());
+        assertThat(orderBook.cancel(order).isPresent(), is(Boolean.FALSE));
     }
 
     @Test
@@ -226,14 +224,14 @@ public class DefaultOrderBookTest {
         final OrderBook orderBook = new DefaultOrderBook();
         final Order order = order(buy());
         final OrderStatus expected = orderBook.insert(order);
-        final OrderStatus actual = orderBook.cancel(order);
+        final OrderStatus actual = orderBook.cancel(order).get();
 
         assertThat(actual.getOrdStatus(), is(OrdStatus.CANCELED));
         assertThat(actual.getAvgPx(), is(expected.getAvgPx()));
         assertThat(actual.getCumQty(), is(expected.getCumQty()));
         assertThat(actual.getLeavesQty(), is(expected.getLeavesQty()));
         assertThat(actual.getOrder(), is(expected.getOrder()));
-        assertThat(orderBook.getOrderStatus(order), nullValue());
+        assertThat(orderBook.getOrderStatus(order).isPresent(), is(false));
         assertThat(orderBook.getBuyOrders(), not(hasItem(order)));
     }
 

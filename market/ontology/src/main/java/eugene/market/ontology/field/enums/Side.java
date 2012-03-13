@@ -117,6 +117,24 @@ public enum Side {
     }
 
     /**
+     * Gets the {@link #BUY} value.
+     *
+     * @return the {@link #BUY} value.
+     */
+    public static Side buy() {
+        return BUY;
+    }
+
+    /**
+     * Gets the {@link #SELL} value.
+     *
+     * @return the {@link #SELL} value.
+     */
+    public static Side sell() {
+        return SELL;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override

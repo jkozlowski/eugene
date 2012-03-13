@@ -211,7 +211,7 @@ public final class VwapBehaviour extends FSMBehaviour {
                 vwapStatus.hasOrder() &&
                 nowInMillis - vwapStatus.getCurrentOrder().getCreationTime() > LIMIT_AGE_THRESHOLD &&
                 // Could have the error here as well
-                curOrder.getPrice().compareTo(topOfBook.getLastPrice(side, NO).getPrice()) != 0) {
+                curOrder.getPrice().compareTo(topOfBook.getLastPrice(side, NO).get().getPrice()) != 0) {
 
             LOG.info("Decided to cancel a limit order");
             b.finish(GOTO_CANCEL_LIMIT_STATE);

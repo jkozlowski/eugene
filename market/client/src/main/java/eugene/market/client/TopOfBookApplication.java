@@ -6,6 +6,7 @@
 
 package eugene.market.client;
 
+import com.google.common.base.Optional;
 import eugene.market.book.OrderBook;
 import eugene.market.ontology.field.enums.Side;
 import eugene.simulation.agent.Symbol;
@@ -22,36 +23,20 @@ import java.math.RoundingMode;
 public interface TopOfBookApplication extends Application {
 
     /**
-     * Indicates that this {@link TopOfBookApplication} did not observe any prices yet.
-     */
-    public static final Price NO_PRICE = new Price() {
-        @Override
-        public Side getSide() {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public BigDecimal nextPrice(BigDecimal priceMove) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public BigDecimal prevPrice(BigDecimal priceMove) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public BigDecimal getPrice() {
-            throw new UnsupportedOperationException();
-        }
-    };
-
-    /**
      * Indicates whether {@link Symbol#getDefaultPrice()} should be returned if this {@link TopOfBookApplication} has
      * not observed any prices yet.
      */
     public enum ReturnDefaultPrice {
-        YES, NO
+        YES, NO;
+
+        /**
+         * Checks if this {@link ReturnDefaultPrice} is {@link #YES}.
+         *
+         * @return {@code true} if this {@link ReturnDefaultPrice} is {@link #YES}, {@link false} otherwise.
+         */
+        public boolean isYes() {
+            return YES.equals(this);
+        }
     }
 
     /**
@@ -105,13 +90,13 @@ public interface TopOfBookApplication extends Application {
      *
      * @see #getLastPrice(Side, ReturnDefaultPrice)
      */
-    Price getLastPrice(final Side side) throws NullPointerException;
+    Optional<Price> getLastPrice(final Side side) throws NullPointerException;
 
     /**
      * Gets the price at the top of the {@link OrderBook} on this <code>side</code>. If there is no liquidity at this
      * <code>side</code>, the latest previous price seen is returned. If this {@link TopOfBookApplication} did not
-     * observe any prices yet, this method will either return {@link #NO_PRICE} or {@link Symbol#getDefaultPrice()},
-     * depending on <code>returnDefaultPrice</code>.
+     * observe any prices yet, this method will either return {@link Optional#absent()} or {@link
+     * Symbol#getDefaultPrice ()}, depending on <code>returnDefaultPrice</code>.
      *
      * @param side               side to inspect.
      * @param returnDefaultPrice whether to return the {@link Symbol#getDefaultPrice()} if no prices have
@@ -121,7 +106,8 @@ public interface TopOfBookApplication extends Application {
      *
      * @throws NullPointerException if either parameter is null.
      */
-    Price getLastPrice(final Side side, final ReturnDefaultPrice returnDefaultPrice) throws NullPointerException;
+    Optional<Price> getLastPrice(final Side side, final ReturnDefaultPrice returnDefaultPrice)
+            throws NullPointerException;
 
     /**
      * @see OrderBook#isEmpty(Side)

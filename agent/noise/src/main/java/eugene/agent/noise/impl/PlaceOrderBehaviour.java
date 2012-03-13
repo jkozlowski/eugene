@@ -151,7 +151,7 @@ public class PlaceOrderBehaviour extends TickerBehaviour {
             return;
         }
 
-        session.send(newMarket(side, topOfBook.getOrderBook().peek(side.getOpposite()).getOrderQty()));
+        session.send(newMarket(side, topOfBook.getOrderBook().peek(side.getOpposite()).get().getOrderQty()));
     }
 
     /**
@@ -164,13 +164,13 @@ public class PlaceOrderBehaviour extends TickerBehaviour {
         final Long ordQty = Double.valueOf(ordSize.sample()).longValue();
 
         if (!topOfBook.hasBothSides()) {
-            session.send(newLimit(topOfBook.getLastPrice(side, YES), ordQty));
+            session.send(newLimit(topOfBook.getLastPrice(side, YES).get(), ordQty));
             return;
         }
 
         final BigDecimal spread = topOfBook.getSpread();
         final BigDecimal additive = BigDecimal.valueOf(inSpreadPrice.sample()).multiply(spread);
-        final BigDecimal price = topOfBook.getLastPrice(Side.BUY, ReturnDefaultPrice.NO).nextPrice(additive);
+        final BigDecimal price = topOfBook.getLastPrice(Side.BUY, ReturnDefaultPrice.NO).get().nextPrice(additive);
         session.send(newLimit(side, price, ordQty));
     }
 
@@ -184,7 +184,7 @@ public class PlaceOrderBehaviour extends TickerBehaviour {
         final Long ordQty = Double.valueOf(ordSize.sample()).longValue();
 
         final BigDecimal priceMove = BigDecimal.valueOf(outOfSpreadPrice.sample());
-        final BigDecimal price = topOfBook.getLastPrice(side, YES).prevPrice(priceMove);
+        final BigDecimal price = topOfBook.getLastPrice(side, YES).get().prevPrice(priceMove);
 
         session.send(newLimit(side, price, ordQty));
     }

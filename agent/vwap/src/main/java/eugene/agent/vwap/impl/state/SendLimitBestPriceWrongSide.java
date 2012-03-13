@@ -55,7 +55,7 @@ public final class SendLimitBestPriceWrongSide implements State {
         }
 
         final Long ordQty = vwapStatus.getCurrentBucket().peek().getCumVolume() - vwapStatus.getCumVolume();
-        final NewOrderSingle newOrderSingle = newLimit(topOfBook.getLastPrice(oppositeSide, NO), ordQty);
+        final NewOrderSingle newOrderSingle = newLimit(topOfBook.getLastPrice(oppositeSide, NO).get(), ordQty);
 
         proxy.addListener(new FinishListener(b, proxy));
 

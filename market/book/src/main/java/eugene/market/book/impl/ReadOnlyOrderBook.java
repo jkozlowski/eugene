@@ -5,6 +5,7 @@
  */
 package eugene.market.book.impl;
 
+import com.google.common.base.Optional;
 import eugene.market.book.Order;
 import eugene.market.book.OrderBook;
 import eugene.market.book.OrderStatus;
@@ -65,8 +66,8 @@ public final class ReadOnlyOrderBook implements OrderBook {
      */
     @Override
     public OrderStatus execute(Side side, Long orderQty, BigDecimal price) throws NullPointerException,
-                                                                              IllegalArgumentException,
-                                                                              UnsupportedOperationException {
+                                                                                  IllegalArgumentException,
+                                                                                  UnsupportedOperationException {
         throw new UnsupportedOperationException(ERROR_MESSAGE);
     }
 
@@ -76,7 +77,7 @@ public final class ReadOnlyOrderBook implements OrderBook {
      * @throws UnsupportedOperationException this {@link OrderBook} is read-only.
      */
     @Override
-    public OrderStatus cancel(Order order) throws UnsupportedOperationException {
+    public Optional<OrderStatus> cancel(Order order) throws UnsupportedOperationException {
         throw new UnsupportedOperationException(ERROR_MESSAGE);
     }
 
@@ -100,7 +101,7 @@ public final class ReadOnlyOrderBook implements OrderBook {
      * {@inheritDoc}
      */
     @Override
-    public Order peek(Side side) {
+    public Optional<Order> peek(Side side) {
         return delegate.peek(side);
     }
 
@@ -108,7 +109,7 @@ public final class ReadOnlyOrderBook implements OrderBook {
      * {@inheritDoc}
      */
     @Override
-    public OrderStatus getOrderStatus(Order order) {
+    public Optional<OrderStatus> getOrderStatus(Order order) {
         return delegate.getOrderStatus(order);
     }
 

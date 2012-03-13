@@ -8,6 +8,8 @@ package eugene.market.ontology.field.enums;
 import eugene.market.ontology.message.NewOrderSingle;
 import org.testng.annotations.Test;
 
+import static eugene.market.ontology.field.enums.Side.buy;
+import static eugene.market.ontology.field.enums.Side.sell;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -25,6 +27,16 @@ public class SideTest {
                                                                                               .Side.BUY)));
         assertThat(Side.SELL.field(), is(new eugene.market.ontology.field.Side(eugene.market.ontology.field
                                                                                       .Side.SELL)));
+    }
+    
+    @Test
+    public void testBuy() {
+        assertThat(buy(), is(Side.BUY));
+    }
+    
+    @Test
+    public void testSell() {
+        assertThat(sell(), is(Side.SELL));
     }
     
     @Test

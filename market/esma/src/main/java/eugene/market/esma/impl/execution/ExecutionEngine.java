@@ -5,6 +5,7 @@
  */
 package eugene.market.esma.impl.execution;
 
+import com.google.common.base.Optional;
 import com.google.common.primitives.Longs;
 import eugene.market.book.Order;
 import eugene.market.book.OrderBook;
@@ -103,7 +104,7 @@ public class ExecutionEngine {
 
         while (!newOrderStatus.isFilled() && !orderBook.isEmpty(newOrder.getSide().getOpposite())) {
 
-            final Order limitOrder = orderBook.peek(newOrder.getSide().getOpposite());
+            final Order limitOrder = orderBook.peek(newOrder.getSide().getOpposite()).get();
             final MatchingResult matchingResult = matchingEngine.match(newOrder, limitOrder);
 
             if (!matchingResult.isMatch()) {
@@ -113,7 +114,7 @@ public class ExecutionEngine {
             final BigDecimal execPrice = matchingResult.getPrice();
 
             final Long execQty = Longs.min(newOrderStatus.getLeavesQty(),
-                                           orderBook.getOrderStatus(limitOrder).getLeavesQty());
+                                           orderBook.getOrderStatus(limitOrder).get().getLeavesQty());
 
             newOrderStatus = newOrderStatus.execute(execPrice, execQty);
             final OrderStatus limitOrderStatus = orderBook.execute(limitOrder.getSide(), execQty, execPrice);
@@ -138,20 +139,20 @@ public class ExecutionEngine {
     }
 
     /**
-     * Cancels this <code>order</code>.
+     * Cancels this {@code order}.
      *
      * @param order {@link Order} to cancel.
      *
-     * @return {@link OrderStatus} of cancelled {@link Order} or <code>null</code> if <code>order</code> does not
+     * @return {@link OrderStatus} of cancelled {@link Order} or {@link Optional#absent()} if {@code order} does not
      *         exist.
      */
-    public OrderStatus cancel(final Order order) {
+    public Optional<OrderStatus> cancel(final Order order) {
         checkNotNull(order);
 
-        final OrderStatus orderStatus = orderBook.cancel(order);
+        final Optional<OrderStatus> orderStatus = orderBook.cancel(order);
 
-        if (null != orderStatus) {
-            marketDataEngine.cancel(orderStatus);
+        if (orderStatus.isPresent()) {
+            marketDataEngine.cancel(orderStatus.get());
         }
 
         return orderStatus;

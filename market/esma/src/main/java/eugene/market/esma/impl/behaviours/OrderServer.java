@@ -5,6 +5,7 @@
  */
 package eugene.market.esma.impl.behaviours;
 
+import com.google.common.base.Optional;
 import eugene.market.book.Order;
 import eugene.market.book.OrderStatus;
 import eugene.market.esma.MarketAgent;
@@ -126,9 +127,9 @@ public class OrderServer {
                 return;
             }
 
-            final OrderStatus orderStatus = executionEngine.cancel(order);
+            final Optional<OrderStatus> orderStatus = executionEngine.cancel(order);
 
-            if (null == orderStatus) {
+            if (!orderStatus.isPresent()) {
                 rejectCancel(orderCancelRequest, request);
                 return;
             }
