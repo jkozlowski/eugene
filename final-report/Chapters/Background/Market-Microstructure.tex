@@ -3,19 +3,36 @@
 
 In this section we describe the model of the market mechanism we will use in the simulator. We describe the market microstructure employed in major stock exchanges during continuous trading sessions, namely model of limit order book, and how it enables market participants to interact asynchronously (for a study of market microstructures in main stock exchanges, see~\cite{Comerton2004}). 
 
+
+\subsection{Instruments}
+Intruments are the different types of \textit{shares} that can be traded on a stock exchange, that represent ownership of a company. Every instrument is associated with a set of technicalities, such as the minimum tick size (minimum amount of money by which the price can change) or price variation controls (conditions for a market halt due to unexpected price volatility).
+
 \subsection{Order Types}
 Market participants indicate their willingness to trade in the form of trading instructions called \textit{orders}. We will consider only two types of orders: \textit{limit} and \textit{market} orders. A \textit{market order} specifies the instrument to trade, the quantity and the side of the trade (buy or sell). A \textit{limit order} additionally specifies a \textit{limit price}: maximum (buy) or minimum (sell) price that the trader accepts for an order. 
 
-Traders can also cancel existing orders that have not been executed. \citet{Lilo2004} estimate that on the London Stock Exchange (LSE) on-book market, up to 30\% of outstanding limit orders are cancelled before execution and order cancellations play an important role in price formation mechanism. 
+Traders can also cancel existing orders that have not been executed. \citet{Lilo2004} estimate that on the London Stock Exchange (LSE) on-book market, up to 30\% of outstanding limit orders are cancelled before execution and order cancellations play an important role in price formation process. 
 
 \subsection{The limit order book}
-The limit order book is the leading market mechanism used by main stock exchanges during continuous trading. It consists of limit orders, characterised by a limit price, a volume and a time of arrival. The limit orders are sorted by price and time or arrival and stored in two queues: one for bid (buy) orders and one for ask (sell) orders. At a specific instant in time $t$, the order book can be described as~\cite{Gilles2006}: 
+The limit order book is the leading market mechanism used by main stock exchanges during continuous trading. A limit order book for a single instrument consists of limit orders, sorted by price and time of arrival and stored in two queues: one for bid (buy) orders and one for ask (sell) orders. At a specific time $t$, the order book can be described as~\cite{Gilles2006}: 
 \begin{equation*}
 \beta_n \leq \ldots \leq \beta_2 \leq \beta_1 < \alpha_1 \leq \alpha_2 \leq \ldots \alpha_m
 \end{equation*}
-where $\beta_i$ represent bid orders, $\alpha_j$ represent ask orders. The highest bid $\beta_1$ (or best bid) and lowest ask $\alpha_1$ (or best ask) define the spread $\alpha_1 - \beta_1$.
+where $\beta_i$ represent bid orders and $\alpha_j$ represent ask orders. The highest bid $\beta_1$ (or best bid) and lowest ask $\alpha_1$ (or best ask) define the spread $\alpha_1 - \beta_1$.
 
-An incoming limit order can either trigger a trade or be stored in the book.    $\beta_1$ will be executed only if the book receives a market sell order, or a limit sell order with an offering price lower than or equal to $\beta_1$. In this case a trade will be executed at the price of $\beta_1$. Analogously for $\alpha_1$.
+An incoming limit order can either trigger a trade or be stored in the book.    $\beta_1$ will be executed only if the book receives a market sell order, or a limit sell order with a limit price lower than or equal to $\beta_1$. In this case a trade will be executed at the price of $\beta_1$. Similarly, $\alpha_1$ will be executed only if the book receives a market buy order, or a limit buy order with a limit price higher than or equal to $\alpha_1$ in which case a trade will be executed at the price of $\alpha_1$.
+
+\subsection{Transparency}
+Market transparency is defined as the ability of market participants to observe information in the market. It can refer to two stages in the lifetime of an order: \textit{pre-trade} and \textit{post-trade} transparency. \textit{Pre-trade} transparency refers to the ability of other market participants to observe the limit orders entering the order book, whereas \textit{post-trade} transparency refers to observing trades after they have taken place.
+
+The extent of \textit{pre-trade} transparency varies across different exchanges, but generally two styles of disclosure emerge: \textit{level 1} and \textit{level 2}. \textit{Level 1} usually refers to publishing best bid/ask quotes  with aggregate volumes, whereas \textit{level 2} discloses entire limit order book in real-time. In case of \textit{level 2} access, the broker IDs can either be disclosed or remain anonymous, depending on the stock exchange.
+
+
+
+
+
+
+
+
 
 
 
