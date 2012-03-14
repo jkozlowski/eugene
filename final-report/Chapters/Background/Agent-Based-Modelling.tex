@@ -4,7 +4,7 @@
 In this section we summarise several artificial stock markets from the available literature. We provide a model of zero-intelligence agents that will be implemented by the Noise Traders, that is based on the work by~\citet[chap.~4]{Gilles2006}. Moreover, in order to provide a background material for implementing a VWAP Trading Algorithm for the experiments, we survey available sources, most prominently the work in~\cite{Coggins2006, Kakade2004}. 
 
 \subsection{Agent-Based Modelling}
-Agent-Based Modelling is a simulation technique concerned with designing societies of rule-based software agents that interact in particular ways, with a view of assessing the of of individual (or groups of) agents on the system as a whole. This technique has been successfully applied in many business scenarios, including financial simulations. Among the benefits of agent-based modelling is emergent phenomena: behaviour resulting from complex interactions of many individual entities.
+Agent-Based Modelling is a simulation technique concerned with designing societies of rule-based software agents that interact in particular ways, with a view of assessing the of influence of individual (or groups of) agents on the system as a whole. This technique has been successfully applied in many business scenarios, including financial simulations. Among the benefits of agent-based modelling is emergent phenomena: behaviour resulting from complex interactions of many individual entities.
 
 \subsection{Agent-Based Computational Economics}
 Agent-Based Models that attempt to explain economic processes are branded as Agent-Based Computational Economics. In recent years, studying stock markets using multi-agent based models has become a promising research area due to the fact that this methodology reflects the fundamental nature of a stock market, where the current situation is a result of a complex interaction of actions of many heterogenous investors that have various expectations and different levels of rationality.
@@ -12,14 +12,14 @@ Agent-Based Models that attempt to explain economic processes are branded as Age
 \subsection{An overview of Agent-Based Artificial Stock Markets}
 
 \subsubsection*{SantaFe ASM~\citep{Lebaron2002, Lebaron99}}
-The Santa Fe Artificial Stock Market (SFI ASM) is a discrete time artificial stock market that consists a central computational market and a number of intelligent agent. Agents make decision by attempting to forecast the future returns on the stock using genetic programming and therefore decide between investing in stock or leaving their money in the bank, which pays a fixed interest rate.
+The Santa Fe Artificial Stock Market (SFI ASM) is a discrete time artificial stock market that consists of a central computational market and a number of intelligent agents. Agents make decisions by attempting to forecast the future returns on the stock using genetic programming and therefore decide between investing in stock or leaving their money in the bank, which pays a fixed interest rate.
 
 The simulated market consists of $N$ agents, usually $50-100$, that interact with the market. The stock has the price $p(t)$ per share at time $t$, where $p(t)$ is set endogenously to clear the market (\textit{call market}). The stock pays a dividend $d(t+1)$ at the end of time $t$, according to a stochastic process, independent of the market and agents' actions. The money left in the bank pays constant rate of return of $r$ per period. The information available to agents consists of the price, the dividend, total number of bids/asks at each past period, plus some additional variables. 
 
 By using genetic programming, agents can explore a wide range of possible forecasting rules and they have the flexibility to use or disregard certain pieces of avaiable information. The market was able to generate the key stylised facts: weak forecastability, volatility persistence, and higher expected returns.~\cite{Lebaron99}. 
 
 \subsubsection{Genoa ASM~\citep{Raberto2001}}
-Similarly to SFI ASM, The Genoa Artificial Stock market (GASM) is an agent-based artificial financial market in which heterogeneous agents exchange cash and stock from an initial fixed endowment of cash and shares. The total amount of cash and shares is constant throughout the duration of the simulation. The price formation process is set at the intersection of the demand and supply curves (\textit{call market}). At each time step, agents place random buy or sell orders, subject to available resources and clustering and for prices that depend on historical volatility.
+Similarly to SFI ASM, The Genoa Artificial Stock market (GASM) is an agent-based artificial financial market in which heterogeneous agents exchange cash and stock from an initial fixed endowment, therefore the total amount of cash and shares is constant throughout the duration of the simulation. The price formation process is set at the intersection of the demand and supply curves (\textit{call market}). At each time step, agents place random buy or sell orders, subject to available resources and clustering, for prices that depend on historical volatility.
 
 The market was able to reproduce key stylised facts, i.e. fat tails and volatility clustering, however failed to reproduce others, e.g. the volatility exhibited an exponential decay, as opposed to power law decay.
 
@@ -27,6 +27,8 @@ The market was able to reproduce key stylised facts, i.e. fat tails and volatili
 The ASMs surveyed thus far evolve in discrete time intervals, i.e. at each time period $t$, some fraction of traders submit orders to the market, the orders are cleared, the new market price is announced, the agents update their positions and a new time period $t+1$ starts. This style of simulation is well placed when dealing with call markets, however fails to realistically reflect the nature of continuous trading sessions, that evolves in a highly asynchronous manner thanks to limit order book microstructure.  
 
 The importantance of asynchronous simulation, as opposed to discrete-time simulation was demonstrated by~\citet{Sorban2008}, which describes \textit{ABSTRACTE}: Agent-Based Simulation of Trading Roles in an Asynchronous Continuous Trading Environment. \textit{ABSTRACTE} was used to model a market with information asymmetry, where prices are set by a learning market maker; this model extends the work in~\citep{Das2006}, but evolves the simulation in continuous time. They show that moving to continuous, asynchronous time simulation renders different price dynamics and conclude that continuous nature of trading in real stock markets should be explicitly taken into account in agent-based models.
+
+
 
 
 
