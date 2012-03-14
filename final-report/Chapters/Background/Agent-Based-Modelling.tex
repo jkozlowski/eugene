@@ -29,7 +29,15 @@ The importantance of asynchronous simulation, as opposed to discrete-time simula
 
 \subsection{Zero-intelligence model of price formation}
 
-Another strong case for turning to asynchronous simulation, is presented by~\citet{Gilles2006}, who studied the primary role played by liquidity dynamics in price formation mechanism. Liquidity is initially modeled using a limit order book simulation populated with a zero-intelligence model of agents, that place random buy/sell and limit/market orders. The prices can either be sent within the spread or out of the spread and are drawn from uniform and power law distribution, respectively. The order quantities follow log-normal distribution. In order to model the well documented pattern of trading activity that is more dense at the start and end of the day~\cite{Clark1973}, the agents sleep for random times that are drawn from a stretched exponential distribution, that is obtained as a mixture of two exponential distributions with different means (the influence of sleep time on price dynamics is explored in~\cite{Scalas2004}). Similarly to~\cite{Raberto2001}, these zero-intelligence agents are endowed with a fixed amount of cash and shares.
+Another strong case for turning to asynchronous simulation is presented by~\citet[chap.~4]{Gilles2006}, who studied the primary role played by liquidity dynamics in price formation mechanism. Liquidity is modeled using zero-intelligence agents trading through the asynchrounous limit order book, whose order placement and cancellation process, in terms of order type, size and limit price, are designed so as to come as close to a realistic aggregate order flow. 
+
+The simulation consists of $N$ Zero-intelligence agents, initially endowed with a fixed amount of cash and shares (similarly to~\cite{Raberto2001}). The stock does not distribute dividents and cash does not yield interest. There is not a market maker, therefore the price formation mechanism arises throught the non-linear interactions between agents demand and supply.
+
+The agents place buy or sell orders with equal probability. The agents can either cancel an existing order with probability $\pi_c$, send a market order ($\pi_m$), or send a limit order ($1-\pi_c-\pi_c$). The limit order price is either in the spread and uniformely distributed between best bid and best ask ($\pi_{in}$), or outside the spread and power law distributed ($\pi_{out}$).
+
+The order sizes of limit orders follow log-normal distribution, and market orders . In order to model the well documented pattern of trading activity that is more dense at the start and end of the day~\cite{Clark1973}, the agents sleep for random times that are drawn from a stretched exponential distribution, that is obtained as a mixture of two exponential distributions with different means (the influence of sleep time on price dynamics is explored in~\cite{Scalas2004}). Similarly to~\cite{Raberto2001}, these zero-intelligence agents are endowed with a fixed amount of cash and shares.
+
+
 
 
 
