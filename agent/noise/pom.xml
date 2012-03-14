@@ -39,7 +39,7 @@
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
-            <artifactId>commons-math3</artifactId>
+            <artifactId>commons-math</artifactId>
             <version>${commons.math.version}</version>
         </dependency>
         <!--<dependency>-->
