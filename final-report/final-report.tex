@@ -1,18 +1,21 @@
 \documentclass[ openright,titlepage,numbers=noenddot,headinclude,%twoside,
-                footinclude=true,BCOR=5mm,paper=a4,fontsize=11pt,a4paper,english%
+                footinclude=true,BCOR=5mm,paper=a4,fontsize=12pt,a4paper,english%
                 ]{scrreprt}
 \input{classicthesis-config}
 
 \begin{document}
+
 
 \input{FrontBackmatter/Titlepage}
 \input{FrontBackmatter/Contents}
 \input{FrontBackmatter/Abstract}
 
 \pagestyle{scrheadings}
+\doublespacing
 
 \chapter{Introduction}
 \label{Chapters/Introduction}
+\input{Chapters/Introduction/Introduction}
 \input{Chapters/Introduction/Motivation}
 \input{Chapters/Introduction/Null-Hypotheses}
 \input{Chapters/Introduction/Research-Methodology}
@@ -20,6 +23,7 @@
 
 \chapter{Background}
 \label{Chapters/Background}
+\input{Chapters/Background/Background}
 \input{Chapters/Background/Market-Microstructure}
 \input{Chapters/Background/Agent-Based-Modelling}
 \input{Chapters/Background/VWAP-Trading}
@@ -33,6 +37,20 @@
 
 \chapter{Implementation}
 \label{Chapters/Implementation}
+
+\begin{itemize}
+\item Describe the design of what you have created.\item Start with the application architecture, giving its overall structure and the components that make up that structure.\item Give a description of the design of each of the the components that make up the architecture.\item Include the database or storage representation.\item Provide implementation details as necessary.As with other chapters, the structure and contents of this chapter will de- pend on the nature of your project, so the list above is only a suggestion not a fixed requirement.
+\end{itemize}
+
+Find an ordering and form of words so that the design is clear, focusing on the interesting design decisions. For example, what were the alternatives, why select one particular solution? You have a limited number of pages so be selective about details. Also remember that someone (your examiners!) has to read this so don’t overwhelm them with intricate descriptions of everything that only you can follow – but do make sure the key details of the solution are in place. Use appropriate terminology and demonstrate that you have a good understanding of the Computer Science principles involved.
+You can use diagrams and screen shots to help explain the design but don’t overuse them. Diagrams and screen shots should add information, not duplicate what is written in the text, and definitely avoid page after page of diagrams as this will disrupt the flow of your text. Where relevant, UML diagrams can certainly be used but, again, don’t flood the chapter with diagrams. Additional diagrams can always be included in an appendix section.
+It may be useful to include sections of code to highlight how a particular algorithm is implemented or how an interesting programming problem was solved. However, avoid lengthy sections of code, as they can disrupt the flow of the text. Also make sure that your code fragments are readable, easy to follow and properly laid out. It may be better to use pseudo-code rather than actual code, especially when describing an algorithm. If you need to make use of longer sections of code, you can put the code in the appendix and reference it from the text.An alternative way to organise the content of both this chapter and the preceding one, suitable for some projects, is to have a sequence of chapters for each major iteration of the project. This allows the progression of the project to be shown, with each iteration building on the last.This is a core chapter in your report and will usually be quite substantial, 10 pages or more.
+
+\section{Things to cover}
+\begin{itemize}
+\item Logging.
+\item Ontologies.
+\end{itemize}
 
 \section{Things to draw attention to}
 \begin{itemize}
@@ -53,8 +71,18 @@
 \chapter{Testing and Validation}
 \label{Chapters/Testing-and-Validation}
 
+\begin{itemize}
+\item Describe your testing strategy (unit, functional, acceptance testingand how they are carried out). How were test cases selected.\item Examples of specific tests and how they were carried out (e.g., using mock objects to break dependencies). Focus on the interesting cases.\item A summary of the test results and what coverage was achieved. The detailed test report(s) should appear in the appendix.
+\end{itemize}
+If your project requires substantial evaluation of data and results, or other forms of testing that are not code-based, then adapt this chapter to suit.This chapter will typically be 2-4 pages in length but could be more de- pending on the depth of testing done.
+
 \chapter{Conclusions and Further Work}
 \label{Chapters/Conclusion-and-Further-Work}
+
+\begin{itemize}
+\item A summary of what the project has achieved. Address each goal setout in the introduction.\item A critical evaluation of the results of the project (e.g., how well were the goals met, is the application fit for purpose, has good design and implementation practice been followed, was the right implementation technology chosen and so on).\item Future work. How could the project be developed if you had another 6 months.\item Wrap-up and final thoughts on your project.
+\end{itemize}
+This chapter is typically 2-4 pages long but could be longer if the projectwork requires more extensive evaluation.
 
 %\end{onehalfspace}
 
