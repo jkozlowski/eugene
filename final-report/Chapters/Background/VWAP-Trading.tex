@@ -13,15 +13,28 @@ In \textit{price-volume trading model}~\cite{Kakade2004}, the \textit{intra-day}
 Assume that there is a trading algorithm $A$ that traded during this period.  Then, the market \textit{VWAP}, $VWAP_m$, for an intraday trading sequence $S_m = (p_1, v_1), \ldots, (p_T, v_T)$ that excludes the trades executed by the algorithm $A$, is then defined as follows:
 \begin{equation}  
 \label{Equation/Market-Vwap}
-VWAP_m(S_m) = \frac{\left( \displaystyle\sum\limits_{t=0}^T (p_t, v_t) \right)}{V}
+VWAP_m(S_m) = \frac{\left( \displaystyle\sum\limits_{t=0}^T (p_t, v_t) \right)}{\displaystyle\sum\limits_{t=0}^T v_tV}
 \end{equation}
-where, $V$ is the total volume of shares traded, i.e. $V = \displaystyle\sum\limits_{t=0}^T v_t $. 
 
 Similarly, the \textit{VWAP} the algorithm $A$, $VWAP_A$, for a sequence $S_A = (p_1, v_1), \ldots, (p_T, v_t)$ is defined as follows:
 \begin{equation}  
 \label{Equation/Algo-Vwap}
-VWAP_A(S_A) = \frac{\left( \displaystyle\sum\limits_{t=0}^T (p_t, v_t) \right)}{V_A}
+VWAP_A(S_A) = \frac{\left( \displaystyle\sum\limits_{t=0}^T (p_t, v_t) \right)}{\displaystyle\sum\limits_{t=0}^T v_t}
 \end{equation}
-where $V_a$ is the total volume traded by the algorithm $A$, i.e. $V_A = \displaystyle\sum\limits_{t=0}^T v_t$. Having defined what a \textit{VWAP} is, we will now turn to an implementation of a \textit{VWAP Algorithm}.
+
+Having defined what a \textit{VWAP} is, we will now turn to an implementation of a \textit{VWAP Algorithm}.
+
+\subsection{VWAP Trading Algorithm under the price-volume trading model}
+\citet{Coggins2006} define the following rule based approach to a \textit{VWAP} buy execution:
+\begin{enumerate}
+\item Divide the trading period into time slots, allocating a given percentage of trade volume to each time interval.
+\item At each time slot, submit a limit order of the specified size at the best bid.
+\item If within $x$ minutes, the best bid has gone up and our order has not executed, amend the order to the best bid.
+\item If by the end of the time slot, the order has not fully completed, amend it to become a market order to force completion.
+\end{enumerate}
+
+This algorithm will be used in our experiments with \textit{VWAP algorithms}.
+
+
 
 
