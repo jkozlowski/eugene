@@ -1,1 +1,16 @@
 \section{VWAP Trading}
+Whenever a large institutional investor wants to take a position or liquidate a holding, the execution of the transaction is faced with price risk. Simply putting a large limit order onto the limit order book would give an incentive to other investors to change their prices and hence drive the cost of executing the order unnecessarily high. 
+
+The solution is to split the parent order into smaller child orders in order to hide the intent of the investor and keep the market impact under control. Traditionally, such task would be delegated to human traders, however following the advent of algorithmic trading, it is usually a machine that executes the order. The quality of execution is measured by comparing against an appropriate benchmark.
+
+Among the most popular benchmarks is \textit{VWAP} or \textit{Volume Weighted Average Price}, that is a measure of average price achieved in the market. When used to measure the quality of execution of an algorithm, the volume weighted prices achieved by the algorithm are compared to all the  other trades that occurred in the market during the period of the algorithm's activity. 
+
+A \textit{VWAP Algorithm} attempts to buy or sell a fixed number of shares at a price that closely tracks the \textit{VWAP} of the market. Therefore, the problem of tracking the market \textit{VWAP} can be stated in terms of splitting the order into a series of smaller orders, whose size corresponds to the forecast intra-day volume pattern of a stock. 
+
+\subsection{The Price-Volume Trading Model}
+In \textit{price-volume trading model}~\cite{Kakade2004}, the \textit{intra-day} trading activity can be summarised by a discrete sequence of price and volume pairs $(p_t, v_t)$, for $t=1,\ldots,T$. Each pair represents the fact that a total volume of shares $v_t$ was traded at a price $p_t$. The market \textit{VWAP} is then defined as follows:
+\begin{equation}  
+\label{Equation/Market-Vwap}
+as
+\end{equation}
+
