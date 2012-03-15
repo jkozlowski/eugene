@@ -56,7 +56,9 @@ Sleeping time				 & $\tau_1, \tau_2$ & (600, 1800) sec.   \\
 
 This simple model of zero-inteligence agents was able to reproduce realistic dynamics in terms of spread and book shape, as well as slight anti-persistence or tick-by-tick returns and a high level of kurtosis and fat tails. 
 
-A very important feature of simulations implemented on top of \textit{NatLab} is full-reproducibility of simulations: the random seeds used by agents to drive their decisions can be exported and reused, hence allowing the simulations to be reproduced exactly. Therefore, sensitivity analysis performed using this simulator allows the modeler to have confidence that the change visible in the output of the simulation is the result of only the change of parameters, not a product of random occurrence.
+A very important feature of simulations implemented on top of \textit{NatLab} is full-reproducibility of simulations: the random seeds used by agents to drive their decisions can be exported and reused, hence allowing the simulations to be reproduced exactly. Therefore, sensitivity analysis performed using this simulator allows the modeler to have confidence that a change observed in the output from the simulation is the result of only the controled change of parameters, not a product of random occurrence.
+
+Zero-intelligence model as described in~\citet[chap.~4]{Gilles2006} will be used to implement the Noise Traders in \textit{Eugene}. We will now turn to survey available literature on implementing VWAP trading.  
 
 
 
