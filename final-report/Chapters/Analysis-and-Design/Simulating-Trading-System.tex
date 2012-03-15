@@ -1,0 +1,11 @@
+\section{Simulating a Trading System}
+
+Trading Algorithms respond to messages received from the Stock Exchange (via the Market Data Bus) and send orders to the Stock Exchange (via the Order Management System). They expect the orders to have some influence on the situation on the Stock Exchange, based on the analysis of past behaviour received from the Tick Database. In our implementation we are going to explicitly omit the issue of past behaviour analysis and the Tick Database, as it is beyond the scope of this report. 
+
+Therefore, in order to simulate a Trading System for testing Trading Algorithms, two systems need to be put in place:
+\begin{itemize}
+\item Order Matching Engine which can accept orders on to a limit order book and match bid/ask orders.
+\item Market behaviour simulator that can realistically simulate market behaviour. 
+\end{itemize}
+
+Having stated the problem we are trying to solve and the required architecture, we will now present a formal set of requirements that the system needs to fulfil.
