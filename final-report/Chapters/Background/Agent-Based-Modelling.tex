@@ -29,14 +29,34 @@ The importantance of asynchronous simulation, as opposed to discrete-time simula
 
 \subsection{Zero-intelligence model of price formation}
 
-Another strong case for turning to asynchronous simulation is presented by~\citet[chap.~4]{Gilles2006}, who studied the primary role played by liquidity dynamics in price formation mechanism. Liquidity is modeled using zero-intelligence agents trading through the asynchrounous limit order book, whose order placement and cancellation process, in terms of order type, size and limit price, are designed so as to come as close to a realistic aggregate order flow. 
+Another strong case for turning to asynchronous simulation is presented by~\citet[chap.~4]{Gilles2006}, who studied the primary role played by liquidity dynamics in price formation mechanism. Liquidity is modeled using zero-intelligence agents trading through the asynchrounous limit order book, whose order placement and cancellation process, in terms of order type, size and limit price, are designed to come as close to a realistic aggregate order flow. The simulation is implemented on top of \textit{Natural Asynchronous-Time Event-Lead Agent-Based Platform (NatLab)}.  
 
 The simulation consists of $N$ Zero-intelligence agents, initially endowed with a fixed amount of cash and shares (similarly to~\cite{Raberto2001}). The stock does not distribute dividents and cash does not yield interest. There is not a market maker, therefore the price formation mechanism arises throught the non-linear interactions between agents demand and supply.
 
 The agents place buy or sell orders with equal probability. The agents can either cancel an existing order with probability $\pi_c$, send a market order ($\pi_m$), or send a limit order ($1-\pi_c-\pi_c$). The limit order price is either in the spread and uniformely distributed between best bid and best ask ($\pi_{in}$), or outside the spread and power law distributed ($\pi_{out}$).
 
-The order sizes of limit orders follow log-normal distribution, and market orders . In order to model the well documented pattern of trading activity that is more dense at the start and end of the day~\cite{Clark1973}, the agents sleep for random times that are drawn from a stretched exponential distribution, that is obtained as a mixture of two exponential distributions with different means (the influence of sleep time on price dynamics is explored in~\cite{Scalas2004}). Similarly to~\cite{Raberto2001}, these zero-intelligence agents are endowed with a fixed amount of cash and shares.
+The order sizes of limit orders follow log-normal distribution, and market order sizes match the best counterpart. In order to model the well documented pattern of trading activity that is more dense at the start and end of the day~\cite{Clark1973}, the agents sleep for random times that are drawn from a stretched exponential distribution, that is obtained as a mixture of two exponential distributions with different means (the influence of sleep time on price dynamics is explored in~\cite{Scalas2004}). The various parameters that relate to this model and corresponding values are summarised in \tableautorefname~\ref{Table/Zero-Intelligence}.
 
+\begin{table}[htbp]
+\begin{center}
+\begin{tabular}{ l l l }
+\textbf{Description} & \textbf{Parameter} & \textbf{Value} \\
+\cmidrule(r){1-3}
+Prob. of cancelling an order & $\pi_c$    		& 0.5                \\
+Prob. of market order		 & $\pi_m$   		& 0.15               \\
+Prob. limit order in spread  & $\pi_{in}$ 		& 0.35               \\ 
+Limit price outside spread   & $1+\alpha$ 		& 1.3                \\
+Order size					 & $(\mu, \sigma)$	& (4.5, 0.8) shares  \\
+Sleeping time				 & $\tau_1, \tau_2$ & (600, 1800) sec.   \\
+\end{tabular}
+\end{center}
+\caption{Summary of Zero-intelligence model of price formation}
+\label{Table/Zero-Intelligence}
+\end{table}
+
+This simple model of zero-inteligence agents was able to reproduce realistic dynamics in terms of spread and book shape, as well as slight anti-persistence or tick-by-tick returns and a high level of kurtosis and fat tails. 
+
+A very important feature of simulations implemented on top of \textit{NatLab} is full-reproducibility of simulations: the random seeds used by agents to drive their decisions can be exported and reused, hence allowing the simulations to be reproduced exactly. Therefore, sensitivity analysis performed using this simulator allows the modeler to have confidence that the change visible in the output of the simulation is the result of only the change of parameters, not a product of random occurrence.
 
 
 
