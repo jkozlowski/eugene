@@ -11,27 +11,43 @@ Requirements are prioritised according to the MoSCoW approach:
 \end{itemize}
 
 \subsection{Functional Requirements}
-
-\begin{table}[htbp]
 \begin{center}
-\begin{longtable}{c p{3.5in} c }
+\begin{longtable}[htbp]{c p{3.5in} c }
 
 \multicolumn{1}{c}{\textbf{ID}}           &
 \multicolumn{1}{c}{\textbf{Requirement}}  &
 \multicolumn{1}{c}{\textbf{Priority}}     \\              
 \toprule
 
-\multicolumn{3}{c}{\textbf{Order Types}}   \\
-F01  & The System shall support limit orders.        & M \\
-F02  & The System shall support market orders.       & M \\
-F03  & The System shall support order cancellations. & M \\
+\multicolumn{3}{c}{\textbf{Market Agent}}   	         \\
+F01  & The Market Agent shall handle the central limit order book by matching orders and sending market data. & M \\ 
+
+\multicolumn{3}{c}{\textbf{Order Types}}   		         \\
+F02  & The Market Agent shall accept limit orders.        & M \\
+F03  & The Market Agent shall accept market orders.       & M \\
+F04  & The Market Agent shall accept order cancellations. & M \\
+
+\multicolumn{3}{c}{\textbf{Market Data}}   		         \\
+F05  & The Market Agent shall provide \textit{level 2} market data access with anonymous order ids. & M \\
+F06  & The Market Agent shall report order executions and status changes back to the order owner. & M \\ 
+
+\multicolumn{3}{c}{\textbf{Simulation Control}}   \\
+F07  & The Simulation Agent shall start all specified agents.  & M \\
+F08  & The Simulation Agent shall synchronise the start of a simulation. & M \\
+F09  & The Simulation Agent shall stop a simulation after a specified amount of time. & M \\
+F10  & The Simulation Agent shall bootstrap the limit order book before starting the simulation. & M \\ 
+
+\multicolumn{3}{c}{\textbf{Client API}}   \\
+F11  & The Client API shall handle the low-level interaction with the Market Agent and Simulation Agent and provide callback methods for receiving messages. & M \\
+
+\multicolumn{3}{c}{\textbf{Other}}   		             \\
+F12  & The System shall log all events to a file.        & M \\
          
 \end{longtable}
 \end{center}
-\end{table}
 
+\needspace{30\baselineskip}
 \subsection{Non Functional Requirements}
-
 \begin{table}[htbp]
 \begin{center}
 \begin{longtable}{c p{3.5in} c }
@@ -42,7 +58,13 @@ F03  & The System shall support order cancellations. & M \\
                 
 \toprule
 \multicolumn{3}{c}{\textbf{Performance}}   \\
-N01  & The System shall handle incoming order rate of        & M \\ \marginpar{Insert the rate here.}
+N01  & The System shall handle incoming order rate of              & M \\ 
+N02  & The System shall maintain $\geq70\%$ unit test coverage.    & M \\
+N03  & The System shall be highly modular and decoupled.           & M \\
+N04  & The System shall be integration tested.	                   & M \\
+N05  & The System shall imitate the message types and formats of industry standard messaging formats. & M \\
+N03  & The System shall publish performance statistics at runtime. & C \\
+
          
 \end{longtable}
 \end{center}
