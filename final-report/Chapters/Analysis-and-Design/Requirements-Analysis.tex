@@ -1,2 +1,50 @@
 \section{Requirements Analysis}
 Having analysed available literature on the design of asynchronous, limit order book markets in \Cref{Chapters/Background/Market-Microstructure}, as well as existing Agent-Based ASMs in \Cref{Chapters/Background/Agent-Based-Modelling}, we will now list the requirements that the trading simulator needs to satisfy.
+
+Requirements are prioritised according to the MoSCoW approach:
+
+\begin{itemize}
+\item M - Must - These requirements are the highest priority must be completed to ensure project success.
+\item S - Should - These requirements are high priority and will be completed after the M requirements.
+\item C - Could - These requirements will be worked on only if there is time after the M and S requirements or if they do not interfere with the progress of the higher priority tasks.
+\item W - Would - These requirements most probably will not be done and are not necessary for the completion and success of the project but are good ideas for future work.
+\end{itemize}
+
+\subsection{Functional Requirements}
+
+\begin{table}[htbp]
+\begin{center}
+\begin{longtable}{c p{3.5in} c }
+
+\multicolumn{1}{c}{\textbf{ID}}           &
+\multicolumn{1}{c}{\textbf{Requirement}}  &
+\multicolumn{1}{c}{\textbf{Priority}}     \\              
+\toprule
+
+\multicolumn{3}{c}{\textbf{Order Types}}   \\
+F01  & The System shall support limit orders.        & M \\
+F02  & The System shall support market orders.       & M \\
+F03  & The System shall support order cancellations. & M \\
+         
+\end{longtable}
+\end{center}
+\end{table}
+
+\subsection{Non Functional Requirements}
+
+\begin{table}[htbp]
+\begin{center}
+\begin{longtable}{c p{3.5in} c }
+
+\multicolumn{1}{c}{\textbf{ID}}           &
+\multicolumn{1}{c}{\textbf{Requirement}}  &
+\multicolumn{1}{c}{\textbf{Priority}}     \\
+                
+\toprule
+\multicolumn{3}{c}{\textbf{Performance}}   \\
+N01  & The System shall handle incoming order rate of        & M \\ \marginpar{Insert the rate here.}
+         
+\end{longtable}
+\end{center}
+\end{table}
+
