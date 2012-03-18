@@ -7,12 +7,12 @@
     <parent>
         <groupId>eugene</groupId>
         <artifactId>parent</artifactId>
-        <version>0.7-SNAPSHOT</version>
+        <version>0.8-SNAPSHOT</version>
     </parent>
 
     <groupId>eugene</groupId>
     <artifactId>integration</artifactId>
-    <version>0.7-SNAPSHOT</version>
+    <version>0.8-SNAPSHOT</version>
     <name>${bundle.namespace}</name>
     <description>Integration tests.</description>
     <packaging>jar</packaging>

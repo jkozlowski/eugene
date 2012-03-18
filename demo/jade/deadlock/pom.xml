@@ -7,12 +7,12 @@
     <parent>
         <groupId>eugene.demo.jade</groupId>
         <artifactId>parent</artifactId>
-        <version>0.7-SNAPSHOT</version>
+        <version>0.8-SNAPSHOT</version>
     </parent>
 
     <groupId>eugene.demo.jade</groupId>
     <artifactId>deadlock</artifactId>
-    <version>0.7-SNAPSHOT</version>
+    <version>0.8-SNAPSHOT</version>
     <name>${bundle.namespace}</name>
     <description>Implements a deadlock simulation:
         Agents pass messages from one to another, and block until receiving a reply -

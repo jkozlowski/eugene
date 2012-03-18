@@ -7,12 +7,12 @@
     <parent>
         <groupId>eugene.experiment</groupId>
         <artifactId>parent</artifactId>
-        <version>0.7-SNAPSHOT</version>
+        <version>0.8-SNAPSHOT</version>
     </parent>
 
     <groupId>eugene.experiment</groupId>
     <artifactId>vwap-error</artifactId>
-    <version>0.7-SNAPSHOT</version>
+    <version>0.8-SNAPSHOT</version>
     <name>${bundle.namespace}</name>
     <description>Starts a simulation with Noise Trader Agents and a VWAP trader with an error that runs for a period of
         time.

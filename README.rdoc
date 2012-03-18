@@ -3,6 +3,30 @@
 * Redmine: http://abfm.cs.ucl.ac.uk/redmine/projects/eugene
 * Jenkins: http://abfm.cs.ucl.ac.uk/jenkins/job/eugene
 
+== 2012-03-18: Release v0.8  - Jakub D Kozlowski <mail@jakub-kozlowski.com>
+
+=== Experiments [experiment]
+* Bootstrap order book in experiments.
+
+=== Market Agent [market/esma]
+* Add trader ids to execution log messages.
+
+=== VWAP Agent [agent/vwap]
+* Refactor VwapBehaviour to accept different implementations for it's actions.
+
+=== Noise Agent [agent/noise]
+* Improved the noise trader to follow Gilles PhD Thesis.
+
+=== Simulation Agent [simulation/agent]
+* Pass the tick size and default price in the Simulation object.
+
+=== Market Ontology [market/ontology]
+* Change Price, AvgPx and LastPx fields in market/ontology to be of type BigDecimal.
+
+=== Client API [market/client]
+* Make current working orders available in the Session.
+* Implement TopOfBookApplication.
+
 == 2012-02-20: Release v0.7  - Jakub D Kozlowski <mail@jakub-kozlowski.com>
 
 === Vwap Agent [agent/vwap]

@@ -7,12 +7,12 @@
     <parent>
         <groupId>eugene</groupId>
         <artifactId>parent</artifactId>
-        <version>0.7-SNAPSHOT</version>
+        <version>0.8-SNAPSHOT</version>
     </parent>
 
     <groupId>eugene</groupId>
     <artifactId>assembly</artifactId>
-    <version>0.7-SNAPSHOT</version>
+    <version>0.8-SNAPSHOT</version>
     <name>${project.groupId}.${project.artifactId}</name>
     <description>Contains assembly.xml file for building the experiments, as well as running them using
         mvn pax:run.
