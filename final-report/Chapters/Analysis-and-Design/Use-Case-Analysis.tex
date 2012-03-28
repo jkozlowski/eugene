@@ -1,0 +1,178 @@
+\FloatBarrier
+\section{Use case analysis}
+
+
+\newcounter{usecases}
+\addtocounter{usecases}{1}
+
+\newenvironment{usecase}[1]
+  {
+   \subsection{UC\arabic{usecases}: {#1}}%
+   \stepcounter{usecases}%
+   \begin{samepage}%
+   \begin{list}{}%
+   {\topsep=5em
+   \renewcommand\makelabel[1]{\textbf{##1}\hfill}%
+   \settowidth\labelwidth{\makelabel{Post-Conditions} + 0.5in}%
+   \setlength\leftmargin{\labelwidth}
+   \addtolength\leftmargin{\labelsep}}}
+  {\end{list}%
+   \end{samepage}}
+
+% UC1   
+\begin{usecase}{Start the simulation}
+\item[Primary Actors] Simulation Agent
+\item[Secondary Actors] Market Agent, Trader Agents
+\item[Description] The Simulation Agent starts the simulation.
+\item[Pre-conditions] 
+\item[Flow of Events] 
+\begin{enumerate}
+\item The Simulation Agent starts the Market Agent.
+\item The Market Agent starts and sends a Started message back to the Simulation Agent.
+\item The Simulation Agent receives the Started message.
+\item The Simulation Agent starts the Trader Agents.
+\item The Trader Agents start and log on with the Market Agent.
+\item The Trader Agents send a Logon Complete message back to the Simulation Agent.
+\item The Simulation Agent receives the Logon Complete messages.
+\item After receiving all the Logon Complete messages, the Simulation Agent sends initial limit orders to the Market Agent.
+\item After receiving acknowledgements for the initial limit orders, the Simulation Agent sends Start messages to the Trader Agents.
+\item The Trader Agents send Started messages back to the Simulation Agent.
+\item The Simulation Agent receives Started messages.
+\item After receiving all Started messages, the Simulation Agent sleeps until the end of the simulation.
+\end{enumerate}
+\item[Post-conditions] The Simulation Agent sleeps.
+\item[Alternative Flows] None. 
+\end{usecase}
+  
+% UC2
+\begin{usecase}{Logon}
+\item[Primary Actors] Trader Agent
+\item[Secondary Actors] Market Agent
+\item[Description] The Trader Agent sends a Logon message to the Market Agent.
+\item[Pre-conditions] 
+\item[Flow of Events] 
+\begin{enumerate}
+\item The Trader Agent sends a Logon message to the Market Agent
+\item The Market Agent receives the message and stores the Trader Agent ID.
+\item The Market Agent sends an acknowledgement message back to the Trader Agent.
+\item The Trader Agent receives the acknowledgement message.
+\end{enumerate}
+\item[Post-conditions] The Trader Agent ID has been saved. \item[Alternative Flows] None.
+\end{usecase}
+  
+% UC3 
+\begin{usecase}{Send Limit Order}
+\item[Primary Actors] Trader Agent
+\item[Secondary Actors] Market Agent, Execution Engine
+\item[Description] The Trader Agent sends a Limit Order message to the Market Agent.
+\item[Pre-conditions] The Trader Agent has logged on with the Market Agent and received the Start message from the Simulation Agent.
+\item[Flow of Events] 
+\begin{enumerate}
+\item The Trader Agent sends a New Limit Order message to the Market Agent
+\item The Market Agent receives the message and forwards the limit order to the Execution Engine.
+\item The Market Agent sends an acknowledgement message back to the Trader Agent.
+\item The Trader Agent receives the acknowledgement message.
+\end{enumerate}
+\item[Post-conditions] The Execution Engine accepted the New Limit Order message.
+\item[Alternative Flows] None
+\end{usecase}
+
+% UC4 
+\begin{usecase}{Send Market Order}
+\item[Primary Actors] Trader Agent
+\item[Secondary Actors] Market Agent, Execution Engine
+\item[Description] The Trader Agent sends a New Market Order message to the Market Agent.
+\item[Pre-conditions] The Trader Agent has logged on with the Market Agent and received the Start message from the Simulation Agent.
+\item[Flow of Events] 
+\begin{enumerate}
+\item The Trader Agent sends a New Market Order message to the Market Agent.
+\item The Market Agent receives the message and forwards the market order to the Execution Engine.
+\item The Market Agent sends an acknowledgement message back to the Trader Agent.
+\item The Trader Agent receives the acknowledgement message.
+\end{enumerate}
+\item[Post-conditions] The Execution Engine accepted the New Market Order message.
+\item[Alternative Flows] None
+\end{usecase}
+
+% UC5
+\begin{usecase}{Cancel Order}
+\item[Primary Actors] Trader Agent
+\item[Secondary Actors] Market Agent, Execution Engine
+\item[Description] The Trader Agent sends a Cancel Order message to the Market Agent.
+\item[Pre-conditions] The Trader Agent has logged on with the Market Agent and received the Start message from the Simulation Agent.
+\item[Flow of Events] 
+\begin{enumerate}
+\item The Trader Agent sends a Cancel Order message to the Market Agent.
+\item The Market Agent receives the message, checks if the order exists and forwards the Cancel Order message to the Execution Engine.
+\item The Market Agent sends an acknowledgement message back to the Trader Agent.
+\item The Trader Agent receives the acknowledgement message.
+\end{enumerate}
+\item[Post-conditions] The Cancel Order message has been accepted by the Execution Engine.
+\item[Alternative Flows] The order referred to in the Cancel Order message does not exist, therefore the Market Agent sends a Cancel Reject message back to the Trader Agent.
+\end{usecase}
+
+% UC6
+\begin{usecase}{Process New Limit Order message}
+\item[Primary Actors] Execution Engine
+\item[Secondary Actors] Trader Agents
+\item[Description] The Execution Engine processes a New Limit Order message.
+\item[Pre-conditions] A New Limit Order message has been accepted by the Execution Engine.
+\item[Flow of Events] 
+\begin{enumerate}
+\item The Execution Engine checks if there are matching limit orders on the opposite side of the book of the limit order to execute.
+\item The Execution Engine executes all matching limit orders and sends Execution Report messages to the counter-parties and Order Executed messages to the rest of the Trader Agents.
+\item If the limit order has not been filled, the Execution Engine puts the limit order into the limit order book and sends Add Order messages to all Trader Agents.
+\end{enumerate}
+\item[Post-conditions] The matching limit orders have been executed, appropriate messages have been sent and the remaining quantity has been put into the limit order book.
+\item[Alternative Flows] None.
+\end{usecase}
+
+% UC7
+\begin{usecase}{Process New Market Order message}
+\item[Primary Actors] Execution Engine
+\item[Secondary Actors] Trader Agents
+\item[Description] The Execution Engine processes a New Market Order message.
+\item[Pre-conditions] The Execution Engine accepted a New Market Order message.
+\item[Flow of Events] 
+\begin{enumerate}
+\item The Execution Engine checks if there are matching limit orders on the opposite side of the book of the market order to execute.
+\item The Execution Engine executes all matching limit orders and sends Execution Report messages to the counter-parties and Order Executed messages for the limit orders to the rest of the Trader Agents.
+\item If the market order has not been filled, the Execution Engine sends a Order Canceled message for the remaining quantity back to the Trader Agent that sent the market order.
+\end{enumerate}
+\item[Post-conditions] The market order has been executed, matching limit orders have been executed, appropriate messages have been sent and the remaining quantity has been canceled.
+\item[Alternative Flows] None.
+\end{usecase}
+
+% UC8   
+\begin{usecase}{Process Cancel Order message}
+\item[Primary Actors] Execution Engine
+\item[Secondary Actors] Trader Agents
+\item[Description] The Execution Engine processes a Cancel Order message.
+\item[Pre-conditions] The Execution Engine accepted a Cancel Order message. 
+\item[Flow of Events] 
+\begin{enumerate}
+\item The Execution Engine removes the limit order from the limit order book.
+\item The Execution Engine sends an Order Canceled message for the remaining quantity back to the Trader agent that sent the limit order.
+\item The Execution Engine sends a Delete Order message to all the Trader Agents.
+\end{enumerate}
+\item[Post-conditions] The limit order has been canceled.
+\item[Alternative Flows] None.
+\end{usecase}
+
+% UC9   
+\begin{usecase}{Stop the simulation}
+\item[Primary Actors] Simulation Agent
+\item[Secondary Actors] Trader Agents
+\item[Description] The Simulation Agent stops the simulation.
+\item[Pre-conditions] The simulation is running. 
+\item[Flow of Events] 
+\begin{enumerate}
+\item The Simulation Agent wakes up.
+\item The Simulation Agent sends a Stop message to the Trader Agents.
+\item The Trader Agents stop and send Stopped messages back to the Simulation Agent.
+\item The Simulation Agent receives the Stopped messages.
+\item After receiving all the Stopped messages, the Simulation Agent stops.
+\end{enumerate}
+\item[Post-conditions] The simulation is stopped.
+\item[Alternative Flows] 
+\end{usecase}
