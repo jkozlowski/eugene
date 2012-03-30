@@ -5,9 +5,4 @@ There exists a \texttt{Test Suite Framework} available through the official \tex
 
 Unfortunately, the \textit{JADE} version as available on the official website contains a messaging module for sending messages to external nodes that opens a socket, and renders creating multiple \texttt{JADE} containers impossible.
 
-Luckily, \texttt{JADE} architecture is modular and hence the implementation of the messaging module can be replaced. \texttt{jade-unit} extension implements a no-op messaging module that simply ignores any messages directed to it.
-
-\begin{itemize}
-\item Highlight the fact that I needed to work around the problems of testing, etc.
-\item Focus on how problems were anticipated, so they were planned
-\end{itemize}
+Luckily, \texttt{JADE} architecture is modular and hence the implementation of the messaging module can be replaced. \texttt{jade-unit} extension implements a no-op messaging module that simply ignores any messages directed to it. This allows the integration tests to reuse the entire testing architecture employed for unit tests. It is expected that the patch with \texttt{jade-unit} will be forwarded to the \texttt{JADE} maintainers.
