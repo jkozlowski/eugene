@@ -1,5 +1,19 @@
 \section{Overall Architecture}
+Before I describe the architecture of all the modules that make up \textit{eugene}, I will present the main technologies used in the implementation.
 
-\subsection{Jade}
+\subsection{Java Agent DEvelopment Framework}
+\texttt{JADE} is a software framework for developing distributed, multi-agent software systems in Java. \texttt{JADE} can be deployed onto a set of containers (nodes) which together form a platform (cluster).
 
-\subsection{OSGi}
+Each platform has a \texttt{Main Container} which holds two special agents:
+\begin{itemize}
+\item The \texttt{Agent Management System} (AMS) which can create and kill agents, kill containers and shut down the entire platform.
+\item The \texttt{Directory Facilitator} (DF) which implements a \texttt{yellow pages} service.
+\end{itemize} 
+
+Each agent in \texttt{JADE} operates in a separate thread of control, therefore allowing independent, preemptive behaviour. \texttt{JADE}  has been designed to operate within an \texttt{OSGi} container, therefore making it easier to deploy.
+
+\subsection{Open Services Gateway Initiative Framework}
+\texttt{OSGi} is dynamic module and service system platform for Java. Application components (distributed as \texttt{bundles}) can be remotely managed without requiring a reboot of the entire container. A package management system enables developers to package public and private APIs within the same bundle, but only expose public APIs at runtime. The dynamic service system allows the components to discover the addition of new services and act accordingly.
+
+\subsection{Simple Logging Facade for Java}
+\texttt{SLF4J} is an abstraction for various logging frameworks that allows the user to plug in the desired implementation at deployment time. Combined with \texttt{logback} implementation, it is a very powerful and versatile logging framework. Among the most useful features are \textit{Markers}: ability to tag a log entry to indicate the type of the event being logged. Different \texttt{markers} can then be directed to separate files.
