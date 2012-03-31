@@ -16,7 +16,7 @@ import jade.content.onto.annotations.Element;
 import jade.content.onto.annotations.Slot;
 
 /**
- * The {@link NewOrderSingle} message type is used by agents wishing to submit securities orders to a broker for
+ * The {@link NewOrderSingle} message type is used by agents wishing to submit securities orders to the Market for
  * execution.
  *
  * @author Jakub D Kozlowski

@@ -12,7 +12,7 @@ import jade.content.onto.annotations.SuppressSlot;
 import java.math.BigDecimal;
 
 /**
- * Calculated average price of all fills on this order.
+ * Average price of all fills of an order.
  *
  * @author Jakub D Kozlowski
  * @since 0.2

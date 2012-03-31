@@ -14,7 +14,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * {@link Start} is sent by the Simulation Agents to a Trader Agent in order to activate the Trader Agent.
+ * {@link Start} is sent by the Simulation Agent to a Trader Agent in order to activate the Trader Agent.
  *
  * @author Jakub D Kozlowski
  * @since 0.6

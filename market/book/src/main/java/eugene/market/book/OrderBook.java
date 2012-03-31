@@ -22,35 +22,36 @@ import java.util.SortedSet;
 public interface OrderBook {
 
     /**
-     * Inserts an unexecuted <code>order</code> into this {@link OrderBook}.
+     * Inserts an unexecuted {@code order} into this {@link OrderBook}.
      *
      * @param order order to insert.
      *
-     * @return status of this <code>order</code>.
+     * @return status of this {@code order}.
      *
-     * @throws NullPointerException     if <code>order</code> is null.
-     * @throws IllegalArgumentException if <code>order</code> is {@link OrdType#MARKET}.
+     * @throws NullPointerException     if {@code order} is null.
+     * @throws IllegalArgumentException if {@code order} is {@link OrdType#MARKET},
+     *                                  or this {@code order} already exists in this {@link OrderBook}.
      */
-    OrderStatus insert(final Order order) throws NullPointerException, IllegalArgumentException;
+    OrderStatus insert(final Order order);
 
     /**
-     * Inserts a partially executed <code>order</code> into this {@link OrderBook}.
+     * Inserts a partially executed {@code order} into this {@link OrderBook}.
      *
      * @param order       order to insert.
-     * @param orderStatus status of execution of this <code>order</code>.
+     * @param orderStatus status of execution of this {@code order}.
      *
-     * @return status of this <code>order</code>.
+     * @return status of this {@code order}.
      *
-     * @throws NullPointerException     if <code>order</code> is null.
-     * @throws IllegalArgumentException if <code>order</code> is {@link OrdType#MARKET} or <code>orderStatus</code>
-     *                                  is not about this <code>order</code>.
+     * @throws NullPointerException     if any parameter is null.
+     * @throws IllegalArgumentException if {@code order} is {@link OrdType#MARKET} or {@code orderStatus}
+     *                                  is not about this {@code order}, or this {@code order} already exists in this
+     *                                  {@link OrderBook}.
      */
-    OrderStatus insert(final Order order, final OrderStatus orderStatus)
-            throws NullPointerException, IllegalArgumentException;
+    OrderStatus insert(final Order order, final OrderStatus orderStatus);
 
     /**
-     * Executes the <code>orderQty</code> of the {@link Order} at the top of the book on this <code>side</code> at
-     * this <code>price</code>.
+     * Executes {@code orderQty} of the {@link Order} at the top of the book on this {@code side} at
+     * this {@code price}.
      *
      * @param side     {@link Side} of the {@link Order} to execute.
      * @param orderQty quantity to execute.
@@ -58,43 +59,45 @@ public interface OrderBook {
      *
      * @return {@link OrderStatus} after the execution.
      *
-     * @throws NullPointerException     if <code>side</code>, <code>orderQty</code> or <code>price</code> are
-     *                                  <code>null</code>.
-     * @throws IllegalArgumentException if <code>price <= {@link Order#NO_PRICE}</code>,
+     * @throws NullPointerException     if any parameter is null.
+     * @throws IllegalArgumentException if <code>price <= {@link Order#NO_PRICE}}</code>,
      *                                  or <code>orderQty <= {@link Order#NO_QTY}</code>,
      *                                  or <code>orderQty > {@link OrderStatus#getLeavesQty()}</code>
-     *                                  or the {@link OrderBook} is empty on this <code>side</code>.
+     *                                  or the {@link OrderBook} is empty on this {@code side}.
      */
-    OrderStatus execute(final Side side, final Long orderQty, final BigDecimal price) throws NullPointerException,
-                                                                                             IllegalArgumentException;
+    OrderStatus execute(final Side side, final Long orderQty, final BigDecimal price);
 
     /**
-     * Cancels this <code>order</code>.
+     * Cancels this {@code order}.
      *
      * @param order {@link Order} to cancel.
      *
      * @return {@link OrderStatus} of cancelled {@link Order} with {@link OrdStatus#CANCELED} or {@link
      *         Optional#absent()} if {@code order} does not exist.
      *
-     * @throws NullPointerException if <code>order</code> is null.
+     * @throws NullPointerException if {@code order} is null.
      */
-    Optional<OrderStatus> cancel(final Order order) throws NullPointerException;
+    Optional<OrderStatus> cancel(final Order order);
 
     /**
-     * Gets the size of the book on this <code>side</code>.
+     * Gets the size of the book on this {@code side}.
      *
-     * @param side the size of the book will be returned for this <code>side</code>.
+     * @param side the size of the book will be returned for this {@code side}.
      *
-     * @return size of the book on this <code>side</code>.
+     * @return size of the book on this {@code side}.
+     *
+     * @throws NullPointerException if {@code side} is null.
      */
     int size(final Side side);
 
     /**
-     * Checks if the book is empty on this <code>side</code>.
+     * Checks if the book is empty on this {@code side}.
      *
      * @param side the side of the book to check.
      *
-     * @return <code>true</code> is this <code>side</code> of the book is empty, <code>false</code> otherwise.
+     * @return {@code true} is this {@code side} of the book is empty, {@code false} otherwise.
+     *
+     * @throws NullPointerException if {@code side} is null.
      */
     boolean isEmpty(final Side side);
 
@@ -103,8 +106,9 @@ public interface OrderBook {
      *
      * @param side side of {@link Order} to get.
      *
-     * @return first {@link Order} on this {@code side} or {@link Optional#absent()} if the book is empty on this
-     *         {@code side}.
+     * @return first {@link Order} on this {@code side}.
+     *
+     * @throws NullPointerException if {@code side} is null.
      */
     Optional<Order> peek(final Side side);
 
@@ -115,6 +119,8 @@ public interface OrderBook {
      *
      * @return the {@link OrderStatus} for this {@code order} or {@link Optional#absent()} if this {@link Order} is not
      *         in this {@link OrderBook}.
+     *
+     * @throws NullPointerException if {@code order} is null.
      */
     Optional<OrderStatus> getOrderStatus(final Order order);
 

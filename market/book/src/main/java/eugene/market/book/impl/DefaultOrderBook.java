@@ -61,8 +61,8 @@ public class DefaultOrderBook implements OrderBook {
         checkNotNull(orderStatus);
         checkArgument(orderStatus.getOrder().equals(order));
         checkArgument(order.getOrdType().isLimit());
-        getQueue(order.getSide()).offer(order);
-        orderStatusMap.put(order, orderStatus);
+        checkArgument(getQueue(order.getSide()).offer(order));
+        checkArgument(null == orderStatusMap.put(order, orderStatus));
         return orderStatus;
     }
 

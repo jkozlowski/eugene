@@ -24,8 +24,7 @@ import jade.content.onto.annotations.Slot;
  * The {@link ExecutionReport} message is used to:
  * <ul>
  * <li>Confirm the receipt of an order.</li>
- * <li>Confirm changes to an existing order (i.e. accept cancel and replace requests).</li>
- * <li>Relay order status information.</li>
+ * <li>Confirm changes to an existing order (i.e. accept cancel request).</li>
  * <li>Relay fill information on working orders.</li>
  * <li>Reject orders.</li>
  * </ul>
