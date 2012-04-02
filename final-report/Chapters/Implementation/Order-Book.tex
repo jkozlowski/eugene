@@ -1,4 +1,9 @@
 \section{Order Book (market/book/)}
+\label{Chapters/Implementation/Order-Book}
 This module implements the data structure behind a limit order book: two sorted lists of orders, one for the bid and one for the ask sides, and maintains the status of the limit orders. Due to this separation of concerns, the module is used both by the \texttt{Market~Agent} (\Cref{Chapters/Implementation/Market-Agent}) and \texttt{Client~API} (\Cref{Chapters/Background/Client-API}) modules, thus contributing to requirement \textit{N03}.
 
 Following the principles outlined in \Cref{Chapters/Implementation/Overall-Principles}, an interface is defined in \\ \texttt{eugene.market.book.OrderBook} that specifies the methods for inserting new orders, executing and cancelling existing orders, and inspecting the orders at the top of the book. There are two implementations: \texttt{eugene.market.book.impl.DefaultOrderBook} and a delegate \texttt{eugene.market.book.impl.ReadOnlyOrderBook}, both hidden in a private package behind \texttt{eugene.market.book.OrderBooks} factory.  
+
+Two classes represent an order: \texttt{Order} and \texttt{OrderStatus} (both located in the \texttt{eugene.market.book} package). Both classes are immutable, which makes them naturally thread-safe; this characteristic is very important in the implementation of the \texttt{Market Agent} (\Cref{Chapters/Implementation/Market-Agent}). The mutable state, i.e. the mapping from the current \texttt{OrderStatus} to \texttt{Order}, is maintained by the \texttt{OrderBook} implementations internally. Also, keeping the order characteristics (price, size, type) separate from the current execution status is also important for the \texttt{MarketDataEngine} (\Cref{Chapters/Implementation/Market-Agent}): this means that events can refer to a snapshot of a status of an order and this snapshot can be accessed at any time, as long as a reference to the appropriate \texttt{OrderStatus} is maintained.
+
+
