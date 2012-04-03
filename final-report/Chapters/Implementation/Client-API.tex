@@ -1,2 +1,7 @@
-\section{Client API}
+\section{Client API (market/client/)}
 \label{Chapters/Background/Client-API}
+The \texttt{Client API} fulfils requirement \textit{F10}. The primary purpose is to handle the intricacies of the simulation startup, provide  a single \texttt{Behaviour} responsible for receiving messages and routing them to the user code, and abstract away \texttt{JADE} messaging but instead provide simple method calls that construct \texttt{JADE} messages from \texttt{Market Ontology} objects. Additionally, \texttt{Client API} handles unique order id generation.
+
+Following the principles outlined in \Cref{Chapters/Implementation/Overall-Principles}, an interface is defined in \\ \texttt{eugene.market.client.Session} that specifies the methods for sending   and extracting \texttt{Market Ontology} objects from \texttt{JADE} messages. The implementation is located in \\\texttt{eugene.market.client.impl.SessionImpl}, however no client code uses this class directly. In order to connect to a \texttt{Market Agent} defined by the current \texttt{Simulation}, the \texttt{Trader Agent} will obtain a \texttt{Behaviour} that will establish the connection from \texttt{eugene.market.client.Sessions} factory. The actual implementation is located in \texttt{eugene.market.client.impl.SessionInitiator}, in a private package. 
+
+In order to establish a \texttt{Session}, the \texttt{Trader Agent} needs to provide an implementation of the \texttt{eugene.market.client.Application} interface, that will receive notifications of all messages that will sent and received by the \texttt{Session}.
