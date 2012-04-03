@@ -1,16 +1,16 @@
 \section{Market microstructure}
 \label{Chapters/Background/Market-Microstructure}
 
-In this section we describe the model of the market mechanism we will use in the simulator. We describe the market microstructure employed in major stock exchanges during continuous trading sessions, namely model of limit order book, and how it enables market participants to interact asynchronously (for a study of market microstructures in main stock exchanges, see~\cite{Comerton2004}). 
+In this section we describe the model of the market mechanism we will use in the simulator. We describe the market microstructure employed in major stock exchanges during continuous trading sessions, namely the model of a limit order book, and how it enables market participants to interact asynchronously (for a study of market microstructures in main stock exchanges, see~\cite{Comerton2004}). 
 
 
 \subsection{Instruments}
 Instruments are the different types of \textit{shares} that can be traded on a stock exchange, that represent ownership of a company. Every instrument is associated with a set of technicalities, such as the minimum tick size (minimum amount of money by which the price can change) or price variation controls (conditions for a market halt due to unexpected price volatility).
 
 \subsection{Order Types}
-Market participants indicate their willingness to trade in the form of trading instructions called \textit{orders}. We will consider only two types of orders: \textit{limit} and \textit{market} orders. A \textit{market order} specifies the instrument to trade, the quantity and the side of the trade (buy or sell). A \textit{limit order} additionally specifies a \textit{limit price}: maximum (buy) or minimum (sell) price that the trader accepts for an order. 
+Market participants indicate their willingness to trade in the form of trading instructions called \textit{orders}. We will consider only two types of orders: \textit{limit} and \textit{market} orders. A \textit{market order} specifies the instrument to trade, the quantity and the side of the trade (buy or sell). A \textit{limit order} additionally specifies a \textit{limit price}: the maximum (buy) or minimum (sell) price that the trader accepts for an order. 
 
-Traders can also cancel existing orders that have not been executed. \citet{Lilo2004} estimate that on the London Stock Exchange (LSE) on-book market, up to 30\% of outstanding limit orders are cancelled before execution and order cancellations play an important role in price formation process. 
+Traders can also cancel existing orders that have not been executed. \citet{Lilo2004} estimate that on the London Stock Exchange (LSE) on-book market, up to 30\% of outstanding limit orders are cancelled before execution and order cancellations play an important role in the price formation process. 
 
 \subsection{The limit order book}
 The limit order book is the leading market mechanism used by main stock exchanges during continuous trading. A limit order book for a single instrument consists of limit orders, sorted by price and time of arrival and stored in two queues: one for bid (buy) orders and one for ask (sell) orders. At a specific time $t$, the order book can be described as~\cite{Gilles2006}: 
