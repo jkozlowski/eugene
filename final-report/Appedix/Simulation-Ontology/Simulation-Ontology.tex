@@ -1,2 +1,32 @@
 \chapter{Simulation Ontology Messages}
 \label{Appendix/Simulation-Ontology}
+
+\subsection{Market data messages (eugene.market.ontology.message.data)}
+\begin{table}[ht]
+\begin{center}
+\begin{tabular}{l p{3in} p{1.5in}}
+
+\multicolumn{1}{l}{\textbf{Message}}  	    &
+\multicolumn{1}{l}{\textbf{Description}}    & 
+\multicolumn{1}{l}{\textbf{Fields [Type]}}	\\              
+\toprule
+
+LogonComplete & Sent by \texttt{Trader Agents} to indicate that the \texttt{Logon} procedure has been completed and the \texttt{Trader Agent} is ready to receive messages from the \texttt{Market Agent}. &   \\
+
+Start & Sent by the \texttt{Simulation Agent} to a \texttt{Trader Agent} in order to activate the \texttt{Trader Agent}. 
+& \texttt{startTime[Date]}, \texttt{stopTime[Date]} \\
+
+Started & Sent by either the \texttt{Market Agent} or the \texttt{Trader Agents} in reply to a \texttt{Start} message. & \\
+
+Stop	& Sent by the \texttt{Simulation Agent} to indicate that either:
+\begin{itemize}
+\item \texttt{Trader Agent}'s trading time has ended and the \texttt{Trader Agent} should cease sending messages to the \texttt{Market Agent} and terminate.
+\item The simulation has ended and therefore the recipient should terminate.
+\end{itemize}	& \\
+
+Stopped	& Sent by \texttt{Trader Agents} in reply to \texttt{Stop} message. & \\
+
+\end{tabular}
+\end{center}
+\caption{Simulation Ontology messages.}        
+\end{table}
