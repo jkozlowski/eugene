@@ -76,7 +76,7 @@ NEW, CANCELED, REJECTED, TRADE \\
 \subsection{Order management messages (eugene.market.ontology.message)}
 \begin{table}[htbp]
 \begin{center}
-\begin{tabular}{l l p{3in} p{1.5in}}
+\begin{tabular}{l p{1.2in} p{2.8in} p{1.5in}}
 
 \multicolumn{1}{l}{\textbf{Type}}            &
 \multicolumn{1}{l}{\textbf{Message}}  	    &
@@ -84,7 +84,7 @@ NEW, CANCELED, REJECTED, TRADE \\
 \multicolumn{1}{l}{\textbf{Fields [optional]}}	\\              
 \toprule
 
-8  & ExecutionReport & 
+8  & \footnotesize{ExecutionReport} & 
 The \texttt{ExecutionReport} message is used to:
 \begin{itemize}
 \item Confirm the receipt of an order.
@@ -102,13 +102,13 @@ First message sent by the Agent to the Market in order to register with the Mark
 \end{itemize} &
 \texttt{Symbol}, \texttt{SessionStatus[Yes]}  \\
 
-D	& NewOrderSingle & Used by agents wishing to submit securities orders to the Market for execution. &
+D	& \footnotesize{NewOrderSingle} & Used by agents wishing to submit securities orders to the Market for execution. &
 \texttt{ClOrdID}, \texttt{Symbol}, \texttt{Side}, \texttt{OrderQty}, \texttt{OrdType}, \texttt{Price[Yes]} \\
 
-9	& OrderCancelReject	& Issued by the Market upon receipt of a \texttt{OrderCancelRequest} message which cannot be honored. & 
+9	& \footnotesize{OrderCancelReject}	& Issued by the Market upon receipt of a \texttt{OrderCancelRequest} message which cannot be honored. & 
 \texttt{OrderID}, \texttt{ClOrdID}, \texttt{OrdStatus} \\
 
-F	& OrderCancelRequest	& Requests the cancellation of all of the remaining quantity of an existing order. &
+F	& \footnotesize{OrderCancelRequest}	& Requests the cancellation of all of the remaining quantity of an existing order. &
 \texttt{ClOrdID}, \texttt{Symbol}, \texttt{Side}, \texttt{OrderQty} \\
 
 \end{tabular}
@@ -121,7 +121,7 @@ F	& OrderCancelRequest	& Requests the cancellation of all of the remaining quant
 \subsection{Market data messages (eugene.market.ontology.message.data)}
 \begin{table}[ht]
 \begin{center}
-\begin{tabular}{l l p{3in} p{1.5in}}
+\begin{tabular}{l p{1in} p{3in} p{1.5in}}
 
 \multicolumn{1}{l}{\textbf{Type}}            &
 \multicolumn{1}{l}{\textbf{Message}}  	    &
