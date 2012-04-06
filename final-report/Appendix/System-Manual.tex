@@ -1,0 +1,25 @@
+\chapter{System Manual}
+
+\section{Requirements}
+\begin{itemize}
+\item JDK 1.6
+\item Maven3
+\item Git
+\end{itemize}
+
+\subsubsection*{Build}
+\begin{itemize}
+\item In the project root directory: \texttt{\$ mvn clean install}
+\item In the assembly directory: \texttt{\$ mvn clean install assembly:single}. This will generate a \texttt{.tar.gz} and a \texttt{.zip} archives in the \texttt{target/} subdirectory, containing the \texttt{diffr} jar, and a bash script each for \texttt{diff} and \texttt{patch}.
+\end{itemize}
+
+\subsubsection*{Running}
+\paragraph{diffr to standard out} \texttt{\$ ./diffr.sh <original-file> <new-file>}
+\paragraph{diffr to file} \texttt{\$ ./diffr.sh <original-file> <new-file> -o <patch-file>}
+
+\paragraph{patchr to standard out} \texttt{\$ ./patchr.sh <original-file> <new-file>}
+\paragraph{patchr to file} \texttt{\$ ./patchr.sh <original-file> <new-file> -o <patch-file>} 
+
+\subsubsection*{Source code}
+The source code is distributed with this report. Access to the \texttt{bitbucket.org} repository is available on demand. Please note that the group did not yet agree on the licence, therefore the sourcecode should not be distributed or used for any purpose, other than for marking. 
+
