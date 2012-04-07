@@ -1,0 +1,4 @@
+\section{Simulation Agent (simulation/agent/)}
+The \texttt{Simulation Agent} implements use case \textit{UC1}. It starts the \texttt{Market Agent}, awaits for messages that synchronise the start of \texttt{Trader Agents}, bootstraps the order book and starts and stops the simulation. 
+
+When starting the \texttt{Trader Agents}, \texttt{Simulation Agent} passes an implementation of \texttt{eugene.simulation.agent.Simulation} that defines methods for obtaining the address of the \texttt{Market Agent}, the \texttt{Simulation Agent} and the instrument definition (name, tick size and default price).

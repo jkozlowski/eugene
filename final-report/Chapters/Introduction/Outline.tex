@@ -1,0 +1,14 @@
+\section{Outline of the Report \label{Chapters/Introduction/Outline}}
+
+In \Cref{Chapters/Background/Market-Microstructure} we describe the model of the market mechanism we will use in the simulator. We describe the market architectures employed in the stock exchanges during continuous trading sessions, namely the model of a limit order book, and how it enables market participants to interact asynchronously.
+
+In \Cref{Chapters/Background/Agent-Based-Modelling} we summarise several artificial stock markets from the available literature. We provide a model of zero-intelligence agents that will be implemented by the Noise Traders, that is based on the work by~\citet[chap.~4]{Gilles2006}. Moreover, in order to provide a background for implementing a VWAP Trading Algorithm for the experiments, we survey available sources, most prominently the work in~\cite{Coggins2006, Kakade2004}. 
+
+\Cref{Chapters/Analysis-and-Design} and \ref{Chapters/Implementation} provide a summary of the main requirements that informed the design and highlight main principles that guided the implementation of the simulator. We describe main elements of an Algorithmic Trading System and \textit{Eugene's} place in that architecture. We provide the pseudo code for the algorithms implemented for the Noise Traders and VWAP Traders.
+
+\Cref{Chapters/Testing-and-Validation} summarises the steps taken to evaluate the implementation of the simulation, as well as it's efficacy in Testing Trading Algorithms. The results and analysis of experiments described in \Cref{Chapters/Implementation} are presented. Different levels of testing as they apply to the simulator are explained, from \textit{Unit-Testing} to following the method employed in~\cite[chap.~4]{Gilles2006} in order to validate the implementation of the Noise Traders.
+
+Finally, in \Cref{Chapters/Conclusion-and-Further-Work} we summarise the key points of this work, highlight the testing method developed and its applicability to testing Trading Algorithms. We then review the contributions and achievements and then provide the possible extensions on how to take this work forward.
+
+
+

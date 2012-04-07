@@ -1,0 +1,30 @@
+\begin{figure}[htbp]
+\begin{center} 
+\begin{tikzpicture}[node distance = 6em, auto]
+
+% Define block styles
+\tikzstyle{bus} = [rectangle, draw, 
+    text width=30em, text centered, minimum height=3em]
+\tikzstyle{line} = [draw, -latex']
+\tikzstyle{system} = [rectangle, draw, 
+    text width=5em, text centered, minimum height=5em]
+
+% Place nodes
+\node [bus] (databus) {\large{Market Data Bus}};
+\node [system, below of=databus, left=9.5em] (exchange) {Stock Exchange};
+\node [system, below of=databus] (ticks) {Tick Database};
+\node [system, below of=databus, right=9.5em] (algos) {Trading \\ Algorithms};
+\node [bus] [below of=ticks] (orderbus) {\large{Order Management System}};
+
+% Draw edges
+\path [line] (exchange.90) -- (databus.187);
+\path [line] (databus) -- (ticks);
+\path [line] (databus.-7) -- (algos.90);
+\path [line] (orderbus) -- (ticks);	
+\path [draw, -latex', <->] (orderbus.173) -- (exchange.-90);
+\path [draw, -latex', <->] (orderbus.7) -- (algos.-90);
+
+\end{tikzpicture}
+\end{center}
+\caption{Trading System Architecture}
+\end{figure}

@@ -1,0 +1,22 @@
+\section{Overall Principles}
+\label{Chapters/Implementation/Overall-Principles}
+In this section I will describe the overall programming and design principles that have informed the implementation of this system in order to later refer to them in the later sections that describe the particular modules of the system. The principles will be described in no particular order, as their scope usually cuts through different architectural levels.
+
+\paragraph{Design by contract and assertions} 
+\marginpar{Replace with an example from the codebase}
+Input is checked for correctness and the contract for the method or constructor parameters is clearly documented. To that end, \texttt{com.google.common.base.Preconditions} class from \texttt{guava-libraries}\cite{guava} is used extensively. The following is an example of a method that checks the \texttt{String} parameter for \texttt{null reference} and asserts that its length is not zero:
+\lstinputlisting[caption=Checking for \texttt{null reference} and length of the \textit{String} parameter]{Code/Implementation/Overall-Principles/checkNotNullExample.java}
+
+This method would have corresponding tests that check whether the correctness of parameters is correctly verified:
+\lstinputlisting[caption=The corresponding unit tests]{Code/Implementation/Overall-Principles/checkNotNullTestExample.java}
+
+Similarly, post-conditions and invariants would be verified. Strict adherence to these principles allows for much safer code that is guaranteed to be used correctly.
+
+\paragraph{Separation of concerns, programming to an interface and information hiding}
+The code is separated into many modules, so that responsibility of each part of the code is very strictly defined. The APIs between different modules are defined in terms of interfaces and specific implementations are hidden behind factories and private packages. The following is an example from the \textit{market/book} module:
+\lstinputlisting[caption=market/book/src/main/java/eugene/market/book/OrderBook.java]{Code/Implementation/Overall-Principles/OrderBook.java}
+\lstinputlisting[caption=market/book/src/main/java/eugene/market/book/OrderBooks.java]{Code/Implementation/Overall-Principles/OrderBooks.java}
+
+\paragraph{Immutable objects}
+An object is considered immutable if its state cannot be changed after it is constructed. Reliance on immutable objects is considered a sound strategy for creating simple code. Immutable objects have an additional advantage of being naturally \textit{thread-safe}: since there is no state that can be changed, they can be safely shared by multiple threads, without interference. The following is an example from the \textit{market/book} module:
+\lstinputlisting[caption=market/book/src/main/java/eugene/market/book/OrderBooks.java]{Code/Implementation/Overall-Principles/Order.java}

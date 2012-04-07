@@ -1,0 +1,12 @@
+\section{Trading System Design} 
+
+\input{Trading-System-Architecture}
+
+\marginpar{Add a reference.}
+Various market participants submit orders to the stock exchange in order to trade. Different stock exchanges publish messages about the submitted/executed orders in a variety of formats. In order to deal with this complexity investment banks have developed internal market data buses that subscribe to feeds published by different stock exchanges in order to republish them in a standardised way to various internal systems, e.g. Trading Algorithms.
+
+Similarly, in order to deal with complexity of submitting orders to different exchanges investment banks develop order management systems that register with various stock exchanges in order to provide a standardised way of submitting orders for various internal systems, e.g. Trading Algorithms, but also to allow Automatic Order Routing between different stock exchanges and enhance other back-office roles.
+
+Historical data is stored in Tick Databases that subscribe to the market data bus in order to perform statistical analysis on the behaviour of different stocks. The result of the statistical analysis is a set of parameters which describe various aspects of stock behaviour. The parameters are published to various internal systems, e.g. Trading Algorithms.
+
+Trading Algorithms are highly sophisticated and parameterised systems which accept parent orders and execute them using different strategies. Trading Algorithms register with the market data bus in order to react to the current situation on the market. They continuously compare the behaviour of stocks with their historical behaviour (using data and analysis from the tick database) in order to minimise market impact of the different strategies. Having described the architecture of a trading system inside an investment bank, we can now turn to analyse how to approach testing the trading algorithms that operate within this architecture.

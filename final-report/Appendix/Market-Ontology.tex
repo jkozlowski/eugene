@@ -1,0 +1,137 @@
+\chapter{Market Ontology Messages}
+\label{Appendix/Market-Ontology}
+
+\section{Fields (eugene.market.ontology.field)}
+
+\subsection{Single valued fields}
+
+\begin{table}[htbp]
+\begin{center}
+\begin{tabular}{l l p{3.5in} l}
+
+\multicolumn{1}{l}{\textbf{Tag}}            &
+\multicolumn{1}{l}{\textbf{Field}}  	    &
+\multicolumn{1}{l}{\textbf{Description}}    & 
+\multicolumn{1}{l}{\textbf{Type}}		   	\\              
+\toprule
+
+6  	& AvgPx  	& Average price of all fills of an order. & BigDecimal \\
+
+11 	& ClOrdID	& Unique identifier for an order as assigned by the Agent originating the trade. Uniqueness must be guaranteed within a single trading day. & String \\
+
+14	& CumQty	& Total quantity (e.g. number of shares) filled. & Long \\
+
+31  & LastPx	& Price of execution.	& BigDecimal \\
+
+32  & LastQty	& Quantity executed.	& Long	     \\
+
+151	& LeavesQty	& Quantity open for further execution. If the \texttt{OrdStatus} is \texttt{OrdStatus\#CANCELLED} or \texttt{OrdStatus\#REJECTED} (in which case the order is no longer active) then \texttt{LeavesQty} could be $0$, otherwise $\mbox{LeavesQty} = \mbox{OrderQty} - \mbox{CumQty}$. & Long \\
+
+37	& OrderID	& Unique identifier for Order as assigned by the Market. Uniqueness must be guaranteed within a single trading day.  & String \\
+
+38  & OrderQty	& Quantity ordered.	& Long \\
+
+44	& Price 	& Price per unit of quantity.	& BigDecimal  \\
+
+55	& Symbol 	& Ticker symbol. Common, "human understood" representation of the security.	& String \\
+
+17	& TradeID	& The unique ID assigned to the execution by the Market Agent. & String \\
+
+\end{tabular}
+\end{center}
+\caption{\texttt{Market Ontology} single valued fields.}        
+\end{table}
+
+\pagebreak
+\subsection{Enum fields}
+\begin{table}[ht]
+\begin{center}
+\begin{tabular}{l l p{3in} p{1.5in}}
+
+\multicolumn{1}{l}{\textbf{Tag}}            &
+\multicolumn{1}{l}{\textbf{Field}}  	    &
+\multicolumn{1}{l}{\textbf{Description}}    & 
+\multicolumn{1}{l}{\textbf{Values}}			\\              
+\toprule
+
+150  & ExecType  & Describes the specific \texttt{ExecutionReport}'s status. & 
+NEW, CANCELED, REJECTED, TRADE \\
+
+39	 & OrdStatus & Identifies current status of order. & NEW, PARTIALLY\_FILLED, FILLED, CANCELLED, REJECTED \\
+
+40	 & OrdType	& Order type.	& MARKET, LIMIT	\\
+
+1409 & SessionStatus	& Session status at time of \texttt{Logon}. Field is intended to be used when the \texttt{Logon} is sent as an acknowledgement from acceptor of the \texttt{Logon} message.	& SESSION\_ACTIVE  \\
+
+54	& Side		& Side of order.	& BUY, SELL \\
+\end{tabular}
+\end{center}
+\caption{\texttt{Market Ontology} enum fields.}        
+\end{table}
+
+\section{Messages}
+\subsection{Order management messages (eugene.market.ontology.message)}
+\begin{table}[htbp]
+\begin{center}
+\begin{tabular}{l p{1.2in} p{2.8in} p{1.5in}}
+
+\multicolumn{1}{l}{\textbf{Type}}            &
+\multicolumn{1}{l}{\textbf{Message}}  	    &
+\multicolumn{1}{l}{\textbf{Description}}    & 
+\multicolumn{1}{l}{\textbf{Fields [optional]}}	\\              
+\toprule
+
+8  & \footnotesize{ExecutionReport} & 
+The \texttt{ExecutionReport} message is used to:
+\begin{itemize}
+\item Confirm the receipt of an order.
+\item Confirm changes to an existing order (i.e. accept cancel request).
+\item Relay fill information on working orders.
+\item Reject orders.
+\end{itemize} &
+\texttt{ExecType}, \texttt{Symbol}, \texttt{Side}, \texttt{LeavesQty}, \texttt{CumQty}, \texttt{AvgPx[Yes]}, \texttt{OrdStatus}, \texttt{OrderID}, \texttt{ClOrdID}, \texttt{LastPx[Yes]}, \texttt{LastQty[Yes]}  \\
+
+A	& Logon & 
+First message sent by the Agent to the Market in order to register with the Market.
+\begin{itemize}
+\item As a result, the Agent will receive data feed updates.
+\item If logon was successful, the Market will send back the same \texttt{Logon} message with \texttt{Logon\#SessionStatus} equal to \texttt{SessionStatus\#SESSION\_ACTIVE}, otherwise this field will be \texttt{null}. 
+\end{itemize} &
+\texttt{Symbol}, \texttt{SessionStatus[Yes]}  \\
+
+D	& \footnotesize{NewOrderSingle} & Used by agents wishing to submit securities orders to the Market for execution. &
+\texttt{ClOrdID}, \texttt{Symbol}, \texttt{Side}, \texttt{OrderQty}, \texttt{OrdType}, \texttt{Price[Yes]} \\
+
+9	& \footnotesize{OrderCancelReject}	& Issued by the Market upon receipt of a \texttt{OrderCancelRequest} message which cannot be honored. & 
+\texttt{OrderID}, \texttt{ClOrdID}, \texttt{OrdStatus} \\
+
+F	& \footnotesize{OrderCancelRequest}	& Requests the cancellation of all of the remaining quantity of an existing order. &
+\texttt{ClOrdID}, \texttt{Symbol}, \texttt{Side}, \texttt{OrderQty} \\
+
+\end{tabular}
+\end{center}
+\caption{Order management messages.}        
+\end{table}
+\clearpage
+
+\subsection{Market data messages (eugene.market.ontology.message.data)}
+\begin{table}[ht]
+\begin{center}
+\begin{tabular}{l p{1in} p{3in} p{1.5in}}
+
+\multicolumn{1}{l}{\textbf{Type}}            &
+\multicolumn{1}{l}{\textbf{Message}}  	    &
+\multicolumn{1}{l}{\textbf{Description}}    & 
+\multicolumn{1}{l}{\textbf{Fields [optional]}}	\\              
+\toprule
+
+BP0x21	& AddOrder & Represents a newly accepted visible order on the order book. & \texttt{OrderID}, \texttt{Symbol}, \texttt{Side}, \texttt{OrderQty}, \texttt{Price}  \\
+
+BP0x29	& DeleteOrder	& Sent whenever an open order is completely cancelled. The \texttt{OrderID} refers to the \texttt{OrderID} of the original \texttt{AddOrder} message. & \texttt{OrderID} \\
+
+BP0x23	& OrderExecuted	& Sent when a visible order on the order book is executed in whole or in part at a price. The \texttt{OrderID} refers to the \texttt{OrderID} of the original \texttt{AddOrder} message. & \texttt{OrderID}, \texttt{LastQty}, \texttt{LeavesQty}, \texttt{LastPx}, \texttt{TradeID} \\
+
+\end{tabular}
+\end{center}
+\caption{Market data messages.}        
+\end{table}

@@ -1,0 +1,8 @@
+\section{jade-unit (jade-unit/)}
+In order to fulfil requirement \textit{NF04}, there needs to be a way to create and tear down an arbitrary number of \texttt{JADE} containers, potentially within a single JVM. Being able to do that would allow for reuse of existing testing tools and frameworks. 
+
+There exists a \texttt{Test Suite Framework} available through the official \texttt{JADE} website, however it seemed like maintaining two entirely different testing environments would be an unnecessary complication.
+
+Unfortunately, the \textit{JADE} version as available on the official website contains a messaging module for sending messages to external nodes that opens a socket, and renders creating multiple \texttt{JADE} containers impossible.
+
+Luckily, \texttt{JADE} architecture is modular and hence the implementation of the messaging module can be replaced. \texttt{jade-unit} extension implements a no-op messaging module that simply ignores any messages directed to it. This allows the integration tests to reuse the entire testing architecture employed for unit tests. It is expected that the patch file with \texttt{jade-unit} extension will find its way to the \texttt{JADE} maintainers, in due time.

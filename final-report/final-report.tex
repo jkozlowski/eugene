@@ -1,0 +1,99 @@
+\documentclass[ openright,titlepage,numbers=noenddot,headinclude,%twoside,
+                footinclude=true,BCOR=5mm,paper=a4,fontsize=12pt,a4paper,english%
+                ]{scrreprt}
+\input{classicthesis-config}
+
+\begin{document}
+
+
+\input{FrontBackmatter/Titlepage}
+\input{FrontBackmatter/Contents}
+\input{FrontBackmatter/Abstract}
+
+\pagestyle{scrheadings}
+%\doublespacing
+
+\chapter{Introduction}
+\label{Chapters/Introduction}
+\input{Chapters/Introduction/Introduction}
+\input{Chapters/Introduction/Motivation}
+\input{Chapters/Introduction/Null-Hypotheses}
+\input{Chapters/Introduction/Research-Methodology}
+\input{Chapters/Introduction/Outline}
+
+\chapter{Background}
+\input{Chapters/Background/Market-Microstructure}
+\input{Chapters/Background/Agent-Based-Modelling}
+\input{Chapters/Background/VWAP-Trading}
+
+\chapter{Analysis and Design}
+\label{Chapters/Analysis-and-Design}
+\input{Chapters/Analysis-and-Design/Analysis-and-Design}
+\input{Chapters/Analysis-and-Design/Trading-System-Design}
+\input{Chapters/Analysis-and-Design/Simulating-Trading-System}
+\input{Chapters/Analysis-and-Design/Requirements-Analysis}
+\input{Chapters/Analysis-and-Design/Use-Case-Analysis}
+
+\chapter{Implementation and Testing}
+\label{Chapters/Implementation}
+\input{Chapters/Implementation/Overall-Principles}
+\input{Chapters/Implementation/Overall-Architecture}
+\input{Chapters/Implementation/Jade-Unit}
+\input{Chapters/Implementation/Order-Book}
+\input{Chapters/Implementation/Simulation-Ontology}
+\input{Chapters/Implementation/Simulation-Agent}
+\input{Chapters/Implementation/Market-Ontology}
+\input{Chapters/Implementation/Market-Agent}
+\input{Chapters/Implementation/Client-API}
+
+\chapter{Experiments and Results}
+\label{Chapters/Testing-and-Validation}
+
+\begin{itemize}
+\item Describe your testing strategy (unit, functional, acceptance testingand how they are carried out). How were test cases selected.\item Examples of specific tests and how they were carried out (e.g., using mock objects to break dependencies). Focus on the interesting cases.\item A summary of the test results and what coverage was achieved. The detailed test report(s) should appear in the appendix.
+\end{itemize}
+If your project requires substantial evaluation of data and results, or other forms of testing that are not code-based, then adapt this chapter to suit.This chapter will typically be 2-4 pages in length but could be more de- pending on the depth of testing done.
+
+\chapter{Conclusions and Further Work}
+\label{Chapters/Conclusion-and-Further-Work}
+
+\begin{itemize}
+\item Summary.
+\item Conclusions.
+\item How to use it and take it further.
+\end{itemize}
+
+
+\begin{itemize}
+\item A summary of what the project has achieved. Address each goal setout in the introduction.\item A critical evaluation of the results of the project (e.g., how well were the goals met, is the application fit for purpose, has good design and implementation practice been followed, was the right implementation technology chosen and so on).\item Future work. How could the project be developed if you had another 6 months.\item Wrap-up and final thoughts on your project.
+\end{itemize}
+This chapter is typically 2-4 pages long but could be longer if the projectwork requires more extensive evaluation.
+
+\appendix
+\input{Appendix/Simulation-Ontology}
+\input{Appendix/Market-Ontology}
+\input{Appendix/System-Manual}
+\chapter{Appendix}
+
+\begin{itemize}
+\item User manual - how to use it.
+\item System manual = how to compile, make changes etc.
+\item If overflowing, drop page numbers on Appendixes.
+\item Have code examples that are being referred form Implementation.
+\item Experiment results. 
+\end{itemize}
+
+
+%\end{onehalfspace}
+
+%\begin{singlespace}
+%\begin{footnotesize}
+%\begin{twocolumn}
+\bibliographystyle{plainnat}
+%\bibliographystyle{IEEEtran}
+\bibliography{Bibliography}
+%\end{twocolumn}
+%\end{footnotesize}
+%\end{singlespace}
+
+\end{document}

@@ -1,0 +1,40 @@
+\section{VWAP Trading}
+Whenever a large institutional investor wants to take a position or liquidate a holding, the execution of the transaction is faced with price risk. Simply putting a large limit order onto the limit order book would give an incentive to other investors to change their prices and hence drive the cost of executing the order unnecessarily high. 
+
+The solution is to split the parent order into smaller child orders in order to hide the intent of the investor and keep the market impact under control. Traditionally, such task would be delegated to human traders, however following the advent of algorithmic trading, it is usually a machine that executes the order. The quality of execution is measured by comparing against an appropriate benchmark.
+
+Among the most popular benchmarks is \textit{VWAP} or \textit{Volume Weighted Average Price}, that is a measure of average price achieved in the market. When used to measure the quality of execution of an algorithm, the volume weighted prices achieved by the algorithm are compared to all the  other trades that occurred in the market during the period of the algorithm's activity. 
+
+A \textit{VWAP Algorithm} attempts to buy or sell a fixed number of shares at a price that closely tracks the \textit{VWAP} of the market. Therefore, the problem of tracking the market \textit{VWAP} can be stated in terms of splitting the order into a series of smaller orders, whose size corresponds to the forecast intra-day volume pattern of a stock. 
+
+\subsection{The Price-Volume Trading Model}
+In \textit{price-volume trading model}~\cite{Kakade2004}, the \textit{intra-day} trading activity can be summarised by a discrete sequence of price and volume pairs $(p_t, v_t)$, for $t=1,\ldots,T$. Each pair represents the fact that a total volume of shares $v_t$ was traded at a price $p_t$. 
+
+Assume that there is a trading algorithm $A$ that traded during this period.  Then, the market \textit{VWAP}, $VWAP_m$, for an intraday trading sequence $S_m = (p_1, v_1), \ldots, (p_T, v_T)$ that excludes the trades executed by the algorithm $A$, is then defined as follows:
+\begin{equation}  
+\label{Equation/Market-Vwap}
+VWAP_m(S_m) = \frac{\left( \displaystyle\sum\limits_{t=0}^T (p_t, v_t) \right)}{\displaystyle\sum\limits_{t=0}^T v_tV}
+\end{equation}
+
+Similarly, the \textit{VWAP} the algorithm $A$, $VWAP_A$, for a sequence $S_A = (p_1, v_1), \ldots, (p_T, v_t)$ is defined as follows:
+\begin{equation}  
+\label{Equation/Algo-Vwap}
+VWAP_A(S_A) = \frac{\left( \displaystyle\sum\limits_{t=0}^T (p_t, v_t) \right)}{\displaystyle\sum\limits_{t=0}^T v_t}
+\end{equation}
+
+Having defined what a \textit{VWAP} is, we will now turn to an implementation of a \textit{VWAP Algorithm}.
+
+\subsection{VWAP Trading Algorithm under the price-volume trading model}
+\citet{Coggins2006} define the following rule based approach to a \textit{VWAP} buy execution:
+\begin{enumerate}
+\item Divide the trading period into time slots, allocating a given percentage of trade volume to each time interval.
+\item At each time slot, submit a limit order of the specified size at the best bid.
+\item If within $x$ minutes, the best bid has gone up and our order has not executed, amend the order to the best bid.
+\item If by the end of the time slot, the order has not fully completed, amend it to become a market order to force completion.
+\end{enumerate}
+
+This algorithm will be used in our experiments with \textit{VWAP algorithms}.
+
+
+
+

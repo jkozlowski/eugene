@@ -1,0 +1,69 @@
+\section{Requirements Analysis}
+Having analysed available literature on the design of asynchronous, limit order book markets in \Cref{Chapters/Background/Market-Microstructure}, as well as existing Agent-Based ASMs in \Cref{Chapters/Background/Agent-Based-Modelling}, we will now list the requirements that the trading simulator needs to satisfy.
+
+Requirements are prioritised according to the MoSCoW approach:
+
+\begin{itemize}
+\item M - Must - These requirements are the highest priority must be completed to ensure project success.
+\item S - Should - These requirements are high priority and will be completed after the M requirements.
+\item C - Could - These requirements will be worked on only if there is time after the M and S requirements or if they do not interfere with the progress of the higher priority tasks.
+\item W - Would - These requirements most probably will not be done and are not necessary for the completion and success of the project but are good ideas for future work.
+\end{itemize}
+
+\subsection{Functional Requirements}
+\begin{center}
+\begin{longtable}[htbp]{c p{4.2in} c }
+
+\multicolumn{1}{c}{\textbf{ID}}           &
+\multicolumn{1}{c}{\textbf{Requirement}}  &
+\multicolumn{1}{c}{\textbf{Priority}}     \\              
+\toprule
+
+\multicolumn{3}{c}{\textbf{Market Agent}}   	         \\
+F01  & The Market Agent shall match orders on the limit order book & M \\ 
+F02  & The Market Agent shall accept limit/market orders and order cancellations. & M \\
+F03  & The Market Agent shall provide \textit{level 2} market data access with anonymous order ids. & M \\
+F04  & The Market Agent shall report order executions and status changes back to the order owner. & M \\ 
+
+\multicolumn{3}{c}{\textbf{Simulation Agent}}   \\
+F05  & The Simulation Agent shall start all specified agents.  & M \\
+F06  & The Simulation Agent shall synchronise the start of a simulation. & M \\
+F07  & The Simulation Agent shall stop a simulation after a specified amount of time. & M \\
+F09  & The Simulation Agent shall bootstrap the limit order book before starting the simulation. & M \\ 
+
+\multicolumn{3}{c}{\textbf{Client API}}   \\
+F10  & The Client API shall handle the low-level interaction with the Market Agent and Simulation Agent and provide callback methods for receiving messages. & M \\
+
+\multicolumn{3}{c}{\textbf{Other}}   		             \\
+F11  & The System shall log all events to a file.        & M \\
+         
+\end{longtable}
+\end{center}
+
+\needspace{11\baselineskip}
+\subsection{Non Functional Requirements}
+
+\marginpart{Is N02 a functional requirement?} 
+
+\begin{table}[htbp]
+\begin{center}
+\begin{longtable}{c p{4.2in} c }
+
+\multicolumn{1}{c}{\textbf{ID}}           &
+\multicolumn{1}{c}{\textbf{Requirement}}  &
+\multicolumn{1}{c}{\textbf{Priority}}     \\        
+\toprule
+
+N01  & The System shall handle incoming order rate of              & M \\
+N02  & The System shall maintain $\geq70\%$ unit test coverage.    & M \\
+N03  & The System shall be highly modular and decoupled.           & M \\
+N04  & The System shall be integration tested.	                   & M \\
+N05  & The System shall be $100\%$ javadoced.	                   & M \\
+N06  & The System shall closely approximate message types and formats of industry standard messaging formats. & M \\
+N07  & The System shall be implemented on top of JADE Framework.   & M \\
+N08  & The System shall publish performance statistics at runtime. & C \\
+ 
+\end{longtable}
+\end{center}
+\end{table}
+
