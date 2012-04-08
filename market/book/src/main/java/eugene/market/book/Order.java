@@ -5,6 +5,8 @@
  */
 package eugene.market.book;
 
+import com.google.common.base.Objects;
+import com.google.common.base.Objects.ToStringHelper;
 import eugene.market.ontology.field.enums.OrdType;
 import eugene.market.ontology.field.enums.Side;
 
@@ -238,13 +240,13 @@ public class Order implements Comparable<Order> {
 
     @Override
     public String toString() {
-        final StringBuilder b = new StringBuilder("Order[");
-        b.append("entryTime=").append(entryTime);
-        b.append(", orderID='").append(orderID).append('\'');
-        b.append(", side=").append(side);
-        b.append(", ordType=").append(ordType);
-        b.append(", price=").append(price);
-        b.append(", orderQty=").append(orderQty).append(']');
-        return b.toString();
+        final ToStringHelper toString = Objects.toStringHelper(Order.class);
+        toString.add("entryTime", entryTime);
+        toString.add("orderID", orderID);
+        toString.add("side", side);
+        toString.add("ordType", ordType);
+        toString.add("price", price);
+        toString.add("orderQty", orderQty);
+        return toString.toString();
     }
 }

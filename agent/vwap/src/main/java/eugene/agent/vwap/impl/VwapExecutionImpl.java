@@ -5,6 +5,8 @@
  */
 package eugene.agent.vwap.impl;
 
+import com.google.common.base.Objects;
+import com.google.common.base.Objects.ToStringHelper;
 import eugene.agent.vwap.VwapExecution;
 import eugene.market.ontology.field.enums.Side;
 
@@ -87,12 +89,10 @@ public class VwapExecutionImpl implements VwapExecution {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder();
-        sb.append("VwapExecutionImpl");
-        sb.append("[quantity=").append(quantity);
-        sb.append(", side=").append(side);
-        sb.append(", targets=").append(targets);
-        sb.append(']');
-        return sb.toString();
+        final ToStringHelper toString = Objects.toStringHelper(this);
+        toString.add("quantity", quantity);
+        toString.add("side", side);
+        toString.add("targets", targets);
+        return toString.toString();
     }
 }

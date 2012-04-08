@@ -5,6 +5,9 @@
  */
 package eugene.agent.vwap.impl;
 
+import com.google.common.base.Objects;
+import com.google.common.base.Objects.ToStringHelper;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -104,11 +107,9 @@ public final class VwapBucket implements Comparable<VwapBucket> {
      */
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder();
-        sb.append("VwapBucket");
-        sb.append("[cumVolume=").append(cumVolume);
-        sb.append(", deadline=").append(format.format(deadline.getTime()));
-        sb.append(']');
-        return sb.toString();
+        final ToStringHelper toString = Objects.toStringHelper(this);
+        toString.add("cumVolume", cumVolume);
+        toString.add("deadline", format.format(deadline.getTime()));
+        return toString.toString();
     }
 }

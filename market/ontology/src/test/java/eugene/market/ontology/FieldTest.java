@@ -8,6 +8,8 @@ package eugene.market.ontology;
 import org.testng.annotations.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasToString;
 import static org.hamcrest.Matchers.is;
 
 /**
@@ -101,6 +103,6 @@ public class FieldTest {
     public void testToString() {
         final TestField testField = new TestField();
         testField.setValue(1L);
-        assertThat(testField.toString(), is("TestField=1"));
+        assertThat(testField, hasToString(equalTo("TestField{value=1}")));
     }
 }

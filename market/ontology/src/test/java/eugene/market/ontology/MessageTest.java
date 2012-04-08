@@ -13,6 +13,8 @@ import java.util.TreeMap;
 
 import static eugene.market.ontology.Defaults.defaultPrice;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasToString;
 import static org.hamcrest.Matchers.is;
 
 /**
@@ -58,6 +60,6 @@ public class MessageTest {
         final TestMessage testMessage = new TestMessage();
         testMessage.setField(Side.TAGi, new Side(Side.BUY));
         testMessage.setField(Price.TAGi, new Price(defaultPrice));
-        assertThat(testMessage.toString(), is("TestMessage[Price=" + defaultPrice + ", Side=1]"));
+        assertThat(testMessage, hasToString(equalTo("TestMessage{Price=" + defaultPrice + ", Side=1}")));
     }
 }

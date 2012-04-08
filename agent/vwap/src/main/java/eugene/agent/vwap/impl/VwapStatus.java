@@ -6,6 +6,8 @@
 package eugene.agent.vwap.impl;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Objects;
+import com.google.common.base.Objects.ToStringHelper;
 import com.google.common.collect.PeekingIterator;
 import eugene.agent.vwap.VwapExecution;
 import eugene.market.book.Order;
@@ -300,14 +302,12 @@ public final class VwapStatus extends OrderReferenceListenerAdapter {
      */
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder();
-        sb.append("VwapStatus");
-        sb.append("[vwapExecution=").append(vwapExecution);
-        sb.append(", deadline=").append(format.format(deadline.getTime()));
-        sb.append(", bucketSize=").append(bucketSize);
-        sb.append(", buckets=").append(buckets);
-        sb.append(", cumVolume=").append(cumVolume);
-        sb.append(']');
-        return sb.toString();
+        final ToStringHelper toString = Objects.toStringHelper(this);
+        toString.add("vwapExecution", vwapExecution);
+        toString.add("deadline", format.format(deadline.getTime()));
+        toString.add("bucketSize", bucketSize);
+        toString.add("buckets", buckets);
+        toString.add("cumVolume", cumVolume);
+        return toString.toString();
     }
 }

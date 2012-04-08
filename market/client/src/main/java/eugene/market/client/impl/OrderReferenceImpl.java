@@ -5,6 +5,8 @@
  */
 package eugene.market.client.impl;
 
+import com.google.common.base.Objects;
+import com.google.common.base.Objects.ToStringHelper;
 import com.google.common.primitives.Longs;
 import eugene.market.book.Order;
 import eugene.market.client.OrderReference;
@@ -211,19 +213,17 @@ public final class OrderReferenceImpl implements OrderReference {
      */
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder();
-        sb.append("OrderReferenceImpl");
-        sb.append("[creationTime=").append(creationTime);
-        sb.append(", clOrdID='").append(clOrdID).append('\'');
-        sb.append(", side=").append(side);
-        sb.append(", ordType=").append(ordType);
-        sb.append(", price=").append(price);
-        sb.append(", orderQty=").append(orderQty);
-        sb.append(", ordStatus=").append(ordStatus);
-        sb.append(", avgPx=").append(avgPx);
-        sb.append(", leavesQty=").append(leavesQty);
-        sb.append(", cumQty=").append(cumQty);
-        sb.append(']');
-        return sb.toString();
+        final ToStringHelper toString = Objects.toStringHelper(OrderReferenceImpl.class);
+        toString.add("creationTime", creationTime);
+        toString.add("clOrdID", clOrdID);
+        toString.add("side", side);
+        toString.add("ordType", ordType);
+        toString.add("price", price);
+        toString.add("orderQty", orderQty);
+        toString.add("ordStatus", ordStatus);
+        toString.add("avgPx", avgPx);
+        toString.add("leavesQty", leavesQty);
+        toString.add("cumQty", cumQty);
+        return toString.toString();
     }
 }

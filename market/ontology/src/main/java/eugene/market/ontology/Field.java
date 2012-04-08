@@ -5,6 +5,8 @@
  */
 package eugene.market.ontology;
 
+import com.google.common.base.Objects;
+import com.google.common.base.Objects.ToStringHelper;
 import jade.content.Concept;
 import jade.content.onto.annotations.Element;
 import jade.content.onto.annotations.Slot;
@@ -146,9 +148,8 @@ public abstract class Field<V> implements Concept {
      */
     @Override
     public String toString() {
-        final StringBuffer b = new StringBuffer();
-        b.append(getClass().getSimpleName());
-        b.append("=").append(value);
-        return b.toString();
+        final ToStringHelper toString = Objects.toStringHelper(getClass());
+        toString.add("value", value);
+        return toString.toString();
     }
 }

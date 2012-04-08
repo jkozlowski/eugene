@@ -5,10 +5,11 @@
  */
 package eugene.market.ontology;
 
+import com.google.common.base.Objects;
+import com.google.common.base.Objects.ToStringHelper;
 import jade.content.AgentAction;
 import jade.content.onto.annotations.SuppressSlot;
 
-import java.util.Iterator;
 import java.util.TreeMap;
 
 
@@ -78,21 +79,13 @@ public abstract class Message implements AgentAction {
 
     @Override
     public String toString() {
-        final StringBuffer b = new StringBuffer();
-        b.append(getClass().getSimpleName()).append("[");
+        final ToStringHelper toString = Objects.toStringHelper(getClass());
 
-        final Iterator<Field<?>> iterator = fields.values().iterator();
-        while (iterator.hasNext()) {
-            final Field<?> f = iterator.next();
-            b.append(f.getClass().getSimpleName()).append("=").append(f.getValue());
-
-            if (iterator.hasNext()) {
-                b.append(", ");
-            }
+        for (final Field<?> field : fields.values()) {
+            toString.add(field.getClass().getSimpleName(), field.getValue());
         }
 
-        b.append("]");
-        return b.toString();
+        return toString.toString();
     }
 }
 
