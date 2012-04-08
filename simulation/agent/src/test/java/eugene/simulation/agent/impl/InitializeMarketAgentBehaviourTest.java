@@ -5,7 +5,7 @@
  */
 package eugene.simulation.agent.impl;
 
-import eugene.market.esma.MarketAgent;
+import eugene.market.agent.MarketAgent;
 import eugene.utils.behaviour.BehaviourResult;
 import jade.core.Profile;
 import jade.imtp.memory.MemoryProfile;

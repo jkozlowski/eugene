@@ -6,7 +6,7 @@
 package eugene.market.client;
 
 import eugene.market.client.impl.SessionInitiator;
-import eugene.market.esma.MarketAgent;
+import eugene.market.agent.MarketAgent;
 import eugene.simulation.agent.Simulation;
 import eugene.simulation.agent.SimulationAgent;
 import jade.core.Agent;

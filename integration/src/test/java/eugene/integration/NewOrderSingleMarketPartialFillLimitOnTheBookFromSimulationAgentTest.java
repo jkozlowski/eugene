@@ -42,7 +42,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import static eugene.integration.CountingApplication.TIMEOUT;
 import static eugene.market.client.Applications.proxy;
 import static eugene.market.client.Sessions.initiate;
-import static eugene.market.esma.AbstractMarketAgentTest.getNakedContainer;
+import static eugene.market.agent.AbstractMarketAgentTest.getNakedContainer;
 import static eugene.market.ontology.Defaults.defaultOrdQty;
 import static eugene.market.ontology.Defaults.defaultOrderID;
 import static eugene.market.ontology.Defaults.defaultPrice;

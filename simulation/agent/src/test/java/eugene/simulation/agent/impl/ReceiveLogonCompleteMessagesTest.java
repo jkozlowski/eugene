@@ -5,7 +5,7 @@
  */
 package eugene.simulation.agent.impl;
 
-import eugene.market.esma.MarketAgent;
+import eugene.market.agent.MarketAgent;
 import eugene.market.ontology.MarketOntology;
 import eugene.simulation.agent.Simulation;
 import eugene.simulation.agent.Symbol;

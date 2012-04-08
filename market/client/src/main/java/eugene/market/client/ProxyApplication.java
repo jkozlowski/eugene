@@ -5,10 +5,10 @@
  */
 package eugene.market.client;
 
-import eugene.market.esma.impl.Messages;
+import eugene.market.ontology.Message;
 
 /**
- * Proxies {@link Messages}s to <code>applications</code>.
+ * Proxies {@link Message}s to <code>applications</code>.
  *
  * @author Jakub D Kozlowski
  * @since 0.7

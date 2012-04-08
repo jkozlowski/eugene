@@ -8,7 +8,7 @@
 === Experiments [experiment]
 * Bootstrap order book in experiments.
 
-=== Market Agent [market/esma]
+=== Market Agent [market/agent]
 * Add trader ids to execution log messages.
 
 === VWAP Agent [agent/vwap]
@@ -44,7 +44,7 @@
 === Client API [market/client]
 * Implemented OrderReference that is updated by the Session and clients can use to track their orders.
 
-=== Market Agent [market/esma]
+=== Market Agent [market/agent]
 * Added logging to file.
 
 === Repository improvements
@@ -66,13 +66,13 @@ Order Book and stops the simulation.
 === Client API [market/client]
 * Integrated Simulation Ontology with Client API.
 
-=== Market Agent [market/esma]
+=== Market Agent [market/agent]
 * Refactored ExecutionEngine to immediately execute orders.
 * Improved performance by putting MarkedDataServer into a separate thread and using LEAP codec.
 * Integrated Simulation Ontology with the Market Agent.
 
 === Integration Tests [integration]
-* Implemented integration tests for market/client, market/esma and simulation/agent.
+* Implemented integration tests for market/client, market/agent and simulation/agent.
 
 === Documentation [doc]
 * Interim Report.
@@ -89,12 +89,12 @@ Order Book and stops the simulation.
 * Added ability to send messages to Client API.
 * Added ability to build the order book to Client API.
 
-=== Market Agent [market/esma]
+=== Market Agent [market/agent]
 * Unique ExecID is generated on each execution.
 
 == 2012-01-10: Release v0.4 - Jakub D Kozlowski <mail@jakub-kozlowski.com>
 
-=== Market Agent [market/esma]
+=== Market Agent [market/agent]
 * Register Market Agent with DFService.
 
 === Order Book [market/book]
@@ -105,7 +105,7 @@ Order Book and stops the simulation.
 
 == 2012-01-03: Release v0.3 - Jakub D Kozlowski <mail@jakub-kozlowski.com>
 
-=== Market Agent - Market Data Feed [market/esma]
+=== Market Agent - Market Data Feed [market/agent]
 * Traders logon with Logon message.
 * Traders receive AddOrder/OrderExecuted/DeleteOrder messages for visible orders on the Order Book.
 
@@ -123,7 +123,7 @@ Order Book and stops the simulation.
 * NewOrderSingle.
 * ExecutionReport.
 
-=== Market Agent [market/esma].
+=== Market Agent [market/agent].
 * Accepts NewOrderSingle, enters Order to OrderBook and sends a confirmation ExecutionReport.
 
 === jade-unit extension to JADE [jade-unit].

@@ -49,7 +49,7 @@
         </dependency>
         <dependency>
             <groupId>eugene.market</groupId>
-            <artifactId>esma</artifactId>
+            <artifactId>agent</artifactId>
             <version>${current.version}</version>
         </dependency>
         <dependency>
@@ -111,7 +111,7 @@
                         <Export-Package>${bundle.namespace}
                         </Export-Package>
                         <Import-Package>com.google.common.base, com.google.common.collect, eugene.market.book,
-                            eugene.market.esma, eugene.market.ontology, eugene.market.ontology.field,
+                            eugene.market.agent, eugene.market.ontology, eugene.market.ontology.field,
                             eugene.market.ontology.field.enums, eugene.market.ontology.message,
                             eugene.simulation.ontology, eugene.utils, eugene.utils.annotation, eugene.utils.behaviour,
                             jade.content, jade.content.lang, jade.content.onto, jade.content.onto.basic, jad

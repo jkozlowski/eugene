@@ -6,7 +6,7 @@
 package eugene.simulation.agent.impl;
 
 import eugene.market.book.Order;
-import eugene.market.esma.MarketAgent;
+import eugene.market.agent.MarketAgent;
 import eugene.market.ontology.MarketOntology;
 import eugene.market.ontology.field.ClOrdID;
 import eugene.market.ontology.field.OrderQty;

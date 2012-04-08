@@ -10,7 +10,7 @@ import eugene.market.book.OrderBooks;
 import eugene.market.client.ApplicationAdapter;
 import eugene.market.client.Session;
 import eugene.market.client.Sessions;
-import eugene.market.esma.MarketAgent;
+import eugene.market.agent.MarketAgent;
 import eugene.market.ontology.MarketOntology;
 import eugene.market.ontology.field.enums.Side;
 import eugene.market.ontology.message.data.AddOrder;

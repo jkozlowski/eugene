@@ -7,7 +7,7 @@ package eugene.market.client.impl;
 
 import eugene.market.client.Application;
 import eugene.market.client.Session;
-import eugene.market.esma.MarketAgent;
+import eugene.market.agent.MarketAgent;
 import eugene.market.ontology.field.Symbol;
 import eugene.market.ontology.field.enums.SessionStatus;
 import eugene.market.ontology.message.Logon;

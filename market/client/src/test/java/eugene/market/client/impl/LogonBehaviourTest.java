@@ -28,9 +28,9 @@ import org.testng.annotations.Test;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import static eugene.market.esma.AbstractMarketAgentTest.MARKET_AGENT;
-import static eugene.market.esma.AbstractMarketAgentTest.getContainer;
-import static eugene.market.esma.AbstractMarketAgentTest.submit;
+import static eugene.market.agent.AbstractMarketAgentTest.MARKET_AGENT;
+import static eugene.market.agent.AbstractMarketAgentTest.getContainer;
+import static eugene.market.agent.AbstractMarketAgentTest.submit;
 import static eugene.market.ontology.Defaults.defaultPrice;
 import static eugene.market.ontology.Defaults.defaultSymbol;
 import static eugene.market.ontology.Defaults.defaultTickSize;

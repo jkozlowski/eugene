@@ -49,7 +49,7 @@
         </encoder>
     </appender>
 
-    <logger name="eugene.market.esma" level="INFO">
+    <logger name="eugene.market.agent" level="INFO">
         <appender-ref ref="MARKETDATA"/>
         <appender-ref ref="EXECUTIONS"/>
         <appender-ref ref="REJECTIONS"/>

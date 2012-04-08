@@ -34,7 +34,7 @@
         </dependency>
         <dependency>
             <groupId>eugene.market</groupId>
-            <artifactId>esma</artifactId>
+            <artifactId>agent</artifactId>
             <version>${current.version}</version>
         </dependency>
         <dependency>
@@ -62,7 +62,7 @@
         </dependency>
         <dependency>
             <groupId>eugene.market</groupId>
-            <artifactId>esma</artifactId>
+            <artifactId>agent</artifactId>
             <version>${current.version}</version>
             <classifier>tests</classifier>
             <scope>test</scope>

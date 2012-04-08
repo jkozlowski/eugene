@@ -8,7 +8,7 @@ package eugene.market.client.impl;
 import eugene.market.client.Application;
 import eugene.market.client.ApplicationAdapter;
 import eugene.market.client.Session;
-import eugene.market.esma.MarketAgent;
+import eugene.market.agent.MarketAgent;
 import eugene.market.ontology.MarketOntology;
 import eugene.market.ontology.Message;
 import eugene.simulation.agent.Simulation;

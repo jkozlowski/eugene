@@ -20,7 +20,7 @@ import org.testng.annotations.Test;
 
 import java.util.Iterator;
 
-import static eugene.market.esma.AbstractMarketAgentTest.MARKET_AGENT;
+import static eugene.market.agent.AbstractMarketAgentTest.MARKET_AGENT;
 import static eugene.market.ontology.Defaults.defaultPrice;
 import static eugene.market.ontology.Defaults.defaultSymbol;
 import static eugene.market.ontology.Defaults.defaultTickSize;

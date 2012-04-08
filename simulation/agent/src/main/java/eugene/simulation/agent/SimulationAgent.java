@@ -7,7 +7,7 @@ package eugene.simulation.agent;
 
 import com.google.common.base.Stopwatch;
 import eugene.market.book.Order;
-import eugene.market.esma.MarketAgent;
+import eugene.market.agent.MarketAgent;
 import eugene.market.ontology.MarketOntology;
 import eugene.simulation.agent.impl.BootstrapOrderBookBehaviour;
 import eugene.simulation.agent.impl.InitializeMarketAgentBehaviour;
