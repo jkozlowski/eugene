@@ -1,0 +1,145 @@
+== 2012-03-18: Release v0.8  - Jakub D Kozlowski <mail@jakub-kozlowski.com>
+
+=== Experiments [experiment]
+* Bootstrap order book in experiments.
+
+=== Market Agent [market/agent]
+* Add trader ids to execution log messages.
+
+=== VWAP Agent [agent/vwap]
+* Refactor VwapBehaviour to accept different implementations for it's actions.
+
+=== Noise Agent [agent/noise]
+* Improved the noise trader to follow Gilles PhD Thesis.
+
+=== Simulation Agent [simulation/agent]
+* Pass the tick size and default price in the Simulation object.
+
+=== Market Ontology [market/ontology]
+* Change Price, AvgPx and LastPx fields in market/ontology to be of type BigDecimal.
+
+=== Client API [market/client]
+* Make current working orders available in the Session.
+* Implement TopOfBookApplication.
+
+== 2012-02-20: Release v0.7  - Jakub D Kozlowski <mail@jakub-kozlowski.com>
+
+=== Vwap Agent [agent/vwap]
+* Implemented the Vwap agent.
+
+=== Integration
+* Modules can now run inside an OSGi container.
+
+=== Simulation Ontology [simulation/ontology]
+* Added startTime and stopTime to Start message.
+
+=== Simulation Agent [simulation/agent]
+* Sends startTime and stopTime with Start message.
+
+=== Client API [market/client]
+* Implemented OrderReference that is updated by the Session and clients can use to track their orders.
+
+=== Market Agent [market/agent]
+* Added logging to file.
+
+=== Repository improvements
+* Moved all the documentation into a new branch (documentation).
+
+== 2012-02-06: Release v0.6  - Jakub D Kozlowski <mail@jakub-kozlowski.com>
+
+=== Order Book [market/book]
+* Refactored OrderBook to accept partially filled Orders.
+* Moved OrderBook implementations to eugene.market.book.impl package and created a OrderBooks factory class.
+
+=== Simulation Ontology [simulation/ontology]
+* Implemented SimulationOntology.
+
+=== Simulation Agent [simulation/agent]
+* Implemented a Simulation Agent that synchronizes the start of the Traders and Market Agent, initializes the
+Order Book and stops the simulation.
+
+=== Client API [market/client]
+* Integrated Simulation Ontology with Client API.
+
+=== Market Agent [market/agent]
+* Refactored ExecutionEngine to immediately execute orders.
+* Improved performance by putting MarkedDataServer into a separate thread and using LEAP codec.
+* Integrated Simulation Ontology with the Market Agent.
+
+=== Integration Tests [integration]
+* Implemented integration tests for market/client, market/agent and simulation/agent.
+
+=== Documentation [doc]
+* Interim Report.
+
+== 2012-01-21: Release v0.5  - Jakub D Kozlowski <mail@jakub-kozlowski.com>
+
+=== Noise Trader Agent [agent/noise]
+* Implemented Noise Trader.
+
+=== Order Book [market/book]
+* Refactored OrderBook to accept single sided executions.
+
+=== Client API [market/client]
+* Added ability to send messages to Client API.
+* Added ability to build the order book to Client API.
+
+=== Market Agent [market/agent]
+* Unique ExecID is generated on each execution.
+
+== 2012-01-10: Release v0.4 - Jakub D Kozlowski <mail@jakub-kozlowski.com>
+
+=== Market Agent [market/agent]
+* Register Market Agent with DFService.
+
+=== Order Book [market/book]
+* Refactor Order Book into a separate module.
+
+=== Client API [market/client]
+* Implement SessionInitiator, Session and Application classes.
+
+== 2012-01-03: Release v0.3 - Jakub D Kozlowski <mail@jakub-kozlowski.com>
+
+=== Market Agent - Market Data Feed [market/agent]
+* Traders logon with Logon message.
+* Traders receive AddOrder/OrderExecuted/DeleteOrder messages for visible orders on the Order Book.
+
+=== Market Ontology [market/ontology]
+* Logon.
+* OrderCancelReject.
+* OrderCancelRequest.
+* AddOrder.
+* DeleteOrder.
+* OrderExecuted.
+
+== 2011-11-2: Release v0.2 -  Jakub D Kozlowski <mail@jakub-kozlowski.com>
+
+=== Market Ontology [market/ontology]
+* NewOrderSingle.
+* ExecutionReport.
+
+=== Market Agent [market/agent].
+* Accepts NewOrderSingle, enters Order to OrderBook and sends a confirmation ExecutionReport.
+
+=== jade-unit extension to JADE [jade-unit].
+* Allows creating unit tests for agent behaviours that run inside a in-memory Main JADE container.
+
+=== Project Plan.
+
+== 2011-11-2: Release v0.1.3 -  Jakub D Kozlowski <mail@jakub-kozlowski.com>
+* Implemented livelock simulation under demo/livelock.
+
+== 2011-10-31: Release v0.1.2 - Jakub D Kozlowski <mail@jakub-kozlowski.com>
+* Implemented deadlock simulation under demo/deadlock.
+
+== 2011-10-27: Release v0.1.1 - Jakub D Kozlowski <mail@jakub-kozlowski.com>
+* Consolidated eugene-hello and eugene-hello-dist into demo/hello-world.
+* Enabled maven-pax-plugin to allow running projects from IDE.
+* Added jade and jade-osgi sources to the repository.
+* Implemented message-passing simulation under demo/message-passing.
+
+== 2011-10-24: Release v0.1 -  Jakub D Kozlowski  <mail@jakub-kozlowski.com>
+* Enabled Maven
+* Created eugene-hello bundle with HelloAgent and HelloActivator (starts one HelloAgent agent).
+* Created eugene-hello-dist which creates a zip with eugene-hello bundle and all it's dependencies, along with equinox that is started with pax-runner.
+* Added jade-osgi-1.2.0.jar and added .repo to the list of repositories.
