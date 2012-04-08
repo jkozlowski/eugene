@@ -95,6 +95,7 @@
 
     <properties>
         <current.version>0.8-SNAPSHOT</current.version>
+        <metrics.version>3.0.0-SNAPSHOT</metrics.version>
         <java.version>1.6</java.version>
         <pax.runner.version>1.7.5</pax.runner.version>
         <pax.confman.version>0.2.2</pax.confman.version>

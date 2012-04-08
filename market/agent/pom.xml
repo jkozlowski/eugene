@@ -54,6 +54,11 @@
             <version>${guava.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.yammer.metrics</groupId>
+            <artifactId>metrics-core</artifactId>
+            <version>${metrics.version}</version>
+        </dependency>
+        <dependency>
             <groupId>eugene</groupId>
             <artifactId>jade-unit</artifactId>
             <version>${current.version}</version>
@@ -113,7 +118,7 @@
                             eugene.market.ontology.message, eugene.market.ontology.message.data,
                             eugene.simulation.ontology, jade.content, jade.content.lang, jade.content.onto,
                             jade.content.onto.basic, jade.core, jade.core.behaviours, jade.lang.acl, jade.util,
-                            org.slf4j
+                            org.slf4j, com.yammer.metrics, com.yammer.metrics.core
                         </Import-Package>
                     </instructions>
                 </configuration>

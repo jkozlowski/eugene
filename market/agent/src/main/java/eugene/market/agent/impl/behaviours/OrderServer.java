@@ -6,14 +6,19 @@
 package eugene.market.agent.impl.behaviours;
 
 import com.google.common.base.Optional;
+import com.yammer.metrics.Metrics;
+import com.yammer.metrics.core.Gauge;
+import com.yammer.metrics.core.Meter;
+import com.yammer.metrics.core.Timer;
+import com.yammer.metrics.core.TimerContext;
 import eugene.market.agent.MarketAgent;
 import eugene.market.agent.impl.Orders;
 import eugene.market.agent.impl.Orders.NewOrderSingleValidationException;
 import eugene.market.agent.impl.Repository;
+import eugene.market.agent.impl.Repository.Tuple;
 import eugene.market.agent.impl.execution.ExecutionEngine;
 import eugene.market.book.Order;
 import eugene.market.book.OrderStatus;
-import eugene.market.agent.impl.Repository.Tuple;
 import eugene.market.ontology.MarketOntology;
 import eugene.market.ontology.Message;
 import eugene.market.ontology.field.AvgPx;
@@ -35,6 +40,7 @@ import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 import jade.util.Logger;
 
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -48,6 +54,20 @@ import static jade.lang.acl.ACLMessage.REFUSE;
  * @since 0.2
  */
 public class OrderServer {
+
+    private final Meter requests = Metrics.newMeter(OrderServer.class, "message-rate", "messages", TimeUnit.SECONDS);
+
+    private final Gauge<Integer> queueSize
+            = Metrics.newGauge(OrderServer.class, "pending-messages",
+                               new Gauge<Integer>() {
+                                   @Override
+                                   public Integer value() {
+                                       return agent.getQueueSize();
+                                   }
+                               });
+
+    private final Timer responses = Metrics.newTimer(OrderServer.class, "response-time", TimeUnit.MILLISECONDS,
+                                                     TimeUnit.SECONDS);
 
     private static Logger LOG = Logger.getMyLogger(OrderServer.class.getName());
 
@@ -99,7 +119,10 @@ public class OrderServer {
      */
     public void serveNewOrderSingleRequest(final NewOrderSingle newOrderSingle, final ACLMessage request) {
 
+        final TimerContext context = responses.time();
         try {
+            queueSize.value();
+            requests.mark();
             final Order newOrder = Orders.newOrder(executionEngine, newOrderSingle);
             final String clOrdID = newOrderSingle.getClOrdID().getValue();
             repository.put(newOrder, new Tuple(request, clOrdID));
@@ -107,6 +130,9 @@ public class OrderServer {
         }
         catch (NewOrderSingleValidationException e) {
             rejectOrder(newOrderSingle, request);
+        }
+        finally {
+            context.stop();
         }
     }
 
@@ -118,7 +144,10 @@ public class OrderServer {
      */
     public void serveOrderCancelRequestRequest(final OrderCancelRequest orderCancelRequest, final ACLMessage request) {
 
+        final TimerContext context = responses.time();
         try {
+            queueSize.value();
+            requests.mark();
             final Tuple tuple = new Tuple(request, orderCancelRequest.getClOrdID().getValue());
             final Order order = repository.get(tuple);
 
@@ -140,6 +169,9 @@ public class OrderServer {
         catch (NullPointerException e) {
             rejectCancel(orderCancelRequest, request);
         }
+        finally {
+            context.stop();
+        }
     }
 
     /**
@@ -150,15 +182,24 @@ public class OrderServer {
      */
     public void serveLogonRequest(final Logon logon, final ACLMessage request) {
 
-        final Logon logonReply = new Logon();
-        logonReply.setSymbol(new Symbol(symbol));
+        final TimerContext context = responses.time();
+        try {
+            queueSize.value();
+            requests.mark();
 
-        if (symbol.equals(logon.getSymbol().getValue())) {
-            repository.add(request.getSender());
-            logonReply.setSessionStatus(SessionStatus.SESSION_ACTIVE.field());
+            final Logon logonReply = new Logon();
+            logonReply.setSymbol(new Symbol(symbol));
+
+            if (symbol.equals(logon.getSymbol().getValue())) {
+                repository.add(request.getSender());
+                logonReply.setSessionStatus(SessionStatus.SESSION_ACTIVE.field());
+            }
+
+            send(request, logonReply);
         }
-
-        send(request, logonReply);
+        finally {
+            context.stop();
+        }
     }
 
     /**

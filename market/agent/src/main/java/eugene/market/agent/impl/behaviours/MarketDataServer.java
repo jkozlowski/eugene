@@ -5,6 +5,8 @@
  */
 package eugene.market.agent.impl.behaviours;
 
+import com.yammer.metrics.Metrics;
+import com.yammer.metrics.core.Gauge;
 import eugene.market.agent.impl.Repository;
 import eugene.market.agent.impl.execution.Execution;
 import eugene.market.agent.impl.execution.data.MarketDataEngine;
@@ -58,6 +60,14 @@ import static jade.lang.acl.ACLMessage.INFORM;
  */
 public class MarketDataServer extends CyclicBehaviour implements MarketDataEventHandler {
 
+    private final Gauge<Long> queueSize
+            = Metrics.newGauge(MarketDataServer.class, "pending-messages", new Gauge<Long>() {
+        @Override
+        public Long value() {
+            return marketDataEngine.getCurrentEventId() - currentEventId.get();
+        }
+    });
+
     private final Logger LOG = LoggerFactory.getLogger(MarketDataServer.class);
 
     private final Marker NEWORDER = MarkerFactory.getMarker("NEWORDER");
@@ -104,6 +114,8 @@ public class MarketDataServer extends CyclicBehaviour implements MarketDataEvent
 
     @Override
     public void action() {
+
+        queueSize.value();
 
         while (null != marketDataEngine.getMarketDataEvent(currentEventId.get())) {
             final Long eventId = currentEventId.getAndIncrement();
