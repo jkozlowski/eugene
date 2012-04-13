@@ -14,7 +14,8 @@
     <artifactId>vwap-no-error</artifactId>
     <version>0.8-SNAPSHOT</version>
     <name>${bundle.namespace}</name>
-    <description>Starts a simulation with Noise Trader Agents and a VWAP trader that runs for a period of time.
+    <description>Starts a simulation with Noise Trader Agents and a VWAP trader (12 targets, no error) that runs for a
+        period of time.
     </description>
     <packaging>bundle</packaging>
 

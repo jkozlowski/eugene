@@ -36,7 +36,8 @@ import static java.math.BigDecimal.valueOf;
 
 /**
  * Starts a simulation with {@link ExperimentActivator#NUMBER_OF_TRADERS} {@link NoiseTraderAgent}s and one {@link
- * VwapAgent} that runs for {@link ExperimentActivator#LENGTH} period of time.
+ * VwapAgent} (with 12 targets and a logical polarity error) that runs for {@link ExperimentActivator#LENGTH}
+ * period of time.
  *
  * @author Jakub D Kozlowski
  * @since 0.7

@@ -11,16 +11,16 @@
     </parent>
 
     <groupId>eugene.experiment</groupId>
-    <artifactId>vwap-error</artifactId>
+    <artifactId>vwap-no-error-aggressive</artifactId>
     <version>0.8-SNAPSHOT</version>
     <name>${bundle.namespace}</name>
-    <description>Starts a simulation with Noise Trader Agents and a VWAP trader (12 targets, logical polarity error)
-        that runs for a period of time.
+    <description>Starts a simulation with Noise Trader Agents and a VWAP trader (24 targets, no error) that runs for a
+        period of time.
     </description>
     <packaging>bundle</packaging>
 
     <properties>
-        <bundle.namespace>${project.groupId}.vwaperror</bundle.namespace>
+        <bundle.namespace>${project.groupId}.vwapnoerroraggressive</bundle.namespace>
     </properties>
 
     <dependencies>

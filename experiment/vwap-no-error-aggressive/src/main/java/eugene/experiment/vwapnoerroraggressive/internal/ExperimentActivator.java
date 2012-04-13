@@ -3,7 +3,7 @@
  * Distributed under the The MIT License.
  * (See accompanying file LICENSE.txt)
  */
-package eugene.experiment.vwapnoerror.internal;
+package eugene.experiment.vwapnoerroraggressive.internal;
 
 import com.google.common.collect.Sets;
 import eugene.agent.noise.NoiseTraderAgent;
@@ -24,9 +24,6 @@ import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
@@ -36,10 +33,10 @@ import static java.math.BigDecimal.valueOf;
 
 /**
  * Starts a simulation with {@link ExperimentActivator#NUMBER_OF_TRADERS} {@link NoiseTraderAgent}s and one {@link
- * VwapAgent} with 12 targets that runs for {@link ExperimentActivator#LENGTH} period of time.
+ * VwapAgent} with 24 targets that runs for {@link ExperimentActivator#LENGTH} period of time.
  *
  * @author Jakub D Kozlowski
- * @since 0.7
+ * @since 1.0
  */
 public class ExperimentActivator implements BundleActivator {
 
@@ -54,8 +51,18 @@ public class ExperimentActivator implements BundleActivator {
     private static final int LENGTH = 6 * 60 * 1000;
 
     final BigDecimal[] targets = new BigDecimal[]{
-            valueOf(0.04), valueOf(0.12), valueOf(0.07), valueOf(0.09), valueOf(0.08), valueOf(0.08),
-            valueOf(0.08), valueOf(0.08), valueOf(0.08), valueOf(0.08), valueOf(0.08), valueOf(0.12)
+            valueOf(0.02), valueOf(0.02),
+            valueOf(0.06), valueOf(0.06),
+            valueOf(0.035), valueOf(0.035),
+            valueOf(0.045), valueOf(0.045),
+            valueOf(0.04), valueOf(0.04),
+            valueOf(0.04), valueOf(0.04),
+            valueOf(0.04), valueOf(0.04),
+            valueOf(0.04), valueOf(0.04),
+            valueOf(0.04), valueOf(0.04),
+            valueOf(0.04), valueOf(0.04),
+            valueOf(0.04), valueOf(0.04),
+            valueOf(0.06), valueOf(0.06),
     };
 
     final Long vwapTargetVolume = 8000L;
@@ -80,8 +87,8 @@ public class ExperimentActivator implements BundleActivator {
 
         try {
 
-            final InputStream in = getClass().getClassLoader().getResourceAsStream("orders.csv");
-            final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+//            final InputStream in = getClass().getClassLoader().getResourceAsStream("orders.csv");
+//            final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
             final Set<Order> orders = new HashSet<Order>();
 //            String line;
