@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       157,          7]
-NotebookDataLength[      8981,        225]
-NotebookOptionsPosition[      8653,        208]
-NotebookOutlinePosition[      9007,        224]
-CellTagsIndexPosition[      8964,        221]
+NotebookDataLength[      9102,        226]
+NotebookOptionsPosition[      8774,        209]
+NotebookOutlinePosition[      9128,        225]
+CellTagsIndexPosition[      9085,        222]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -179,7 +179,7 @@ Cell[BoxData[{
     RowBox[{
     "graph", "[", 
      "\"\</Users/jakubkozlowski/Programming/intellij/eugene/experiment/vwap-\
-no-error/runner/\>\"", "]"}], ",", 
+no-error-aggressive/runner/\>\"", "]"}], ",", 
     RowBox[{"UpdateInterval", "\[Rule]", "2"}]}], "]"}], 
   "]"}], "\[IndentingNewLine]"}], "Input",
  CellChangeTimes->{{3.539952014494246*^9, 3.539952020345891*^9}, {
@@ -187,15 +187,16 @@ no-error/runner/\>\"", "]"}], ",",
   3.540045048889413*^9}, {3.540045089579852*^9, 3.540045098560384*^9}, {
   3.5400455387462797`*^9, 3.540045555482976*^9}, {3.540045804320773*^9, 
   3.540045826969455*^9}, {3.540204969822137*^9, 3.540204977111747*^9}, {
-  3.540225615220014*^9, 3.540225619642825*^9}}],
+  3.540225615220014*^9, 3.540225619642825*^9}, {3.5433102139110413`*^9, 
+  3.543310216058722*^9}}],
 
 Cell[BoxData[
  DynamicBox[ToBoxes[
    Refresh[
     $CellContext`graph[
     "/Users/jakubkozlowski/Programming/intellij/eugene/experiment/vwap-no-\
-error/runner/"], UpdateInterval -> 2], StandardForm],
-  ImageSizeCache->{360., {115., 119.}}]], "Output",
+error-aggressive/runner/"], UpdateInterval -> 2], StandardForm],
+  ImageSizeCache->{360., {103., 107.}}]], "Output",
  CellChangeTimes->{
   3.5399875334720182`*^9, 3.540044698183076*^9, {3.54004500330219*^9, 
    3.540045017268422*^9}, 3.540045049576812*^9, 3.5400450995122023`*^9, {
@@ -203,10 +204,10 @@ error/runner/"], UpdateInterval -> 2], StandardForm],
    3.540045827366544*^9}, {3.540204965716669*^9, 3.540204977589903*^9}, 
    3.5402051253606577`*^9, 3.540205499017861*^9, {3.540225608427693*^9, 
    3.5402256200923243`*^9}, 3.540230877693057*^9, {3.540230928726803*^9, 
-   3.540230945493844*^9}}]
+   3.540230945493844*^9}, {3.543310209496565*^9, 3.5433102183643723`*^9}}]
 }, Open  ]]
 },
-WindowSize->{1920, 951},
+WindowSize->{1280, 671},
 WindowMargins->{{0, Automatic}, {Automatic, 0}},
 FrontEndVersion->"8.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (October 5, \
 2011)",
@@ -224,8 +225,8 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[579, 22, 7318, 167, 463, "Input"],
-Cell[7900, 191, 737, 14, 249, "Output"]
+Cell[579, 22, 7380, 168, 508, "Input"],
+Cell[7962, 192, 796, 14, 225, "Output"]
 }, Open  ]]
 }
 ]
