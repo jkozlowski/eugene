@@ -1,0 +1,701 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 8.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[     27585,        692]
+NotebookOptionsPosition[     26662,        658]
+NotebookOutlinePosition[     27016,        674]
+CellTagsIndexPosition[     26973,        671]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"ClearAll", "[", 
+    RowBox[{
+    "vwapnoerror", ",", " ", "vwapnoerroraggressive20", ",", " ", 
+     "vwapnoerroraggressive40"}], "]"}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"vwapnoerroraggressive20", " ", "=", " ", 
+    RowBox[{"{", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"98.1308", ",", " ", "98.1476"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"104.179", ",", " ", "103.894"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"105.055", ",", " ", "104.734"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"100.616", ",", " ", "100.499"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"101.674", ",", " ", "101.516"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"104.058", ",", " ", "103.628"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"100.771", ",", " ", "100.733"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"105.309", ",", " ", "105.355"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"92.3349", ",", " ", "92.771"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"104.276", ",", " ", "103.903"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"101.846", ",", " ", "101.696"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"105.01", ",", " ", "104.871"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"103.381", ",", " ", "103.185"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"100.351", ",", " ", "100.029"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"100.241", ",", " ", "100.225"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"102.655", ",", " ", "102.526"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"102.363", ",", " ", "102.21"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"99.4911", ",", " ", "99.6777"}], "}"}]}], 
+     "\[IndentingNewLine]", "}"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"vwapnoerroraggressive40", " ", "=", " ", 
+    RowBox[{"{", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"101.015", ",", " ", "100.935"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"102.034", ",", " ", "101.926"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"101.868", ",", " ", "101.776"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"102.068", ",", " ", "101.923"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"96.9205", ",", " ", "96.8109"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"96.7334", ",", " ", "96.529"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"100.665", ",", " ", "100.464"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"99.5002", ",", " ", "99.5373"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"99.4037", ",", " ", "99.3156"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"104.579", ",", " ", "104.451"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"98.4673", ",", " ", "98.4371"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"101.202", ",", " ", "101.068"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"100.326", ",", " ", "100.393"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"98.9442", ",", " ", "98.9485"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"95.3393", ",", " ", "95.1618"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"97.0996", ",", " ", "96.9995"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"103.304", ",", " ", "103.219"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"101.898", ",", " ", "101.724"}], "}"}]}], 
+     "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"102.138", ",", " ", "102.131"}], "}"}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"{", 
+        RowBox[{"100.688", ",", " ", "100.567"}], "}"}]}], "*)"}], 
+     "\[IndentingNewLine]", "}"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"vwapnoerror", "=", 
+    RowBox[{"{", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"106.711", ",", " ", "106.415"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"100.507", ",", " ", "100.292"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"99.1793", ",", " ", "99.04"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"100.619", ",", " ", "100.636"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"98.2182", ",", " ", "98.1217"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"105.508", ",", " ", "105.301"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"102.485", ",", " ", "102.023"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"98.4751", ",", " ", "98.1921"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"101.845", ",", " ", "101.681"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"101.184", ",", " ", "101.079"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"101.899", ",", " ", "101.689"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"93.514", ",", " ", "93.7508"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"98.1282", ",", " ", "98.221"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"97.1723", ",", " ", "97.341"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"101.004", ",", " ", "100.994"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"101.51", ",", " ", "101.377"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"104.302", ",", " ", "103.427"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", 
+       RowBox[{"98.7657", ",", " ", "98.4682"}], "}"}]}], 
+     "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"97.6622", ",", " ", "97.9664"}], "}"}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"{", 
+        RowBox[{"97.8746", ",", " ", "97.8944"}], "}"}]}], "*)"}], 
+     "\[IndentingNewLine]", "}"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Length", "[", "vwapnoerror", "]"}], "\[Equal]", 
+   RowBox[{"Length", "[", "vwapnoerroraggressive40", "]"}]}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{"vwapnoerrordiff", " ", "=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"1", "-", " ", 
+     RowBox[{
+      RowBox[{"#", "[", 
+       RowBox[{"[", "2", "]"}], "]"}], "/", 
+      RowBox[{"#", "[", 
+       RowBox[{"[", "1", "]"}], "]"}]}]}], "&"}], "/@", 
+   "vwapnoerror"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"vwaperrordiff", " ", "=", " ", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"1", "-", 
+      RowBox[{
+       RowBox[{"#", "[", 
+        RowBox[{"[", "2", "]"}], "]"}], "/", 
+       RowBox[{"#", "[", 
+        RowBox[{"[", "1", "]"}], "]"}]}]}], "&"}], "/@", 
+    "vwapnoerroraggressive40"}]}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Print", "[", "\"\<Vwap no error test for normality:\>\"", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Print", "[", 
+   RowBox[{"KolmogorovSmirnovTest", "[", 
+    RowBox[{
+    "vwapnoerrordiff", " ", ",", "Automatic", ",", "\"\<TestDataTable\>\""}], 
+    "]"}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Print", "[", 
+    RowBox[{"KolmogorovSmirnovTest", "[", 
+     RowBox[{
+     "vwapnoerrordiff", " ", ",", "Automatic", ",", 
+      "\"\<TestConclusion\>\""}], "]"}], "]"}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Print", "[", "\"\<Vwap error test for normality:\>\"", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Print", "[", 
+   RowBox[{"KolmogorovSmirnovTest", "[", 
+    RowBox[{
+    "vwaperrordiff", " ", ",", "Automatic", ",", "\"\<TestDataTable\>\""}], 
+    "]"}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Print", "[", 
+    RowBox[{"KolmogorovSmirnovTest", "[", 
+     RowBox[{
+     "vwaperrordiff", " ", ",", "Automatic", ",", "\"\<TestConclusion\>\""}], 
+     "]"}], "]"}], ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Length", "[", "vwapnoerrordiff", "]"}], "\[Equal]", 
+   RowBox[{"Length", "[", "vwaperrordiff", "]"}]}], "\[IndentingNewLine]", 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Print", "[", 
+   RowBox[{"MannWhitneyTest", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"vwapnoerrordiff", ",", " ", "vwaperrordiff"}], "}"}], ",", 
+     "Automatic", ",", "\"\<TestDataTable\>\""}], "]"}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Print", "[", 
+    RowBox[{"MannWhitneyTest", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"vwapnoerrordiff", ",", " ", "vwaperrordiff"}], "}"}], ",", 
+      "Automatic", ",", "\"\<TestConclusion\>\""}], "]"}], "]"}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Print", "[", 
+   RowBox[{"TTest", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"vwapnoerrordiff", ",", " ", "vwaperrordiff"}], "}"}], ",", 
+     "Automatic", ",", "\"\<TestDataTable\>\""}], "]"}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Print", "[", 
+   RowBox[{"TTest", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"vwapnoerrordiff", ",", " ", "vwaperrordiff"}], "}"}], ",", 
+     "Automatic", ",", "\"\<TestConclusion\>\""}], "]"}], "]"}], 
+  ";"}]}], "Input",
+ CellChangeTimes->{{3.543402983108289*^9, 3.543403376263051*^9}, {
+  3.5434035130376043`*^9, 3.543403865606686*^9}, {3.543404034032546*^9, 
+  3.5434040496011143`*^9}, {3.543404919983828*^9, 3.543404929202003*^9}, {
+  3.543414021767918*^9, 3.543414344193252*^9}, {3.543414479439858*^9, 
+  3.5434145356971817`*^9}, {3.543414569821044*^9, 3.543414588382977*^9}, {
+  3.543414624683078*^9, 3.543414646341675*^9}, {3.5434193134368753`*^9, 
+  3.543419354798223*^9}, {3.543419386766069*^9, 3.543419463979332*^9}, {
+  3.543419533052786*^9, 3.5434195527911243`*^9}}],
+
+Cell[BoxData["True"], "Output",
+ CellChangeTimes->{
+  3.5434030268949127`*^9, 3.543404014668886*^9, 3.5434040505173883`*^9, 
+   3.543404934697434*^9, 3.543414508282816*^9, 3.543414571159753*^9, {
+   3.54341462536154*^9, 3.543414646760456*^9}, 3.543419356702201*^9, {
+   3.543419414401054*^9, 3.543419433741995*^9}, 3.543419465620228*^9, {
+   3.5434195428520107`*^9, 3.543419553179036*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+  "0.0027738471197908954`", ",", "0.0021391544867521706`", ",", 
+   "0.0014045269527006576`", ",", 
+   RowBox[{"-", "0.00016895417366491472`"}], ",", "0.0009825062972035337`", 
+   ",", "0.0019619365356181584`", ",", "0.004507976777089362`", ",", 
+   "0.0028738229257954107`", ",", "0.0016102901467917041`", ",", 
+   "0.0010377134724857129`", ",", "0.002060864189049938`", ",", 
+   RowBox[{"-", "0.002532241161751214`"}], ",", 
+   RowBox[{"-", "0.000945701643360497`"}], ",", 
+   RowBox[{"-", "0.0017360914581623366`"}], ",", "0.00009900597996115312`", 
+   ",", "0.0013102157422915095`", ",", "0.008389100880136446`", ",", 
+   "0.0030121793294636268`"}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.5434030268949127`*^9, 3.543404014668886*^9, 3.5434040505173883`*^9, 
+   3.543404934697434*^9, 3.543414508282816*^9, 3.543414571159753*^9, {
+   3.54341462536154*^9, 3.543414646760456*^9}, 3.543419356702201*^9, {
+   3.543419414401054*^9, 3.543419433741995*^9}, 3.543419465620228*^9, {
+   3.5434195428520107`*^9, 3.543419553181478*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+  "0.0007919615898628329`", ",", "0.0010584707058431952`", ",", 
+   "0.0009031295401892292`", ",", "0.0014206215464199756`", ",", 
+   "0.0011308237163448753`", ",", "0.0021130240434019676`", ",", 
+   "0.0019967218000298548`", ",", 
+   RowBox[{"-", "0.0003728635721336193`"}], ",", "0.0008862849169597453`", 
+   ",", "0.0012239550961473666`", ",", "0.00030670080321071325`", ",", 
+   "0.0013240845042588045`", ",", 
+   RowBox[{"-", "0.0006678228973546751`"}], ",", 
+   RowBox[{"-", "0.000043458838415944`"}], ",", "0.0018617715884216013`", ",",
+    "0.0010309002302789638`", ",", "0.0008228142182298281`", ",", 
+   "0.0017075899428840025`"}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.5434030268949127`*^9, 3.543404014668886*^9, 3.5434040505173883`*^9, 
+   3.543404934697434*^9, 3.543414508282816*^9, 3.543414571159753*^9, {
+   3.54341462536154*^9, 3.543414646760456*^9}, 3.543419356702201*^9, {
+   3.543419414401054*^9, 3.543419433741995*^9}, 3.543419465620228*^9, {
+   3.5434195428520107`*^9, 3.543419553183923*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["\<\"Vwap no error test for normality:\"\>"], "Print",
+ CellChangeTimes->{
+  3.543403026900505*^9, 3.54340401470096*^9, 3.543404050530044*^9, 
+   3.543404934705276*^9, 3.5434145082921352`*^9, 3.5434145712656813`*^9, {
+   3.5434146253711243`*^9, 3.543414646768346*^9}, 3.543419356710009*^9, {
+   3.5434194144089527`*^9, 3.543419433749548*^9}, 3.543419465627812*^9, {
+   3.543419545484023*^9, 3.543419553186203*^9}}],
+
+Cell[BoxData[
+ StyleBox[
+  TagBox[GridBox[{
+     {"\<\"\"\>", "\<\"Statistic\"\>", "\<\"P\[Hyphen]Value\"\>"},
+     {"\<\"Kolmogorov\[Hyphen]Smirnov\"\>", "0.1643300408517392`", 
+      "0.23271808019626442`"}
+    },
+    AutoDelete->False,
+    GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Automatic}}},
+    GridBoxDividers->{
+     "ColumnsIndexed" -> {2 -> GrayLevel[0.7]}, 
+      "RowsIndexed" -> {2 -> GrayLevel[0.7]}},
+    GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+    GridBoxSpacings->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+   "Grid"], "DialogStyle",
+  StripOnInput->False]], "Print",
+ CellChangeTimes->{
+  3.543403026900505*^9, 3.54340401470096*^9, 3.543404050530044*^9, 
+   3.543404934705276*^9, 3.5434145082921352`*^9, 3.5434145712656813`*^9, {
+   3.5434146253711243`*^9, 3.543414646768346*^9}, 3.543419356710009*^9, {
+   3.5434194144089527`*^9, 3.543419433749548*^9}, 3.543419465627812*^9, {
+   3.543419545484023*^9, 3.543419553188409*^9}}],
+
+Cell[BoxData[
+ TemplateBox[{
+  "\"The null hypothesis that \"",
+   TemplateBox[{"\"the data is distributed according to the \"", 
+     RowBox[{"NormalDistribution", "[", 
+       RowBox[{"\[FormalX]", ",", "\[FormalY]"}], "]"}], "\" \""}, "Row", 
+    DisplayFunction -> (
+     RowBox[{#, "\[InvisibleSpace]", #2, "\[InvisibleSpace]", #3}]& ), 
+    InterpretationFunction -> (RowBox[{"Row", "[", 
+       RowBox[{"{", 
+         RowBox[{#, ",", #2, ",", #3}], "}"}], "]"}]& )],
+   "\"is not rejected at the \"",
+   TemplateBox[{"5.`", "\" percent level \""}, "Row", 
+    DisplayFunction -> (RowBox[{#, "\[InvisibleSpace]", #2}]& ), 
+    InterpretationFunction -> (RowBox[{"Row", "[", 
+       RowBox[{"{", 
+         RowBox[{#, ",", #2}], "}"}], "]"}]& )],
+   TemplateBox[{
+    "\"based on the \"", "\"Kolmogorov\[Hyphen]Smirnov\"", "\" test.\""}, 
+    "Row", DisplayFunction -> (
+     RowBox[{#, "\[InvisibleSpace]", #2, "\[InvisibleSpace]", #3}]& ), 
+    InterpretationFunction -> (RowBox[{"Row", "[", 
+       RowBox[{"{", 
+         RowBox[{#, ",", #2, ",", #3}], "}"}], "]"}]& )]},
+  "Row",
+  DisplayFunction->(
+   RowBox[{#, "\[InvisibleSpace]", #2, "\[InvisibleSpace]", #3, 
+     "\[InvisibleSpace]", #4, "\[InvisibleSpace]", #5}]& ),
+  InterpretationFunction->(RowBox[{"Row", "[", 
+     RowBox[{"{", 
+       RowBox[{#, ",", #2, ",", #3, ",", #4, ",", #5}], "}"}], 
+     "]"}]& )]], "Print",
+ CellChangeTimes->{
+  3.543403026900505*^9, 3.54340401470096*^9, 3.543404050530044*^9, 
+   3.543404934705276*^9, 3.5434145082921352`*^9, 3.5434145712656813`*^9, {
+   3.5434146253711243`*^9, 3.543414646768346*^9}, 3.543419356710009*^9, {
+   3.5434194144089527`*^9, 3.543419433749548*^9}, 3.543419465627812*^9, {
+   3.543419545484023*^9, 3.5434195531923323`*^9}}],
+
+Cell[BoxData["\<\"Vwap error test for normality:\"\>"], "Print",
+ CellChangeTimes->{
+  3.543403026900505*^9, 3.54340401470096*^9, 3.543404050530044*^9, 
+   3.543404934705276*^9, 3.5434145082921352`*^9, 3.5434145712656813`*^9, {
+   3.5434146253711243`*^9, 3.543414646768346*^9}, 3.543419356710009*^9, {
+   3.5434194144089527`*^9, 3.543419433749548*^9}, 3.543419465627812*^9, {
+   3.543419545484023*^9, 3.543419553195938*^9}}],
+
+Cell[BoxData[
+ StyleBox[
+  TagBox[GridBox[{
+     {"\<\"\"\>", "\<\"Statistic\"\>", "\<\"P\[Hyphen]Value\"\>"},
+     {"\<\"Kolmogorov\[Hyphen]Smirnov\"\>", "0.18306500262190956`", 
+      "0.12020753324024819`"}
+    },
+    AutoDelete->False,
+    GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Automatic}}},
+    GridBoxDividers->{
+     "ColumnsIndexed" -> {2 -> GrayLevel[0.7]}, 
+      "RowsIndexed" -> {2 -> GrayLevel[0.7]}},
+    GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+    GridBoxSpacings->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+   "Grid"], "DialogStyle",
+  StripOnInput->False]], "Print",
+ CellChangeTimes->{
+  3.543403026900505*^9, 3.54340401470096*^9, 3.543404050530044*^9, 
+   3.543404934705276*^9, 3.5434145082921352`*^9, 3.5434145712656813`*^9, {
+   3.5434146253711243`*^9, 3.543414646768346*^9}, 3.543419356710009*^9, {
+   3.5434194144089527`*^9, 3.543419433749548*^9}, 3.543419465627812*^9, {
+   3.543419545484023*^9, 3.543419553197855*^9}}],
+
+Cell[BoxData[
+ TemplateBox[{
+  "\"The null hypothesis that \"",
+   TemplateBox[{"\"the data is distributed according to the \"", 
+     RowBox[{"NormalDistribution", "[", 
+       RowBox[{"\[FormalX]", ",", "\[FormalY]"}], "]"}], "\" \""}, "Row", 
+    DisplayFunction -> (
+     RowBox[{#, "\[InvisibleSpace]", #2, "\[InvisibleSpace]", #3}]& ), 
+    InterpretationFunction -> (RowBox[{"Row", "[", 
+       RowBox[{"{", 
+         RowBox[{#, ",", #2, ",", #3}], "}"}], "]"}]& )],
+   "\"is not rejected at the \"",
+   TemplateBox[{"5.`", "\" percent level \""}, "Row", 
+    DisplayFunction -> (RowBox[{#, "\[InvisibleSpace]", #2}]& ), 
+    InterpretationFunction -> (RowBox[{"Row", "[", 
+       RowBox[{"{", 
+         RowBox[{#, ",", #2}], "}"}], "]"}]& )],
+   TemplateBox[{
+    "\"based on the \"", "\"Kolmogorov\[Hyphen]Smirnov\"", "\" test.\""}, 
+    "Row", DisplayFunction -> (
+     RowBox[{#, "\[InvisibleSpace]", #2, "\[InvisibleSpace]", #3}]& ), 
+    InterpretationFunction -> (RowBox[{"Row", "[", 
+       RowBox[{"{", 
+         RowBox[{#, ",", #2, ",", #3}], "}"}], "]"}]& )]},
+  "Row",
+  DisplayFunction->(
+   RowBox[{#, "\[InvisibleSpace]", #2, "\[InvisibleSpace]", #3, 
+     "\[InvisibleSpace]", #4, "\[InvisibleSpace]", #5}]& ),
+  InterpretationFunction->(RowBox[{"Row", "[", 
+     RowBox[{"{", 
+       RowBox[{#, ",", #2, ",", #3, ",", #4, ",", #5}], "}"}], 
+     "]"}]& )]], "Print",
+ CellChangeTimes->{
+  3.543403026900505*^9, 3.54340401470096*^9, 3.543404050530044*^9, 
+   3.543404934705276*^9, 3.5434145082921352`*^9, 3.5434145712656813`*^9, {
+   3.5434146253711243`*^9, 3.543414646768346*^9}, 3.543419356710009*^9, {
+   3.5434194144089527`*^9, 3.543419433749548*^9}, 3.543419465627812*^9, {
+   3.543419545484023*^9, 3.543419553200205*^9}}]
+}, Open  ]],
+
+Cell[BoxData["True"], "Output",
+ CellChangeTimes->{
+  3.5434030268949127`*^9, 3.543404014668886*^9, 3.5434040505173883`*^9, 
+   3.543404934697434*^9, 3.543414508282816*^9, 3.543414571159753*^9, {
+   3.54341462536154*^9, 3.543414646760456*^9}, 3.543419356702201*^9, {
+   3.543419414401054*^9, 3.543419433741995*^9}, 3.543419465620228*^9, {
+   3.5434195428520107`*^9, 3.543419553203362*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ StyleBox[
+  TagBox[GridBox[{
+     {"\<\"\"\>", "\<\"Statistic\"\>", "\<\"P\[Hyphen]Value\"\>"},
+     {"\<\"Mann\[Hyphen]Whitney\"\>", "202.`", "0.21140013326822724`"}
+    },
+    AutoDelete->False,
+    GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Automatic}}},
+    GridBoxDividers->{
+     "ColumnsIndexed" -> {2 -> GrayLevel[0.7]}, 
+      "RowsIndexed" -> {2 -> GrayLevel[0.7]}},
+    GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+    GridBoxSpacings->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+   "Grid"], "DialogStyle",
+  StripOnInput->False]], "Print",
+ CellChangeTimes->{
+  3.543403026900505*^9, 3.54340401470096*^9, 3.543404050530044*^9, 
+   3.543404934705276*^9, 3.5434145082921352`*^9, 3.5434145712656813`*^9, {
+   3.5434146253711243`*^9, 3.543414646768346*^9}, 3.543419356710009*^9, {
+   3.5434194144089527`*^9, 3.543419433749548*^9}, 3.543419465627812*^9, {
+   3.543419545484023*^9, 3.5434195532064133`*^9}}],
+
+Cell[BoxData[
+ TemplateBox[{
+  "\"The null hypothesis that \"",
+   TemplateBox[{
+    "\"the \"", "\"median\"", "\" difference is \"", "0", "\" \""}, "Row", 
+    DisplayFunction -> (
+     RowBox[{#, "\[InvisibleSpace]", #2, "\[InvisibleSpace]", #3, 
+       "\[InvisibleSpace]", #4, "\[InvisibleSpace]", #5}]& ), 
+    InterpretationFunction -> (RowBox[{"Row", "[", 
+       RowBox[{"{", 
+         RowBox[{#, ",", #2, ",", #3, ",", #4, ",", #5}], "}"}], "]"}]& )],
+   "\"is not rejected at the \"",
+   TemplateBox[{"5.`", "\" percent level \""}, "Row", 
+    DisplayFunction -> (RowBox[{#, "\[InvisibleSpace]", #2}]& ), 
+    InterpretationFunction -> (RowBox[{"Row", "[", 
+       RowBox[{"{", 
+         RowBox[{#, ",", #2}], "}"}], "]"}]& )],
+   TemplateBox[{
+    "\"based on the \"", "\"Mann\[Hyphen]Whitney\"", "\" test.\""}, "Row", 
+    DisplayFunction -> (
+     RowBox[{#, "\[InvisibleSpace]", #2, "\[InvisibleSpace]", #3}]& ), 
+    InterpretationFunction -> (RowBox[{"Row", "[", 
+       RowBox[{"{", 
+         RowBox[{#, ",", #2, ",", #3}], "}"}], "]"}]& )]},
+  "Row",
+  DisplayFunction->(
+   RowBox[{#, "\[InvisibleSpace]", #2, "\[InvisibleSpace]", #3, 
+     "\[InvisibleSpace]", #4, "\[InvisibleSpace]", #5}]& ),
+  InterpretationFunction->(RowBox[{"Row", "[", 
+     RowBox[{"{", 
+       RowBox[{#, ",", #2, ",", #3, ",", #4, ",", #5}], "}"}], 
+     "]"}]& )]], "Print",
+ CellChangeTimes->{
+  3.543403026900505*^9, 3.54340401470096*^9, 3.543404050530044*^9, 
+   3.543404934705276*^9, 3.5434145082921352`*^9, 3.5434145712656813`*^9, {
+   3.5434146253711243`*^9, 3.543414646768346*^9}, 3.543419356710009*^9, {
+   3.5434194144089527`*^9, 3.543419433749548*^9}, 3.543419465627812*^9, {
+   3.543419545484023*^9, 3.5434195532082853`*^9}}],
+
+Cell[BoxData[
+ StyleBox[
+  TagBox[GridBox[{
+     {"\<\"\"\>", "\<\"Statistic\"\>", "\<\"P\[Hyphen]Value\"\>"},
+     {"\<\"T\"\>", "1.0399925560047585`", "0.31052507019679365`"}
+    },
+    AutoDelete->False,
+    GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Automatic}}},
+    GridBoxDividers->{
+     "ColumnsIndexed" -> {2 -> GrayLevel[0.7]}, 
+      "RowsIndexed" -> {2 -> GrayLevel[0.7]}},
+    GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+    GridBoxSpacings->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+   "Grid"], "DialogStyle",
+  StripOnInput->False]], "Print",
+ CellChangeTimes->{
+  3.543403026900505*^9, 3.54340401470096*^9, 3.543404050530044*^9, 
+   3.543404934705276*^9, 3.5434145082921352`*^9, 3.5434145712656813`*^9, {
+   3.5434146253711243`*^9, 3.543414646768346*^9}, 3.543419356710009*^9, {
+   3.5434194144089527`*^9, 3.543419433749548*^9}, 3.543419465627812*^9, {
+   3.543419545484023*^9, 3.543419553244664*^9}}],
+
+Cell[BoxData[
+ TemplateBox[{
+  "\"The null hypothesis that \"",
+   TemplateBox[{"\"the \"", "\"mean\"", "\" difference is \"", "0", "\" \""}, 
+    "Row", DisplayFunction -> (
+     RowBox[{#, "\[InvisibleSpace]", #2, "\[InvisibleSpace]", #3, 
+       "\[InvisibleSpace]", #4, "\[InvisibleSpace]", #5}]& ), 
+    InterpretationFunction -> (RowBox[{"Row", "[", 
+       RowBox[{"{", 
+         RowBox[{#, ",", #2, ",", #3, ",", #4, ",", #5}], "}"}], "]"}]& )],
+   "\"is not rejected at the \"",
+   TemplateBox[{"5.`", "\" percent level \""}, "Row", 
+    DisplayFunction -> (RowBox[{#, "\[InvisibleSpace]", #2}]& ), 
+    InterpretationFunction -> (RowBox[{"Row", "[", 
+       RowBox[{"{", 
+         RowBox[{#, ",", #2}], "}"}], "]"}]& )],
+   TemplateBox[{"\"based on the \"", "\"T\"", "\" test.\""}, "Row", 
+    DisplayFunction -> (
+     RowBox[{#, "\[InvisibleSpace]", #2, "\[InvisibleSpace]", #3}]& ), 
+    InterpretationFunction -> (RowBox[{"Row", "[", 
+       RowBox[{"{", 
+         RowBox[{#, ",", #2, ",", #3}], "}"}], "]"}]& )]},
+  "Row",
+  DisplayFunction->(
+   RowBox[{#, "\[InvisibleSpace]", #2, "\[InvisibleSpace]", #3, 
+     "\[InvisibleSpace]", #4, "\[InvisibleSpace]", #5}]& ),
+  InterpretationFunction->(RowBox[{"Row", "[", 
+     RowBox[{"{", 
+       RowBox[{#, ",", #2, ",", #3, ",", #4, ",", #5}], "}"}], 
+     "]"}]& )]], "Print",
+ CellChangeTimes->{
+  3.543403026900505*^9, 3.54340401470096*^9, 3.543404050530044*^9, 
+   3.543404934705276*^9, 3.5434145082921352`*^9, 3.5434145712656813`*^9, {
+   3.5434146253711243`*^9, 3.543414646768346*^9}, 3.543419356710009*^9, {
+   3.5434194144089527`*^9, 3.543419433749548*^9}, 3.543419465627812*^9, {
+   3.543419545484023*^9, 3.543419553285874*^9}}]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1280, 671},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+FrontEndVersion->"8.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (October 5, \
+2011)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[579, 22, 11311, 309, 1363, "Input"],
+Cell[11893, 333, 389, 6, 27, "Output"],
+Cell[12285, 341, 1069, 19, 43, "Output"],
+Cell[13357, 362, 1057, 19, 43, "Output"],
+Cell[CellGroupData[{
+Cell[14439, 385, 427, 6, 20, "Print"],
+Cell[14869, 393, 1003, 21, 38, "Print"],
+Cell[15875, 416, 1752, 37, 45, "Print"],
+Cell[17630, 455, 424, 6, 20, "Print"],
+Cell[18057, 463, 1004, 21, 38, "Print"],
+Cell[19064, 486, 1750, 37, 45, "Print"]
+}, Open  ]],
+Cell[20829, 526, 389, 6, 27, "Output"],
+Cell[CellGroupData[{
+Cell[21243, 536, 978, 20, 38, "Print"],
+Cell[22224, 558, 1733, 37, 20, "Print"],
+Cell[23960, 597, 971, 20, 38, "Print"],
+Cell[24934, 619, 1700, 35, 20, "Print"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
