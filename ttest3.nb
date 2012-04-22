@@ -1,0 +1,198 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 8.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[      6294,        189]
+NotebookOptionsPosition[      6041,        175]
+NotebookOutlinePosition[      6394,        191]
+CellTagsIndexPosition[      6351,        188]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"ClearAll", "[", 
+    RowBox[{
+    "vwapnoerror", ",", " ", "vwaperror", ",", "vwapnoerrordiff", ",", " ", 
+     "vwaperrordiff"}], "]"}], ";"}], "\[IndentingNewLine]", 
+  RowBox[{"(*", " ", 
+   RowBox[{"buying", " ", "5000", " ", "over", " ", "6", " ", "minutes"}], 
+   "*)"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+  RowBox[{"(*", " ", 
+   RowBox[{"10", " ", "equal", " ", "targets"}], " ", 
+   "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"vwapnoerror", "=", 
+    RowBox[{"{", "\[IndentingNewLine]", "\[IndentingNewLine]", "}"}]}], ";"}],
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+  RowBox[{"(*", " ", 
+   RowBox[{"40", " ", "equal", " ", "targets"}], " ", 
+   "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"vwaperror", " ", "=", " ", 
+    RowBox[{"{", "\[IndentingNewLine]", "\[IndentingNewLine]", "}"}]}], ";"}],
+   "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Length", "[", "vwapnoerror", "]"}], "\[Equal]", 
+   RowBox[{"Length", "[", "vwaperror", "]"}]}], "\[IndentingNewLine]", 
+  "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{"vwapnoerrordiff", " ", "=", " ", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         RowBox[{"#", "[", 
+          RowBox[{"[", "1", "]"}], "]"}], "-", 
+         RowBox[{"#", "[", 
+          RowBox[{"[", "2", "]"}], "]"}]}], "&"}], "/@", "vwapnoerror"}], 
+      "\[IndentingNewLine]", "vwaperrordiff"}], " ", "=", " ", 
+     RowBox[{
+      RowBox[{
+       RowBox[{
+        RowBox[{"#", "[", 
+         RowBox[{"[", "1", "]"}], "]"}], "-", 
+        RowBox[{"#", "[", 
+         RowBox[{"[", "2", "]"}], "]"}]}], "&"}], "/@", "vwaperror"}]}]}], 
+   "*)"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{"vwapnoerrordiff", " ", "=", " ", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"1", "-", 
+     RowBox[{
+      RowBox[{"#", "[", 
+       RowBox[{"[", "2", "]"}], "]"}], "/", 
+      RowBox[{"#", "[", 
+       RowBox[{"[", "1", "]"}], "]"}]}]}], "&"}], "/@", 
+   "vwapnoerror"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"vwaperrordiff", " ", "=", " ", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"1", "-", 
+      RowBox[{
+       RowBox[{"#", "[", 
+        RowBox[{"[", "2", "]"}], "]"}], "/", 
+       RowBox[{"#", "[", 
+        RowBox[{"[", "1", "]"}], "]"}]}]}], "&"}], "/@", "vwaperror"}]}], 
+  "\[IndentingNewLine]", "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Print", "[", "\"\<Vwap no error test for normality:\>\"", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Print", "[", 
+   RowBox[{"KolmogorovSmirnovTest", "[", 
+    RowBox[{
+    "vwapnoerrordiff", " ", ",", "Automatic", ",", "\"\<TestDataTable\>\""}], 
+    "]"}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Print", "[", 
+    RowBox[{"KolmogorovSmirnovTest", "[", 
+     RowBox[{
+     "vwapnoerrordiff", " ", ",", "Automatic", ",", 
+      "\"\<TestConclusion\>\""}], "]"}], "]"}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Print", "[", "\"\<Vwap error test for normality:\>\"", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Print", "[", 
+   RowBox[{"KolmogorovSmirnovTest", "[", 
+    RowBox[{
+    "vwaperrordiff", " ", ",", "Automatic", ",", "\"\<TestDataTable\>\""}], 
+    "]"}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Print", "[", 
+    RowBox[{"KolmogorovSmirnovTest", "[", 
+     RowBox[{
+     "vwaperrordiff", " ", ",", "Automatic", ",", "\"\<TestConclusion\>\""}], 
+     "]"}], "]"}], ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Length", "[", "vwapnoerrordiff", "]"}], "\[Equal]", 
+   RowBox[{"Length", "[", "vwaperrordiff", "]"}]}], "\[IndentingNewLine]", 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Print", "[", 
+   RowBox[{"MannWhitneyTest", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"vwapnoerrordiff", ",", " ", "vwaperrordiff"}], "}"}], ",", 
+     "Automatic", ",", "\"\<TestDataTable\>\""}], "]"}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Print", "[", 
+    RowBox[{"MannWhitneyTest", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"vwapnoerrordiff", ",", " ", "vwaperrordiff"}], "}"}], ",", 
+      "Automatic", ",", "\"\<TestConclusion\>\""}], "]"}], "]"}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Print", "[", 
+   RowBox[{"TTest", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"vwapnoerrordiff", ",", " ", "vwaperrordiff"}], "}"}], ",", 
+     "Automatic", ",", "\"\<TestDataTable\>\""}], "]"}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Print", "[", 
+    RowBox[{"TTest", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"vwapnoerrordiff", ",", " ", "vwaperrordiff"}], "}"}], ",", 
+      "Automatic", ",", "\"\<TestConclusion\>\""}], "]"}], "]"}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{"Histogram", "[", 
+  RowBox[{"{", 
+   RowBox[{"vwapnoerrordiff", ",", " ", "vwaperrordiff"}], "}"}], 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"SmoothHistogram", "[", 
+  RowBox[{"{", 
+   RowBox[{"vwapnoerrordiff", ",", " ", "vwaperrordiff"}], "}"}], 
+  "]"}]}], "Input",
+ CellChangeTimes->{{3.544101627114039*^9, 3.544101653836217*^9}, 
+   3.544101728910005*^9, {3.5441021645942287`*^9, 3.544102164655508*^9}}]
+},
+WindowSize->{740, 851},
+WindowMargins->{{1, Automatic}, {Automatic, 0}},
+FrontEndVersion->"8.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (October 5, \
+2011)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[557, 20, 5480, 153, 628, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)
