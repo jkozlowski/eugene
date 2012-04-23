@@ -133,12 +133,4 @@ public enum Side {
     public static Side sell() {
         return SELL;
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String toString() {
-        return this == BUY ? "BUY" : "SELL";
-    }
 }

@@ -55,18 +55,18 @@ public final class LastPx extends Field<BigDecimal> {
     /**
      * {@inheritDoc}
      */
-    @Override
-    public boolean equals(Object o) {
-
-        if (this == o) {
-            return true;
-        }
-
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        final LastPx field = (LastPx) o;
-        return (getValue() != null ? getValue().compareTo(field.getValue()) == 0 : field.getValue() == null);
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//
+//        if (this == o) {
+//            return true;
+//        }
+//
+//        if (o == null || getClass() != o.getClass()) {
+//            return false;
+//        }
+//
+//        final LastPx field = (LastPx) o;
+//        return (getValue() != null ? getValue().compareTo(field.getValue()) == 0 : field.getValue() == null);
+//    }
 }

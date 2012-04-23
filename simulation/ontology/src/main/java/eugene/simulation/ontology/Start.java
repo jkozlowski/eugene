@@ -5,6 +5,7 @@
  */
 package eugene.simulation.ontology;
 
+import com.google.common.base.Objects;
 import jade.content.AgentAction;
 import jade.content.onto.annotations.Slot;
 
@@ -119,8 +120,8 @@ public class Start implements AgentAction {
 
         final Start start = (Start) o;
 
-        if (startTime != null ? !startTime.equals(start.startTime) : start.startTime != null) return false;
-        if (stopTime != null ? !stopTime.equals(start.stopTime) : start.stopTime != null) return false;
+        if (!Objects.equal(startTime, start.startTime)) return false;
+        if (!Objects.equal(stopTime, start.stopTime)) return false;
 
         return true;
     }
@@ -131,8 +132,6 @@ public class Start implements AgentAction {
      */
     @Override
     public int hashCode() {
-        int result = startTime != null ? startTime.hashCode() : 0;
-        result = 31 * result + (stopTime != null ? stopTime.hashCode() : 0);
-        return result;
+        return Objects.hashCode(startTime, stopTime);
     }
 }

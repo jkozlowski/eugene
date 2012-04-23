@@ -5,13 +5,16 @@
  */
 package eugene.simulation.ontology;
 
+import com.google.common.base.Objects;
 import org.testng.annotations.Test;
 
 import java.util.Calendar;
 import java.util.Date;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 
 /**
  * Tests {@link Start}.
@@ -82,6 +85,38 @@ public class StartTest {
         final Date stopTime = getStop(startCalendar);
         final Start start = new Start(startCalendar.getTime(), stopTime);
         start.setStopTime(startCalendar.getTime());
+    }
+    
+    @Test
+    public void testEquals() {
+        final Calendar startCalendar = Calendar.getInstance();
+        final Date stopTime = getStop(startCalendar);
+
+        final Calendar laterStartCalendar = Calendar.getInstance();
+        laterStartCalendar.add(Calendar.HOUR, 1);
+
+        final Calendar laterStopCalendar = Calendar.getInstance();
+        laterStopCalendar.add(Calendar.HOUR, 2);
+
+        final Start start = new Start();
+        assertThat(start, equalTo(start));
+        assertThat(new Start(), not(equalTo(null)));
+        assertThat(new Start(), not(equalTo(new Object())));
+        assertThat(new Start(startCalendar.getTime(), stopTime),
+                   not(equalTo(new Start(startCalendar.getTime(), laterStopCalendar.getTime()))));
+        assertThat(new Start(laterStartCalendar.getTime(), laterStopCalendar.getTime()),
+                   not(equalTo(new Start(startCalendar.getTime(), laterStopCalendar.getTime()))));
+
+        assertThat(new Start(laterStartCalendar.getTime(), laterStopCalendar.getTime()),
+                   equalTo(new Start(laterStartCalendar.getTime(), laterStopCalendar.getTime())));
+    }
+    
+    @Test
+    public void testHashCode() {
+        final Calendar startCalendar = Calendar.getInstance();
+        final Date stopTime = getStop(startCalendar);
+        assertThat(new Start(startCalendar.getTime(), stopTime).hashCode(),
+                   is(Objects.hashCode(startCalendar.getTime(), stopTime)));
     }
     
     public static Date getStop(final Calendar start) {

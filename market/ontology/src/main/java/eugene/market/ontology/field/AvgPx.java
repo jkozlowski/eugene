@@ -55,18 +55,18 @@ public final class AvgPx extends Field<BigDecimal> {
     /**
      * {@inheritDoc}
      */
-    @Override
-    public boolean equals(Object o) {
-
-        if (this == o) {
-            return true;
-        }
-
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        final AvgPx field = (AvgPx) o;
-        return (getValue() != null ? getValue().compareTo(field.getValue()) == 0 : field.getValue() == null);
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//
+//        if (this == o) {
+//            return true;
+//        }
+//
+//        if (o == null || getClass() != o.getClass()) {
+//            return false;
+//        }
+//
+//        final AvgPx field = (AvgPx) o;
+//        return (getValue() != null ? getValue().compareTo(field.getValue()) == 0 : field.getValue() == null);
+//    }
 }

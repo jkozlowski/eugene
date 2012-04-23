@@ -229,6 +229,9 @@
                                 <excludes>
                                     <exclude>jade/imtp/memory/**/*.class</exclude>
                                     <exclude>eugene/demo/**/*.class</exclude>
+                                    <exclude>eugene/agent/**/*.class</exclude>
+                                    <exclude>eugene/experiment/**/*.class</exclude>
+                                    <exclude>eugene/utils/logging/**/*.class</exclude>
                                 </excludes>
                             </instrumentation>
                         </configuration>
