@@ -1,4 +1,1 @@
 = Eugene: Agent-Based Stock Market Simulator for System Testing of Trading Algorithms
-
-* Redmine: http://abfm.cs.ucl.ac.uk/redmine/projects/eugene
-* Jenkins: http://abfm.cs.ucl.ac.uk/jenkins/job/eugene
